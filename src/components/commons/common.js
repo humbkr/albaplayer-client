@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled, { keyframes } from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Title = styled.h1`
   display: inline-block;
@@ -11,6 +12,7 @@ const Title = styled.h1`
 
 const Header = styled.header`
   display: inline-block;
+  margin-left: 50px;
   width: 100%;
   height: ${props => props.theme.itemHeight};
   
@@ -163,9 +165,8 @@ class Loading extends Component {
 }
 
 const MessageStyled = styled.div`
+  display: table-row;
   width: 100%;
-  height: ${props => props.theme.itemHeight};
-  padding: 10px;
   background-color: ${props => {
     switch (props.type) {
       case 'info':
@@ -178,15 +179,13 @@ const MessageStyled = styled.div`
   }} ;
   color: #ffffff;
   
-  > span {
-    display: inline-block;
-    padding-left: 10px;
+  > div {
+    padding-left: 0;
   }
   
   > * {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+    display: table-cell;
+    padding: 10px;
     vertical-align: top;
   }
 `;
@@ -198,7 +197,7 @@ class Message extends Component {
     return (
       <MessageStyled type={messageType}>
         <Icon>{messageType}</Icon>
-        <span>{this.props.children}</span>
+        <div>{this.props.children}</div>
       </MessageStyled>
     );
   }
@@ -206,6 +205,22 @@ class Message extends Component {
 Message.propTypes = {
   type: PropTypes.string.isRequired,
 };
+
+const LinkBox = styled(Link)`
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: ${props => (props.secondary) ? props.theme.textSecondaryColor : props.theme.textPrimaryColor};
+  
+  > * {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+`;
 
 export {
   Icon,
@@ -215,4 +230,5 @@ export {
   Header,
   Message,
   Loading,
+  LinkBox,
 };

@@ -24,16 +24,6 @@ const LibraryListHeader = styled.header`
 `;
 
 class LibraryListHeaderContainer extends Component {
-  constructor(props) {
-    super(props);
-
-    this.focusInput = this.focusInput.bind(this);
-  }
-
-  focusInput() {
-    this.drawerContent.refs
-  }
-
   render() {
     const orderBy = this.props.orderBy;
     const searchValue = this.props.searchValue;

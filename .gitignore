@@ -6,6 +6,9 @@
 # generated
 __generated__
 
+# IDE stuff
+.idea
+
 # testing
 /coverage
 

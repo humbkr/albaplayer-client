@@ -32,12 +32,15 @@ class LibraryListView extends Component {
   }
 
   handleCloseSearch() {
-    this.setState({
-      search: '',
-    });
+    if (this.state.search !== '') {
+      this.setState({
+        search: '',
+      });
+    }
   }
 
   render() {
+    console.log('render LibraryListView');
     return (
       <div>
         <LibraryListHeaderContainer

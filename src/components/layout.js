@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-import { Icon, IconButton, Title, Header } from './commons/common';
+import { Title, Header } from './commons/common';
 import SidebarContainer from './sidebar';
+import { AlbumListView, AlbumListViewAll } from "./albumListView";
 import ArtistListView from "./artistListView";
-import AlbumListView from "./albumListView";
 import HomeView from "./homeView";
 
 class AppPageHeader extends Component {
@@ -21,15 +22,24 @@ AppPageHeader.propTypes = {
   title: PropTypes.string,
 };
 
+const AppPageContent = styled.div`
+  
+`;
+
+
 class AppPage extends Component {
   render() {
     return (
       <Router>
         <div>
           <SidebarContainer />
-          <Route exact path="/" component={HomeView}/>
-          <Route path="/artists" component={ArtistListView}/>
-          <Route path="/albums" component={AlbumListView}/>
+          <AppPageHeader title="Test title"/>
+          <AppPageContent>
+            <Route exact path="/" component={HomeView}/>
+            <Route path="/artists" component={ArtistListView}/>
+            <Route path="/artist/:artistId/albums" component={AlbumListView}/>
+            <Route path="/albums" component={AlbumListViewAll}/>
+          </AppPageContent>
         </div>
       </Router>
     );

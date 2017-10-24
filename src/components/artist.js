@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import {IconButton, Icon} from "./commons/common";
+import {IconButton, Icon, LinkBox} from "./commons/common";
 import DrawerMenuDecorator from './commons/drawer';
 
 const ArtistTeaserName = styled.h2`
@@ -14,7 +14,9 @@ class ArtistTeaser extends Component {
     const artist = this.props.item;
 
     return (
-      <ArtistTeaserName>{artist.name}</ArtistTeaserName>
+      <LinkBox to={`/artist/${artist.id}/albums`}>
+        <ArtistTeaserName>{artist.name}</ArtistTeaserName>
+      </LinkBox>
     );
   }
 }

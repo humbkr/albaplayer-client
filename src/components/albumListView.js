@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router'
 import { gql, graphql } from 'react-apollo';
 
 import { Message, Loading } from './commons/common';
 import LibraryListView from "./library/listView";
 import { AlbumTeaserPlayable } from "./album";
 
-class AlbumListView extends Component {
+class AlbumListViewInternal extends Component {
   constructor(props){
     super(props);
     document.title = 'Albums';
@@ -21,14 +22,24 @@ class AlbumListView extends Component {
 
     // Copy objects into a new array so we can reorder them client-side.
     let items = [];
-    this.props.data.albums.forEach((value) => {
-      items.push(value);
-    });
+    if (this.props.data.albums) {
+      this.props.data.albums.forEach((value) => {
+        items.push(value);
+      });
+    }
+    if (this.props.data.artist && this.props.data.artist.albums) {
+      this.props.data.artist.albums.forEach((value) => {
+        const albumItem = {
+          ...value,
+          artistName: this.props.data.artist.name
+        };
+        items.push(albumItem);
+      });
+    }
 
     const orderByOptions = [
       {value: 'title', label: 'title'},
       {value: 'year', label: 'year'},
-      {value: 'artist.name', label: 'artist'},
     ];
 
     return (
@@ -42,14 +53,41 @@ class AlbumListView extends Component {
     );
   }
 }
+const albumsForArtistQuery = gql`
+  query AlbumsForArtistQuery($artistId : ID!) {
+    artist(id: $artistId) {
+      name
+      albums {
+        id
+        title
+        year
+        artistName
+      }
+    }
+  }
+`;
 const allAlbumsQuery = gql`
   query AllAlbumsQuery {
     albums {
       id
       title
       year
+      artistName
     }
   }
 `;
 
-export default graphql(allAlbumsQuery)(AlbumListView);
+const AlbumListView = graphql(albumsForArtistQuery, {
+  options: (props) => ({
+    variables: {
+      artistId: props.match.params.artistId
+    }
+  }),
+})(withRouter(AlbumListViewInternal));
+
+const AlbumListViewAll = graphql(allAlbumsQuery)(AlbumListViewInternal);
+
+export {
+  AlbumListViewAll,
+  AlbumListView,
+}

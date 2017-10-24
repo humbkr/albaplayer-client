@@ -4,7 +4,6 @@ import { gql, graphql } from 'react-apollo';
 import { Message, Loading } from './commons/common';
 import LibraryListView from "./library/listView";
 import { ArtistTeaserPlayable } from "./artist";
-import AppPage from "./layout";
 
 class ArtistListView extends Component {
   constructor(props){

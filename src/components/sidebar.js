@@ -34,13 +34,23 @@ const MainMenuFooter = styled.footer`
   bottom: 0;
   padding-left: 10px;
   width: 100%;
-  
+
   :hover {
     background-color: ${props => props.theme.highlight};
   }
-  
+
   > MainMenuLink {
     color: ${props => props.theme.sidebar.textSecondaryColor};
+  }
+`;
+
+const SidebarWrapper = styled.div`
+  width: ${props => props.theme.itemHeight};
+  
+  > Button {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 `;
 
@@ -70,41 +80,35 @@ class SidebarContainer extends Component {
     };
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.closeButtonHandler = this.closeButtonHandler.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleClickOutside.bind(this), true);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleClickOutside.bind(this), true);
+    this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
   toggleSidebar() {
+    if (!this.state.isOpen) {
+      document.addEventListener('click', this.handleClickOutside, true);
+    } else {
+      document.removeEventListener('click', this.handleClickOutside, true);
+    }
+
     this.setState({
       isOpen: !this.state.isOpen,
     });
   }
 
   closeButtonHandler() {
-    this.setState({
-      isOpen: false,
-    });
+    this.toggleSidebar();
   }
 
   handleClickOutside(event) {
     const domNode = ReactDOM.findDOMNode(this);
-
-    if ((!domNode || !domNode.contains(event.target))) {
-      this.setState({
-        isOpen: false,
-      });
+    if (!domNode || !domNode.contains(event.target)) {
+      this.toggleSidebar();
     }
   }
 
   render() {
     return (
-      <div>
+      <SidebarWrapper>
         <IconButton onClick={this.toggleSidebar}><Icon>menu</Icon></IconButton>
         <Sidebar isOpen={this.state.isOpen}>
           <Header>
@@ -150,7 +154,7 @@ class SidebarContainer extends Component {
             </MainMenuLink>
           </MainMenuFooter>
         </Sidebar>
-      </div>
+      </SidebarWrapper>
     );
   }
 }

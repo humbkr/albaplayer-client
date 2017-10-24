@@ -11,6 +11,8 @@ const DrawerMenuWrapper = styled.div`
 
 const DrawerMenuDecorated = styled.div`
   flex: 1;
+  overflow: hidden;
+  background-color: chocolate;
   
   > * {
     position: relative;
@@ -20,11 +22,11 @@ const DrawerMenuDecorated = styled.div`
 `;
 
 const DrawerMenu = styled.div`
-  position: absolute;
   right: 0;
   width: ${props => props.theme.itemHeight};
   
   ${props => props.open && css`
+    position: absolute;
     display: flex;
     justify-content: flex-end;
     width: ${props => props.maxWidth ? props.maxWidth : '100%'};
