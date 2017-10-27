@@ -5,6 +5,7 @@ import { gql, graphql } from 'react-apollo';
 import { Message, Loading } from './commons/common';
 import LibraryListView from "./library/listView";
 import { AlbumTeaserPlayable } from "./album";
+import { AppPageHeader } from './layout';
 
 class AlbumListViewInternal extends Component {
   constructor(props){
@@ -43,18 +44,21 @@ class AlbumListViewInternal extends Component {
     ];
 
     return (
-      <LibraryListView
-        itemDisplay={AlbumTeaserPlayable}
-        items={items}
-        orderOptions={orderByOptions}
-        defaultOrder="title"
-        searchProperty="title"
-      />
+      <div>
+        <AppPageHeader title="Albums" />
+        <LibraryListView
+          itemDisplay={AlbumTeaserPlayable}
+          items={items}
+          orderOptions={orderByOptions}
+          defaultOrder="title"
+          searchProperty="title"
+        />
+      </div>
     );
   }
 }
 const albumsForArtistQuery = gql`
-  query AlbumsForArtistQuery($artistId : ID!) {
+  query AlbumsForArtistQuery($artistId: ID!) {
     artist(id: $artistId) {
       name
       albums {

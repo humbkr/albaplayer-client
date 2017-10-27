@@ -4,6 +4,7 @@ import { gql, graphql } from 'react-apollo';
 import { Message, Loading } from './commons/common';
 import LibraryListView from "./library/listView";
 import { ArtistTeaserPlayable } from "./artist";
+import { AppPageHeader } from './layout';
 
 class ArtistListView extends Component {
   constructor(props){
@@ -31,13 +32,16 @@ class ArtistListView extends Component {
     ];
 
     return (
-      <LibraryListView
-        itemDisplay={ArtistTeaserPlayable}
-        items={items}
-        orderOptions={orderByOptions}
-        defaultOrder="name"
-        searchProperty="name"
-      />
+      <div>
+        <AppPageHeader title="Artists" />
+        <LibraryListView
+          itemDisplay={ArtistTeaserPlayable}
+          items={items}
+          orderOptions={orderByOptions}
+          defaultOrder="name"
+          searchProperty="name"
+        />
+      </div>
     );
   }
 }

@@ -8,6 +8,7 @@ import SidebarContainer from './sidebar';
 import { AlbumListView, AlbumListViewAll } from "./albumListView";
 import ArtistListView from "./artistListView";
 import HomeView from "./homeView";
+import { AlbumDetailWithData } from './album';
 
 class AppPageHeader extends Component {
   render() {
@@ -33,12 +34,12 @@ class AppPage extends Component {
       <Router>
         <div>
           <SidebarContainer />
-          <AppPageHeader title="Test title"/>
           <AppPageContent>
             <Route exact path="/" component={HomeView}/>
             <Route path="/artists" component={ArtistListView}/>
             <Route path="/artist/:artistId/albums" component={AlbumListView}/>
             <Route path="/albums" component={AlbumListViewAll}/>
+            <Route path="/album/:albumId" component={AlbumDetailWithData}/>
           </AppPageContent>
         </div>
       </Router>

@@ -5,23 +5,19 @@ import styled, { css } from 'styled-components';
 import {IconButton, Icon} from "./common";
 
 const DrawerMenuWrapper = styled.div`
-  display: flex;
+  display: table;
+  width: 100%;
   height: ${props => props.theme.itemHeight};
 `;
 
 const DrawerMenuDecorated = styled.div`
-  flex: 1;
+  display: table-cell;
   overflow: hidden;
-  background-color: chocolate;
-  
-  > * {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-  }
 `;
 
 const DrawerMenu = styled.div`
+  display: table-cell;
+  vertical-align: top;
   right: 0;
   width: ${props => props.theme.itemHeight};
   
@@ -37,6 +33,7 @@ const DrawerMenu = styled.div`
 const DrawerMenuContent = styled.div`
   display: none;
   width: 0;
+  height: ${props => props.theme.itemHeight};
   
   ${props => props.open && css`
     display: block;

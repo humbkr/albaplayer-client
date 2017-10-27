@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import LibraryListHeaderContainer from './listHeader'
-import LibraryListContainer from './list'
+import LibraryListHeaderContainer from './listHeader';
+import LibraryListContainer from './list';
 
 class LibraryListView extends Component {
   constructor(props) {

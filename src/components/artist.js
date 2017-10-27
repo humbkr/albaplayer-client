@@ -5,6 +5,7 @@ import {IconButton, Icon, LinkBox} from "./commons/common";
 import DrawerMenuDecorator from './commons/drawer';
 
 const ArtistTeaserName = styled.h2`
+  padding-left: 15px;
   font-size: 1em;
   font-weight: normal;
 `;
@@ -14,7 +15,7 @@ class ArtistTeaser extends Component {
     const artist = this.props.item;
 
     return (
-      <LinkBox to={`/artist/${artist.id}/albums`}>
+      <LinkBox to={`/artist/${artist.id}/albums`} title={artist.name}>
         <ArtistTeaserName>{artist.name}</ArtistTeaserName>
       </LinkBox>
     );

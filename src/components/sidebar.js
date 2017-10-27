@@ -7,9 +7,10 @@ import { ListItem, List } from './commons/list';
 import {IconButton, Icon, Header, Title } from "./commons/common";
 
 const MainMenuLink = styled(Link)`
+  display: inline-block;
   width: 100%;
   height: ${props => props.theme.itemHeight};
-  display: inline-block;
+  padding-left: 15px;
   color: ${props => (props.secondary) ? props.theme.sidebar.textSecondaryColor : props.theme.sidebar.textPrimaryColor};
   
   :hover {
@@ -67,6 +68,10 @@ const Sidebar = styled.div`
   background-color: ${props => props.theme.sidebar.background};
   color: ${props => props.theme.sidebar.textPrimaryColor};
   
+  > header {
+    margin-left: 0;
+  }
+  
   button {
     color: ${props => props.theme.sidebar.textPrimaryColor};
   }
@@ -117,38 +122,38 @@ class SidebarContainer extends Component {
           </Header>
           <List>
             <ListItem>
-              <MainMenuLink to="/">
+              <MainMenuLink to="/" onClick={this.toggleSidebar}>
                 <Icon>home</Icon>
                 <span>Home</span>
               </MainMenuLink>
             </ListItem>
             <ListItem>
-              <MainMenuLink to="/artists">
+              <MainMenuLink to="/artists" onClick={this.toggleSidebar}>
                 <Icon>person</Icon>
                 <span>Artists</span>
               </MainMenuLink>
             </ListItem>
             <ListItem>
-              <MainMenuLink to="/albums">
+              <MainMenuLink to="/albums" onClick={this.toggleSidebar}>
                 <Icon>album</Icon>
                 <span>Albums</span>
               </MainMenuLink>
             </ListItem>
             <ListItem>
-              <MainMenuLink to="/genres">
+              <MainMenuLink to="/genres" onClick={this.toggleSidebar}>
                 <Icon>fingerprint</Icon>
                 <span>Genres</span>
               </MainMenuLink>
             </ListItem>
             <ListItem>
-              <MainMenuLink to="/playlists">
+              <MainMenuLink to="/playlists" onClick={this.toggleSidebar}>
                 <Icon>playlist_play</Icon>
                 <span>Playlists</span>
               </MainMenuLink>
             </ListItem>
           </List>
           <MainMenuFooter>
-            <MainMenuLink secondary to="/settings">
+            <MainMenuLink secondary to="/settings" onClick={this.toggleSidebar}>
               <Icon>settings</Icon>
               <span>Settings</span>
             </MainMenuLink>
