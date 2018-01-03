@@ -5,7 +5,6 @@ const ListItem = styled.li`
   width: 100%;
   height: ${props => props.theme.itemHeight};
   ${props => props.border ? 'border-bottom: 1px solid ' + props.theme.separatorColor : ''};
-  //padding-left: 15px;
   
   :hover {
     background-color: ${props => props.theme.highlight};
