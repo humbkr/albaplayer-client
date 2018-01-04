@@ -1,8 +1,5 @@
-import apolloClient from './graphql/apollo';
+import apolloClient from '../graphql/apollo';
 import gql from "graphql-tag";
-
-const LIBRARY_BROWSER_FILTER_ALBUMS = 'LIBRARY_BROWSER_FILTER_ALBUMS';
-const LIBRARY_BROWSER_INIT_FAILURE = 'LIBRARY_BROWSER_INIT_FAILURE';
 
 const LIBRARY_BROWSER_INIT_START = 'LIBRARY_BROWSER_INIT_START';
 const libraryBrowserInitStart = () => {
@@ -19,17 +16,11 @@ const libraryBrowserInitSuccess = (response) => {
   }
 };
 
+const LIBRARY_BROWSER_INIT_FAILURE = 'LIBRARY_BROWSER_INIT_FAILURE';
 const libraryBrowserInitFailure = (response) => {
   return {
     type: LIBRARY_BROWSER_INIT_FAILURE,
     response
-  }
-};
-
-const libraryBrowserFilterAlbums = (artistId) => {
-  return {
-    type: LIBRARY_BROWSER_FILTER_ALBUMS,
-    artistId
   }
 };
 
@@ -44,10 +35,17 @@ const libraryBrowserFetchLibrary =  () => {
     albums {
       id
       title
+      year
+      artistId
+      artistName
     }
     tracks {
       id
       title
+      number
+      duration
+			artistId
+      albumId
     }
   }
 `;
@@ -83,12 +81,20 @@ const libraryBrowserGetLibrary = () => {
   };
 };
 
+const LIBRARY_BROWSER_SELECT_ARTIST = 'LIBRARY_BROWSER_SELECT_ARTIST';
+const libraryBrowserSelectArtist = (artistId) => {
+  return {
+    type: LIBRARY_BROWSER_SELECT_ARTIST,
+    artistId
+  }
+};
+
 export {
-  LIBRARY_BROWSER_FILTER_ALBUMS,
+  LIBRARY_BROWSER_SELECT_ARTIST,
   LIBRARY_BROWSER_INIT_START,
   LIBRARY_BROWSER_INIT_SUCCESS,
   LIBRARY_BROWSER_INIT_FAILURE,
-  libraryBrowserFilterAlbums,
+  libraryBrowserSelectArtist,
   libraryBrowserInitStart,
   libraryBrowserInitSuccess,
   libraryBrowserInitFailure,

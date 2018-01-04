@@ -1,14 +1,20 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import LibraryBrowserList from "./LibraryBrowserList";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import LibraryBrowserList from "./LibraryBrowserList"
 
-class BasicArtistTeaser extends Component {
+const ArtistTeaserName = styled.h2`
+  padding-left: 15px;
+  font-size: 1em;
+  font-weight: normal;
+`;
+
+class ArtistTeaser extends Component {
   render() {
     const artist = this.props.item;
 
     return (
-      <span>{artist.name}</span>
+      <ArtistTeaserName>{artist.name}</ArtistTeaserName>
     );
   }
 }
@@ -20,7 +26,6 @@ const ArtistsPane = styled.div`
   overflow-y: hidden;
   width: 33%;
   height: 100%;
-  background-color: aqua;
 `;
 
 class ArtistsPaneContainer extends Component {
@@ -32,7 +37,7 @@ class ArtistsPaneContainer extends Component {
         <h2>Artists</h2>
         <LibraryBrowserList
           items={artists}
-          itemDisplay={BasicArtistTeaser}
+          itemDisplay={ArtistTeaser}
         />
       </ArtistsPane>
     );

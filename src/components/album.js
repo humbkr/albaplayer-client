@@ -42,6 +42,7 @@ class AlbumTeaser extends Component {
         <AlbumTeaserWrapper>
           <AlbumTeaserTitle>{album.title}</AlbumTeaserTitle>
           <AlbumSubInfo>
+            {  }
             <span>{album.year}</span><AlbumTeaserArtist>{' - ' + album.artistName}</AlbumTeaserArtist>
           </AlbumSubInfo>
         </AlbumTeaserWrapper>

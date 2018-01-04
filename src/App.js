@@ -11,7 +11,7 @@ import MaterialIconsWoff from './assets/fonts/MaterialIcons-Regular.woff';
 import MaterialIconsWoff2 from './assets/fonts/MaterialIcons-Regular.woff2';
 import MaterialIconsSvg from './assets/fonts/MaterialIcons-Regular.svg';
 import themeDefault from './themes/light';
-import LibraryBrowser from "./components/browser/LibraryBrowser";
+import LibraryBrowser from "./browser/components/LibraryBrowser";
 
 // Global styles used by the styled components.
 injectGlobal`

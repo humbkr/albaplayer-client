@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from "prop-types";
-import styled, { withTheme } from "styled-components";
-import { AutoSizer, List } from 'react-virtualized';
+import React, { Component } from 'react'
+import PropTypes from "prop-types"
+import styled, { withTheme } from "styled-components"
+import { AutoSizer, List } from 'react-virtualized'
 
 const LibraryBrowserListItem = styled.div`
   width: 100%;
+  ${props => props.border ? 'border-top: 1px solid ' + props.theme.separatorColor : ''};
   
   // The items MUST ALWAYS have a fixed height for the list to work.
   height: ${props => props.theme.itemHeight};
@@ -15,6 +16,7 @@ const LibraryBrowserListItem = styled.div`
   }
   
   > * {
+    display: block;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
@@ -29,7 +31,7 @@ class LibraryBrowserList extends Component {
     // Magic function used by react-virtualized.
     function rowRenderer ({key, index, isScrolling, isVisible, style}) {
       return (
-        <LibraryBrowserListItem key={key} style={style}>
+        <LibraryBrowserListItem border key={key} style={style}>
           {itemsList[index]}
         </LibraryBrowserListItem>
       )

@@ -1,16 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
-import ArtistsPaneContainer from "./ArtistsPaneContainer";
-import AlbumsPaneContainer from "./AlbumsPaneContainer";
-import TracksPaneContainer from "./TracksPaneContainer";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
+import ArtistsPaneContainer from "./ArtistsPaneContainer"
+import AlbumsPaneContainer from "./AlbumsPaneContainer"
+import TracksPaneContainer from "./TracksPaneContainer"
 
-import { libraryBrowserGetLibrary } from "../../actions";
+import { libraryBrowserGetLibrary } from "../actions"
 
 const LibraryBrowserWrapper = styled.div`
   width: 100%;
   height: 100vh;
+  
+  > div {
+    width: 100%;
+    height: 100vh;
+  }
 `;
 
 class LibraryBrowser extends Component {
@@ -47,7 +52,7 @@ LibraryBrowser.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { artists, albums, tracks } = state.libraryBrowser.original;
+  const { artists, albums, tracks } = state.libraryBrowser.current;
   const { isFetching, isInitialized } = state.libraryBrowser.original;
 
   return {

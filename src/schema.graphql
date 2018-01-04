@@ -7,10 +7,12 @@ type Query {
   albums: [Album]
   artist(id: ID!): Artist
   artists: [Artist]
+  tracks: [Track]
 }
 
 type Album {
   id: ID!
+  artistId: ID!
   title: String!
   tracks: [Track]
   artist: Artist
@@ -20,4 +22,11 @@ type Artist {
   id: ID!
   name: String!
   albums: [Album]
+}
+
+type Track {
+  id: ID!
+  title: String!
+  artistId: ID!
+  albumId: ID!
 }
