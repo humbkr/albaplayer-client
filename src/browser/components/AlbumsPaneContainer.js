@@ -1,49 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import LibraryBrowserList from "./LibraryBrowserList"
-
-const AlbumTeaserTitle = styled.h2`
-  font-size: 1em;
-  font-weight: normal;
-  max-height: 18px;
-  overflow: hidden;
-`;
-
-const AlbumSubInfo = styled.div`
-  color: ${props => props.theme.textSecondaryColor};
-  font-size: 0.8em;
-  margin-top: 5px;
-`;
-
-const AlbumTeaserArtist = styled.span`
-  font-style: italic;
-`;
-
-const AlbumTeaserWrapper = styled.div`
-  padding-left: 15px;
-  height: 36px;
-`;
-
-class AlbumTeaser extends Component {
-  render() {
-    const album = this.props.item;
-
-    return (
-      <AlbumTeaserWrapper>
-        <AlbumTeaserTitle>{album.title}</AlbumTeaserTitle>
-        <AlbumSubInfo>
-          {album.year && <span>{album.year}</span>}
-          {album.year && ' - '}
-          <AlbumTeaserArtist>{album.artistName ? album.artistName : 'Unknown artist'}</AlbumTeaserArtist>
-        </AlbumSubInfo>
-      </AlbumTeaserWrapper>
-    );
-  }
-}
-AlbumTeaser.propTypes = {
-  item: PropTypes.object.isRequired,
-};
+import LibraryBrowserList from './LibraryBrowserList'
+import AlbumTeaser from './AlbumTeaser'
+import { connect } from "react-redux";
+import { immutableNestedSort } from "../utils";
+import LibraryBrowserListHeader from "./LibraryBrowserListHeader";
+import { libraryBrowserSortAlbums } from "../actions";
 
 const AlbumsPane = styled.div`
   display: inline-block;
@@ -52,15 +15,39 @@ const AlbumsPane = styled.div`
   overflow-y: hidden;
   width: 33%;
   height: 100%;
+  border-left: 3px solid ${props => props.theme.separatorColor};
 `;
 
 class AlbumsPaneContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onSortChangeHandler = this.onSortChangeHandler.bind(this)
+  }
+
+  // Change event handler for LibraryBrowserListHeader.
+  onSortChangeHandler(event) {
+    // Pass the new selected sort option to the dispatcher.
+    this.props.onChange(event.target.value)
+  }
+
   render() {
     const albums = this.props.albums;
+    const orderBy = this.props.orderBy;
+    const orderByOptions = [
+      {value: 'title', label: 'title'},
+      {value: 'year', label: 'year'},
+      {value: 'artistName', label: 'artist'},
+    ];
 
     return (
       <AlbumsPane>
-        <h2>Albums</h2>
+        <LibraryBrowserListHeader
+          title={'Albums'}
+          orderBy={orderBy}
+          orderByOptions={orderByOptions}
+          onChange={this.onSortChangeHandler}
+        />
         <LibraryBrowserList
           items={albums}
           itemDisplay={AlbumTeaser}
@@ -70,7 +57,27 @@ class AlbumsPaneContainer extends Component {
   }
 }
 AlbumsPaneContainer.propTypes = {
-  albums: PropTypes.array.isRequired
+  albums: PropTypes.array.isRequired,
+  orderBy: PropTypes.string.isRequired
 };
 
-export default AlbumsPaneContainer;
+const mapStateToProps = state => {
+  return {
+    albums: immutableNestedSort(state.libraryBrowser.current.albums, state.libraryBrowser.current.sortAlbums),
+    orderBy: state.libraryBrowser.current.sortAlbums
+  }
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    onChange: sortProperty => {
+      dispatch(libraryBrowserSortAlbums(sortProperty))
+    }
+  }
+};
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AlbumsPaneContainer);
+

@@ -1,7 +1,9 @@
 import {
   LIBRARY_BROWSER_SELECT_ARTIST,
   LIBRARY_BROWSER_INIT_START,
-  LIBRARY_BROWSER_INIT_SUCCESS
+  LIBRARY_BROWSER_INIT_SUCCESS, LIBRARY_BROWSER_SELECT_ALBUM,
+  LIBRARY_BROWSER_SELECT_TRACK, LIBRARY_BROWSER_SORT_ARTISTS,
+  LIBRARY_BROWSER_SORT_ALBUMS, LIBRARY_BROWSER_SORT_TRACKS
 } from "./actions";
 
 
@@ -19,9 +21,12 @@ const initialState = {
     artists: [],
     albums: [],
     tracks: [],
-    selectedArtists: 0,
-    selectedAlbums: 0,
-    selectedTracks: 0
+    sortArtists: 'name',
+    sortAlbums: 'title',
+    sortTracks: 'number',
+    selectedArtists: '',
+    selectedAlbums: '',
+    selectedTracks: ''
   }
 };
 
@@ -59,16 +64,61 @@ function libraryBrowser(state = initialState, action) {
         current: {
           ...state.current,
           selectedArtists: action.artistId,
-          albums: state.original.albums.map((album) => {
-            if (album.artistId === action.artistId) {
-              return album
+          albums: state.original.albums.filter(item => (action.artistId === '0' || item.artistId === action.artistId)),
+          tracks: state.original.tracks.filter(item => (action.artistId === '0' || item.artistId === action.artistId))
+        }
+      });
+    case LIBRARY_BROWSER_SELECT_ALBUM:
+      return Object.assign({}, state, {
+        original: state.original,
+        current: {
+          ...state.current,
+          selectedAlbums: action.albumId,
+          tracks: state.original.tracks.filter((item) => {
+            if (action.albumId === '0' && state.current.selectedArtists === '0') {
+              // Display all the tracks in the library.
+              return true
+            } else if (action.albumId === '0') {
+              // Display all the tracks of the selected artist for all albums of
+              // this artist.
+              return item.artistId === state.current.selectedArtists
             }
-          }),
-          tracks: state.original.tracks.map((track) => {
-            if (track.artistId === action.artistId) {
-              return track
-            }
+
+            // Else return the tracks for the selected album only.
+            return item.albumId === action.albumId
           })
+        }
+      });
+    case LIBRARY_BROWSER_SELECT_TRACK:
+      return Object.assign({}, state, {
+        original: state.original,
+        current: {
+          ...state.current,
+          selectedTracks: action.trackId
+        }
+      });
+    case LIBRARY_BROWSER_SORT_ARTISTS:
+      return Object.assign({}, state, {
+        original: state.original,
+        current: {
+          ...state.current,
+          sortArtists: action.sortProperty
+        }
+      });
+    case LIBRARY_BROWSER_SORT_ALBUMS:
+      return Object.assign({}, state, {
+        original: state.original,
+        current: {
+          ...state.current,
+          sortAlbums: action.sortProperty
+        }
+      });
+    case LIBRARY_BROWSER_SORT_TRACKS:
+      return Object.assign({}, state, {
+        original: state.original,
+        current: {
+          ...state.current,
+          sortTracks: action.sortProperty
         }
       });
 

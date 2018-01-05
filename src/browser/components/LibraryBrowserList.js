@@ -1,32 +1,24 @@
 import React, { Component } from 'react'
-import PropTypes from "prop-types"
-import styled, { withTheme } from "styled-components"
+import PropTypes from 'prop-types'
+import { withTheme } from 'styled-components'
 import { AutoSizer, List } from 'react-virtualized'
+import LibraryBrowserListItem from './LibraryBrowserListItem'
 
-const LibraryBrowserListItem = styled.div`
-  width: 100%;
-  ${props => props.border ? 'border-top: 1px solid ' + props.theme.separatorColor : ''};
-  
-  // The items MUST ALWAYS have a fixed height for the list to work.
-  height: ${props => props.theme.itemHeight};
-  overflow-y: hidden;
-  
-  :hover {
-    background-color: ${props => props.theme.highlight};
-  }
-  
-  > * {
-    display: block;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-`;
 
 class LibraryBrowserList extends Component {
   render() {
     const Display = this.props.itemDisplay;
-    const itemsList = this.props.items.map(item => (<Display item={item}/>));
+    let itemsList = this.props.items.map(item => (<Display item={item}/>));
+
+    // Add a "All" item at the beginning of the list
+    const itemAll = {
+      id: '0',
+      name: 'All',
+      title: 'All',
+      artistId: '0',
+      albumId: '0',
+    };
+    itemsList.unshift(<Display item={itemAll}/>);
 
     // Magic function used by react-virtualized.
     function rowRenderer ({key, index, isScrolling, isVisible, style}) {

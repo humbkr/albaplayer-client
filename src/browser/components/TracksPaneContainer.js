@@ -1,50 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import LibraryBrowserList from "./LibraryBrowserList"
+import LibraryBrowserList from './LibraryBrowserList'
+import TrackTeaser from './TrackTeaser'
+import { connect } from "react-redux";
+import { immutableNestedSort } from "../utils";
+import LibraryBrowserListHeader from "./LibraryBrowserListHeader";
+import { libraryBrowserSortTracks } from "../actions";
 
-const TrackTeaserNumber = styled.div`
-  display: table-cell;
-  width: 40px;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 0.8em;
-`;
-
-const TrackTeaserName = styled.h2`
-  display: table-cell;
-  font-size: 1em;
-  font-weight: normal;
-  vertical-align: middle;
-`;
-
-const TrackTeaserDuration = styled.div`
-  display: table-cell;
-  width: 40px;
-  text-align: center;
-  color: ${props => props.theme.textSecondaryColor};
-  vertical-align: middle;
-`;
-
-const TrackWrapper = styled.div`
-  display: table;
-  width: 100%;
-  height: 100%;
-`;
-
-class TrackTeaser extends Component {
-  render() {
-    const track = this.props.item;
-
-    return (
-      <TrackWrapper>
-        <TrackTeaserNumber>{track.number}</TrackTeaserNumber>
-        <TrackTeaserName>{track.title}</TrackTeaserName>
-        <TrackTeaserDuration>{track.duration}</TrackTeaserDuration>
-      </TrackWrapper>
-    );
-  }
-}
 
 const TracksPane = styled.div`
   display: inline-block;
@@ -53,15 +16,41 @@ const TracksPane = styled.div`
   overflow-y: hidden;
   width: 34%;
   height: 100%;
+  border-left: 3px solid ${props => props.theme.separatorColor};
 `;
 
 class TracksPaneContainer extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onSortChangeHandler = this.onSortChangeHandler.bind(this)
+  }
+
+  // Change event handler for LibraryBrowserListHeader.
+  onSortChangeHandler(event) {
+    // Pass the new selected sort option to the dispatcher.
+    this.props.onChange(event.target.value)
+  }
+
   render() {
     const tracks = this.props.tracks;
+    const orderBy = this.props.orderBy;
+    const orderByOptions = [
+      {value: 'title', label: 'title'},
+      {value: 'number', label: 'track number'},
+      {value: 'albumId', label: 'album'},
+      {value: 'artistId', label: 'artist'},
+      {value: 'duration', label: 'duration'},
+    ];
 
     return (
       <TracksPane>
-        <h2>Tracks</h2>
+        <LibraryBrowserListHeader
+          title={'Tracks'}
+          orderBy={orderBy}
+          orderByOptions={orderByOptions}
+          onChange={this.onSortChangeHandler}
+        />
         <LibraryBrowserList
           items={tracks}
           itemDisplay={TrackTeaser}
@@ -71,7 +60,26 @@ class TracksPaneContainer extends Component {
   }
 }
 TracksPaneContainer.propTypes = {
-  tracks: PropTypes.array.isRequired
+  tracks: PropTypes.array.isRequired,
+  orderBy: PropTypes.string.isRequired
 };
 
-export default TracksPaneContainer;
+const mapStateToProps = state => {
+  return {
+    tracks: immutableNestedSort(state.libraryBrowser.current.tracks, state.libraryBrowser.current.sortTracks),
+    orderBy: state.libraryBrowser.current.sortTracks
+  }
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    onChange: sortProperty => {
+      dispatch(libraryBrowserSortTracks(sortProperty))
+    }
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TracksPaneContainer);
+
