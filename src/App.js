@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { injectGlobal, ThemeProvider } from 'styled-components';
 import apolloClient from './graphql/apollo';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
+import { BrowserRouter as Router } from "react-router-dom";
 import configureStore from './store';
 
 import MaterialIconsEot from './assets/fonts/MaterialIcons-Regular.eot';
@@ -11,7 +12,8 @@ import MaterialIconsWoff from './assets/fonts/MaterialIcons-Regular.woff';
 import MaterialIconsWoff2 from './assets/fonts/MaterialIcons-Regular.woff2';
 import MaterialIconsSvg from './assets/fonts/MaterialIcons-Regular.svg';
 import themeDefault from './themes/light';
-import LibraryBrowser from "./browser/components/LibraryBrowser";
+import AlbaApp from './AlbaApp'
+
 
 // Global styles used by the styled components.
 injectGlobal`
@@ -36,14 +38,16 @@ class App extends Component {
   render() {
     return (
       <ThemeProvider theme={themeDefault}>
-        <Provider store={store}>
+        <ReduxProvider store={store}>
           <ApolloProvider client={apolloClient}>
-            <LibraryBrowser />
+            <Router>
+              <AlbaApp/>
+            </Router>
           </ApolloProvider>
-        </Provider>
+        </ReduxProvider>
       </ThemeProvider>
     );
   }
 }
 
-export default App;
+export default App

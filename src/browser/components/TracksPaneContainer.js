@@ -4,9 +4,10 @@ import styled from 'styled-components'
 import LibraryBrowserList from './LibraryBrowserList'
 import TrackTeaser from './TrackTeaser'
 import { connect } from "react-redux";
-import { immutableNestedSort } from "../utils";
+import { immutableNestedSort } from "../../utils";
 import LibraryBrowserListHeader from "./LibraryBrowserListHeader";
 import { libraryBrowserSortTracks } from "../actions";
+import TrackContextMenu from './TrackContextMenu';
 
 
 const TracksPane = styled.div`
@@ -16,7 +17,7 @@ const TracksPane = styled.div`
   overflow-y: hidden;
   width: 34%;
   height: 100%;
-  border-left: 3px solid ${props => props.theme.separatorColor};
+  //border-left: 3px solid ${props => props.theme.separatorColor};
 `;
 
 class TracksPaneContainer extends Component {
@@ -55,6 +56,7 @@ class TracksPaneContainer extends Component {
           items={tracks}
           itemDisplay={TrackTeaser}
         />
+        <TrackContextMenu/>
       </TracksPane>
     );
   }
@@ -66,8 +68,8 @@ TracksPaneContainer.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    tracks: immutableNestedSort(state.libraryBrowser.current.tracks, state.libraryBrowser.current.sortTracks),
-    orderBy: state.libraryBrowser.current.sortTracks
+    tracks: immutableNestedSort(state.libraryBrowser.tracks, state.libraryBrowser.sortTracks),
+    orderBy: state.libraryBrowser.sortTracks
   }
 };
 const mapDispatchToProps = dispatch => {

@@ -1,0 +1,2 @@
+
+- make library elements objects containings data objects indexed by their id

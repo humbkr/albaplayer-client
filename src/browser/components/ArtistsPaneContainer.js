@@ -4,9 +4,10 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import LibraryBrowserList from "./LibraryBrowserList"
 import ArtistTeaser from "./ArtistTeaser"
-import { immutableNestedSort } from "../utils";
+import { immutableNestedSort } from "../../utils";
 import LibraryBrowserListHeader from "./LibraryBrowserListHeader";
 import { libraryBrowserSortArtists } from "../actions";
+import ArtistContextMenu from './ArtistContextMenu'
 
 
 const ArtistsPane = styled.div`
@@ -51,6 +52,7 @@ class ArtistsPaneContainer extends Component {
           items={artists}
           itemDisplay={ArtistTeaser}
         />
+        <ArtistContextMenu/>
       </ArtistsPane>
     );
   }
@@ -62,8 +64,8 @@ ArtistsPaneContainer.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    artists: immutableNestedSort(state.libraryBrowser.current.artists, state.libraryBrowser.current.sortArtists),
-    orderBy: state.libraryBrowser.current.sortArtists
+    artists: immutableNestedSort(state.libraryBrowser.artists, state.libraryBrowser.sortArtists),
+    orderBy: state.libraryBrowser.sortArtists
   }
 };
 const mapDispatchToProps = dispatch => {

@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { libraryBrowserSelectArtist } from "../actions"
+import { menuProvider } from "react-contexify";
 
 const ArtistTeaserName = styled.h2`
   display: table-cell;
@@ -16,6 +17,7 @@ const ArtistTeaserWrapper = styled.div`
   display: table;
   width: 100%;
   height: 100%;
+  height: ${props => props.theme.itemHeight};
   ${props => props.selected ? 'background-color: ' + props.theme.highlight : ''};
 `;
 
@@ -41,7 +43,7 @@ ArtistTeaser.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    selectedArtists: state.libraryBrowser.current.selectedArtists
+    selectedArtists: state.libraryBrowser.selectedArtists
   }
 };
 const mapDispatchToProps = dispatch => {
@@ -52,7 +54,10 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
+// Bind the context menu event.
+const addContextMenu = menuProvider('artist-context-menu');
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ArtistTeaser)
+)(addContextMenu(ArtistTeaser))

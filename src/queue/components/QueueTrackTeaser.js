@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { connect } from "react-redux";
-import { libraryBrowserSelectTrack } from "../actions";
-import { menuProvider } from 'react-contexify';
 
 const TrackTeaserNumber = styled.div`
   display: table-cell;
@@ -35,17 +32,13 @@ const TrackWrapper = styled.div`
   ${props => props.selected ? 'background-color: ' + props.theme.highlight : ''};
 `;
 
-class TrackTeaser extends Component {
+class QueueTrackTeaser extends Component {
 
   render() {
     const track = this.props.item;
-    const selectedTracks = this.props.selectedTracks;
-    const selected = (selectedTracks === track.id) ? {selected: true} : {};
-
-    const onClick = this.props.onClick;
 
     return (
-      <TrackWrapper onClick={() => onClick(track.id)} {...selected}>
+      <TrackWrapper>
         <TrackTeaserNumber>{track.number}</TrackTeaserNumber>
         <TrackTeaserName>{track.title}</TrackTeaserName>
         <TrackTeaserDuration>{track.duration}</TrackTeaserDuration>
@@ -53,29 +46,8 @@ class TrackTeaser extends Component {
     );
   }
 }
-TrackTeaser.propTypes = {
-  item: PropTypes.object.isRequired,
-  selectedTracks: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+QueueTrackTeaser.propTypes = {
+  item: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => {
-  return {
-    selectedTracks: state.libraryBrowser.selectedTracks
-  }
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    onClick: trackId => {
-      dispatch(libraryBrowserSelectTrack(trackId))
-    }
-  }
-};
-
-// Bind the context menu event.
-const addContextMenu = menuProvider('track-context-menu');
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(addContextMenu(TrackTeaser))
+export default QueueTrackTeaser

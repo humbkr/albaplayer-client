@@ -7,6 +7,7 @@ const themeDefault = {
   textSecondaryColor: '#959595',
 
   sidebar: {
+    width: '250px',
     background: '#333333',
     textPrimaryColor: '#d9d9d9',
     textPrimaryColorHover: '#333333',

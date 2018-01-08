@@ -4,9 +4,10 @@ import styled from 'styled-components'
 import LibraryBrowserList from './LibraryBrowserList'
 import AlbumTeaser from './AlbumTeaser'
 import { connect } from "react-redux";
-import { immutableNestedSort } from "../utils";
+import { immutableNestedSort } from "../../utils";
 import LibraryBrowserListHeader from "./LibraryBrowserListHeader";
 import { libraryBrowserSortAlbums } from "../actions";
+import AlbumContextMenu from './AlbumContextMenu';
 
 const AlbumsPane = styled.div`
   display: inline-block;
@@ -15,7 +16,7 @@ const AlbumsPane = styled.div`
   overflow-y: hidden;
   width: 33%;
   height: 100%;
-  border-left: 3px solid ${props => props.theme.separatorColor};
+  //border-left: 3px solid ${props => props.theme.separatorColor};
 `;
 
 class AlbumsPaneContainer extends Component {
@@ -52,6 +53,7 @@ class AlbumsPaneContainer extends Component {
           items={albums}
           itemDisplay={AlbumTeaser}
         />
+        <AlbumContextMenu/>
       </AlbumsPane>
     );
   }
@@ -63,8 +65,8 @@ AlbumsPaneContainer.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    albums: immutableNestedSort(state.libraryBrowser.current.albums, state.libraryBrowser.current.sortAlbums),
-    orderBy: state.libraryBrowser.current.sortAlbums
+    albums: immutableNestedSort(state.libraryBrowser.albums, state.libraryBrowser.sortAlbums),
+    orderBy: state.libraryBrowser.sortAlbums
   }
 };
 const mapDispatchToProps = dispatch => {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from "react-redux";
 import { libraryBrowserSelectAlbum } from "../actions";
+import { menuProvider } from "react-contexify";
 
 const AlbumTeaserTitle = styled.h2`
   font-size: 1em;
@@ -26,6 +27,7 @@ const AlbumTeaserWrapper = styled.div`
   width: 100%;
   height: 100%;
   padding-left: 15px;
+  height: ${props => props.theme.itemHeight};
   ${props => props.selected ? 'background-color: ' + props.theme.highlight : ''};
   
   > div {
@@ -63,7 +65,7 @@ AlbumTeaser.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    selectedAlbums: state.libraryBrowser.current.selectedAlbums
+    selectedAlbums: state.libraryBrowser.selectedAlbums
   }
 };
 const mapDispatchToProps = dispatch => {
@@ -74,7 +76,10 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
+// Bind the context menu event.
+const addContextMenu = menuProvider('album-context-menu');
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AlbumTeaser)
+)(addContextMenu(AlbumTeaser))
