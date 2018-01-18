@@ -1,14 +1,14 @@
 import {
   QUEUE_ADD_ALBUM, QUEUE_ADD_ARTIST, QUEUE_ADD_TRACK,
   QUEUE_CLEAR, QUEUE_PLAY_ALBUM, QUEUE_PLAY_ARTIST, QUEUE_PLAY_TRACK,
-  QUEUE_REMOVE_TRACK
+  QUEUE_REMOVE_TRACK, QUEUE_SET_CURRENT
 } from "./actions";
 import { immutableRemove } from "../utils";
 
 
 const initialState = {
   tracks: [],
-  current: ''
+  current: undefined
 };
 
 function queue(state = initialState, action, library) {
@@ -67,6 +67,11 @@ function queue(state = initialState, action, library) {
       return Object.assign({}, state, {
         tracks: {},
         current: ''
+      });
+    case QUEUE_SET_CURRENT:
+      return Object.assign({}, state, {
+        ...state,
+        current: action.position
       });
 
     default:

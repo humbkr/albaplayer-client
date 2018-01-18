@@ -19,8 +19,6 @@ class MainPlayer extends React.Component {
   render() {
     const {
       width,
-      name,
-      volumeOrientationDown,
       controlStates,
       controlCallbacks,
       timelineStates,
@@ -37,18 +35,9 @@ class MainPlayer extends React.Component {
         />
         <div>
           <Controls
-            volumeOrientationDown={volumeOrientationDown}
             {...controlStates}
             {...controlCallbacks}
           />
-          <div>
-            <div title={name}>{name}</div>
-            <div>
-              <Time time={this.state.progressTime} />
-              <span>{'/'}</span>
-              <Time time={timelineStates.duration} />
-            </div>
-          </div>
         </div>
       </div>
     );

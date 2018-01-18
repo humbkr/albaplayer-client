@@ -9,6 +9,8 @@ const QueueListItemRow = styled.li`
   table-layout: fixed;
   width: 100%;
   border-bottom: 1px solid ${props => props.theme.separatorColor};
+  
+  ${props => props.isCurrent ? 'font-weight: bold' : ''};
 `;
 
 const QueueListItemPosition =  styled.div`
@@ -16,6 +18,7 @@ const QueueListItemPosition =  styled.div`
   width: 60px;
   text-align: center;
   vertical-align: middle;
+  color: ${props => props.theme.textSecondaryColor};
 `;
 
 const QueueListItemTrackTitle = styled.div`
@@ -28,6 +31,7 @@ const QueueListItemDuration = styled.div`
   width: 70px;
   vertical-align: middle;
   text-align: center;
+  color: ${props => props.theme.textSecondaryColor};
 `;
 
 const QueueListItemCell = styled.div`
@@ -42,11 +46,13 @@ class QueueList extends Component {
   render() {
     const virtual = this.props.virtual;
     const itemHeight = this.props.itemHeight;
+    const current = this.props.current;
+
 
     return (
       <ul style={virtual.style}>
         {virtual.items.map((item) => (
-          <QueueListItemRow key={item.position} style={{height: itemHeight}}>
+          <QueueListItemRow key={item.position} style={{height: itemHeight}} isCurrent={(current + 1 === item.position)}>
             <QueueListItemPosition>{item.position}</QueueListItemPosition>
             <QueueListItemTrackTitle>{item.title}</QueueListItemTrackTitle>
             <QueueListItemDuration>{item.duration}</QueueListItemDuration>
@@ -59,7 +65,8 @@ class QueueList extends Component {
 QueueList.propTypes = {
   virtual: PropTypes.object.isRequired,
   itemHeight: PropTypes.number.isRequired,
-  items: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired,
+  current: PropTypes.number
 };
 
 export default VirtualList()(QueueList);

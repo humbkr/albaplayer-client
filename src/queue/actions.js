@@ -64,35 +64,12 @@ const queueClear = () => {
   }
 };
 
-const fetchTrackInfo = (trackId) => {
-  const trackInfo = gql`
-    query trackInfo {
-      track(id: ${trackId}) {
-        id
-        title
-        number
-        disc
-        duration
-        path
-        artist {
-          id
-          name
-        }
-        album {
-          id
-          title
-        }
-      }
-    }
-  `;
-
-  return function (dispatch) {
-    // Then we make the API call.
-    return apolloClient.query({ query: trackInfo })
-    .then(
-      response => dispatch(queueAddTrack(response.track))
-    )
-  };
+const QUEUE_SET_CURRENT = 'QUEUE_SET_CURRENT';
+const queueSetCurrent = (position) => {
+  return {
+    type: QUEUE_SET_CURRENT,
+    position: position
+  }
 };
 
 export {
@@ -104,6 +81,7 @@ export {
   QUEUE_PLAY_ARTIST,
   QUEUE_REMOVE_TRACK,
   QUEUE_CLEAR,
+  QUEUE_SET_CURRENT,
   queueAddTrack,
   queueAddAlbum,
   queueAddArtist,
@@ -112,4 +90,5 @@ export {
   queuePlayArtist,
   queueRemoveTrack,
   queueClear,
+  queueSetCurrent,
 }

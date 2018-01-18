@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import SelectContainer from "../../common/SelectContainer"
 
 const LibraryBrowserListHeaderWrapper = styled.div`
-  background-color: aquamarine;
   display: table;
   height: ${props => props.theme.itemHeight};
   width: 100%;
+  color: ${props => props.theme.textSecondaryColor};
 
   > h2 {
     display: table-cell;

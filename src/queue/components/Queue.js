@@ -20,6 +20,7 @@ const Queue = (props) => {
       <QueueList
         items={items}
         itemHeight={parseInt(props.theme.itemHeight, 0)}
+        current={props.current}
       />
     </div>
   )
@@ -27,7 +28,7 @@ const Queue = (props) => {
 
 Queue.propTypes = {
   tracks: PropTypes.array.isRequired,
-  current: PropTypes.string.isRequired
+  current: PropTypes.number
 };
 
 const mapStateToProps = state => {

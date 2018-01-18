@@ -14,12 +14,13 @@ class AudioPlayer extends React.PureComponent {
     width: PropTypes.number,
     height: PropTypes.number,
     autoPlay: PropTypes.bool,
-    comment: PropTypes.bool,
-    volumeOrientationDown: PropTypes.bool,
     onCommentSubmit: PropTypes.func,
     color: PropTypes.string,
-    CoverWrapperStates: PropTypes.shape({
-      songImageSrc: PropTypes.string,
+    songInfo: PropTypes.shape({
+      title: PropTypes.string,
+      artist: PropTypes.string,
+      cover: PropTypes.string,
+      position: PropTypes.number
     }),
     controlStates: PropTypes.shape({
       playing: PropTypes.bool,
@@ -47,12 +48,8 @@ class AudioPlayer extends React.PureComponent {
   static defaultProps = {
     width: 400,
     height: 300,
-    songImage: false,
     color: '#fff',
-    autoPlay: false,
-    comment: false,
-    volumeOrientationDown: false,
-    onCommentSubmit: null
+    autoPlay: false
   };
   static childContextTypes = {
     color: PropTypes.string
@@ -65,14 +62,13 @@ class AudioPlayer extends React.PureComponent {
   render() {
     const {
       width,
-      name,
-      volumeOrientationDown,
-      CoverWrapperStates,
+      songInfo,
       controlStates,
       controlCallbacks,
       timelineStates,
       timelineCallbacks
     } = this.props;
+
     const height = this.props.height;
     const newStyle = Object.assign({}, {
       width: `${width}px`,
@@ -84,12 +80,10 @@ class AudioPlayer extends React.PureComponent {
     return (
       <AudioPlayerWrapper>
         <SongInfo
-          {...CoverWrapperStates}
+          {...songInfo}
         />
         <MainPlayer
           width={_width}
-          name={name}
-          volumeOrientationDown={volumeOrientationDown}
           controlStates={controlStates}
           controlCallbacks={controlCallbacks}
           timelineStates={timelineStates}

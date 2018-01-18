@@ -4,15 +4,11 @@ import PropTypes from 'prop-types';
 
 const HOCAudio = (Audio) => {
   return class HOCAudioComponent extends React.Component {
-    static propTypes = {
-      playlist: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string,
-        src: PropTypes.string,
-        img: PropTypes.string,
-      })).isRequired
-    };
+
     constructor(props) {
       super(props);
+
+      /*
       if (!this.props.playlist || this.props.playlist.length === 0) {
         throw new Error('You should provide a playlist which contains at least 1 audio object');
       }
@@ -22,6 +18,7 @@ const HOCAudio = (Audio) => {
           throw new Error('You should provide song.img when the fullPlayer is enabled.');
         }
       });
+      */
 
       // bind methods
       this.playNext = props.autoPlay; // A boolean to determine whether to play the next song or not
@@ -57,6 +54,7 @@ const HOCAudio = (Audio) => {
         }
       };
     }
+
     onCanPlay() {
       // console.log('audio oncanplay');
       this.playNext = this.state.playing;
@@ -64,6 +62,7 @@ const HOCAudio = (Audio) => {
         duration: this.audioElement.duration
       });
     }
+
     onPlay() {
       // console.log('audio onplay');
       this.playNext = true;
@@ -72,21 +71,25 @@ const HOCAudio = (Audio) => {
         this.setState({ progress: this.audioElement.currentTime });
       }, 900);
     }
+
     onPause() {
       // console.log('audio onpause');
       this.setState({ playing: false });
       this._clearInterval();
     }
+
     onEnded() {
       // console.log('audio onended');
       if (this.playNext) {
         this.handleEndedProgress();
       }
     }
+
     // onTimeUpdate(e) {
     //   this.setState({ progress: this.audioElement.currentTime });
     //   console.log(e.target.currentTime);
     // }
+
     handleEndedProgress() {
       this.playNext = true;
       switch (this.state.playingState) {
@@ -139,11 +142,13 @@ const HOCAudio = (Audio) => {
         }
       }
     }
+
     setVolume(volume) {
       // console.log(`volume is set to ${volume}`);
       this.audioElement.volume = volume;
       this.setState({ volume });
     }
+
     setProgress(newProgress) {
       let progress = newProgress;
       const duration = this.audioElement.duration;
@@ -154,6 +159,7 @@ const HOCAudio = (Audio) => {
       this.setState({ progress });
       // console.log(`progress is set to ${progress}`);
     }
+
     _clearInterval() {
       // console.log('interval cleared');
       if (this.intervalId !== null) {
@@ -161,6 +167,7 @@ const HOCAudio = (Audio) => {
         this.intervalId = null;
       }
     }
+
     loadSrc() {
       // console.log('load src');
       if (this.state.currentPlaylistPos < this.props.playlist.length) {
@@ -173,6 +180,7 @@ const HOCAudio = (Audio) => {
         this._clearInterval();
       }
     }
+
     togglePlayPause() {
       // console.log('toggle playpause');
       if (this.state.playing) {
@@ -184,21 +192,25 @@ const HOCAudio = (Audio) => {
         this.audioElement.play();
       }
     }
+
     skipToNext() {
       // console.log('skip to next');
       this.state.currentPlaylistPos = this.setCycleNumPos(this.state.currentPlaylistPos, 1, this.props.playlist.length);
       this.loadSrc();
     }
+
     skipToPrevious() {
       // console.log('skip to next');
       this.state.currentPlaylistPos = this.setCycleNumPos(this.state.currentPlaylistPos, -1, this.props.playlist.length);
       this.loadSrc();
     }
+
     togglePlayingState() {
       this.setState({
         playingState: this.setCycleNumPos(this.state.playingState, 1, 3)
       });
     }
+
     setCycleNumPos(currentVal, change, length) {
       let newPos = currentVal + change;
       if (newPos >= length) {
@@ -208,39 +220,6 @@ const HOCAudio = (Audio) => {
         newPos += length;
       }
       return newPos;
-    }
-
-    render() {
-      const newProps = Object.assign({}, {
-        name: this.props.playlist[this.state.currentPlaylistPos].name,
-        CoverWrapperStates: {
-          songImageSrc: this.props.playlist[this.state.currentPlaylistPos].img,
-          pos: this.state.currentPlaylistPos
-        },
-        controlStates: {
-          playing: this.state.playing,
-          playingState: this.state.playingState,
-          volume: this.state.volume * 100
-        },
-        controlCallbacks: {
-          setVolume: this.setVolume,
-          togglePlayPause: this.togglePlayPause,
-          togglePlayingState: this.togglePlayingState,
-          skipToNext: this.skipToNext,
-          skipToPrevious: this.skipToPrevious
-        },
-        timelineStates: {
-          playing: this.state.playing,
-          progress: this.state.progress,
-          duration: this.state.duration
-        },
-        timelineCallbacks: {
-          setProgress: this.setProgress,
-          togglePlayPause: this.togglePlayPause
-        },
-        children: this.props.children
-      }, this.props);
-      return <Audio {...newProps} />;
     }
 
     playEventHandler() {
@@ -292,8 +271,57 @@ const HOCAudio = (Audio) => {
       ReactDOM.findDOMNode(this).removeEventListener('audio-skip-to-next', this.skipToNextEventHandler);
       ReactDOM.findDOMNode(this).removeEventListener('audio-skip-to-previous', this.skipToPreviousEventHandler);
     }
-  };
 
+    render() {
+      const songTitle = (this.props.playlist[this.state.currentPlaylistPos].title) ? this.props.playlist[this.state.currentPlaylistPos].title : 'Unknown title';
+      const songArtist = (this.props.playlist[this.state.currentPlaylistPos].artist) ? this.props.playlist[this.state.currentPlaylistPos].artist.name : 'Unknown artist';
+      const cover = (this.props.playlist[this.state.currentPlaylistPos].cover) ? this.props.playlist[this.state.currentPlaylistPos].cover : null;
+
+      const newProps = Object.assign({}, {
+        songInfo: {
+          title: songTitle,
+          artist: songArtist,
+          cover: cover
+        },
+        name: this.props.playlist[this.state.currentPlaylistPos].name,
+        controlStates: {
+          playing: this.state.playing,
+          playingState: this.state.playingState,
+          volume: this.state.volume * 100
+        },
+        controlCallbacks: {
+          setVolume: this.setVolume,
+          togglePlayPause: this.togglePlayPause,
+          togglePlayingState: this.togglePlayingState,
+          skipToNext: this.skipToNext,
+          skipToPrevious: this.skipToPrevious
+        },
+        timelineStates: {
+          playing: this.state.playing,
+          progress: this.state.progress,
+          duration: this.state.duration
+        },
+        timelineCallbacks: {
+          setProgress: this.setProgress,
+          togglePlayPause: this.togglePlayPause
+        },
+        children: this.props.children
+      }, this.props);
+
+      return <Audio {...newProps} />;
+    }
+  };
+};
+HOCAudio.propTypes = {
+  playlist: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string,
+    src: PropTypes.string.isRequired,
+    cover: PropTypes.string,
+    artist: PropTypes.objectOf(PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }))
+  })).isRequired
 };
 
 export default HOCAudio;

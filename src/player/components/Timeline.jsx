@@ -12,7 +12,7 @@ class Timeline extends React.Component {
     super(props);
     this.state = {
       showHandler: false,
-      barWidth: (props.appWidth < 300) ? 300 : props.appWidth,
+      barWidth: props.appWidth,
       translate: 0
     };
     this.holding = false;
