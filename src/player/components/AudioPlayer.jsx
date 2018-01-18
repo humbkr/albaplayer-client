@@ -5,6 +5,7 @@ import HOCAudio from './HOCAudio';
 import SongInfo from './SongInfo';
 import MainPlayer from './MainPlayer';
 
+
 const AudioPlayerWrapper = styled.div`
   width: 100%;
 `;
@@ -14,7 +15,6 @@ class AudioPlayer extends React.PureComponent {
     width: PropTypes.number,
     height: PropTypes.number,
     autoPlay: PropTypes.bool,
-    onCommentSubmit: PropTypes.func,
     color: PropTypes.string,
     songInfo: PropTypes.shape({
       title: PropTypes.string,
@@ -75,7 +75,10 @@ class AudioPlayer extends React.PureComponent {
       height: `${height}px`
     }, this.props.style);
 
-    const _width = parseInt(newStyle.width);
+    const _width = parseInt(newStyle.width, 0);
+
+    console.log('in AudioPlayer render');
+    console.log(this.props.track);
 
     return (
       <AudioPlayerWrapper>

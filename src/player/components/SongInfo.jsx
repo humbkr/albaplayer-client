@@ -6,6 +6,8 @@ import coverPlaceholder from '../assets/cover_placeholder.png';
 
 const SongInfoWrapper = styled.div`
   position: relative;
+  width: ${props => props.theme.sidebar.width};
+  height: ${props => props.theme.sidebar.width};
 `;
 
 const Cover = styled.img`
@@ -15,7 +17,7 @@ const Cover = styled.img`
 const Overlay = styled.div`
   position: absolute;
   background-color: #191922;
-  opacity: .40;
+  opacity: .65;
   top: 0;
   left: 0;
   width: 100%;
