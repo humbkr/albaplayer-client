@@ -42,21 +42,21 @@ function queue(state = initialState, action, library) {
         tracks: [
           ...library.tracks.filter(item => (action.trackId === item.id))
         ],
-        current: state.current
+        current: 0
       });
     case QUEUE_PLAY_ALBUM:
       return Object.assign({}, state, {
         tracks: [
           ...library.tracks.filter(item => (action.albumId === item.albumId))
         ],
-        current: state.current
+        current: 0
       });
     case QUEUE_PLAY_ARTIST:
       return Object.assign({}, state, {
         tracks: [
           ...library.tracks.filter(item => (action.artistId === item.artistId))
         ],
-        current: state.current
+        current: 0
       });
     case QUEUE_REMOVE_TRACK:
       return Object.assign({}, state, {

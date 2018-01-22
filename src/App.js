@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { injectGlobal, ThemeProvider } from 'styled-components';
-import apolloClient from './graphql/apollo';
+import apolloClient from './backend/apollo';
 import { Provider as ReduxProvider } from 'react-redux';
 import { BrowserRouter as Router } from "react-router-dom";
 import configureStore from './store';

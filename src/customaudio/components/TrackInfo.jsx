@@ -4,10 +4,12 @@ import styled from 'styled-components';
 import coverPlaceholder from '../assets/cover_placeholder.png';
 
 
-const SongInfoWrapper = styled.div`
+const TrackInfoWrapper = styled.div`
   position: relative;
   width: ${props => props.theme.sidebar.width};
   height: ${props => props.theme.sidebar.width};
+  background: url(${coverPlaceholder}) no-repeat;
+  background-size: 100% 100%;
 `;
 
 const Cover = styled.img`
@@ -44,32 +46,31 @@ const ArtistName = styled.h2`
   color: #fff;
 `;
 
-class SongInfo extends React.PureComponent {
-  static propTypes = {
-    title: PropTypes.string,
-    artist: PropTypes.string,
-    cover: PropTypes.string
-  };
-  static defaultProps = {
-    title: 'Unknown title',
-    artist: 'Unknown artist',
-    cover: coverPlaceholder
-  };
-
+class TrackInfo extends React.PureComponent {
   render() {
-    const { title, artist, cover } = this.props;
+    const track = this.props.track;
+    const trackTitle = (track && track.title !== '') ? track.title : 'Unknown title';
+    const trackArtist = (track && track.artist && track.artist.name) ? track.artist.name : 'Unknown artist';
+    const trackCover = (track && track.cover) ? track.cover : false;
 
     return (
-      <SongInfoWrapper>
-        <Cover src={cover ? cover : coverPlaceholder} alt="Song cover"/>
+      <TrackInfoWrapper>
         <Overlay/>
-        <OverlayText>
-          <TrackTitle>{title}</TrackTitle>
-          <ArtistName>by {artist}</ArtistName>
-        </OverlayText>
-      </SongInfoWrapper>
+        {trackCover &&
+          <Cover src={trackCover}/>
+        }
+        {track &&
+          <OverlayText>
+            <TrackTitle>{trackTitle}</TrackTitle>
+            <ArtistName>by {trackArtist}</ArtistName>
+          </OverlayText>
+        }
+      </TrackInfoWrapper>
     );
   }
 }
+TrackInfo.propTypes = {
+  track: PropTypes.object,
+};
 
-export default SongInfo;
+export default TrackInfo;

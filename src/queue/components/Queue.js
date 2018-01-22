@@ -17,11 +17,13 @@ const Queue = (props) => {
   return (
     <div>
       <QueueHeader/>
-      <QueueList
-        items={items}
-        itemHeight={parseInt(props.theme.itemHeight, 0)}
-        current={props.current}
-      />
+      { items.length > 0 &&
+        <QueueList
+          items={items}
+          itemHeight={parseInt(props.theme.itemHeight, 0)}
+          current={props.current}
+        />
+      }
     </div>
   )
 };

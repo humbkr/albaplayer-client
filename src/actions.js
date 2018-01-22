@@ -1,4 +1,4 @@
-import apolloClient from './graphql/apollo';
+import apolloClient from './backend/apollo';
 import gql from "graphql-tag";
 
 const LIBRARY_INIT_START = 'LIBRARY_INIT_START';

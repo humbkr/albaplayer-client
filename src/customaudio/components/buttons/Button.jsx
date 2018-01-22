@@ -13,18 +13,14 @@ const ControlButton = styled.button`
 `;
 
 class Button extends React.PureComponent {
-  static propTypes = {
-    onClick: PropTypes.func
-  };
-  static defaultProps = {
-    onClick: null
-  };
   constructor(props) {
     super(props);
     this.state = { mouseOver: false };
   }
+
   render() {
     const newClassName = this.props.className;
+
     return (
       <ControlButton
         className={newClassName}
@@ -41,8 +37,11 @@ class Button extends React.PureComponent {
     );
   }
 }
-Button.contextTypes = {
-  color: PropTypes.string
+Button.propTypes = {
+  onClick: PropTypes.func
+};
+Button.defaultProps = {
+  onClick: null
 };
 
 export default Button;

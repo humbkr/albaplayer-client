@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import MainMenuLink from "./SidebarNavLink";
-import Player from "../../player/components/Player";
+import Player from "../../customaudio/components/Player";
 
 const SidebarWrapper = styled.div`
   position: fixed;
@@ -18,7 +18,7 @@ const MainMenu = styled.div`
 
 const Sidebar = () => (
   <SidebarWrapper>
-    <Player/>
+    <Player />
     <MainMenu>
       <MainMenuLink to="/queue">
         <span>Now playing</span>

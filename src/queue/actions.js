@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import apolloClient from "../graphql/apollo";
+import apolloClient from "../backend/apollo";
 
 const QUEUE_ADD_TRACK = 'QUEUE_ADD_TRACK';
 const queueAddTrack = (trackId) => {
