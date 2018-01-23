@@ -153,12 +153,12 @@ const Audio = (Player) => {
 
   const mapStateToProps = state => {
     return {
-      track: state.audioPlayer.track,
-      playing: state.audioPlayer.playing,
-      shuffle: state.audioPlayer.shuffle,
-      repeat: state.audioPlayer.repeat,
-      volume: state.audioPlayer.volume,
-      progress: state.audioPlayer.progress,
+      track: state.player.track,
+      playing: state.player.playing,
+      shuffle: state.player.shuffle,
+      repeat: state.player.repeat,
+      volume: state.player.volume,
+      progress: state.player.progress,
     };
   };
   const mapDispatchToProps = dispatch => ({

@@ -18,7 +18,7 @@ function library(state = initialState, action) {
       });
 
     case LIBRARY_INIT_SUCCESS:
-      // Populate original and current lsits data.
+      // Populate original and current lists data.
       return Object.assign({}, state, {
         ...state,
         isFetching: false,

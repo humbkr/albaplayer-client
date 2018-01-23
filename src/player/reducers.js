@@ -18,7 +18,7 @@ const initialState = {
   track: null,
 };
 
-function audioPlayer(state = initialState, action) {
+function player(state = initialState, action) {
   switch (action.type) {
     case PLAYER_TOGGLE_PLAY_PAUSE:
       return {
@@ -84,4 +84,4 @@ function setCycleNumPos(currentValue, change, length) {
   return newPos;
 }
 
-export default audioPlayer;
+export default player;

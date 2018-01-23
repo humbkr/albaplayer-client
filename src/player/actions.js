@@ -85,7 +85,7 @@ const playNextTrack = () => {
     let nextTrackId = 0;
     let newQueuePosition = 0;
 
-    if (state.audioPlayer.track === null) {
+    if (state.player.track === null) {
       // First play after launch.
       if (state.queue.tracks.length > 0) {
         // Get first track of the queue.
@@ -95,14 +95,14 @@ const playNextTrack = () => {
         // No track to play, do nothing.
         return;
       }
-    } else if (state.audioPlayer.repeat === PLAYER_REPEAT_LOOP_ONE) {
+    } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ONE) {
       // Play the same track again.
       // TODO: Maybe create an action to reset the current track.
       newQueuePosition = state.queue.current;
       nextTrackId = state.queue.tracks[state.queue.current].id;
     } else {
       // Get the next track to play.
-      if (state.audioPlayer.shuffle) {
+      if (state.player.shuffle) {
         // TODO: shuffle functionality is currently shit.
         const randomIndex = Math.floor(Math.random() * state.queue.tracks.length);
         newQueuePosition = randomIndex;
@@ -113,7 +113,7 @@ const playNextTrack = () => {
         nextTrackId = state.queue.tracks[state.queue.current + 1].id;
       } else {
         // End of the queue.
-        if (state.audioPlayer.repeat === PLAYER_REPEAT_LOOP_ALL) {
+        if (state.player.repeat === PLAYER_REPEAT_LOOP_ALL) {
           // Loop back to the first track of the queue.
           newQueuePosition = 0;
           nextTrackId = state.queue.tracks[0].id;
@@ -153,16 +153,16 @@ const playPreviousTrack = () => {
     let newQueuePosition = 0;
 
     // Get trackId of the previous track in playlist.
-    if (state.audioPlayer.track === null) {
+    if (state.player.track === null) {
       // Do nothing.
       return;
-    } else if (state.audioPlayer.repeat === PLAYER_REPEAT_LOOP_ONE) {
+    } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ONE) {
       // Play the same track again.
       // TODO: Maybe create an action to reset the current track.
       newQueuePosition = state.queue.current;
       prevTrackId = state.queue.tracks[state.queue.current].id;
     } else {
-      if (state.audioPlayer.shuffle) {
+      if (state.player.shuffle) {
         // TODO: shuffle functionality is currently shit.
         const randomIndex = Math.floor(Math.random() * state.queue.tracks.length);
         newQueuePosition = randomIndex;
@@ -173,7 +173,7 @@ const playPreviousTrack = () => {
         prevTrackId = state.queue.tracks[state.queue.current - 1].id;
       } else {
         // Begining of the queue.
-        if (state.audioPlayer.repeat === PLAYER_REPEAT_LOOP_ALL) {
+        if (state.player.repeat === PLAYER_REPEAT_LOOP_ALL) {
           // Loop back to the last track of the queue.
           newQueuePosition = state.queue.tracks.length - 1;
           prevTrackId = state.queue.tracks[state.queue.tracks.length - 1].id;
