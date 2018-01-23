@@ -28,10 +28,11 @@ const playerToggleRepeat = () => {
   }
 };
 
-const PLAYER_TOGGLE_VOLUME = 'PLAYER_TOGGLE_VOLUME';
-const playerToggleVolume = () => {
+const PLAYER_SET_VOLUME = 'PLAYER_SET_VOLUME';
+const playerSetVolume = (volume) => {
   return {
-    type: PLAYER_TOGGLE_VOLUME
+    type: PLAYER_SET_VOLUME,
+    volume: volume
   }
 };
 
@@ -208,13 +209,13 @@ export {
   PLAYER_REPEAT_LOOP_ALL,
   PLAYER_REPEAT_LOOP_ONE,
   PLAYER_TOGGLE_REPEAT,
-  PLAYER_TOGGLE_VOLUME,
+  PLAYER_SET_VOLUME,
   PLAYER_SET_TRACK,
   PLAYER_SET_DURATION,
   PLAYER_SET_PROGRESS,
   playerToggleShuffle,
   playerToggleRepeat,
-  playerToggleVolume,
+  playerSetVolume,
   playerSetTrack,
   playerSetDuration,
   playerSetProgress,

@@ -70,7 +70,7 @@ Player.propTypes = {
   controlCallbacks: PropTypes.shape({
     togglePlayPause: PropTypes.func.isRequired,
     toggleRepeat: PropTypes.func.isRequired,
-    toggleVolume: PropTypes.func.isRequired,
+    setVolume: PropTypes.func.isRequired,
     skipToPrevious: PropTypes.func.isRequired,
     skipToNext: PropTypes.func.isRequired,
 

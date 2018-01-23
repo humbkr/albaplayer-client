@@ -9,7 +9,7 @@ const SidebarWrapper = styled.div`
   left: 0;
   width: ${props => props.theme.sidebar.width};
   height: 100%;
-  background-color: #2a2a2a;
+  background-color: ${props => props.theme.sidebar.background};
 `;
 
 const MainMenu = styled.div`

@@ -1,7 +1,8 @@
 import {
   PLAYER_TOGGLE_PLAY_PAUSE, PLAYER_SET_TRACK,
   PLAYER_TOGGLE_SHUFFLE, PLAYER_TOGGLE_REPEAT, PLAYER_REPEAT_NO_REPEAT,
-  PLAYER_TOGGLE_VOLUME, PLAYER_SET_DURATION, PLAYER_SET_PROGRESS
+  PLAYER_SET_DURATION, PLAYER_SET_PROGRESS,
+  PLAYER_SET_VOLUME
 } from "./actions";
 
 const initialState = {
@@ -34,13 +35,10 @@ function audioPlayer(state = initialState, action) {
         ...state,
         repeat: setCycleNumPos(state.repeat, 1, 3)
       };
-    case PLAYER_TOGGLE_VOLUME:
+    case PLAYER_SET_VOLUME:
       return {
         ...state,
-        // Save current volume.
-        volumeMuted: state.volume,
-        // If volume > 0 it's not muted, else put the saved value back.
-        volume: (state.volume > 0) ? 0 : state.volumeMuted
+        volume: action.volume
       };
     case PLAYER_SET_TRACK:
       return {

@@ -6,6 +6,7 @@ import {
   PLAYER_REPEAT_LOOP_ALL, PLAYER_REPEAT_LOOP_ONE,
   PLAYER_REPEAT_NO_REPEAT
 } from "../actions";
+import VolumeContainer from "./VolumeContainer";
 
 const ControlsWrapper = styled.div`
   margin: 10px 0;
@@ -42,7 +43,7 @@ const Controls = ({
   repeat,
   toggleRepeat,
   volume,
-  toggleVolume,
+  setVolume,
   skipToNext,
   skipToPrevious,
 }) => {
@@ -77,16 +78,6 @@ const Controls = ({
       break;
   }
 
-  let VolumeButton;
-  if (volume > 0) {
-    if (volume > 0.5) {
-      VolumeButton = Buttons.VolumeHighBtn;
-    } else {
-      VolumeButton = Buttons.VolumeLowBtn;
-    }
-  } else {
-    VolumeButton = Buttons.VolumeMutedBtn;
-  }
 
   return (
     <ControlsWrapper>
@@ -96,7 +87,12 @@ const Controls = ({
         <Buttons.SkipNextBtn onClick={skipToNext} />
       </ControlsPrimary>
       <ControlsSecondary>
-        <div><VolumeButton onClick={toggleVolume} size={22} /></div>
+        <div>
+          <VolumeContainer
+            volume={volume}
+            setVolume={setVolume}
+          />
+        </div>
         <div><RepeatButton onClick={toggleRepeat} enabled={repeatButtonEnabled} /></div>
         <div><Buttons.ShuffleBtn onClick={toggleShuffle} enabled={shuffle} /></div>
         <div></div>
@@ -107,7 +103,12 @@ const Controls = ({
 Controls.propTypes = {
   playing: PropTypes.bool.isRequired,
   shuffle: PropTypes.bool.isRequired,
+  repeat: PropTypes.number.isRequired,
+  volume: PropTypes.number.isRequired,
+  setVolume: PropTypes.func.isRequired,
   togglePlayPause: PropTypes.func.isRequired,
+  toggleShuffle: PropTypes.func.isRequired,
+  toggleRepeat: PropTypes.func.isRequired,
   skipToNext: PropTypes.func.isRequired,
   skipToPrevious: PropTypes.func.isRequired
 };

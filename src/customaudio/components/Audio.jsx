@@ -4,7 +4,7 @@ import {
   playerPlayPause,
   playerToggleRepeat,
   playerToggleShuffle,
-  playerToggleVolume,
+  playerSetVolume,
   playNextTrack,
   playPreviousTrack,
   playerSetProgress,
@@ -50,18 +50,6 @@ const Audio = (Player) => {
       }
     };
 
-    handleSetProgress = (newProgress) => {
-      let progress = newProgress;
-      const duration = this.audioElement.duration;
-      if (progress > duration) {
-        progress = duration;
-      }
-
-      console.log("handleSetProgress set progress to: " + progress)
-      this.audioElement.currentTime = progress;
-      this.props.onProgressChange(progress);
-    };
-
     onPlay = () => {
       // console.log('on play');
       this.props.onPlayPausePress(this.audioElement);
@@ -84,6 +72,22 @@ const Audio = (Player) => {
         this.onPlay();
       }
     };
+    handleSetProgress = (newProgress) => {
+      let progress = newProgress;
+      const duration = this.audioElement.duration;
+      if (progress > duration) {
+        progress = duration;
+      }
+
+      console.log("handleSetProgress set progress to: " + progress)
+      this.audioElement.currentTime = progress;
+      this.props.onProgressChange(progress);
+    };
+    handleSetVolume = (newVolume) => {
+      this.audioElement.volume = newVolume;
+      this.props.onVolumeChange(newVolume);
+    };
+
 
     _clearInterval() {
       // console.log('interval cleared');
@@ -98,7 +102,7 @@ const Audio = (Player) => {
       // Compute all the data that will be needed by the wrapped component.
       const timelineState = {
         playing: this.props.playing,
-        duration: (this.audioElement) ? this.audioElement.duration : 0,
+        duration: (this.props.track && this.audioElement) ? this.audioElement.duration : 0,
         progress: this.props.progress,
       };
       const timelineCallbacks = {
@@ -117,7 +121,7 @@ const Audio = (Player) => {
         skipToNext: this.props.onNextPress,
         toggleShuffle: this.props.onShufflePress,
         toggleRepeat: this.props.onRepeatPress,
-        toggleVolume: this.props.onVolumePress,
+        setVolume: this.handleSetVolume,
       };
 
       const newProps = {
@@ -144,7 +148,7 @@ const Audio = (Player) => {
     onNextPress: PropTypes.func.isRequired,
     onShufflePress: PropTypes.func.isRequired,
     onRepeatPress: PropTypes.func.isRequired,
-    onVolumePress: PropTypes.func.isRequired,
+    onVolumeChange: PropTypes.func.isRequired,
   };
 
   const mapStateToProps = state => {
@@ -176,11 +180,10 @@ const Audio = (Player) => {
     onRepeatPress: () => {
       dispatch(playerToggleRepeat())
     },
-    onVolumePress: () => {
-      dispatch(playerToggleVolume())
+    onVolumeChange: (volume) => {
+      dispatch(playerSetVolume(volume))
     },
     onProgressChange: (currentTime) => {
-      console.log("onProgressChange set progress to: " + currentTime)
       dispatch(playerSetProgress(currentTime))
     },
   });
