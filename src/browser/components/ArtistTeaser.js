@@ -8,7 +8,6 @@ import { menuProvider } from "react-contexify";
 const ArtistTeaserName = styled.h2`
   display: table-cell;
   vertical-align: middle;
-  padding-left: 15px;
   font-size: 1em;
   font-weight: normal;
 `;
@@ -19,6 +18,7 @@ const ArtistTeaserWrapper = styled.div`
   height: 100%;
   height: ${props => props.theme.itemHeight};
   ${props => props.selected ? 'background-color: ' + props.theme.highlight : ''};
+  padding: 0 15px;
 `;
 
 class ArtistTeaser extends Component {

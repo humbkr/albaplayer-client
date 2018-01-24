@@ -15,8 +15,7 @@ const Select = styled.select`
 `;
 
 const SelectWrapper = styled.div`
-
- 
+  text-align: right;
 `;
 
 class SelectContainer extends Component {
@@ -30,7 +29,6 @@ class SelectContainer extends Component {
 
     return (
       <SelectWrapper>
-        <label htmlFor="select">order by:</label>
         <Select id="select" value={defaultValue} onChange={onChangeHandler}>
           {options}
         </Select>

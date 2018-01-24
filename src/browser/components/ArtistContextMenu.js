@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ContextMenu, Item } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.min.css'
-import { queueAddArtist, queuePlayArtist } from "../../queue/actions";
+import { addArtist, playArtist } from "../../queue/actions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -45,10 +45,10 @@ ArtistContextMenu.propTypes = {
 const mapDispatchToProps = dispatch => {
   return {
     handlePlayNow: artistId => {
-      dispatch(queuePlayArtist(artistId))
+      dispatch(playArtist(artistId))
     },
     handleAddToQueue: artistId => {
-      dispatch(queueAddArtist(artistId))
+      dispatch(addArtist(artistId))
     }
   }
 };

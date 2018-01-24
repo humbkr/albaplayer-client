@@ -1,6 +1,6 @@
 import {
   QUEUE_ADD_ALBUM, QUEUE_ADD_ARTIST, QUEUE_ADD_TRACK,
-  QUEUE_CLEAR, QUEUE_PLAY_ALBUM, QUEUE_PLAY_ARTIST, QUEUE_PLAY_TRACK,
+  QUEUE_CLEAR,
   QUEUE_REMOVE_TRACK, QUEUE_SET_CURRENT
 } from "./actions";
 import { immutableRemove } from "../utils";
@@ -36,27 +36,6 @@ function queue(state = initialState, action, library) {
           ...library.tracks.filter(item => (action.artistId === item.artistId))
         ],
         current: state.current
-      });
-    case QUEUE_PLAY_TRACK:
-      return Object.assign({}, state, {
-        tracks: [
-          ...library.tracks.filter(item => (action.trackId === item.id))
-        ],
-        current: 0
-      });
-    case QUEUE_PLAY_ALBUM:
-      return Object.assign({}, state, {
-        tracks: [
-          ...library.tracks.filter(item => (action.albumId === item.albumId))
-        ],
-        current: 0
-      });
-    case QUEUE_PLAY_ARTIST:
-      return Object.assign({}, state, {
-        tracks: [
-          ...library.tracks.filter(item => (action.artistId === item.artistId))
-        ],
-        current: 0
       });
     case QUEUE_REMOVE_TRACK:
       return Object.assign({}, state, {

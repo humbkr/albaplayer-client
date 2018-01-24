@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { connect } from "react-redux";
 import { libraryBrowserSelectTrack } from "../actions";
 import { menuProvider } from 'react-contexify';
+import { formatDuration } from "../../utils";
 
 const TrackTeaserNumber = styled.div`
   display: table-cell;
@@ -26,6 +27,7 @@ const TrackTeaserDuration = styled.div`
   text-align: center;
   color: ${props => props.theme.textSecondaryColor};
   vertical-align: middle;
+  font-size: 0.8em;
 `;
 
 const TrackWrapper = styled.div`
@@ -33,6 +35,7 @@ const TrackWrapper = styled.div`
   width: 100%;
   height: ${props => props.theme.itemHeight};
   ${props => props.selected ? 'background-color: ' + props.theme.highlight : ''};
+  padding: 0 15px;
 `;
 
 class TrackTeaser extends Component {
@@ -48,7 +51,7 @@ class TrackTeaser extends Component {
       <TrackWrapper onClick={() => onClick(track.id)} {...selected}>
         <TrackTeaserNumber>{track.number}</TrackTeaserNumber>
         <TrackTeaserName>{track.title}</TrackTeaserName>
-        <TrackTeaserDuration>{track.duration}</TrackTeaserDuration>
+        <TrackTeaserDuration>{formatDuration(track.duration)}</TrackTeaserDuration>
       </TrackWrapper>
     );
   }

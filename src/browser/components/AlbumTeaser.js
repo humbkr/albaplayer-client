@@ -26,9 +26,9 @@ const AlbumTeaserWrapper = styled.div`
   display: table;
   width: 100%;
   height: 100%;
-  padding-left: 15px;
   height: ${props => props.theme.itemHeight};
   ${props => props.selected ? 'background-color: ' + props.theme.highlight : ''};
+  padding: 0 15px;
   
   > div {
     display: table-cell;
@@ -43,6 +43,13 @@ class AlbumTeaser extends Component {
     const selectedAlbums = this.props.selectedAlbums;
     const selected = (selectedAlbums === album.id) ? {selected: true} : {};
 
+    let artistName = '';
+    if (album.artistName) {
+      artistName = album.artistName;
+    } else if (album.id !== '0') {
+      artistName = 'Unknown artist';
+    }
+
     return (
       <AlbumTeaserWrapper onClick={() => onClick(album.id)} {...selected}>
         <div>
@@ -50,7 +57,7 @@ class AlbumTeaser extends Component {
           <AlbumSubInfo>
             {album.year && <span>{album.year}</span>}
             {album.year && ' - '}
-            <AlbumTeaserArtist>{album.artistName ? album.artistName : 'Unknown artist'}</AlbumTeaserArtist>
+            <AlbumTeaserArtist>{artistName}</AlbumTeaserArtist>
           </AlbumSubInfo>
         </div>
       </AlbumTeaserWrapper>

@@ -16,7 +16,8 @@ const AlbumsPane = styled.div`
   overflow-y: hidden;
   width: 33%;
   height: 100%;
-  //border-left: 3px solid ${props => props.theme.separatorColor};
+  border-left: 1px solid ${props => props.theme.separatorColor};
+  border-right: 1px solid ${props => props.theme.separatorColor};
 `;
 
 class AlbumsPaneContainer extends Component {

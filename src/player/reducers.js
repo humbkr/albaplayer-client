@@ -23,7 +23,7 @@ function player(state = initialState, action) {
     case PLAYER_TOGGLE_PLAY_PAUSE:
       return {
         ...state,
-        playing: !state.playing
+        playing: (action.forcedValue === undefined) ? !state.playing : action.forcedValue
       };
     case PLAYER_TOGGLE_SHUFFLE:
       return {

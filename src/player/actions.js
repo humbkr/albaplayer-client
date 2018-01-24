@@ -5,9 +5,10 @@ import { getBackendUrl } from "../backend/config";
 /* Actions updating the store */
 
 const PLAYER_TOGGLE_PLAY_PAUSE = 'PLAYER_TOGGLE_PLAY_PAUSE';
-const playerTogglePlayPause = () => {
+const playerTogglePlayPause = (forcedValue) => {
   return {
-    type: PLAYER_TOGGLE_PLAY_PAUSE
+    type: PLAYER_TOGGLE_PLAY_PAUSE,
+    forcedValue: forcedValue
   }
 };
 
@@ -60,25 +61,36 @@ const playerSetProgress = (currentTime) => {
   }
 };
 
-/* Actions managing the html5 player */
+const setTrackFromQueue = (trackPosition) => {
+  return function (dispatch, getState) {
+    const state = getState();
 
-const playerPlayPause = (audio) => {
-  if (audio.paused) {
-    audio.play();
-  } else {
-    audio.pause();
-  }
+    if (state.queue.tracks.length < trackPosition) {
+      return;
+    }
 
-  return {
-    type: PLAYER_TOGGLE_PLAY_PAUSE
-  }
+    // Make API call to get the track full info.
+    return getFullTrackInfo(state.queue.tracks[0].id)
+    .then(
+      // And dispatch appropriate actions.
+      response => {
+        // Copy track to change it.
+        let track = {...response.data.track};
+        track.cover = getBackendUrl() + track.cover;
+        track.src = getBackendUrl() + track.src;
+
+        dispatch(playerSetTrack(track));
+        dispatch(queueSetCurrent(trackPosition));
+      }
+    )
+  };
 };
 
 /*
  * Select the next track to play from the queue, get its info,
  * and dispatch required actions.
  */
-const playNextTrack = () => {
+const setNextTrack = () => {
   return function (dispatch, getState) {
     const state = getState();
 
@@ -145,7 +157,7 @@ const playNextTrack = () => {
  * Select the previous track to play from the queue, get its info,
  * and dispatch required actions.
  */
-const playPreviousTrack = () => {
+const setPreviousTrack = () => {
   return function (dispatch, getState) {
     const state = getState();
 
@@ -213,6 +225,7 @@ export {
   PLAYER_SET_TRACK,
   PLAYER_SET_DURATION,
   PLAYER_SET_PROGRESS,
+  playerTogglePlayPause,
   playerToggleShuffle,
   playerToggleRepeat,
   playerSetVolume,
@@ -220,7 +233,7 @@ export {
   playerSetDuration,
   playerSetProgress,
 
-  playerPlayPause,
-  playNextTrack,
-  playPreviousTrack
+  setTrackFromQueue,
+  setNextTrack,
+  setPreviousTrack
 }

@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  playerPlayPause,
   playerToggleRepeat,
   playerToggleShuffle,
   playerSetVolume,
-  playNextTrack,
-  playPreviousTrack,
-  playerSetProgress,
+  setNextTrack,
+  setPreviousTrack,
+  playerSetProgress, playerTogglePlayPause,
 } from "../actions";
 import { connect } from "react-redux";
 
@@ -52,7 +51,8 @@ const Audio = (Player) => {
 
     onPlay = () => {
       // console.log('on play');
-      this.props.onPlayPausePress(this.audioElement);
+      this.audioElement.play();
+      this.props.onPlayPausePress(true);
       this.intervalId = setInterval(() => {
         this.props.onProgressChange(this.audioElement.currentTime);
       }, 900);
@@ -60,7 +60,8 @@ const Audio = (Player) => {
 
     onPause = () => {
       // console.log('on pause');
-      this.props.onPlayPausePress(this.audioElement);
+      this.audioElement.pause();
+      this.props.onPlayPausePress(false);
       this._clearInterval();
     };
 
@@ -162,17 +163,17 @@ const Audio = (Player) => {
     };
   };
   const mapDispatchToProps = dispatch => ({
-    onPlayPausePress: (audio) => {
-      dispatch(playerPlayPause(audio));
+    onPlayPausePress: (value) => {
+      dispatch(playerTogglePlayPause(value));
     },
     onTrackEnded: () => {
-      dispatch(playNextTrack())
+      dispatch(setNextTrack())
     },
     onPrevPress: () => {
-      dispatch(playPreviousTrack())
+      dispatch(setPreviousTrack())
     },
     onNextPress: () => {
-      dispatch(playNextTrack())
+      dispatch(setNextTrack())
     },
     onShufflePress: () => {
       dispatch(playerToggleShuffle())

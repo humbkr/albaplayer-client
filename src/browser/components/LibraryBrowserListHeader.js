@@ -8,12 +8,12 @@ const LibraryBrowserListHeaderWrapper = styled.div`
   height: ${props => props.theme.itemHeight};
   width: 100%;
   color: ${props => props.theme.textSecondaryColor};
+  padding: 0 15px;
 
   > h2 {
     display: table-cell;
     vertical-align: middle;
     font-size: 1.2em;
-    padding-left: 15px;
   }
   
   > div {
@@ -33,7 +33,6 @@ class LibraryBrowserListHeader extends Component {
       <LibraryBrowserListHeaderWrapper>
         <h2>{title}</h2>
         <SelectContainer
-          label="order by:"
           options={orderByOptions}
           value={orderBy}
           onChangeHandler={onSortChangeHandler}

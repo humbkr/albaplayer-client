@@ -32,29 +32,43 @@ function libraryBrowser(state = initialState, action, library) {
       });
 
     case LIBRARY_BROWSER_SELECT_ARTIST:
+      // To display all the albums containing tracks of an artist, including
+      // the compilations, we can't directly filter albums on artistId, we have
+      // to instead display all the albums for which tracks have been found.
+      const filteredTracks = library.tracks.filter(item => (action.artistId === '0' || item.artistId === action.artistId));
+      const tracksAlbums = filteredTracks.map((item) => (item.albumId));
+
       return Object.assign({}, state, {
-          ...state,
-          selectedArtists: action.artistId,
-          albums: library.albums.filter(item => (action.artistId === '0' || item.artistId === action.artistId)),
-          tracks: library.tracks.filter(item => (action.artistId === '0' || item.artistId === action.artistId))
+        ...state,
+        selectedAlbums: '',
+        selectedTracks: '',
+        selectedArtists: action.artistId,
+        albums: library.albums.filter(item => (action.artistId === '0' || tracksAlbums.includes(item.id))),
+        tracks: filteredTracks
       });
 
     case LIBRARY_BROWSER_SELECT_ALBUM:
       return Object.assign({}, state, {
         ...state,
+        selectedTracks: '',
         selectedAlbums: action.albumId,
         tracks: library.tracks.filter((item) => {
           if (action.albumId === '0' && state.selectedArtists === '0') {
-            // Display all the tracks in the library.
+            // If no artist nor album selected, display
+            // all the tracks in the library.
             return true
           } else if (action.albumId === '0') {
-            // Display all the tracks of the selected artist for all albums of
-            // this artist.
-            return item.artistId === state.selectedArtists
+            // If no specific album selected, display all the tracks of
+            // the selected artist for all albums of this artist.
+            return item.artistId === state.selectedArtists;
+          } else if (state.selectedArtists === '0') {
+            // If no artist selected, display all the tracks
+            // for the selected album.
+            return (item.albumId === action.albumId);
           }
 
-          // Else return the tracks for the selected album only.
-          return item.albumId === action.albumId
+          // Else return the tracks for the selected album and artist.
+          return (item.albumId === action.albumId && item.artistId === state.selectedArtists);
         })
       });
 
