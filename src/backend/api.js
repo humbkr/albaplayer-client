@@ -1,32 +1,63 @@
-import gql from "graphql-tag";
-import apolloClient from "./apollo";
+import gql from 'graphql-tag';
+import apolloClient from './apollo';
+
+const getLibrary = () => {
+  // Query used to initialise the browser with all the data from the server.
+  const libraryInit = gql`
+    query libraryInit {
+      artists {
+        id
+        name
+      }
+      albums {
+        id
+        title
+        year
+        artistId
+        artistName
+      }
+      tracks {
+        id
+        title
+        number
+        duration
+        artistId
+        albumId
+      }
+    }
+`;
+
+  return apolloClient.query({ query: libraryInit });
+};
+
 
 const getFullTrackInfo = (trackId) => {
   const fullTrackInfoQuery = gql`
-  query fullTrackInfoQuery {
-    track(id: ${trackId}) {
-      id
-      title
-      number
-      duration
-      src
-      cover
-			album {
+    query fullTrackInfoQuery {
+      track(id: ${trackId}) {
         id
-        title			
-			}
-			artist {
-			  id
-			  name
-			}
+        title
+        number
+        disc
+        duration
+        src
+        cover
+        album {
+          id
+          title
+        }
+        artist {
+          id
+          name
+        }
+      }
     }
-  }
 `;
 
-  // API call.
   return apolloClient.query({ query: fullTrackInfoQuery });
 };
 
 export {
-  getFullTrackInfo
-}
+  getLibrary,
+  getFullTrackInfo,
+};

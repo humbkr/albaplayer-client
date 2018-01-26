@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import React, { Component } from "react";
-import Sidebar from './sidebar/components/Sidebar'
+import styled from 'styled-components';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import Sidebar from './sidebar/components/Sidebar';
 import MainPanel from './common/MainPanel';
-import PropTypes from "prop-types";
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import { getLibrary } from "./actions";
+import { initLibrary } from './actions';
 
 const AlbaAppWrapper = styled.div`
   display: table;
@@ -17,7 +17,7 @@ const AlbaAppWrapper = styled.div`
 class AlbaApp extends Component {
   componentDidMount() {
     const dispatch = this.props.dispatch;
-    dispatch(getLibrary());
+    dispatch(initLibrary());
   }
 
   render() {
@@ -28,18 +28,18 @@ class AlbaApp extends Component {
         { isFetching && <h2>Loading...</h2> }
         { !isFetching && isInitialized &&
           <AlbaAppWrapper>
-            <Sidebar/>
-            <MainPanel/>
+            <Sidebar />
+            <MainPanel />
           </AlbaAppWrapper>
         }
       </div>
-    )
+    );
   }
 }
 AlbaApp.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  isInitialized: PropTypes.bool.isRequired
+  isInitialized: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -47,8 +47,8 @@ function mapStateToProps(state) {
 
   return {
     isFetching,
-    isInitialized
-  }
+    isInitialized,
+  };
 }
 
 export default withRouter(connect(mapStateToProps)(AlbaApp));

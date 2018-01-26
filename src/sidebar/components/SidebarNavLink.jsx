@@ -1,5 +1,5 @@
-import styled from "styled-components"
-import { NavLink } from "react-router-dom"
+import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 
 const MainMenuLink = styled(NavLink)`
   text-align: left;
@@ -26,4 +26,4 @@ const MainMenuLink = styled(NavLink)`
   }
 `;
 
-export default MainMenuLink
+export default MainMenuLink;

@@ -1,7 +1,3 @@
-const getBackendUrl = () => {
-  return 'http://localhost:32768';
-};
+const getBackendUrl = () => ('http://localhost:32768');
 
-export {
-  getBackendUrl
-}
+export default getBackendUrl;

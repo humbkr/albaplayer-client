@@ -1,45 +1,64 @@
 /*
 Sort function with nested objects capabilities.
  */
-const immutableNestedSort = (items, property) => {
-  property = property.split('.');
+const immutableNestedSort = (items, prop) => {
+  const property = prop.split('.');
   const len = property.length;
 
-  return [ ...items ].sort((a, b) => {
+  let result = 0;
+
+  return [...items].sort((propA, propB) => {
+    let a = propA;
+    let b = propB;
     let i = 0;
-    while( i < len ) {
+    while (i < len) {
       a = a[property[i]];
       b = b[property[i]];
       i++;
     }
 
     if (typeof a === 'string' || a instanceof String) {
-      return (a.toLowerCase() > b.toLowerCase()) ? 1 : ((b.toLowerCase() > a.toLowerCase()) ? -1 : 0);
+      if (a.toLowerCase() > b.toLowerCase()) {
+        result = 1;
+      } else if (b.toLowerCase() > a.toLowerCase()) {
+        result = -1;
+      }
+
+      return result;
     }
 
-    return (a > b) ? 1 : ((b > a) ? -1 : 0);
+    if (a > b) {
+      result = 1;
+    } else if ((b > a)) {
+      result = -1;
+    }
+
+    return result;
   });
 };
 
-function immutableRemove (arr, index) {
-  return arr.slice(0,index).concat(arr.slice(index+1))
+function immutableRemove(arr, index) {
+  return arr.slice(0, index).concat(arr.slice(index + 1));
 }
 
 const formatDuration = (amount) => {
   if (amount === undefined) {
-    return;
+    return 0;
   }
 
-  let sec_num = parseInt(amount, 10);
-  let hours   = Math.floor(sec_num / 3600);
-  let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-  let seconds = sec_num - (hours * 3600) - (minutes * 60);
+  const secNum = parseInt(amount, 10);
+  const hours = Math.floor(secNum / 3600);
+  let minutes = Math.floor((secNum - (hours * 3600)) / 60);
+  let seconds = secNum - (hours * 3600) - (minutes * 60);
 
-  //if (hours   < 10) {hours   = "0"+hours;}
-  if (minutes < 10) {minutes = "0"+minutes;}
-  if (seconds < 10) {seconds = "0"+seconds;}
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
 
-  return minutes + ':' + seconds;
+  return `${minutes}:${seconds}`;
 };
 
 
@@ -47,4 +66,4 @@ export {
   immutableNestedSort,
   immutableRemove,
   formatDuration,
-}
+};

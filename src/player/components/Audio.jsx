@@ -30,6 +30,8 @@ const Audio = (Player) => {
     componentDidUpdate(prevProps) {
       // Manage the current track being player in audio element.
       if (prevProps.track !== this.props.track) {
+        // Clear progress update interval.
+        this._clearInterval();
         this.loadTrack();
       }
     }
@@ -44,13 +46,13 @@ const Audio = (Player) => {
 
         if (this.props.playing) {
           // Start playing.
-          this.audioElement.play();
+          this.onPlay();
         }
       }
     };
 
     onPlay = () => {
-      // console.log('on play');
+       console.log('on play');
       this.audioElement.play();
       this.props.onPlayPausePress(true);
       this.intervalId = setInterval(() => {
@@ -59,7 +61,7 @@ const Audio = (Player) => {
     };
 
     onPause = () => {
-      // console.log('on pause');
+       console.log('on pause');
       this.audioElement.pause();
       this.props.onPlayPausePress(false);
       this._clearInterval();

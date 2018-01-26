@@ -1,14 +1,16 @@
 import {
-  QUEUE_ADD_ALBUM, QUEUE_ADD_ARTIST, QUEUE_ADD_TRACK,
+  QUEUE_ADD_ALBUM,
+  QUEUE_ADD_ARTIST,
+  QUEUE_ADD_TRACK,
   QUEUE_CLEAR,
-  QUEUE_REMOVE_TRACK, QUEUE_SET_CURRENT
-} from "./actions";
-import { immutableRemove } from "../utils";
+  QUEUE_REMOVE_TRACK, QUEUE_SET_CURRENT,
+} from './actions';
+import { immutableRemove } from '../utils';
 
 
 const initialState = {
   tracks: [],
-  current: undefined
+  current: undefined,
 };
 
 function queue(state = initialState, action, library) {
@@ -17,44 +19,44 @@ function queue(state = initialState, action, library) {
       return Object.assign({}, state, {
         tracks: [
           ...state.tracks,
-          ...library.tracks.filter(item => (action.trackId === item.id))
+          ...library.tracks.filter(item => (action.trackId === item.id)),
         ],
-        current: state.current
+        current: state.current,
       });
     case QUEUE_ADD_ALBUM:
       return Object.assign({}, state, {
         tracks: [
           ...state.tracks,
-          ...library.tracks.filter(item => (action.albumId === item.albumId))
+          ...library.tracks.filter(item => (action.albumId === item.albumId)),
         ],
-        current: state.current
+        current: state.current,
       });
     case QUEUE_ADD_ARTIST:
       return Object.assign({}, state, {
         tracks: [
           ...state.tracks,
-          ...library.tracks.filter(item => (action.artistId === item.artistId))
+          ...library.tracks.filter(item => (action.artistId === item.artistId)),
         ],
-        current: state.current
+        current: state.current,
       });
     case QUEUE_REMOVE_TRACK:
       return Object.assign({}, state, {
         tracks: immutableRemove(state.tracks, action.trackIndex),
-        current: state.current
+        current: state.current,
       });
     case QUEUE_CLEAR:
       return Object.assign({}, state, {
         tracks: {},
-        current: ''
+        current: '',
       });
     case QUEUE_SET_CURRENT:
       return Object.assign({}, state, {
         ...state,
-        current: action.position
+        current: action.position,
       });
 
     default:
-      return state
+      return state;
   }
 }
 

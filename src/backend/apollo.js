@@ -1,9 +1,9 @@
 import ApolloClient from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { getBackendUrl } from "./config";
+import getBackendUrl from './config';
 
-const API_URL = getBackendUrl() + '/graphql';
+const API_URL = `${getBackendUrl()}/graphql`;
 
 const apolloClient = new ApolloClient({
   link: new HttpLink({ uri: API_URL }),

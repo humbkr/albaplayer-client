@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const QueueHeaderRow = styled.li`
   display: table;
@@ -16,23 +16,17 @@ const QueueHeaderRow = styled.li`
   }
 `;
 
-const QueueHeaderCell = styled.div`
-  display: table-cell;
-`;
-
-const QueueHeaderPosition =  styled.div`
+const QueueHeaderPosition = styled.div`
   width: 60px;
   text-align: center;
 `;
 
-const QueueHeaderTrackTitle = styled.div`
-`;
+const QueueHeaderTrackTitle = styled.div``;
 
 const QueueHeaderDuration = styled.div`
   width: 70px;
   text-align: center;
 `;
-
 
 const QueueHeader = () => (
   <QueueHeaderRow>
@@ -42,4 +36,5 @@ const QueueHeader = () => (
   </QueueHeaderRow>
 );
 
-export default QueueHeader
+
+export default QueueHeader;

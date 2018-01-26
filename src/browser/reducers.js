@@ -5,8 +5,8 @@ import {
   LIBRARY_BROWSER_SORT_ARTISTS,
   LIBRARY_BROWSER_SORT_ALBUMS,
   LIBRARY_BROWSER_SORT_TRACKS,
-  LIBRARY_BROWSER_SELECT_ALBUM
-} from "./actions"
+  LIBRARY_BROWSER_SELECT_ALBUM,
+} from './actions';
 
 
 const initialState = {
@@ -16,9 +16,9 @@ const initialState = {
   sortArtists: 'name',
   sortAlbums: 'title',
   sortTracks: 'number',
-  selectedArtists: '',
-  selectedAlbums: '',
-  selectedTracks: ''
+  selectedArtists: '0',
+  selectedAlbums: '0',
+  selectedTracks: '0',
 };
 
 function libraryBrowser(state = initialState, action, library) {
@@ -28,35 +28,35 @@ function libraryBrowser(state = initialState, action, library) {
         ...state,
         artists: library.artists,
         albums: library.albums,
-        tracks: library.tracks
+        tracks: library.tracks,
       });
 
-    case LIBRARY_BROWSER_SELECT_ARTIST:
+    case LIBRARY_BROWSER_SELECT_ARTIST: {
       // To display all the albums containing tracks of an artist, including
       // the compilations, we can't directly filter albums on artistId, we have
       // to instead display all the albums for which tracks have been found.
       const filteredTracks = library.tracks.filter(item => (action.artistId === '0' || item.artistId === action.artistId));
-      const tracksAlbums = filteredTracks.map((item) => (item.albumId));
+      const tracksAlbums = filteredTracks.map(item => (item.albumId));
 
       return Object.assign({}, state, {
         ...state,
-        selectedAlbums: '',
-        selectedTracks: '',
+        selectedAlbums: '0',
+        selectedTracks: '0',
         selectedArtists: action.artistId,
         albums: library.albums.filter(item => (action.artistId === '0' || tracksAlbums.includes(item.id))),
-        tracks: filteredTracks
+        tracks: filteredTracks,
       });
-
+    }
     case LIBRARY_BROWSER_SELECT_ALBUM:
       return Object.assign({}, state, {
         ...state,
-        selectedTracks: '',
+        selectedTracks: '0',
         selectedAlbums: action.albumId,
         tracks: library.tracks.filter((item) => {
           if (action.albumId === '0' && state.selectedArtists === '0') {
             // If no artist nor album selected, display
             // all the tracks in the library.
-            return true
+            return true;
           } else if (action.albumId === '0') {
             // If no specific album selected, display all the tracks of
             // the selected artist for all albums of this artist.
@@ -69,31 +69,31 @@ function libraryBrowser(state = initialState, action, library) {
 
           // Else return the tracks for the selected album and artist.
           return (item.albumId === action.albumId && item.artistId === state.selectedArtists);
-        })
+        }),
       });
 
     case LIBRARY_BROWSER_SELECT_TRACK:
       return Object.assign({}, state, {
         ...state,
-        selectedTracks: action.trackId
+        selectedTracks: action.trackId,
       });
 
     case LIBRARY_BROWSER_SORT_ARTISTS:
       return Object.assign({}, state, {
         ...state,
-        sortArtists: action.sortProperty
+        sortArtists: action.sortProperty,
       });
 
     case LIBRARY_BROWSER_SORT_ALBUMS:
       return Object.assign({}, state, {
         ...state,
-        sortAlbums: action.sortProperty
+        sortAlbums: action.sortProperty,
       });
 
     case LIBRARY_BROWSER_SORT_TRACKS:
       return Object.assign({}, state, {
         ...state,
-        sortTracks: action.sortProperty
+        sortTracks: action.sortProperty,
       });
 
     default:

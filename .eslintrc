@@ -1,0 +1,16 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "rules": {
+    "func-names": ["error", "never"],
+    "no-mixed-spaces-and-tabs": [2, false],
+    "prefer-destructuring": ["error", {
+      "array": true,
+      "object": false
+    }, {
+      "enforceForRenamedProperties": false
+    }],
+    "no-confusing-arrow": ["warn", {"allowParens": false}],
+    "no-plusplus": ["off"]
+  }
+}

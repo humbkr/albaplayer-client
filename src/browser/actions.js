@@ -1,57 +1,57 @@
 const LIBRARY_BROWSER_INIT = 'LIBRARY_BROWSER_INIT';
-const libraryBrowserInit = () => {
-  return {
-    type: LIBRARY_BROWSER_INIT
+const libraryBrowserInit = () => (
+  {
+    type: LIBRARY_BROWSER_INIT,
   }
-};
+);
 
 const LIBRARY_BROWSER_SELECT_ARTIST = 'LIBRARY_BROWSER_SELECT_ARTIST';
-const libraryBrowserSelectArtist = (artistId) => {
-  return {
+const libraryBrowserSelectArtist = artistId => (
+  {
     type: LIBRARY_BROWSER_SELECT_ARTIST,
-    artistId
+    artistId,
   }
-};
+);
 
 const LIBRARY_BROWSER_SELECT_ALBUM = 'LIBRARY_BROWSER_SELECT_ALBUM';
-const libraryBrowserSelectAlbum = (albumId) => {
-  return {
+const libraryBrowserSelectAlbum = albumId => (
+  {
     type: LIBRARY_BROWSER_SELECT_ALBUM,
-    albumId
+    albumId,
   }
-};
+);
 
 const LIBRARY_BROWSER_SELECT_TRACK = 'LIBRARY_BROWSER_SELECT_TRACK';
-const libraryBrowserSelectTrack = (trackId) => {
-  return {
+const libraryBrowserSelectTrack = trackId => (
+  {
     type: LIBRARY_BROWSER_SELECT_TRACK,
-    trackId
+    trackId,
   }
-};
+);
 
 const LIBRARY_BROWSER_SORT_ARTISTS = 'LIBRARY_BROWSER_SORT_ARTISTS';
-const libraryBrowserSortArtists = (sortProperty) => {
-  return {
+const libraryBrowserSortArtists = sortProperty => (
+  {
     type: LIBRARY_BROWSER_SORT_ARTISTS,
-    sortProperty
+    sortProperty,
   }
-};
+);
 
 const LIBRARY_BROWSER_SORT_ALBUMS = 'LIBRARY_BROWSER_SORT_ALBUMS';
-const libraryBrowserSortAlbums = (sortProperty) => {
-  return {
+const libraryBrowserSortAlbums = sortProperty => (
+  {
     type: LIBRARY_BROWSER_SORT_ALBUMS,
-    sortProperty
+    sortProperty,
   }
-};
+);
 
 const LIBRARY_BROWSER_SORT_TRACKS = 'LIBRARY_BROWSER_SORT_TRACKS';
-const libraryBrowserSortTracks = (sortProperty) => {
-  return {
+const libraryBrowserSortTracks = sortProperty => (
+  {
     type: LIBRARY_BROWSER_SORT_TRACKS,
-    sortProperty
+    sortProperty,
   }
-};
+);
 
 export {
   LIBRARY_BROWSER_SELECT_ARTIST,

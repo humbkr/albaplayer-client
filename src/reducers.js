@@ -1,4 +1,4 @@
-import { LIBRARY_INIT_START, LIBRARY_INIT_SUCCESS } from "./actions";
+import { LIBRARY_INIT_START, LIBRARY_INIT_SUCCESS } from './actions';
 
 
 const initialState = {
@@ -6,7 +6,7 @@ const initialState = {
   isInitialized: false,
   artists: [],
   albums: [],
-  tracks: []
+  tracks: [],
 };
 
 function library(state = initialState, action) {
@@ -14,7 +14,7 @@ function library(state = initialState, action) {
     case LIBRARY_INIT_START:
       return Object.assign({}, state, {
         ...state,
-        isFetching: true
+        isFetching: true,
       });
 
     case LIBRARY_INIT_SUCCESS:
@@ -25,7 +25,7 @@ function library(state = initialState, action) {
         isInitialized: true,
         artists: action.response.artists,
         albums: action.response.albums,
-        tracks: action.response.tracks
+        tracks: action.response.tracks,
       });
 
     default:

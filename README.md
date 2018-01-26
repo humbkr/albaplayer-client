@@ -16,3 +16,7 @@ Once logged in, run
 
 Now get the port the docker container is listening to with ``docker ps`` (the container to look for is named "alba_client")
 and access the app at localhost:[docker container port]
+
+##### Code style
+This project follows the AirBnb React guidelines.
+Jetbrains IDE setup: https://www.themarketingtechnologist.co/eslint-with-airbnb-javascript-style-guide-in-webstorm/

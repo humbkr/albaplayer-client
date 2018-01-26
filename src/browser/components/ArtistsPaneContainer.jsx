@@ -1,43 +1,35 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import LibraryBrowserList from "./LibraryBrowserList"
-import ArtistTeaser from "./ArtistTeaser"
-import { immutableNestedSort } from "../../utils";
-import LibraryBrowserListHeader from "./LibraryBrowserListHeader";
-import { libraryBrowserSortArtists } from "../actions";
-import ArtistContextMenu from './ArtistContextMenu'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import LibraryBrowserList from './LibraryBrowserList';
+import ArtistTeaser from './ArtistTeaser';
+import { immutableNestedSort } from '../../utils';
+import LibraryBrowserListHeader from './LibraryBrowserListHeader';
+import { libraryBrowserSortArtists } from '../actions';
+import ArtistContextMenu from './ArtistContextMenu';
 
 
 const ArtistsPane = styled.div`
   display: inline-block;
   vertical-align: top;
-  overflow-y: scroll;
   overflow-y: hidden;
   width: 33%;
   height: 100%;
 `;
 
 class ArtistsPaneContainer extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onSortChangeHandler = this.onSortChangeHandler.bind(this)
-  }
-
   // Change event handler for LibraryBrowserListHeader.
-  onSortChangeHandler(event) {
+  onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.
-    this.props.onChange(event.target.value)
-  }
+    this.props.onChange(event.target.value);
+  };
 
   render() {
-    const artists = this.props.artists;
-    const orderBy = this.props.orderBy;
+    const { artists, orderBy } = this.props;
     const orderByOptions = [
-      {value: 'name', label: 'name'},
-      {value: 'id', label: 'id'},
+      { value: 'name', label: 'name' },
+      { value: 'id', label: 'id' },
     ];
 
     return (

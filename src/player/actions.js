@@ -1,97 +1,95 @@
-import { queueSetCurrent } from "../queue/actions";
-import { getFullTrackInfo } from "../backend/api";
-import { getBackendUrl } from "../backend/config";
+import { queueSetCurrent } from '../queue/actions';
+import { getFullTrackInfo } from '../backend/api';
+import getBackendUrl from '../backend/config';
 
 /* Actions updating the store */
 
 const PLAYER_TOGGLE_PLAY_PAUSE = 'PLAYER_TOGGLE_PLAY_PAUSE';
-const playerTogglePlayPause = (forcedValue) => {
-  return {
+const playerTogglePlayPause = forcedValue => (
+  {
     type: PLAYER_TOGGLE_PLAY_PAUSE,
-    forcedValue: forcedValue
+    forcedValue,
   }
-};
+);
 
 const PLAYER_TOGGLE_SHUFFLE = 'PLAYER_TOGGLE_SHUFFLE';
-const playerToggleShuffle = () => {
-  return {
-    type: PLAYER_TOGGLE_SHUFFLE
+const playerToggleShuffle = () => (
+  {
+    type: PLAYER_TOGGLE_SHUFFLE,
   }
-};
+);
 
 const PLAYER_REPEAT_NO_REPEAT = 0;
 const PLAYER_REPEAT_LOOP_ALL = 1;
 const PLAYER_REPEAT_LOOP_ONE = 2;
 const PLAYER_TOGGLE_REPEAT = 'PLAYER_TOGGLE_REPEAT';
-const playerToggleRepeat = () => {
-  return {
-    type: PLAYER_TOGGLE_REPEAT
+const playerToggleRepeat = () => (
+  {
+    type: PLAYER_TOGGLE_REPEAT,
   }
-};
+);
 
 const PLAYER_SET_VOLUME = 'PLAYER_SET_VOLUME';
-const playerSetVolume = (volume) => {
-  return {
+const playerSetVolume = volume => (
+  {
     type: PLAYER_SET_VOLUME,
-    volume: volume
+    volume,
   }
-};
+);
 
 const PLAYER_SET_TRACK = 'PLAYER_SET_TRACK';
-const playerSetTrack = (track) => {
-  return {
+const playerSetTrack = track => (
+  {
     type: PLAYER_SET_TRACK,
-    track: track
+    track,
   }
-};
+);
 
 const PLAYER_SET_DURATION = 'PLAYER_SET_DURATION';
-const playerSetDuration = (duration) => {
-  return {
+const playerSetDuration = duration => (
+  {
     type: PLAYER_SET_DURATION,
-    duration: duration
+    duration,
   }
-};
+);
 
 const PLAYER_SET_PROGRESS = 'PLAYER_SET_PROGRESS';
-const playerSetProgress = (currentTime) => {
-  return {
+const playerSetProgress = currentTime => (
+  {
     type: PLAYER_SET_PROGRESS,
-    currentTime: currentTime
+    currentTime,
   }
-};
+);
 
-const setTrackFromQueue = (trackPosition) => {
-  return function (dispatch, getState) {
+const setTrackFromQueue = trackPosition => (
+  (dispatch, getState) => {
     const state = getState();
 
     if (state.queue.tracks.length < trackPosition) {
-      return;
+      return null;
     }
 
     // Make API call to get the track full info.
-    return getFullTrackInfo(state.queue.tracks[0].id)
-    .then(
-      // And dispatch appropriate actions.
-      response => {
+    return getFullTrackInfo(state.queue.tracks[trackPosition].id)
+      .then((response) => {
+        // And dispatch appropriate actions.
         // Copy track to change it.
-        let track = {...response.data.track};
-        track.cover = getBackendUrl() + track.cover;
+        const track = { ...response.data.track };
+        track.cover = (track.cover) ? getBackendUrl() + track.cover : '';
         track.src = getBackendUrl() + track.src;
 
         dispatch(playerSetTrack(track));
         dispatch(queueSetCurrent(trackPosition));
-      }
-    )
-  };
-};
+      });
+  }
+);
 
 /*
  * Select the next track to play from the queue, get its info,
  * and dispatch required actions.
  */
-const setNextTrack = () => {
-  return function (dispatch, getState) {
+const setNextTrack = () => (
+  (dispatch, getState) => {
     const state = getState();
 
     let nextTrackId = 0;
@@ -105,60 +103,54 @@ const setNextTrack = () => {
         nextTrackId = state.queue.tracks[0].id;
       } else {
         // No track to play, do nothing.
-        return;
+        return null;
       }
     } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ONE) {
       // Play the same track again.
       // TODO: Maybe create an action to reset the current track.
       newQueuePosition = state.queue.current;
       nextTrackId = state.queue.tracks[state.queue.current].id;
-    } else {
+    } else if (state.player.shuffle) {
       // Get the next track to play.
-      if (state.player.shuffle) {
-        // TODO: shuffle functionality is currently shit.
-        const randomIndex = Math.floor(Math.random() * state.queue.tracks.length);
-        newQueuePosition = randomIndex;
-        nextTrackId = state.queue.tracks[randomIndex].id;
-      } else if (state.queue.current + 1 < state.queue.tracks.length) {
-        // Get next song in queue.
-        newQueuePosition = state.queue.current + 1;
-        nextTrackId = state.queue.tracks[state.queue.current + 1].id;
-      } else {
-        // End of the queue.
-        if (state.player.repeat === PLAYER_REPEAT_LOOP_ALL) {
-          // Loop back to the first track of the queue.
-          newQueuePosition = 0;
-          nextTrackId = state.queue.tracks[0].id;
-        } else {
-          // No further track to play, do nothing.
-          return;
-        }
-      }
+      // TODO: shuffle functionality is currently shit.
+      const randomIndex = Math.floor(Math.random() * state.queue.tracks.length);
+      newQueuePosition = randomIndex;
+      nextTrackId = state.queue.tracks[randomIndex].id;
+    } else if (state.queue.current + 1 < state.queue.tracks.length) {
+      // Get next song in queue.
+      newQueuePosition = state.queue.current + 1;
+      nextTrackId = state.queue.tracks[state.queue.current + 1].id;
+    } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ALL) {
+      // End of the queue.
+      // Loop back to the first track of the queue.
+      newQueuePosition = 0;
+      nextTrackId = state.queue.tracks[0].id;
+    } else {
+      // No further track to play, do nothing.
+      return null;
     }
 
     // Make API call to get the track full info.
     return getFullTrackInfo(nextTrackId)
-    .then(
-      // And dispatch appropriate actions.
-      response => {
+      .then((response) => {
+        // And dispatch appropriate actions.
         // Copy track to change it.
-        let track = {...response.data.track};
-        track.cover = getBackendUrl() + track.cover;
+        const track = { ...response.data.track };
+        track.cover = (track.cover) ? getBackendUrl() + track.cover : '';
         track.src = getBackendUrl() + track.src;
 
         dispatch(playerSetTrack(track));
         dispatch(queueSetCurrent(newQueuePosition));
-      }
-    )
-  };
-};
+      });
+  }
+);
 
 /*
  * Select the previous track to play from the queue, get its info,
  * and dispatch required actions.
  */
-const setPreviousTrack = () => {
-  return function (dispatch, getState) {
+const setPreviousTrack = () => (
+  (dispatch, getState) => {
     const state = getState();
 
     let prevTrackId = 0;
@@ -167,51 +159,45 @@ const setPreviousTrack = () => {
     // Get trackId of the previous track in playlist.
     if (state.player.track === null) {
       // Do nothing.
-      return;
+      return null;
     } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ONE) {
       // Play the same track again.
       // TODO: Maybe create an action to reset the current track.
       newQueuePosition = state.queue.current;
       prevTrackId = state.queue.tracks[state.queue.current].id;
+    } else if (state.player.shuffle) {
+      // TODO: shuffle functionality is currently shit.
+      const randomIndex = Math.floor(Math.random() * state.queue.tracks.length);
+      newQueuePosition = randomIndex;
+      prevTrackId = state.queue.tracks[randomIndex].id;
+    } else if (state.queue.current - 1 >= 0) {
+      // Get previous song in queue.
+      newQueuePosition = state.queue.current - 1;
+      prevTrackId = state.queue.tracks[state.queue.current - 1].id;
+    } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ALL) {
+      // Begining of the queue.
+      // Loop back to the last track of the queue.
+      newQueuePosition = state.queue.tracks.length - 1;
+      prevTrackId = state.queue.tracks[state.queue.tracks.length - 1].id;
     } else {
-      if (state.player.shuffle) {
-        // TODO: shuffle functionality is currently shit.
-        const randomIndex = Math.floor(Math.random() * state.queue.tracks.length);
-        newQueuePosition = randomIndex;
-        prevTrackId = state.queue.tracks[randomIndex].id;
-      } else if (state.queue.current - 1 >= 0) {
-        // Get previous song in queue.
-        newQueuePosition = state.queue.current - 1;
-        prevTrackId = state.queue.tracks[state.queue.current - 1].id;
-      } else {
-        // Begining of the queue.
-        if (state.player.repeat === PLAYER_REPEAT_LOOP_ALL) {
-          // Loop back to the last track of the queue.
-          newQueuePosition = state.queue.tracks.length - 1;
-          prevTrackId = state.queue.tracks[state.queue.tracks.length - 1].id;
-        } else {
-          // No further track to play, do nothing.
-          return;
-        }
-      }
+      // No further track to play, do nothing.
+      return null;
     }
 
     // Make API call to get the track full info.
     return getFullTrackInfo(prevTrackId)
-    .then(
-      // And dispatch appropriate actions.
-      response => {
+      .then((response) => {
+        // And dispatch appropriate actions.
         // Copy track to change it.
-        let track = {...response.data.track};
-        track.cover = getBackendUrl() + track.cover;
+        const track = { ...response.data.track };
+        track.cover = (track.cover) ? getBackendUrl() + track.cover : '';
         track.src = getBackendUrl() + track.src;
 
         dispatch(playerSetTrack(track));
         dispatch(queueSetCurrent(newQueuePosition));
-      }
-    )
-  };
-};
+      });
+  }
+);
 
 
 export {
@@ -235,5 +221,5 @@ export {
 
   setTrackFromQueue,
   setNextTrack,
-  setPreviousTrack
-}
+  setPreviousTrack,
+};

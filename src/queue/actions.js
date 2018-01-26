@@ -1,84 +1,85 @@
 import {
   playerTogglePlayPause,
-  setTrackFromQueue
-} from "../player/actions";
+  setTrackFromQueue,
+} from '../player/actions';
 
 const QUEUE_ADD_TRACK = 'QUEUE_ADD_TRACK';
-const queueAddTrack = (trackId) => {
-  return {
+const queueAddTrack = trackId => (
+  {
     type: QUEUE_ADD_TRACK,
-    trackId
+    trackId,
   }
-};
+);
 
 const QUEUE_ADD_ALBUM = 'QUEUE_ADD_ALBUM';
-const queueAddAlbum = (albumId) => {
-  return {
+const queueAddAlbum = albumId => (
+  {
     type: QUEUE_ADD_ALBUM,
-    albumId
+    albumId,
   }
-};
+);
 
 const QUEUE_ADD_ARTIST = 'QUEUE_ADD_ARTIST';
-const queueAddArtist = (artistId) => {
-  return {
+const queueAddArtist = artistId => (
+  {
     type: QUEUE_ADD_ARTIST,
-    artistId
+    artistId,
   }
-};
+);
 
 const QUEUE_REMOVE_TRACK = 'QUEUE_REMOVE_TRACK';
-const queueRemoveTrack = (trackIndex) => {
-  return {
+const queueRemoveTrack = trackIndex => (
+  {
     type: QUEUE_REMOVE_TRACK,
-    trackIndex
+    trackIndex,
   }
-};
+);
 
 const QUEUE_CLEAR = 'QUEUE_CLEAR';
-const queueClear = () => {
-  return {
-    type: QUEUE_CLEAR
+const queueClear = () => (
+  {
+    type: QUEUE_CLEAR,
   }
-};
+);
 
 const QUEUE_SET_CURRENT = 'QUEUE_SET_CURRENT';
-const queueSetCurrent = (position) => {
-  return {
+const queueSetCurrent = position => (
+  {
     type: QUEUE_SET_CURRENT,
-    position: position
+    position,
   }
-};
+);
 
-const playTrack = (id) => {
-  return function(dispatch) {
+
+const playTrack = id => (
+  (dispatch) => {
     dispatch(queueClear());
     dispatch(queueAddTrack(id));
     dispatch(setTrackFromQueue(0));
     dispatch(playerTogglePlayPause(true));
   }
-};
+);
 
-const playAlbum = (id) => {
-  return function(dispatch) {
+const playAlbum = id => (
+  (dispatch) => {
     dispatch(queueClear());
     dispatch(queueAddAlbum(id));
     dispatch(setTrackFromQueue(0));
     dispatch(playerTogglePlayPause(true));
   }
-};
+);
 
-const playArtist = (id) => {
-  return function(dispatch) {
+const playArtist = id => (
+  (dispatch) => {
     dispatch(queueClear());
     dispatch(queueAddArtist(id));
     dispatch(setTrackFromQueue(0));
     dispatch(playerTogglePlayPause(true));
   }
-};
+);
 
-const addTrack = (id) => {
-  return function(dispatch, getState) {
+const addTrack = id => (
+  (dispatch, getState) => {
     dispatch(queueAddTrack(id));
 
     const state = getState();
@@ -86,10 +87,10 @@ const addTrack = (id) => {
       dispatch(setTrackFromQueue(0));
     }
   }
-};
+);
 
-const addAlbum = (id) => {
-  return function(dispatch, getState) {
+const addAlbum = id => (
+  (dispatch, getState) => {
     dispatch(queueAddAlbum(id));
 
     const state = getState();
@@ -97,10 +98,10 @@ const addAlbum = (id) => {
       dispatch(setTrackFromQueue(0));
     }
   }
-};
+);
 
-const addArtist = (id) => {
-  return function(dispatch, getState) {
+const addArtist = id => (
+  (dispatch, getState) => {
     dispatch(queueAddArtist(id));
 
     const state = getState();
@@ -108,7 +109,7 @@ const addArtist = (id) => {
       dispatch(setTrackFromQueue(0));
     }
   }
-};
+);
 
 
 export {
@@ -131,4 +132,4 @@ export {
   addTrack,
   addAlbum,
   addArtist,
-}
+};
