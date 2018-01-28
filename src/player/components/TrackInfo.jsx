@@ -55,9 +55,9 @@ class TrackInfo extends React.PureComponent {
 
     return (
       <TrackInfoWrapper>
-        <Overlay/>
+        <Overlay />
         {trackCover &&
-          <Cover src={trackCover}/>
+          <Cover src={trackCover} />
         }
         {track &&
           <OverlayText>
@@ -70,7 +70,17 @@ class TrackInfo extends React.PureComponent {
   }
 }
 TrackInfo.propTypes = {
-  track: PropTypes.object,
+  track: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    cover: PropTypes.string,
+    artist: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  }),
 };
+TrackInfo.defaultProps = {
+  track: null,
+};
+
 
 export default TrackInfo;

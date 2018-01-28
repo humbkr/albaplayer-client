@@ -137,7 +137,7 @@ const NowPlaying = (props) => {
             <Position>{trackAlbumInfo}</Position>
 
             <SongActions>
-              <ActionButtonCircle text="T'" />
+              <ActionButtonCircle text="T" />
               <ActionButtonCircle text="L" />
             </SongActions>
           </SongInfo>
@@ -152,7 +152,15 @@ const NowPlaying = (props) => {
   );
 };
 NowPlaying.propTypes = {
-  track: PropTypes.objectOf(PropTypes.shape()).isRequired,
+  track: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    duration: PropTypes.number,
+    number: PropTypes.number,
+  }),
+};
+NowPlaying.defaultProps = {
+  track: null,
 };
 
 const mapStateToProps = state => (

@@ -10,7 +10,7 @@ const CloseBtn = (props, context) => (
   </Button>
 );
 CloseBtn.contextTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
 };
 
 export default CloseBtn;

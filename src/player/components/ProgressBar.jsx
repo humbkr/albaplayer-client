@@ -9,9 +9,10 @@ const ProgressBar = ({
   onMouseDown,
   onMouseOver,
   onMouseOut,
-  children
+  children,
 }, { color }) => {
   const diff = (height - barHeight) / 2;
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -54,10 +55,14 @@ ProgressBar.propTypes = {
   height: PropTypes.number.isRequired,
   barHeight: PropTypes.number.isRequired,
   translate: PropTypes.number.isRequired,
-  onMouseDown: PropTypes.func.isRequired
+  onMouseDown: PropTypes.func.isRequired,
+  onMouseOver: PropTypes.func.isRequired,
+  onMouseOut: PropTypes.func.isRequired,
+  children: PropTypes.element.isRequired,
 };
 ProgressBar.contextTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
 };
+
 
 export default ProgressBar;

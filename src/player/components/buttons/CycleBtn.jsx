@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from './Button';
 
 const CycleBtn = (props, context) => {
-  const size = (props.size) ? props.size + 'px' : '25px';
+  const size = `${props.size}px`;
   const color = (props.enabled) ? context.colorEnabled : context.color;
 
   return (
@@ -25,10 +25,17 @@ const CycleBtn = (props, context) => {
     </Button>
   );
 };
+CycleBtn.propTypes = {
+  enabled: PropTypes.bool,
+  size: PropTypes.number,
+};
+CycleBtn.defaultProps = {
+  enabled: false,
+  size: 25,
+};
 CycleBtn.contextTypes = {
   color: PropTypes.string,
   colorEnabled: PropTypes.string,
-  size: PropTypes.number
 };
 
 export default CycleBtn;

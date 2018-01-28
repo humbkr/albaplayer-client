@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { Motion, spring } from 'react-motion';
 import ProgressBarHandler from './ProgressBarHandler';
 import VolumeBar from './VolumeBar';
-import * as Buttons from "./buttons";
+import * as Buttons from './buttons';
 
 const VolumeContainerWrapper = styled.div`
   display: flex;
@@ -55,14 +55,29 @@ const VolumeOverlayEnd = styled.div`
   }
 `;
 
+function audioPlayerVolumeToVisualVolume(audioPlayerVolume) {
+  // So, why the fuck 1.48? Because that's the magic number that makes
+  // the far left coordinate of the volume bar the 0 volume level, and the
+  // far right coordinate the 100 volume level.
+  // Also, we get the volume from the state as a number between 0 and 1,
+  // so we have to multiply it by 100 to match the translate properties.
+  return audioPlayerVolume * 100 * 1.48;
+}
+function visualVolumeToAudioPlayerVolume(audioPlayerVolume) {
+  // So, why the fuck 1.48? Because that's the magic number that makes
+  // the far left coordinate of the volume bar the 0 volume level, and the
+  // far right coordinate the 100 volume level.
+  return Math.round(audioPlayerVolume / 1.48) / 100;
+}
+
 class VolumeContainer extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       mouseOverBox: false,
-      translate: this._audioPlayerVolumeToVisualVolume(props.volume),
+      translate: audioPlayerVolumeToVisualVolume(props.volume),
       volume: props.volume,
-      mutedVolume: 0
+      mutedVolume: 0,
     };
 
     this.handlerWidth = 12;
@@ -78,7 +93,7 @@ class VolumeContainer extends React.PureComponent {
     this.onMouseDragging = this.onMouseDragging.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
-    this._onMouseUp = this._onMouseUp.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
 
     this.onDraggingFunctionRef = null;
   }
@@ -86,14 +101,15 @@ class VolumeContainer extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     if (!this.holding) {
       this.setState({
-        translate: this._audioPlayerVolumeToVisualVolume(nextProps.volume),
-        volume: nextProps.volume
+        translate: audioPlayerVolumeToVisualVolume(nextProps.volume),
+        volume: nextProps.volume,
       });
     }
   }
 
   onClick(e) {
-    const newVolume = this._visualVolumeToAudioPlayerVolume(e.clientX - e.target.getBoundingClientRect().left);
+    const newVolume =
+      visualVolumeToAudioPlayerVolume(e.clientX - e.target.getBoundingClientRect().left);
     if (newVolume < 1) {
       this.props.setVolume(newVolume);
     }
@@ -109,7 +125,7 @@ class VolumeContainer extends React.PureComponent {
     }
     this.onDraggingFunctionRef = this.onMouseDragging(e.clientX, this.state.translate);
     document.addEventListener('mousemove', this.onDraggingFunctionRef);
-    document.addEventListener('mouseup', this._onMouseUp);
+    document.addEventListener('mouseup', this.onMouseUp);
   }
 
   onMouseDragging(mouseDownX, startTranslate) {
@@ -127,7 +143,7 @@ class VolumeContainer extends React.PureComponent {
 
         this.setState({
           translate: newTranslate,
-          volume: this._visualVolumeToAudioPlayerVolume(newTranslate)
+          volume: visualVolumeToAudioPlayerVolume(newTranslate),
         });
         this.props.setVolume(this.state.volume);
       }
@@ -153,26 +169,11 @@ class VolumeContainer extends React.PureComponent {
     }
   }
 
-  _onMouseUp() {
+  onMouseUp() {
     this.holding = false;
     this.props.setVolume(this.state.volume);
     document.removeEventListener('mousemove', this.onDraggingFunctionRef);
-    document.removeEventListener('mouseup', this._onMouseUp);
-  }
-
-  _audioPlayerVolumeToVisualVolume(audioPlayerVolume) {
-    // So, why the fuck 1.48? Because that's the magic number that makes
-    // the far left coordinate of the volume bar the 0 volume level, and the
-    // far right coordinate the 100 volume level.
-    // Also, we get the volume from the state as a number between 0 and 1,
-    // so we have to multiply it by 100 to match the translate properties.
-    return audioPlayerVolume * 100 * 1.48;
-  }
-  _visualVolumeToAudioPlayerVolume(audioPlayerVolume) {
-    // So, why the fuck 1.48? Because that's the magic number that makes
-    // the far left coordinate of the volume bar the 0 volume level, and the
-    // far right coordinate the 100 volume level.
-    return Math.round(audioPlayerVolume / 1.48) / 100;
+    document.removeEventListener('mouseup', this.onMouseUp);
   }
 
   render() {
@@ -181,13 +182,11 @@ class VolumeContainer extends React.PureComponent {
       VolumeButton = Buttons.VolumeMutedBtn;
     } else if (this.state.mouseOverBox) {
       VolumeButton = Buttons.VolumeLowBtn;
-    } else {
-      if (this.state.volume > 0) {
-        if (this.state.volume > 0.5) {
-          VolumeButton = Buttons.VolumeHighBtn;
-        } else {
-          VolumeButton = Buttons.VolumeLowBtn;
-        }
+    } else if (this.state.volume > 0) {
+      if (this.state.volume > 0.5) {
+        VolumeButton = Buttons.VolumeHighBtn;
+      } else {
+        VolumeButton = Buttons.VolumeLowBtn;
       }
     }
 
@@ -203,14 +202,12 @@ class VolumeContainer extends React.PureComponent {
           style={{
             w: (this.state.mouseOverBox || this.holding) ? 208 : 0,
             opacity: spring(this.state.mouseOverBox ? 1 : 0),
-            //w: 208,
-            //opacity: 1,
           }}
         >
-          {({ w, opacity }) =>
+          {({ w, opacity }) => (
             <VolumeOverlay style={{
                 width: `${w}px`,
-                opacity
+                opacity,
               }}
             >
               <VolumeBarWrapper>
@@ -225,17 +222,17 @@ class VolumeContainer extends React.PureComponent {
                   <ProgressBarHandler
                     width={this.handlerWidth}
                     height={this.handlerHeight}
-                    visibility={true}
+                    visibility
                     translate={`translate(${this.state.translate}, 0)`}
                     onMouseDown={this.onMouseDown}
                   />
                 </VolumeBar>
               </VolumeBarWrapper>
               <VolumeOverlayEnd>
-                <Buttons.VolumeHighBtn/>
+                <Buttons.VolumeHighBtn />
               </VolumeOverlayEnd>
             </VolumeOverlay>
-          }
+          )}
         </Motion>
       </VolumeContainerWrapper>
     );
@@ -243,7 +240,7 @@ class VolumeContainer extends React.PureComponent {
 }
 VolumeContainer.propTypes = {
   volume: PropTypes.number.isRequired,
-  setVolume: PropTypes.func.isRequired
+  setVolume: PropTypes.func.isRequired,
 };
 
 export default VolumeContainer;

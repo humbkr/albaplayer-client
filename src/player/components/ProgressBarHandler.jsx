@@ -6,7 +6,7 @@ const progressBarHandler = ({
   height,
   translate,
   visibility,
-  onMouseDown
+  onMouseDown,
 }, { color }) => (
   <g
     visibility={visibility ? 'visible' : 'hidden'}
@@ -21,10 +21,11 @@ progressBarHandler.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   translate: PropTypes.string.isRequired,
-  onMouseDown: PropTypes.func.isRequired
+  visibility: PropTypes.bool.isRequired,
+  onMouseDown: PropTypes.func.isRequired,
 };
 progressBarHandler.contextTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
 };
 
 export default progressBarHandler;

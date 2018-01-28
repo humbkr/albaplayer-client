@@ -21,5 +21,5 @@ export {
   VolumeHighBtn,
   VolumeLowBtn,
   VolumeMutedBtn,
-  CloseBtn
+  CloseBtn,
 };

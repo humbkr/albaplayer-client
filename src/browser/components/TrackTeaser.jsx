@@ -42,7 +42,7 @@ const TrackWrapper = styled.div`
 // eslint-disable-next-line react/prefer-stateless-function
 class TrackTeaser extends Component {
   render() {
-    const { item, selectedTracks, onClick } = this.props.item;
+    const { item, selectedTracks, onClick } = this.props;
     const selected = (selectedTracks === item.id) ? { selected: true } : {};
 
     return (
@@ -55,7 +55,12 @@ class TrackTeaser extends Component {
   }
 }
 TrackTeaser.propTypes = {
-  item: PropTypes.objectOf(PropTypes.shape()).isRequired,
+  item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    duration: PropTypes.number,
+    number: PropTypes.number,
+  }).isRequired,
   selectedTracks: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };

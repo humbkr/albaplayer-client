@@ -36,7 +36,10 @@ class ArtistTeaser extends Component {
   }
 }
 ArtistTeaser.propTypes = {
-  item: PropTypes.objectOf(PropTypes.shape()).isRequired,
+  item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
   selectedArtists: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };

@@ -54,8 +54,12 @@ class QueueItem extends Component {
   }
 }
 QueueItem.propTypes = {
-  item: PropTypes.objectOf(PropTypes.shape()).isRequired,
-  itemHeight: PropTypes.string.isRequired,
+  item: PropTypes.shape({
+    position: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    duration: PropTypes.number,
+  }).isRequired,
+  itemHeight: PropTypes.number.isRequired,
   current: PropTypes.number.isRequired,
 };
 

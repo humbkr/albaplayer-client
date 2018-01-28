@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from "styled-components";
+import styled from 'styled-components';
 import * as Buttons from './buttons/index';
 import {
-  PLAYER_REPEAT_LOOP_ALL, PLAYER_REPEAT_LOOP_ONE,
-  PLAYER_REPEAT_NO_REPEAT
-} from "../actions";
-import VolumeContainer from "./VolumeContainer";
+  PLAYER_REPEAT_LOOP_ALL,
+  PLAYER_REPEAT_LOOP_ONE,
+  PLAYER_REPEAT_NO_REPEAT,
+} from '../actions';
+import VolumeContainer from './VolumeContainer';
 
 const ControlsWrapper = styled.div`
   margin: 10px 0;
@@ -47,7 +48,6 @@ const Controls = ({
   skipToNext,
   skipToPrevious,
 }) => {
-
   let PlayPauseButton;
   switch (playing) {
     case true:
@@ -78,7 +78,6 @@ const Controls = ({
       break;
   }
 
-
   return (
     <ControlsWrapper>
       <ControlsPrimary>
@@ -95,7 +94,7 @@ const Controls = ({
         </div>
         <div><RepeatButton onClick={toggleRepeat} enabled={repeatButtonEnabled} /></div>
         <div><Buttons.ShuffleBtn onClick={toggleShuffle} enabled={shuffle} /></div>
-        <div></div>
+        <div />
       </ControlsSecondary>
     </ControlsWrapper>
   );
@@ -110,7 +109,7 @@ Controls.propTypes = {
   toggleShuffle: PropTypes.func.isRequired,
   toggleRepeat: PropTypes.func.isRequired,
   skipToNext: PropTypes.func.isRequired,
-  skipToPrevious: PropTypes.func.isRequired
+  skipToPrevious: PropTypes.func.isRequired,
 };
 
 export default Controls;

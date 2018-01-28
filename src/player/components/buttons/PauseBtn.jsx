@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
 
+
 const PauseBtn = (props, context) => {
-  const size = (props.size) ? props.size + 'px' : '30px';
+  const size = `${props.size}px`;
 
   return (
     <Button {...props}>
@@ -16,9 +17,14 @@ const PauseBtn = (props, context) => {
     </Button>
   );
 };
+PauseBtn.propTypes = {
+  size: PropTypes.number,
+};
+PauseBtn.defaultProps = {
+  size: 30,
+};
 PauseBtn.contextTypes = {
   color: PropTypes.string,
-  size: PropTypes.number
 };
 
 export default PauseBtn;

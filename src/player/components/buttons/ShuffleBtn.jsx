@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from './Button';
 
 const ShuffleBtn = (props, context) => {
-  const size = (props.size) ? props.size + 'px' : '25px';
+  const size = `${props.size}px`;
   const color = (props.enabled) ? context.colorEnabled : context.color;
 
   return (
@@ -25,16 +25,17 @@ const ShuffleBtn = (props, context) => {
     </Button>
   );
 };
-Button.propTypes = {
-  enabled: PropTypes.bool
+ShuffleBtn.propTypes = {
+  enabled: PropTypes.bool,
+  size: PropTypes.number,
 };
-Button.defaultProps = {
-  enabled: false
+ShuffleBtn.defaultProps = {
+  enabled: false,
+  size: 25,
 };
 ShuffleBtn.contextTypes = {
   color: PropTypes.string,
   colorEnabled: PropTypes.string,
-  size: PropTypes.number
 };
 
 export default ShuffleBtn;

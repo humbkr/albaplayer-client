@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from './Button';
 
 const RepeatBtn = (props, context) => {
-  const size = (props.size) ? props.size + 'px' : '25px';
+  const size = `${props.size}px`;
   const color = (props.enabled) ? context.colorEnabled : context.color;
 
   return (
@@ -28,10 +28,17 @@ const RepeatBtn = (props, context) => {
     </Button>
   );
 };
+RepeatBtn.propTypes = {
+  enabled: PropTypes.bool,
+  size: PropTypes.number,
+};
+RepeatBtn.defaultProps = {
+  enabled: false,
+  size: 25,
+};
 RepeatBtn.contextTypes = {
   color: PropTypes.string,
   colorEnabled: PropTypes.string,
-  size: PropTypes.number
 };
 
 export default RepeatBtn;

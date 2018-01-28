@@ -15,36 +15,29 @@ class Timeline extends React.Component {
 
     this.holding = false;
     this.shouldTogglePlayPause = this.props.playing;
-
-    this.changeTranslate = this.changeTranslate.bind(this);
-    this._onMouseDownProgressBar = this._onMouseDownProgressBar.bind(this);
-    this._onMouseOverProgressBar = this._onMouseOverProgressBar.bind(this);
-    this._onMouseOutProgressBar = this._onMouseOutProgressBar.bind(this);
-    this._onMouseDownProgressBarHandler = this._onMouseDownProgressBarHandler.bind(this);
-    this._onMouseUp = this._onMouseUp.bind(this);
-
     this.onMouseMoveFunctionRef = null;
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.duration !== 0 && !this.holding) {
+    if (!Number.isNaN(nextProps.duration) && nextProps.duration !== 0 && !this.holding) {
       const lengthPerSecond = this.state.barWidth / nextProps.duration;
       const length = nextProps.progress * lengthPerSecond;
+
       this.changeTranslate(length);
       this.shouldTogglePlayPause = nextProps.playing;
     }
   }
 
-  _onMouseOverProgressBar() {
+  onMouseOverProgressBar = () => {
     this.setState({ showHandler: true });
-  }
-  _onMouseOutProgressBar() {
+  };
+  onMouseOutProgressBar = () => {
     this.setState({ showHandler: false });
-  }
+  };
 
-  _onMouseDownProgressBar(e) {
+  onMouseDownProgressBar = (e) => {
     e.stopPropagation();
-    //console.log('Timeline: _onMouseDownProgressBar');
+    // console.log('Timeline: onMouseDownProgressBar');
     if (this.shouldTogglePlayPause) {
       this.props.togglePlayPause();
     }
@@ -52,38 +45,38 @@ class Timeline extends React.Component {
     const newTranslate = e.pageX - timelineDisToLeft;
     this.changeTranslate(newTranslate);
     this.holding = true;
-    this.onMouseMoveFunctionRef = this._onMouseMove(e.pageX, newTranslate);
+    this.onMouseMoveFunctionRef = this.onMouseMove(e.pageX, newTranslate);
     document.addEventListener('mousemove', this.onMouseMoveFunctionRef);
-    document.addEventListener('mouseup', this._onMouseUp);
-  }
-  _onMouseDownProgressBarHandler(e) {
+    document.addEventListener('mouseup', this.onMouseUp);
+  };
+  onMouseDownProgressBarHandler = (e) => {
     e.stopPropagation();
     this.holding = true;
-    //console.log('Timeline: _onMouseDownProgressBarHandler');
+    // console.log('Timeline: onMouseDownProgressBarHandler');
     if (this.shouldTogglePlayPause) {
       this.props.togglePlayPause();
     }
-    this.onMouseMoveFunctionRef = this._onMouseMove(e.pageX, this.state.translate);
+    this.onMouseMoveFunctionRef = this.onMouseMove(e.pageX, this.state.translate);
     document.addEventListener('mousemove', this.onMouseMoveFunctionRef);
-    document.addEventListener('mouseup', this._onMouseUp);
-  }
-  _onMouseMove(mouseDownX, startTranslate) {
-    return (event) => {
+    document.addEventListener('mouseup', this.onMouseUp);
+  };
+  onMouseMove = (mouseDownX, startTranslate) => (
+    (event) => {
       if (this.holding) {
         const translate = (event.pageX - mouseDownX) + startTranslate;
         this.changeTranslate(translate);
-        this.props.updateProgressTime((this.state.translate / this.state.barWidth) * this.props.duration);
       }
-    };
-  }
-  _onMouseUp() {
-    //console.log('Timeline: _onMouseUp()');
-    /* When the _onMouseUp() event happen really quick after the _onMouseDownProgressBar(),
+    }
+  );
+  onMouseUp = () => {
+    // console.log('Timeline: onMouseUp()');
+    /* When the onMouseUp() event happen really quick after the onMouseDownProgressBar(),
        i.e. React hasn't called setState, enqueue a togglePlayPause() to the loop. */
     if (this.shouldTogglePlayPause && this.props.playing) {
       setTimeout(() => this.props.togglePlayPause(), 0);
     }
-    // Normally, when this.shouldTogglePlayPause is true, this.props.playing should be false, except the case above.
+    // Normally, when this.shouldTogglePlayPause is true, this.props.playing should be false,
+    // except the case above.
     if (this.shouldTogglePlayPause && !this.props.playing) {
       this.props.togglePlayPause();
     }
@@ -92,10 +85,10 @@ class Timeline extends React.Component {
     this.props.setProgress((this.state.translate / this.state.barWidth) * this.props.duration);
 
     document.removeEventListener('mousemove', this.onMouseMoveFunctionRef);
-    document.removeEventListener('mouseup', this._onMouseUp);
-  }
+    document.removeEventListener('mouseup', this.onMouseUp);
+  };
 
-  changeTranslate(newTranslate) {
+  changeTranslate = (newTranslate) => {
     let translate = newTranslate;
     const max = this.state.barWidth;
 
@@ -108,7 +101,7 @@ class Timeline extends React.Component {
     }
 
     this.setState({ translate });
-  }
+  };
 
   render() {
     const handlerWidth = 12;
@@ -124,16 +117,16 @@ class Timeline extends React.Component {
           barHeight={barHeight}
           translate={this.state.translate}
           duration={this.props.duration}
-          onMouseDown={this._onMouseDownProgressBar}
-          onMouseOver={this._onMouseOverProgressBar}
-          onMouseOut={this._onMouseOutProgressBar}
+          onMouseDown={this.onMouseDownProgressBar}
+          onMouseOver={this.onMouseOverProgressBar}
+          onMouseOut={this.onMouseOutProgressBar}
         >
           <ProgressBarHandler
             width={handlerWidth}
             height={handlerHeight}
             visibility={this.state.showHandler || this.holding}
             translate={`translate(${this.state.translate - 6})`}
-            onMouseDown={this._onMouseDownProgressBarHandler}
+            onMouseDown={this.onMouseDownProgressBarHandler}
           />
         </ProgressBar>
       </div>

@@ -20,6 +20,7 @@ const Queue = (props) => {
       <QueueHeader />
       { items.length > 0 &&
         <QueueList
+          items={items}
           itemHeight={parseInt(props.theme.itemHeight, 0)}
           current={props.current}
         />
@@ -30,8 +31,11 @@ const Queue = (props) => {
 };
 
 Queue.propTypes = {
-  theme: PropTypes.objectOf(PropTypes.shape()).isRequired,
-  tracks: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  theme: PropTypes.object.isRequired,
+  tracks: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  })).isRequired,
   current: PropTypes.number,
 };
 Queue.defaultProps = {

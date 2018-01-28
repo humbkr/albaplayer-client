@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import {
   playerToggleRepeat,
   playerToggleShuffle,
@@ -7,8 +9,7 @@ import {
   setNextTrack,
   setPreviousTrack,
   playerSetProgress, playerTogglePlayPause,
-} from "../actions";
-import { connect } from "react-redux";
+} from '../actions';
 
 
 const Audio = (Player) => {
@@ -21,20 +22,36 @@ const Audio = (Player) => {
       this.audioElement.addEventListener('ended', this.props.onTrackEnded);
     }
 
-    componentWillUnmount() {
-      this._clearInterval();
-      this.audioElement.removeEventListener('ended', this.props.onTrackEnded);
-      this.audioElement = null;
-    }
-
     componentDidUpdate(prevProps) {
       // Manage the current track being player in audio element.
       if (prevProps.track !== this.props.track) {
         // Clear progress update interval.
-        this._clearInterval();
+        this.clearInterval();
         this.loadTrack();
       }
     }
+
+    componentWillUnmount() {
+      this.clearInterval();
+      this.audioElement.removeEventListener('ended', this.props.onTrackEnded);
+      this.audioElement = null;
+    }
+
+    onPlay = () => {
+      // console.log('on play');
+      this.audioElement.play();
+      this.props.onPlayPausePress(true);
+      this.intervalId = setInterval(() => {
+        this.props.onProgressChange(this.audioElement.currentTime);
+      }, 900);
+    };
+
+    onPause = () => {
+      // console.log('on pause');
+      this.audioElement.pause();
+      this.props.onPlayPausePress(false);
+      this.clearInterval();
+    };
 
     /*
      * Loads a track in the html5 player.
@@ -49,22 +66,6 @@ const Audio = (Player) => {
           this.onPlay();
         }
       }
-    };
-
-    onPlay = () => {
-       console.log('on play');
-      this.audioElement.play();
-      this.props.onPlayPausePress(true);
-      this.intervalId = setInterval(() => {
-        this.props.onProgressChange(this.audioElement.currentTime);
-      }, 900);
-    };
-
-    onPause = () => {
-       console.log('on pause');
-      this.audioElement.pause();
-      this.props.onPlayPausePress(false);
-      this._clearInterval();
     };
 
     /* Handlers managing the html5 audio player from sub components */
@@ -82,7 +83,7 @@ const Audio = (Player) => {
         progress = duration;
       }
 
-      console.log("handleSetProgress set progress to: " + progress)
+      // console.log("handleSetProgress set progress to: " + progress)
       this.audioElement.currentTime = progress;
       this.props.onProgressChange(progress);
     };
@@ -91,15 +92,13 @@ const Audio = (Player) => {
       this.props.onVolumeChange(newVolume);
     };
 
-
-    _clearInterval() {
+    clearInterval() {
       // console.log('interval cleared');
       if (this.intervalId !== null) {
         clearInterval(this.intervalId);
         this.intervalId = null;
       }
     }
-
 
     render() {
       // Compute all the data that will be needed by the wrapped component.
@@ -139,7 +138,10 @@ const Audio = (Player) => {
     }
   }
   HOCAudio.propTypes = {
-    track: PropTypes.object,
+    track: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      src: PropTypes.string.isRequired,
+    }),
     playing: PropTypes.bool.isRequired,
     shuffle: PropTypes.bool.isRequired,
     repeat: PropTypes.number.isRequired,
@@ -152,48 +154,52 @@ const Audio = (Player) => {
     onShufflePress: PropTypes.func.isRequired,
     onRepeatPress: PropTypes.func.isRequired,
     onVolumeChange: PropTypes.func.isRequired,
+    onProgressChange: PropTypes.func.isRequired,
+  };
+  HOCAudio.defaultProps = {
+    track: null,
   };
 
-  const mapStateToProps = state => {
-    return {
+  const mapStateToProps = state => (
+    {
       track: state.player.track,
       playing: state.player.playing,
       shuffle: state.player.shuffle,
       repeat: state.player.repeat,
       volume: state.player.volume,
       progress: state.player.progress,
-    };
-  };
+    }
+  );
   const mapDispatchToProps = dispatch => ({
     onPlayPausePress: (value) => {
       dispatch(playerTogglePlayPause(value));
     },
     onTrackEnded: () => {
-      dispatch(setNextTrack())
+      dispatch(setNextTrack());
     },
     onPrevPress: () => {
-      dispatch(setPreviousTrack())
+      dispatch(setPreviousTrack());
     },
     onNextPress: () => {
-      dispatch(setNextTrack())
+      dispatch(setNextTrack());
     },
     onShufflePress: () => {
-      dispatch(playerToggleShuffle())
+      dispatch(playerToggleShuffle());
     },
     onRepeatPress: () => {
-      dispatch(playerToggleRepeat())
+      dispatch(playerToggleRepeat());
     },
     onVolumeChange: (volume) => {
-      dispatch(playerSetVolume(volume))
+      dispatch(playerSetVolume(volume));
     },
     onProgressChange: (currentTime) => {
-      dispatch(playerSetProgress(currentTime))
+      dispatch(playerSetProgress(currentTime));
     },
   });
 
   return connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
   )(HOCAudio);
 };
 

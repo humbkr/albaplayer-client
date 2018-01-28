@@ -8,7 +8,7 @@ const VolumeBar = ({
   handlerWidth,
   translate,
   onClick,
-  children
+  children,
 }, { color }) => {
   const diff = (height - barThickness) / 2;
   return (
@@ -45,9 +45,10 @@ VolumeBar.propTypes = {
   barThickness: PropTypes.number.isRequired,
   translate: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
+  children: PropTypes.element.isRequired,
 };
 VolumeBar.contextTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
 };
 
 export default VolumeBar;

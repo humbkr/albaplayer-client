@@ -16,7 +16,8 @@ const QueueList = (props) => {
   );
 };
 QueueList.propTypes = {
-  virtual: PropTypes.objectOf(PropTypes.shape()).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  virtual: PropTypes.object.isRequired,
   itemHeight: PropTypes.number.isRequired,
   current: PropTypes.number.isRequired,
 };

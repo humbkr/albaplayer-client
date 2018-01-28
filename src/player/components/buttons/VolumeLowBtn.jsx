@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
 
+
 const VolumeLowBtn = (props, context) => {
-  const size = (props.size) ? props.size + 'px' : '25px';
+  const size = `${props.size}px`;
 
   return (
     <Button {...props}>
@@ -15,9 +16,14 @@ const VolumeLowBtn = (props, context) => {
     </Button>
   );
 };
+VolumeLowBtn.propTypes = {
+  size: PropTypes.number,
+};
+VolumeLowBtn.defaultProps = {
+  size: 25,
+};
 VolumeLowBtn.contextTypes = {
   color: PropTypes.string,
-  size: PropTypes.number
 };
 
 export default VolumeLowBtn;

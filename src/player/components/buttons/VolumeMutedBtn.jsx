@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
 
+
 const VolumeMutedBtn = (props, context) => {
-  const size = (props.size) ? props.size + 'px' : '25px';
+  const size = `${props.size}px`;
 
   return (
     <Button {...props}>
@@ -20,9 +21,14 @@ const VolumeMutedBtn = (props, context) => {
     </Button>
   );
 };
+VolumeMutedBtn.propTypes = {
+  size: PropTypes.number,
+};
+VolumeMutedBtn.defaultProps = {
+  size: 25,
+};
 VolumeMutedBtn.contextTypes = {
   color: PropTypes.string,
-  size: PropTypes.number
 };
 
 export default VolumeMutedBtn;

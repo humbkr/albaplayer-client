@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from './Button';
 
 const SkipPrevBtn = (props, context) => {
-  const size = (props.size) ? props.size + 'px' : '30px';
+  const size = `${props.size}px`;
 
   return (
     <Button {...props}>
@@ -16,9 +16,14 @@ const SkipPrevBtn = (props, context) => {
     </Button>
   );
 };
+SkipPrevBtn.propTypes = {
+  size: PropTypes.number,
+};
+SkipPrevBtn.defaultProps = {
+  size: 30,
+};
 SkipPrevBtn.contextTypes = {
   color: PropTypes.string,
-  size: PropTypes.number
 };
 
 export default SkipPrevBtn;

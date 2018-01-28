@@ -64,7 +64,12 @@ class AlbumTeaser extends Component {
   }
 }
 AlbumTeaser.propTypes = {
-  item: PropTypes.objectOf(PropTypes.shape()).isRequired,
+  item: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    artistName: PropTypes.string,
+    year: PropTypes.string,
+  }).isRequired,
   selectedAlbums: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };

@@ -35,7 +35,7 @@ class ArtistsPaneContainer extends Component {
     return (
       <ArtistsPane>
         <LibraryBrowserListHeader
-          title={'Artists'}
+          title="Artists"
           orderBy={orderBy}
           orderByOptions={orderByOptions}
           onChange={this.onSortChangeHandler}
@@ -44,32 +44,36 @@ class ArtistsPaneContainer extends Component {
           items={artists}
           itemDisplay={ArtistTeaser}
         />
-        <ArtistContextMenu/>
+        <ArtistContextMenu />
       </ArtistsPane>
     );
   }
 }
 ArtistsPaneContainer.propTypes = {
-  artists: PropTypes.array.isRequired,
-  orderBy: PropTypes.string.isRequired
+  artists: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => (
+  {
     artists: immutableNestedSort(state.libraryBrowser.artists, state.libraryBrowser.sortArtists),
-    orderBy: state.libraryBrowser.sortArtists
+    orderBy: state.libraryBrowser.sortArtists,
   }
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    onChange: sortProperty => {
-      dispatch(libraryBrowserSortArtists(sortProperty))
-    }
+);
+const mapDispatchToProps = dispatch => (
+  {
+    onChange: (sortProperty) => {
+      dispatch(libraryBrowserSortArtists(sortProperty));
+    },
   }
-};
+);
 
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ArtistsPaneContainer);

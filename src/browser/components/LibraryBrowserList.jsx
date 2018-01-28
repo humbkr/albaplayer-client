@@ -44,7 +44,8 @@ const LibraryBrowserList = (props) => {
   );
 };
 LibraryBrowserList.propTypes = {
-  theme: PropTypes.objectOf(PropTypes.shape()).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  theme: PropTypes.object.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   itemDisplay: PropTypes.func.isRequired,
 };
