@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ContextMenu, Item } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.min.css';
-import { addTrack, playTrack } from '../../queue/actions';
+import { addTrack, playTrack } from '../../player/actions';
 
 
 class TrackContextMenu extends Component {

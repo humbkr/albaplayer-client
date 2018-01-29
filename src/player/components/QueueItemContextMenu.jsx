@@ -3,8 +3,9 @@ import { ContextMenu, Item } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.min.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { playerTogglePlayPause, setTrackFromQueue } from '../../player/actions';
-import { queueRemoveTrack } from '../actions';
+import { playerTogglePlayPause } from '../actionsPlayer';
+import { queueRemoveTrack } from '../actionsQueue';
+import { setTrackFromQueue } from '../actions';
 
 
 class QueueItemContextMenu extends Component {

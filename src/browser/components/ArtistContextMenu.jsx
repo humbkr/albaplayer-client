@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ContextMenu, Item } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.min.css';
-import { addArtist, playArtist } from '../../queue/actions';
+import { addArtist, playArtist } from '../../player/actions';
 
 
 class ArtistContextMenu extends Component {

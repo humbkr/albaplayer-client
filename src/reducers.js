@@ -1,9 +1,10 @@
-import { LIBRARY_INIT_START, LIBRARY_INIT_SUCCESS } from './actions';
+import { LIBRARY_INIT_FAILURE, LIBRARY_INIT_START, LIBRARY_INIT_SUCCESS } from './actions';
 
 
 const initialState = {
   isFetching: false,
   isInitialized: false,
+  initHasFailed: false,
   artists: [],
   albums: [],
   tracks: [],
@@ -18,7 +19,6 @@ function library(state = initialState, action) {
       });
 
     case LIBRARY_INIT_SUCCESS:
-      // Populate original and current lists data.
       return Object.assign({}, state, {
         ...state,
         isFetching: false,
@@ -28,9 +28,18 @@ function library(state = initialState, action) {
         tracks: action.response.tracks,
       });
 
+    case LIBRARY_INIT_FAILURE:
+      return Object.assign({}, state, {
+        ...state,
+        isFetching: false,
+        isInitialized: false,
+        initHasFailed: true,
+      });
+
     default:
       return state;
   }
 }
+
 
 export default library;

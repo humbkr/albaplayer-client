@@ -7,7 +7,7 @@ import {
   PLAYER_SET_DURATION,
   PLAYER_SET_PROGRESS,
   PLAYER_SET_VOLUME,
-} from './actions';
+} from './actionsPlayer';
 
 /*
  * Calculates the next / previous position in an list of consecutive integers

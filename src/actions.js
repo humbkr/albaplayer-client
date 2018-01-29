@@ -30,7 +30,12 @@ const fetchLibrary = () => (
 
     // Then we make the API call.
     return getLibrary()
-      .then(response => dispatch(libraryInitSuccess(response)));
+      .then((response) => {
+        dispatch(libraryInitSuccess(response));
+      })
+      .catch(() => {
+        dispatch(libraryInitFailure());
+      });
   }
 );
 

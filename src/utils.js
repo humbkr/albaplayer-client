@@ -61,9 +61,13 @@ const formatDuration = (amount) => {
   return `${minutes}:${seconds}`;
 };
 
+const arrayToObject = (arr, keyField) => (
+  Object.assign({}, ...arr.map(item => ({ [item[keyField]]: item })))
+);
 
 export {
   immutableNestedSort,
   immutableRemove,
   formatDuration,
+  arrayToObject,
 };

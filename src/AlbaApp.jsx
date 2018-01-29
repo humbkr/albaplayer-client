@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Sidebar from './sidebar/components/Sidebar';
+import Sidebar from './common/Sidebar';
 import MainPanel from './common/MainPanel';
 import { initLibrary } from './actions';
 
@@ -21,34 +21,18 @@ class AlbaApp extends Component {
   }
 
   render() {
-    const { isFetching, isInitialized } = this.props;
-
     return (
-      <div>
-        { isFetching && <h2>Loading...</h2> }
-        { !isFetching && isInitialized &&
-          <AlbaAppWrapper>
-            <Sidebar />
-            <MainPanel />
-          </AlbaAppWrapper>
-        }
-      </div>
+      <AlbaAppWrapper>
+        <Sidebar />
+        <MainPanel />
+      </AlbaAppWrapper>
     );
   }
 }
 AlbaApp.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  isInitialized: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps(state) {
-  const { isFetching, isInitialized } = state.library;
-
-  return {
-    isFetching,
-    isInitialized,
-  };
-}
-
-export default withRouter(connect(mapStateToProps)(AlbaApp));
+// Need to use withRouter here or the views in MainPanel won't change.
+// https://github.com/ReactTraining/react-router/issues/4671
+export default withRouter(connect()(AlbaApp));

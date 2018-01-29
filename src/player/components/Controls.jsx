@@ -6,7 +6,7 @@ import {
   PLAYER_REPEAT_LOOP_ALL,
   PLAYER_REPEAT_LOOP_ONE,
   PLAYER_REPEAT_NO_REPEAT,
-} from '../actions';
+} from '../actionsPlayer';
 import VolumeContainer from './VolumeContainer';
 
 const ControlsWrapper = styled.div`

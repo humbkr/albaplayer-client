@@ -4,7 +4,7 @@ import {
   QUEUE_ADD_TRACK,
   QUEUE_CLEAR,
   QUEUE_REMOVE_TRACK, QUEUE_SET_CURRENT,
-} from './actions';
+} from './actionsQueue';
 import { immutableRemove } from '../utils';
 
 
@@ -19,7 +19,7 @@ function queue(state = initialState, action, library) {
       return Object.assign({}, state, {
         tracks: [
           ...state.tracks,
-          ...library.tracks.filter(item => (action.trackId === item.id)),
+          library.tracks[action.trackId],
         ],
         current: state.current,
       });
@@ -59,5 +59,6 @@ function queue(state = initialState, action, library) {
       return state;
   }
 }
+
 
 export default queue;

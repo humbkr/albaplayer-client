@@ -6,11 +6,13 @@ import {
   playerToggleRepeat,
   playerToggleShuffle,
   playerSetVolume,
+  playerSetProgress,
+  playerTogglePlayPause,
+} from '../actionsPlayer';
+import {
   setNextTrack,
   setPreviousTrack,
-  playerSetProgress, playerTogglePlayPause,
 } from '../actions';
-
 
 const Audio = (Player) => {
   class HOCAudio extends React.Component {

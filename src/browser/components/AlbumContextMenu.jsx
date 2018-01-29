@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ContextMenu, Item } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.min.css';
-import { addAlbum, playAlbum } from '../../queue/actions';
+import { addAlbum, playAlbum } from '../../player/actions';
 
 
 class AlbumContextMenu extends Component {

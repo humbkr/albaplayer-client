@@ -16,6 +16,8 @@ type Album {
   title: String!
   tracks: [Track]
   artist: Artist
+  # Shorthand property for perfs on albums query.
+  artistName: String
 }
 
 type Artist {

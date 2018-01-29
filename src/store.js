@@ -3,8 +3,8 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import library from './reducers';
 import libraryBrowser from './browser/reducers';
-import queue from './queue/reducers';
-import player from './player/reducers';
+import queue from './player/reducersQueue';
+import player from './player/reducersPlayer';
 
 const customReducer = (state = {}, action) => (
   {
