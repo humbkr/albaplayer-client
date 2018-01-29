@@ -46,7 +46,7 @@ function queue(state = initialState, action, library) {
       });
     case QUEUE_CLEAR:
       return Object.assign({}, state, {
-        tracks: {},
+        tracks: [],
         current: '',
       });
     case QUEUE_SET_CURRENT:

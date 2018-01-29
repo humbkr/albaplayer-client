@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 import QueueHeader from './QueueHeader';
 import QueueList from './QueueList';
+import QueueActions from './QueueActions';
 import QueueItemContextMenu from './QueueItemContextMenu';
 
 
@@ -17,6 +18,7 @@ const Queue = (props) => {
 
   return (
     <div>
+      <QueueActions />
       <QueueHeader />
       { items.length > 0 &&
         <QueueList

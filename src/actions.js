@@ -33,8 +33,8 @@ const fetchLibrary = () => (
       .then((response) => {
         dispatch(libraryInitSuccess(response));
       })
-      .catch(() => {
-        dispatch(libraryInitFailure());
+      .catch((response) => {
+        dispatch(libraryInitFailure(response));
       });
   }
 );

@@ -22,7 +22,6 @@ const NowPlayingPane = () => (
   <NowPlayingPaneWrapper>
     <NowPlaying />
     <NowPlayingQueue>
-      <h2>Queue</h2>
       <Queue />
     </NowPlayingQueue>
   </NowPlayingPaneWrapper>

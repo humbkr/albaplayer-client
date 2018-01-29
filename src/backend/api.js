@@ -23,6 +23,7 @@ const getLibrary = () => {
         duration
         artistId
         albumId
+        cover
       }
     }
 `;
