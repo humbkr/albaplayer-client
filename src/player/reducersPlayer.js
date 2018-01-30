@@ -43,23 +43,7 @@ const initialState = {
   duration: 0,
   progress: 0,
   // Track currently loaded in audio.
-  track: {
-    id: "7",
-    title: "Make It Wit Chu",
-    number: 7,
-    disc: "1/2",
-    cover: "http://localhost:32768/covers/1",
-    duration: 291,
-    src: "http://localhost:327",
-    album: {
-      id: "1",
-      title: "Era Vulgaris - Deluxe Edition"
-    },
-    artist: {
-      id: "2",
-      name: "Queens Of The Stone Age"
-    }
-  },
+  track: null,
 };
 
 function player(state = initialState, action) {
