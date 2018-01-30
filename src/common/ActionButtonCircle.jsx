@@ -2,12 +2,54 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const ActionButtonCircleWrapper = styled.div`
+const ActionButtonCircleWrapper = styled.button`
   display: inline-block;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
   
-  :hover {
-    cursor: pointer;
+  svg {
+    transition: .2s ease-out;
+    
+    circle {
+      transition: .2s ease-out;
+      stroke: ${props => props.color};
+    }
+
+    fill: ${props => props.color};
+    
+    :hover {
+      circle {
+        stroke: ${props => props.theme.buttons.colorHover};
+      }
+  
+      fill: ${props => props.theme.buttons.colorHover};
+    }
   }
+  
+  // For icon.
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 28px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
 `;
 
 const ActionButtonCircle = (props) => {
@@ -15,15 +57,16 @@ const ActionButtonCircle = (props) => {
     size,
     borderWidth,
     color,
-    text,
+    icon,
+    onClick,
   } = props;
 
   return (
-    <ActionButtonCircleWrapper>
+    <ActionButtonCircleWrapper onClick={onClick} color={color}>
       <svg width={size + borderWidth} height={size + borderWidth} xmlns="http://www.w3.org/2000/svg" version="1.1">
         <g>
-          <circle cx="50%" cy="50%" r={size / 2} stroke={color} strokeWidth={borderWidth} fill="transparent" />
-          <text x="50%" y="50%" fill={color} textAnchor="middle" alignmentBaseline="middle" dy=".1em">{text}</text>
+          <circle cx="50%" cy="50%" r={size / 2} strokeWidth={borderWidth} fill="transparent" />
+          <text x="50%" y="50%" textAnchor="middle" alignmentBaseline="middle" dy=".5em">{icon}</text>
         </g>
       </svg>
     </ActionButtonCircleWrapper>
@@ -33,13 +76,14 @@ ActionButtonCircle.propTypes = {
   size: PropTypes.number,
   borderWidth: PropTypes.number,
   color: PropTypes.string,
-  text: PropTypes.string,
+  icon: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
 };
 ActionButtonCircle.defaultProps = {
   size: 50,
   borderWidth: 1,
   color: '#fff',
-  text: '',
+  icon: '',
 };
 
 export default ActionButtonCircle;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -91,45 +91,65 @@ const SongActions = styled.div`
   }
 `;
 
-const NowPlaying = (props) => {
-  const song = props.track;
+class NowPlaying extends Component {
+  handleSearchForTabs = () => {
+    const song = this.props.track;
+    const songTitle = (song && song.title !== '') ? song.title : '';
+    const songArtist = (song && song.artist && song.artist.name) ? song.artist.name : '';
+    const searchQuery = `${songArtist}+${songTitle}+tab`.replace(/ /g, '+');
 
-  const songTitle = (song && song.title !== '') ? song.title : 'Unknown title';
-  const songArtist = (song && song.artist && song.artist.name) ? song.artist.name : 'Unknown artist';
-  const songAlbum = (song && song.album && song.album.title) ? song.album.title : 'Unknown album';
-  const songNumber = (song && song.number) ? song.number : '';
-  const songDisc = (song && song.disc) ? song.disc : '';
-  const songDuration = (song && song.duration) ? formatDuration(song.duration) : '';
-  const songCover = (song && song.cover) ? song.cover : '';
+    window.open(`https://www.google.fr/search?q=${searchQuery}`, '_blank');
+  };
 
-  let trackAlbumInfo = '';
-  if (songNumber) {
-    trackAlbumInfo += `track ${songNumber}`;
+  handleSearchForLyrics = () => {
+    const song = this.props.track;
+    const songTitle = (song && song.title !== '') ? song.title : '';
+    const songArtist = (song && song.artist && song.artist.name) ? song.artist.name : '';
+    const searchQuery = `${songArtist}+${songTitle}+lyrics`.replace(/ /g, '+');;
 
-    if (songDisc) {
-      trackAlbumInfo += ` on disc ${songDisc}`;
-    }
-  }
-  if (songDuration) {
+    window.open(`https://www.google.fr/search?q=${searchQuery}`, '_blank');
+  };
+
+
+  render() {
+    const song = this.props.track;
+
+    const songTitle = (song && song.title !== '') ? song.title : 'Unknown title';
+    const songArtist = (song && song.artist && song.artist.name) ? song.artist.name : 'Unknown artist';
+    const songAlbum = (song && song.album && song.album.title) ? song.album.title : 'Unknown album';
+    const songNumber = (song && song.number) ? song.number : '';
+    const songDisc = (song && song.disc) ? song.disc : '';
+    const songDuration = (song && song.duration) ? formatDuration(song.duration) : '';
+    const songCover = (song && song.cover) ? song.cover : '';
+
+    let trackAlbumInfo = '';
     if (songNumber) {
-      trackAlbumInfo += ' - ';
+      trackAlbumInfo += `track ${songNumber}`;
+
+      if (songDisc) {
+        trackAlbumInfo += ` on disc ${songDisc}`;
+      }
     }
-    trackAlbumInfo += songDuration;
-  }
+    if (songDuration) {
+      if (songNumber) {
+        trackAlbumInfo += ' - ';
+      }
+      trackAlbumInfo += songDuration;
+    }
 
-  if (trackAlbumInfo !== '') {
-    trackAlbumInfo = `(${trackAlbumInfo})`;
-  }
+    if (trackAlbumInfo !== '') {
+      trackAlbumInfo = `(${trackAlbumInfo})`;
+    }
 
-  return (
-    <Background cover={songCover}>
-      <NowPlayingWrapper>
-        <CoverInfo>
-          {songCover &&
+    return (
+      <Background cover={songCover}>
+        <NowPlayingWrapper>
+          <CoverInfo>
+            {songCover &&
             <SongCover src={songCover} />
-          }
-        </CoverInfo>
-        {song &&
+            }
+          </CoverInfo>
+          {song &&
           <SongInfo>
             <Title>{songTitle}</Title>
             <Artist>by {songArtist}</Artist>
@@ -137,20 +157,21 @@ const NowPlaying = (props) => {
             <Position>{trackAlbumInfo}</Position>
 
             <SongActions>
-              <ActionButtonCircle text="T" />
-              <ActionButtonCircle text="L" />
+              <ActionButtonCircle icon="queue_music" onClick={this.handleSearchForTabs} />
+              <ActionButtonCircle icon="mic" onClick={this.handleSearchForLyrics} />
             </SongActions>
           </SongInfo>
-        }
-        {!song &&
+          }
+          {!song &&
           <SongInfo>
             <h2>No song currently playing</h2>
           </SongInfo>
-        }
-      </NowPlayingWrapper>
-    </Background>
-  );
-};
+          }
+        </NowPlayingWrapper>
+      </Background>
+    );
+  }
+}
 NowPlaying.propTypes = {
   track: PropTypes.shape({
     id: PropTypes.string.isRequired,
