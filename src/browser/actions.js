@@ -1,7 +1,7 @@
-const LIBRARY_BROWSER_INIT = 'LIBRARY_BROWSER_INIT';
-const libraryBrowserInit = () => (
+const LIBRARY_BROWSER_INIT_ARTISTS = 'LIBRARY_BROWSER_INIT_ARTISTS';
+const libraryBrowserInitArtists = () => (
   {
-    type: LIBRARY_BROWSER_INIT,
+    type: LIBRARY_BROWSER_INIT_ARTISTS,
   }
 );
 
@@ -53,14 +53,25 @@ const libraryBrowserSortTracks = sortProperty => (
   }
 );
 
+const libraryBrowserInit = () => (
+  (dispatch, getState) => {
+    const state = getState();
+    dispatch(libraryBrowserInitArtists());
+    dispatch(libraryBrowserSelectArtist(state.libraryBrowser.selectedArtists));
+    dispatch(libraryBrowserSelectAlbum(state.libraryBrowser.selectedAlbums));
+    dispatch(libraryBrowserSelectTrack(state.libraryBrowser.selectedTracks));
+  }
+);
+
 export {
+  LIBRARY_BROWSER_INIT_ARTISTS,
   LIBRARY_BROWSER_SELECT_ARTIST,
   LIBRARY_BROWSER_SELECT_ALBUM,
   LIBRARY_BROWSER_SELECT_TRACK,
   LIBRARY_BROWSER_SORT_ARTISTS,
   LIBRARY_BROWSER_SORT_ALBUMS,
   LIBRARY_BROWSER_SORT_TRACKS,
-  LIBRARY_BROWSER_INIT,
+  libraryBrowserInitArtists,
   libraryBrowserSelectArtist,
   libraryBrowserSelectAlbum,
   libraryBrowserSelectTrack,

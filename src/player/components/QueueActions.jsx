@@ -10,7 +10,7 @@ const QueueActionsWrapper = styled.div`
   float: right;
 `;
 
-const QueueActions = (props) => (
+const QueueActions = props => (
   <QueueActionsWrapper>
     <ActionButton onClick={props.clearQueue} icon="close">Clear</ActionButton>
   </QueueActionsWrapper>

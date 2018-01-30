@@ -19,7 +19,7 @@ function queue(state = initialState, action, library) {
       return Object.assign({}, state, {
         tracks: [
           ...state.tracks,
-          library.tracks[action.trackId],
+          ...library.tracks.filter(item => (action.trackId === item.id)),
         ],
         current: state.current,
       });

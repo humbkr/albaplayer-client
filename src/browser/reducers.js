@@ -1,11 +1,10 @@
 import {
   LIBRARY_BROWSER_SELECT_ARTIST,
-  LIBRARY_BROWSER_INIT,
   LIBRARY_BROWSER_SELECT_TRACK,
   LIBRARY_BROWSER_SORT_ARTISTS,
   LIBRARY_BROWSER_SORT_ALBUMS,
   LIBRARY_BROWSER_SORT_TRACKS,
-  LIBRARY_BROWSER_SELECT_ALBUM,
+  LIBRARY_BROWSER_SELECT_ALBUM, LIBRARY_BROWSER_INIT_ARTISTS,
 } from './actions';
 
 
@@ -23,19 +22,16 @@ const initialState = {
 
 function libraryBrowser(state = initialState, action, library) {
   switch (action.type) {
-    case LIBRARY_BROWSER_INIT:
+    case LIBRARY_BROWSER_INIT_ARTISTS:
       return Object.assign({}, state, {
         ...state,
         artists: library.artists,
-        albums: library.albums,
-        tracks: library.tracks,
       });
-
     case LIBRARY_BROWSER_SELECT_ARTIST: {
       // To display all the albums containing tracks of an artist, including
       // the compilations, we can't directly filter albums on artistId, we have
       // to instead display all the albums for which tracks have been found.
-      const filteredTracks = Object.values(library.tracks).filter(item => (action.artistId === '0' || item.artistId === action.artistId));
+      const filteredTracks = library.tracks.filter(item => (action.artistId === '0' || item.artistId === action.artistId));
       const tracksAlbums = filteredTracks.map(item => (item.albumId));
 
       return Object.assign({}, state, {
@@ -43,7 +39,7 @@ function libraryBrowser(state = initialState, action, library) {
         selectedAlbums: '0',
         selectedTracks: '0',
         selectedArtists: action.artistId,
-        albums: Object.values(library.albums).filter(item => (action.artistId === '0' || tracksAlbums.includes(item.id))),
+        albums: library.albums.filter(item => (action.artistId === '0' || tracksAlbums.includes(item.id))),
         tracks: filteredTracks,
       });
     }
@@ -52,7 +48,7 @@ function libraryBrowser(state = initialState, action, library) {
         ...state,
         selectedTracks: '0',
         selectedAlbums: action.albumId,
-        tracks: Object.values(library.tracks).filter((item) => {
+        tracks: library.tracks.filter((item) => {
           if (action.albumId === '0' && state.selectedArtists === '0') {
             // If no artist nor album selected, display
             // all the tracks in the library.
