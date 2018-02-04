@@ -58,7 +58,35 @@ const getFullTrackInfo = (trackId) => {
   return apolloClient.query({ query: fullTrackInfoQuery });
 };
 
+const scanLibrary = () => {
+  // TODO not sure we should use a query here, but apollo doesn't allow a mutation without parameter
+  const scanLibraryQuery = gql`
+    query scanLibraryQuery {
+        updateLibrary {
+            tracksNumber
+        }
+    }
+`;
+
+  return apolloClient.query({ query: scanLibraryQuery });
+};
+
+const emptyLibrary = () => {
+  // TODO not sure we should use a query here, but apollo doesn't allow a mutation without parameter
+  const emptyLibraryQuery = gql`
+      query emptyLibraryQuery {
+          eraseLibrary {
+              tracksNumber
+          }
+      }
+  `;
+
+  return apolloClient.query({ query: emptyLibraryQuery });
+};
+
 export {
   getLibrary,
   getFullTrackInfo,
+  scanLibrary,
+  emptyLibrary,
 };

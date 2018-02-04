@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import LibraryBrowser from '../browser/components/LibraryBrowser';
 import NowPlayingPane from './NowPlayingPane';
 import LoadingScreen from './LoadingScreen';
+import SettingsScreen from './SettingsScreen';
 
 
 const MainPanelWrapper = styled.div`
@@ -27,6 +28,7 @@ const MainPanel = (props) => {
         <Route exact path="/" component={LibraryBrowser} />
         <Route path="/queue" component={NowPlayingPane} />
         <Route path="/library" component={LibraryBrowser} />
+        <Route path="/settings" component={SettingsScreen} />
       </MainPanelWrapper>
       }
     </div>

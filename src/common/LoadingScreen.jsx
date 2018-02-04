@@ -1,33 +1,10 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Loading from './Loading';
 import Icon from './Icon';
 
-const rotate360CounterClockwise = keyframes`
-  from {
-    transform: rotate(360deg);
-  }
-  
-  to {
-    transform: rotate(0deg);
-  }
-`;
-
-const LoadingStyled = styled.div`
-  width: 100%;
-  text-align: center;
-  color: ${props => props.theme.highlight};
-  
-  > i {
-    font-size: 60px;
-    animation: ${rotate360CounterClockwise} 2s linear infinite;
-  }
-  
-  > p {
-    margin-top: 10px;
-  }
-`;
 
 const LoadingScreenWrapper = styled.div`
   display: table;
@@ -51,11 +28,15 @@ const LoadingScreenInitFailed = styled.div`
   padding: 20px;
 `;
 
-const Loading = () => (
-  <LoadingStyled>
-    <Icon>camera</Icon>
-  </LoadingStyled>
-);
+const LoadingStyled = styled(Icon)`
+  width: 100%;
+  text-align: center;
+  color: ${props => props.theme.highlight};
+  
+  > p {
+    margin-top: 10px;
+  }
+`;
 
 const LoadingScreen = (props) => {
   const { isFetching, initHasFailed } = props;
@@ -64,7 +45,7 @@ const LoadingScreen = (props) => {
     <LoadingScreenWrapper>
       { isFetching &&
         <LoadingScreenInitProgress>
-          <Loading />
+          <Loading size="60px" />
           <h2>Initializing library...</h2>
         </LoadingScreenInitProgress>
       }
