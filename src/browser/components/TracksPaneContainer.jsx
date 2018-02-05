@@ -43,7 +43,7 @@ const NoTracks = props => (
   </NoTracksWrapper>
 );
 NoTracks.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 class TracksPaneContainer extends Component {

@@ -14,7 +14,6 @@ const getLibrary = () => {
         title
         year
         artistId
-        artistName
       }
       tracks {
         id
