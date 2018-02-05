@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { menuProvider } from 'react-contexify';
-import { formatDuration } from '../../utils';
+
 
 const QueueItemWrapper = styled.li`
   display: table;

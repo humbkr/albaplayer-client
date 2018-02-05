@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Loading from './Loading';
-import Icon from './Icon';
 
 
 const LoadingScreenWrapper = styled.div`

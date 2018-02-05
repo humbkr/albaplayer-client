@@ -5,6 +5,7 @@ import library from './reducers';
 import libraryBrowser from './browser/reducers';
 import queue from './player/reducersQueue';
 import player from './player/reducersPlayer';
+import settings from './settings/reducers';
 
 const customReducer = (state = {}, action) => (
   {
@@ -12,6 +13,7 @@ const customReducer = (state = {}, action) => (
     libraryBrowser: libraryBrowser(state.libraryBrowser, action, state.library),
     queue: queue(state.queue, action, state.library),
     player: player(state.player, action),
+    settings: settings(state.settings, action),
   }
 );
 

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { menuProvider } from 'react-contexify';
 import { libraryBrowserSelectTrack } from '../actions';
-import { formatDuration } from '../../utils';
+
 
 const TrackTeaserNumber = styled.div`
   display: table-cell;

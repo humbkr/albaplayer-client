@@ -6,6 +6,19 @@ const themeDefault = {
   textPrimaryColor: '#000000',
   textSecondaryColor: '#92929d',
 
+  messages: {
+    info: {
+      color: '#00911b',
+    },
+    warning: {
+      color: '#dba00b',
+    },
+    error: {
+      color: '#cb2a2a',
+    },
+    height: '32px',
+  },
+
   sidebar: {
     width: '280px',
     background: '#2a2a2a',

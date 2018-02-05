@@ -83,9 +83,21 @@ const emptyLibrary = () => {
   return apolloClient.query({ query: emptyLibraryQuery });
 };
 
+const processApiError = (response) => {
+  let result = 'Unknown error';
+  if (response.graphQLErrors.length > 0 && response.graphQLErrors[0].message) {
+    result = response.graphQLErrors[0].message;
+  } else if (response.message) {
+    result = response.message;
+  }
+
+  return result;
+};
+
 export {
   getLibrary,
   getFullTrackInfo,
   scanLibrary,
   emptyLibrary,
+  processApiError,
 };
