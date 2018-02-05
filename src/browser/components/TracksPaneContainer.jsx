@@ -18,6 +18,34 @@ const TracksPane = styled.div`
   height: 100%;
 `;
 
+const NoTracksWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  display: table;
+  
+  > div {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    
+    > p {
+      font-style: italic;
+      color: ${props => props.theme.textSecondaryColor};
+      // So the text appears verticaly centered.
+      margin-bottom: 75px;
+    }
+  }
+`;
+
+const NoTracks = props => (
+  <NoTracksWrapper>
+    <div><p>{props.children}</p></div>
+  </NoTracksWrapper>
+);
+NoTracks.propTypes = {
+  children: PropTypes.element.isRequired,
+};
+
 class TracksPaneContainer extends Component {
   // Change event handler for LibraryBrowserListHeader.
   onSortChangeHandler = (event) => {
@@ -43,10 +71,15 @@ class TracksPaneContainer extends Component {
           orderByOptions={orderByOptions}
           onChange={this.onSortChangeHandler}
         />
-        <LibraryBrowserList
-          items={tracks}
-          itemDisplay={TrackTeaser}
-        />
+        { tracks.length > 0 &&
+          <LibraryBrowserList
+            items={tracks}
+            itemDisplay={TrackTeaser}
+          />
+        }
+        { tracks.length === 0 &&
+          <NoTracks>Select an artist or album</NoTracks>
+        }
         <TrackContextMenu />
       </TracksPane>
     );

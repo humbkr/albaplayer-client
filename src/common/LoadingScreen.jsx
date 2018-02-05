@@ -28,16 +28,6 @@ const LoadingScreenInitFailed = styled.div`
   padding: 20px;
 `;
 
-const LoadingStyled = styled(Icon)`
-  width: 100%;
-  text-align: center;
-  color: ${props => props.theme.highlight};
-  
-  > p {
-    margin-top: 10px;
-  }
-`;
-
 const LoadingScreen = (props) => {
   const { isFetching, initHasFailed } = props;
 

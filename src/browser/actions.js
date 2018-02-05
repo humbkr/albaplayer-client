@@ -53,6 +53,9 @@ const libraryBrowserSortTracks = sortProperty => (
   }
 );
 
+/*
+ * Called when loading the browser pane.
+ */
 const libraryBrowserInit = () => (
   (dispatch, getState) => {
     const state = getState();
