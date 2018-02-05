@@ -21,15 +21,6 @@ const TrackTeaserName = styled.h2`
   vertical-align: middle;
 `;
 
-const TrackTeaserDuration = styled.div`
-  display: table-cell;
-  width: 40px;
-  text-align: center;
-  color: ${props => props.theme.textSecondaryColor};
-  vertical-align: middle;
-  font-size: 0.8em;
-`;
-
 const TrackWrapper = styled.div`
   display: table;
   width: 100%;
@@ -49,7 +40,6 @@ class TrackTeaser extends Component {
       <TrackWrapper onClick={() => onClick(item.id)} {...selected}>
         <TrackTeaserNumber>{item.number}</TrackTeaserNumber>
         <TrackTeaserName>{item.title}</TrackTeaserName>
-        <TrackTeaserDuration>{formatDuration(item.duration)}</TrackTeaserDuration>
       </TrackWrapper>
     );
   }

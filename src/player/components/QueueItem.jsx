@@ -30,14 +30,6 @@ const QueueItemTrackTitle = styled.div`
   vertical-align: middle;
 `;
 
-const QueueItemDuration = styled.div`
-  display: table-cell;
-  width: 70px;
-  vertical-align: middle;
-  text-align: center;
-  color: ${props => props.theme.textSecondaryColor};
-`;
-
 // Needs to be declared as a stateful component so menuProvider can work.
 // eslint-disable-next-line react/prefer-stateless-function
 class QueueItem extends Component {
@@ -48,7 +40,6 @@ class QueueItem extends Component {
       <QueueItemWrapper style={{ height: itemHeight }} isCurrent={(current + 1 === item.position)}>
         <QueueItemPosition>{item.position}</QueueItemPosition>
         <QueueItemTrackTitle>{item.title}</QueueItemTrackTitle>
-        <QueueItemDuration>{formatDuration(item.duration)}</QueueItemDuration>
       </QueueItemWrapper>
     );
   }

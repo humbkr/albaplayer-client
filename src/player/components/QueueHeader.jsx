@@ -23,16 +23,10 @@ const QueueHeaderPosition = styled.div`
 
 const QueueHeaderTrackTitle = styled.div``;
 
-const QueueHeaderDuration = styled.div`
-  width: 70px;
-  text-align: center;
-`;
-
 const QueueHeader = () => (
   <QueueHeaderRow>
     <QueueHeaderPosition>#</QueueHeaderPosition>
     <QueueHeaderTrackTitle>track</QueueHeaderTrackTitle>
-    <QueueHeaderDuration>l.</QueueHeaderDuration>
   </QueueHeaderRow>
 );
 
