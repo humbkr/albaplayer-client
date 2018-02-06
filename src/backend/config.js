@@ -1,3 +1,3 @@
-const getBackendUrl = () => ('http://localhost:8888');
+const getBackendUrl = () => (process.env.REACT_APP_BACKEND_URL);
 
 export default getBackendUrl;

@@ -9,6 +9,9 @@ __generated__
 # IDE stuff
 .idea
 
+# dev
+/.env.development
+
 # testing
 /coverage
 
