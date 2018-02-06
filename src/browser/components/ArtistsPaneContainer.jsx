@@ -5,15 +5,16 @@ import styled from 'styled-components';
 import LibraryBrowserList from './LibraryBrowserList';
 import ArtistTeaser from './ArtistTeaser';
 import { immutableNestedSort } from '../../utils';
+import LibraryBrowserPane from './LibraryBrowserPane';
 import LibraryBrowserListHeader from './LibraryBrowserListHeader';
 import { libraryBrowserSortArtists } from '../actions';
 import ArtistContextMenu from './ArtistContextMenu';
 
 
-const ArtistsPane = styled.div`
+const ArtistsPaneWrapper = styled.div`
   display: inline-block;
   vertical-align: top;
-  overflow-y: hidden;
+  overflow: hidden;
   width: 33%;
   height: 100%;
 `;
@@ -33,19 +34,21 @@ class ArtistsPaneContainer extends Component {
     ];
 
     return (
-      <ArtistsPane>
-        <LibraryBrowserListHeader
-          title="Artists"
-          orderBy={orderBy}
-          orderByOptions={orderByOptions}
-          onChange={this.onSortChangeHandler}
-        />
-        <LibraryBrowserList
-          items={artists}
-          itemDisplay={ArtistTeaser}
-        />
-        <ArtistContextMenu />
-      </ArtistsPane>
+      <ArtistsPaneWrapper>
+        <LibraryBrowserPane>
+          <LibraryBrowserListHeader
+            title="Artists"
+            orderBy={orderBy}
+            orderByOptions={orderByOptions}
+            onChange={this.onSortChangeHandler}
+          />
+          <ArtistContextMenu />
+          <LibraryBrowserList
+            items={artists}
+            itemDisplay={ArtistTeaser}
+          />
+        </LibraryBrowserPane>
+      </ArtistsPaneWrapper>
     );
   }
 }

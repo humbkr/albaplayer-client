@@ -6,7 +6,7 @@ const LibraryBrowserListItem = styled.div`
   
   // The items MUST ALWAYS have a fixed height for the list to work.
   height: ${props => props.theme.itemHeight};
-  overflow-y: hidden;
+  overflow: hidden;
   
   :hover {
     background-color: ${props => props.theme.highlight};

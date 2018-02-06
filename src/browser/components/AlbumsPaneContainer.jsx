@@ -6,13 +6,14 @@ import LibraryBrowserList from './LibraryBrowserList';
 import AlbumTeaser from './AlbumTeaser';
 import { immutableNestedSort } from '../../utils';
 import LibraryBrowserListHeader from './LibraryBrowserListHeader';
+import LibraryBrowserPane from './LibraryBrowserPane';
 import { libraryBrowserSortAlbums } from '../actions';
 import AlbumContextMenu from './AlbumContextMenu';
 
-const AlbumsPane = styled.div`
+const AlbumsPaneWrapper = styled.div`
   display: inline-block;
   vertical-align: top;
-  overflow-y: hidden;
+  overflow: hidden;
   width: 33%;
   height: 100%;
   border-left: 1px solid ${props => props.theme.separatorColor};
@@ -35,24 +36,26 @@ class AlbumsPaneContainer extends Component {
     ];
 
     return (
-      <AlbumsPane>
-        <LibraryBrowserListHeader
-          title="Albums"
-          orderBy={orderBy}
-          orderByOptions={orderByOptions}
-          onChange={this.onSortChangeHandler}
-        />
-        <LibraryBrowserList
-          items={albums}
-          itemDisplay={AlbumTeaser}
-        />
-        <AlbumContextMenu />
-      </AlbumsPane>
+      <AlbumsPaneWrapper>
+        <LibraryBrowserPane>
+          <LibraryBrowserListHeader
+            title="Albums"
+            orderBy={orderBy}
+            orderByOptions={orderByOptions}
+            onChange={this.onSortChangeHandler}
+          />
+          <LibraryBrowserList
+            items={albums}
+            itemDisplay={AlbumTeaser}
+          />
+          <AlbumContextMenu />
+        </LibraryBrowserPane>
+      </AlbumsPaneWrapper>
     );
   }
 }
 AlbumsPaneContainer.propTypes = {
-  albums: PropTypes.arrayOf(PropTypes.shape({})),
+  albums: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   orderBy: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };

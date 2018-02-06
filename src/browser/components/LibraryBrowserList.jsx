@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTheme } from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import { AutoSizer, List } from 'react-virtualized';
 import LibraryBrowserListItem from './LibraryBrowserListItem';
 
+
+const LibraryBrowserListWrapper = styled.div`
+  flex: 1 1 auto;
+`;
 
 const LibraryBrowserList = (props) => {
   const Display = props.itemDisplay;
@@ -30,17 +34,19 @@ const LibraryBrowserList = (props) => {
   }
 
   return (
-    <AutoSizer>
-      {({ height, width }) => (
-        <List
-          width={width}
-          height={height}
-          rowCount={itemsList.length}
-          rowHeight={parseInt(props.theme.itemHeight, 0)}
-          rowRenderer={rowRenderer}
-        />
-      )}
-    </AutoSizer>
+    <LibraryBrowserListWrapper>
+      <AutoSizer>
+        {({ height, width }) => (
+          <List
+            width={width}
+            height={height}
+            rowCount={itemsList.length}
+            rowHeight={parseInt(props.theme.itemHeight, 0)}
+            rowRenderer={rowRenderer}
+          />
+        )}
+      </AutoSizer>
+    </LibraryBrowserListWrapper>
   );
 };
 LibraryBrowserList.propTypes = {

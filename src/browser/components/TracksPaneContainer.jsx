@@ -8,43 +8,26 @@ import { immutableNestedSort } from '../../utils';
 import LibraryBrowserListHeader from './LibraryBrowserListHeader';
 import { libraryBrowserSortTracks } from '../actions';
 import TrackContextMenu from './TrackContextMenu';
+import LibraryBrowserPane from './LibraryBrowserPane';
 
 
-const TracksPane = styled.div`
+const TracksPaneWrapper = styled.div`
   display: inline-block;
   vertical-align: top;
-  overflow-y: hidden;
+  overflow: hidden;
   width: 34%;
   height: 100%;
 `;
 
-const NoTracksWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-  display: table;
-  
-  > div {
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
-    
-    > p {
-      font-style: italic;
-      color: ${props => props.theme.textSecondaryColor};
-      // So the text appears verticaly centered.
-      margin-bottom: 75px;
-    }
-  }
+const NoTracks = styled.div`
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-style: italic;
+  color: ${props => props.theme.textSecondaryColor};
 `;
-
-const NoTracks = props => (
-  <NoTracksWrapper>
-    <div><p>{props.children}</p></div>
-  </NoTracksWrapper>
-);
-NoTracks.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 class TracksPaneContainer extends Component {
   // Change event handler for LibraryBrowserListHeader.
@@ -64,24 +47,26 @@ class TracksPaneContainer extends Component {
     ];
 
     return (
-      <TracksPane>
-        <LibraryBrowserListHeader
-          title="Tracks"
-          orderBy={orderBy}
-          orderByOptions={orderByOptions}
-          onChange={this.onSortChangeHandler}
-        />
-        { tracks.length > 0 &&
-          <LibraryBrowserList
-            items={tracks}
-            itemDisplay={TrackTeaser}
+      <TracksPaneWrapper>
+        <LibraryBrowserPane>
+          <LibraryBrowserListHeader
+            title="Tracks"
+            orderBy={orderBy}
+            orderByOptions={orderByOptions}
+            onChange={this.onSortChangeHandler}
           />
-        }
-        { tracks.length === 0 &&
-          <NoTracks>Select an artist or album</NoTracks>
-        }
-        <TrackContextMenu />
-      </TracksPane>
+          { tracks.length > 0 &&
+            <LibraryBrowserList
+              items={tracks}
+              itemDisplay={TrackTeaser}
+            />
+          }
+          { tracks.length === 0 &&
+            <NoTracks>Select an artist or album</NoTracks>
+          }
+          <TrackContextMenu />
+        </LibraryBrowserPane>
+      </TracksPaneWrapper>
     );
   }
 }

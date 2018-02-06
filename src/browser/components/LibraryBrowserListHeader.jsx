@@ -4,11 +4,15 @@ import PropTypes from 'prop-types';
 import SelectContainer from '../../common/SelectContainer';
 
 const LibraryBrowserListHeaderWrapper = styled.div`
-  display: table;
-  height: ${props => props.theme.itemHeight};
-  width: 100%;
+  flex: 0 1 ${props => props.theme.itemHeight};
   color: ${props => props.theme.textSecondaryColor};
   padding: 0 15px;
+`;
+
+const ContentWrapper = styled.div`
+  display: table;
+  width: 100%;
+  height: 100%;
 
   > h2 {
     display: table-cell;
@@ -27,17 +31,19 @@ const LibraryBrowserListHeader = (props) => {
     orderByOptions,
     orderBy,
     title,
-    onChange
+    onChange,
   } = props;
 
   return (
     <LibraryBrowserListHeaderWrapper>
-      <h2>{title}</h2>
-      <SelectContainer
-        options={orderByOptions}
-        value={orderBy}
-        onChangeHandler={onChange}
-      />
+      <ContentWrapper>
+        <h2>{title}</h2>
+        <SelectContainer
+          options={orderByOptions}
+          value={orderBy}
+          onChangeHandler={onChange}
+        />
+      </ContentWrapper>
     </LibraryBrowserListHeaderWrapper>
   );
 };

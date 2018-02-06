@@ -10,7 +10,7 @@ import { libraryBrowserInit } from '../actions';
 
 const LibraryBrowserWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
 `;
 
 class LibraryBrowser extends Component {

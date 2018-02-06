@@ -11,6 +11,7 @@ import SettingsPane from '../settings/components/SettingsPane';
 
 const MainPanelWrapper = styled.div`
   margin-left: ${props => props.theme.sidebar.width};
+  height: 100vh;
 `;
 
 const MainPanel = (props) => {

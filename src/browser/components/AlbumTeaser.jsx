@@ -9,7 +9,6 @@ const AlbumTeaserTitle = styled.h2`
   font-size: 1em;
   font-weight: normal;
   max-height: 18px;
-  overflow: hidden;
 `;
 
 const AlbumSubInfo = styled.div`
@@ -28,6 +27,8 @@ const AlbumTeaserWrapper = styled.div`
   height: ${props => props.theme.itemHeight};
   ${props => props.selected ? `background-color: ${props.theme.highlight}` : ''};
   padding: 0 15px;
+  overflow: hidden; 
+  white-space: nowrap; 
   
   > div {
     display: table-cell;

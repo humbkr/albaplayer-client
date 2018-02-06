@@ -11,7 +11,6 @@ const AlbaAppWrapper = styled.div`
   display: table;
   width: 100%;
   height: 100vh;
-  overflow: hidden;
 `;
 
 class AlbaApp extends Component {
