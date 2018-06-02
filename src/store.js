@@ -17,14 +17,14 @@ const customReducer = (state = {}, action) => (
   }
 );
 
-const loggerMiddleware = createLogger();
+// const loggerMiddleware = createLogger();
 
 export default function configureStore() {
   return createStore(
     customReducer,
     applyMiddleware(
       thunkMiddleware,
-      loggerMiddleware,
+      // loggerMiddleware,
     ),
   );
 }

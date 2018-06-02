@@ -1,14 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withTheme } from 'styled-components';
-import QueueHeader from './QueueHeader';
-import QueueList from './QueueList';
-import QueueActions from './QueueActions';
-import QueueItemContextMenu from './QueueItemContextMenu';
+import styled, { withTheme } from 'styled-components';
+import NowPlayingQueueHeader from './NowPlayingQueueHeader';
+import NowPlayingQueueList from './NowPlayingQueueList';
+import NowPlayingQueueActions from './NowPlayingQueueActions';
+import QueueItemContextMenu from '../common/QueueItemContextMenu';
 
+const QueueTitle = styled.h2`
+  display: inline;
+`;
 
-const Queue = (props) => {
+const NowPlayingQueue = (props) => {
   const tracks = props.tracks;
 
   // Add a position info to each playlist element.
@@ -18,10 +21,11 @@ const Queue = (props) => {
 
   return (
     <div>
-      <QueueActions />
-      <QueueHeader />
+      <QueueTitle>Queue</QueueTitle>
+      <NowPlayingQueueActions />
+      <NowPlayingQueueHeader />
       { items.length > 0 &&
-        <QueueList
+        <NowPlayingQueueList
           items={items}
           itemHeight={parseInt(props.theme.itemHeight, 0)}
           current={props.current}
@@ -32,7 +36,7 @@ const Queue = (props) => {
   );
 };
 
-Queue.propTypes = {
+NowPlayingQueue.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   theme: PropTypes.object.isRequired,
   tracks: PropTypes.arrayOf(PropTypes.shape({
@@ -40,7 +44,7 @@ Queue.propTypes = {
   })).isRequired,
   current: PropTypes.number,
 };
-Queue.defaultProps = {
+NowPlayingQueue.defaultProps = {
   current: 0,
 };
 
@@ -52,4 +56,4 @@ const mapStateToProps = state => (
 );
 
 
-export default connect(mapStateToProps)(withTheme(Queue));
+export default connect(mapStateToProps)(withTheme(NowPlayingQueue));

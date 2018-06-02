@@ -30,9 +30,6 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update && apt-get install yarn
 
-# Gulp (kept for old projects compatibility)
-RUN npm i -g gulp -y
-
 # Clean apt-get cache
 RUN apt-get clean all -y && apt-get autoclean -y
 

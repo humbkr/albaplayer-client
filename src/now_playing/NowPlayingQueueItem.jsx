@@ -32,7 +32,7 @@ const QueueItemTrackTitle = styled.div`
 
 // Needs to be declared as a stateful component so menuProvider can work.
 // eslint-disable-next-line react/prefer-stateless-function
-class QueueItem extends Component {
+class NowPlayingQueueItem extends Component {
   render() {
     const { item, itemHeight, current } = this.props;
 
@@ -44,7 +44,7 @@ class QueueItem extends Component {
     );
   }
 }
-QueueItem.propTypes = {
+NowPlayingQueueItem.propTypes = {
   item: PropTypes.shape({
     position: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -57,4 +57,4 @@ QueueItem.propTypes = {
 // Bind the context menu event.
 const addContextMenu = menuProvider('queue-item-context-menu');
 
-export default addContextMenu(QueueItem);
+export default addContextMenu(NowPlayingQueueItem);

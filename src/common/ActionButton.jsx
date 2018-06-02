@@ -28,6 +28,16 @@ const ActionButtonWrapper = styled.button`
     ` : `color: ${props.theme.buttons.colorHover}`}
   }
   
+  :disabled {
+    cursor: default;
+    color: ${props => props.theme.buttons.colorDisabled};
+  
+    ${props => props.raised ? `
+      background-color: ${props.theme.buttons.colorDisabled};
+      color: #fff;
+  ` : ''}
+  }
+  
   > * {
     display: inline-block;
     vertical-align: middle;
@@ -40,7 +50,7 @@ const ActionButtonWrapper = styled.button`
 `;
 
 const ActionButton = props => (
-  <ActionButtonWrapper raised={props.raised} onClick={props.onClick}>
+  <ActionButtonWrapper raised={props.raised} disabled={props.disabled} onClick={props.onClick}>
     { props.icon &&
     <Icon>{props.icon}</Icon>
     }
@@ -52,11 +62,13 @@ ActionButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   icon: PropTypes.string,
   raised: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 ActionButton.defaultProps = {
   children: '',
   icon: null,
   raised: false,
+  disabled: false,
 };
 
 export default ActionButton;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ActionButton from '../../common/ActionButton';
-import { eraseLibrary, settingsInit, updateLibrary } from '../actions';
+import { eraseLibrary, initSettings, updateLibrary } from '../actions';
 import Loading from '../../common/Loading';
 import Message from '../../common/Message';
 
@@ -57,23 +57,34 @@ class SettingsPane extends Component {
       libraryError,
       scanLibrary,
       emptyLibrary,
+      librarySettings,
     } = this.props;
 
-    // Note: artistNumber - 1 because of the placeholder "Various artists".
     return (
       <SettingsScreenWrapper>
         <h1>Settings</h1>
         <h2>Library</h2>
         <p>
-          There are currently {artistsNumber - 1} artists, {albumsNumber} albums
+          There are currently {artistsNumber} artists, {albumsNumber} albums
           and {tracksNumber} tracks in the library.
         </p>
         {!libraryIsUpdating &&
         <ActionButtons>
-          <ActionButton raised onClick={scanLibrary}>Update library</ActionButton>
-          <ActionButton onClick={() => {
+          <ActionButton
+            raised
+            disabled={librarySettings.disableLibrarySettings}
+            onClick={scanLibrary}
+          >
+            Update library
+          </ActionButton>
+          <ActionButton
+            disabled={librarySettings.disableLibrarySettings}
+            onClick={() => {
             if (window.confirm('Are you sure you wish empty the library?')) emptyLibrary();
-          }}>Empty library</ActionButton>
+          }}
+          >
+            Empty library
+          </ActionButton>
         </ActionButtons>
         }
         {libraryIsUpdating &&
@@ -100,6 +111,7 @@ SettingsPane.propTypes = {
   initSettings: PropTypes.func.isRequired,
   libraryIsUpdating: PropTypes.bool.isRequired,
   libraryError: PropTypes.string.isRequired,
+  librarySettings: PropTypes.shape().isRequired,
 };
 
 const mapStateToProps = state => (
@@ -109,12 +121,13 @@ const mapStateToProps = state => (
     tracksNumber: state.library.tracks.length,
     libraryIsUpdating: state.settings.library.isUpdating,
     libraryError: state.settings.library.error,
+    librarySettings: state.settings.library.config,
   }
 );
 const mapDispatchToProps = dispatch => (
   {
     initSettings: () => {
-      dispatch(settingsInit());
+      dispatch(initSettings());
     },
     scanLibrary: () => {
       dispatch(updateLibrary());

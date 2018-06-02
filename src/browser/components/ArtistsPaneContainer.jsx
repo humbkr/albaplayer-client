@@ -30,7 +30,6 @@ class ArtistsPaneContainer extends Component {
     const { artists, orderBy } = this.props;
     const orderByOptions = [
       { value: 'name', label: 'name' },
-      { value: 'id', label: 'id' },
     ];
 
     return (

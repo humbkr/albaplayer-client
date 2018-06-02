@@ -68,7 +68,6 @@ Player.propTypes = {
     setVolume: PropTypes.func.isRequired,
     skipToPrevious: PropTypes.func.isRequired,
     skipToNext: PropTypes.func.isRequired,
-
   }).isRequired,
   timelineState: PropTypes.shape({
     playing: PropTypes.bool.isRequired,

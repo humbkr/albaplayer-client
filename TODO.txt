@@ -1,2 +1,7 @@
 
 - make library elements objects containings data objects indexed by their id
+
+
+
+- When displaying browser pane scroll to selected items in each pane
+- implement search

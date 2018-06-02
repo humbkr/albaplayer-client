@@ -4,7 +4,7 @@ import { Route, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LibraryBrowser from '../browser/components/LibraryBrowser';
-import NowPlayingPane from './NowPlayingPane';
+import NowPlayingPane from '../now_playing/NowPlayingPane';
 import LoadingScreen from './LoadingScreen';
 import SettingsPane from '../settings/components/SettingsPane';
 

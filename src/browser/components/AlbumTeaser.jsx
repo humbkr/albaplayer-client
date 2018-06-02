@@ -29,6 +29,7 @@ const AlbumTeaserWrapper = styled.div`
   padding: 0 15px;
   overflow: hidden; 
   white-space: nowrap; 
+  cursor: pointer;
   
   > div {
     display: table-cell;

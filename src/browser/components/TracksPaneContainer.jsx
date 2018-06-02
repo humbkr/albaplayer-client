@@ -43,7 +43,6 @@ class TracksPaneContainer extends Component {
       { value: 'number', label: 'track number' },
       { value: 'albumId', label: 'album' },
       { value: 'artistId', label: 'artist' },
-      { value: 'duration', label: 'duration' },
     ];
 
     return (

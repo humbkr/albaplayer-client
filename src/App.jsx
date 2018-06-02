@@ -11,7 +11,7 @@ import MaterialIconsTtf from './assets/fonts/MaterialIcons-Regular.ttf';
 import MaterialIconsWoff from './assets/fonts/MaterialIcons-Regular.woff';
 import MaterialIconsWoff2 from './assets/fonts/MaterialIcons-Regular.woff2';
 import MaterialIconsSvg from './assets/fonts/MaterialIcons-Regular.svg';
-import themeDefault from './themes/light';
+import themeDefault from './themes/default';
 import AlbaApp from './AlbaApp';
 
 

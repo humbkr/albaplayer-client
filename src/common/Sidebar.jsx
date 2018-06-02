@@ -27,8 +27,8 @@ const Sidebar = () => (
   <SidebarWrapper>
     <Player />
     <MainMenu>
-      <SidebarNavLink to="/queue">Now playing</SidebarNavLink>
-      <SidebarNavLink to="/library">Library browser</SidebarNavLink>
+      <SidebarNavLink to="/queue" icon="play_circle_outline">Now playing</SidebarNavLink>
+      <SidebarNavLink to="/library" icon="library_music">Library browser</SidebarNavLink>
     </MainMenu>
     <SettingsMenu>
       <SidebarNavLink to="/settings" icon="settings">Settings</SidebarNavLink>

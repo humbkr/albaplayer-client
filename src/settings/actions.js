@@ -1,11 +1,12 @@
-import { emptyLibrary, scanLibrary } from '../backend/api';
+import { emptyLibrary, getSettings, scanLibrary } from '../backend/api';
 import { initLibrary } from '../actions';
 import apolloClient from '../backend/apollo';
 
 const SETTINGS_INIT = 'SETTINGS_INIT';
-const settingsInit = () => (
+const settingsInit = response => (
   {
     type: SETTINGS_INIT,
+    response: response.data,
   }
 );
 
@@ -52,6 +53,18 @@ const libraryEraseFailure = response => (
   {
     type: LIBRARY_ERASE_FAILURE,
     response,
+  }
+);
+
+const initSettings = () => (
+  (dispatch) => {
+    return getSettings()
+      .then((response) => {
+        dispatch(settingsInit(response));
+      })
+      .catch((response) => {
+        //dispatch(libraryUpdateFailure(response));
+      });
   }
 );
 
@@ -104,5 +117,5 @@ export {
   LIBRARY_ERASE_FAILURE,
   updateLibrary,
   eraseLibrary,
-  settingsInit,
+  initSettings,
 };

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import coverPlaceholder from '../assets/cover_placeholder.png';
 import { formatDuration } from '../utils';
-import ActionButtonCircle from './ActionButtonCircle';
+import ActionButtonCircle from '../common/ActionButtonCircle';
 
 
 const NowPlayingWrapper = styled.div`
@@ -54,6 +54,7 @@ const SongInfo = styled.div`
   position: relative;
   vertical-align: top;
   height: 250px;
+  min-width: 200px;
   padding: 20px;
   color: #fff;
 `;

@@ -23,7 +23,7 @@ const QueueHeaderPosition = styled.div`
 
 const QueueHeaderTrackTitle = styled.div``;
 
-const QueueHeader = () => (
+const NowPlayingQueueHeader = () => (
   <QueueHeaderRow>
     <QueueHeaderPosition>#</QueueHeaderPosition>
     <QueueHeaderTrackTitle>track</QueueHeaderTrackTitle>
@@ -31,4 +31,4 @@ const QueueHeader = () => (
 );
 
 
-export default QueueHeader;
+export default NowPlayingQueueHeader;

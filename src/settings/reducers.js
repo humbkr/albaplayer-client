@@ -12,6 +12,7 @@ const initialState = {
   library: {
     isUpdating: false,
     error: '',
+    config: {},
   },
 };
 
@@ -23,6 +24,7 @@ function settings(state = initialState, action) {
         library: {
           ...state.library,
           error: '',
+          config: action.response.settings,
         },
       });
     case LIBRARY_ERASE_START:

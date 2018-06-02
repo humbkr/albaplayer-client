@@ -33,6 +33,7 @@ const themeDefault = {
     fontSize: '14px',
     color: '#009688',
     colorHover: '#00bdab',
+    colorDisabled: '#b2b2b2',
   },
 };
 

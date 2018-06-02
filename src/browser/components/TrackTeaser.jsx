@@ -26,7 +26,8 @@ const TrackWrapper = styled.div`
   width: 100%;
   height: ${props => props.theme.itemHeight};
   ${props => props.selected ? `background-color: ${props.theme.highlight}` : ''};
-  padding: 0 15px;
+  padding: 0 15px 0 0;
+  cursor: pointer;
 `;
 
 // Needs to be declared as a stateful component so menuProvider can work.

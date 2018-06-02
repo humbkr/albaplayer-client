@@ -83,6 +83,20 @@ const emptyLibrary = () => {
   return apolloClient.query({ query: emptyLibraryQuery });
 };
 
+const getSettings = () => {
+  const getSettingsQuery = gql`
+      query getSettingsQuery {
+          settings {
+              libraryPath
+              coversPreferredSource
+              disableLibrarySettings
+          }
+      }
+  `;
+
+  return apolloClient.query({ query: getSettingsQuery });
+};
+
 const processApiError = (response) => {
   let result = 'Unknown error';
   if (response.graphQLErrors.length > 0 && response.graphQLErrors[0].message) {
@@ -99,5 +113,6 @@ export {
   getFullTrackInfo,
   scanLibrary,
   emptyLibrary,
+  getSettings,
   processApiError,
 };
