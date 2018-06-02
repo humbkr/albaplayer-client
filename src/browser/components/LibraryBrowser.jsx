@@ -5,12 +5,18 @@ import { connect } from 'react-redux';
 import ArtistsPaneContainer from './ArtistsPaneContainer';
 import AlbumsPaneContainer from './AlbumsPaneContainer';
 import TracksPaneContainer from './TracksPaneContainer';
+import LibraryBrowserSearchBar from './LibraryBrowserSearchBar';
 import { libraryBrowserInit } from '../actions';
 
 
 const LibraryBrowserWrapper = styled.div`
-  width: 100%;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%
+`;
+
+const LibraryBrowserListsWrapper = styled.div`
+  flex: 1;
 `;
 
 class LibraryBrowser extends Component {
@@ -22,9 +28,12 @@ class LibraryBrowser extends Component {
   render() {
     return (
       <LibraryBrowserWrapper>
-        <ArtistsPaneContainer />
-        <AlbumsPaneContainer />
-        <TracksPaneContainer />
+        <LibraryBrowserSearchBar />
+        <LibraryBrowserListsWrapper>
+          <ArtistsPaneContainer />
+          <AlbumsPaneContainer />
+          <TracksPaneContainer />
+        </LibraryBrowserListsWrapper>
       </LibraryBrowserWrapper>
     );
   }

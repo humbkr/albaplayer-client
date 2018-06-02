@@ -53,6 +53,15 @@ const libraryBrowserSortTracks = sortProperty => (
   }
 );
 
+const LIBRARY_BROWSER_SEARCH = 'LIBRARY_BROWSER_SEARCH';
+const libraryBrowserSearch = searchTerm => (
+  {
+    type: LIBRARY_BROWSER_SEARCH,
+    searchTerm,
+  }
+);
+
+
 /*
  * Called when loading the browser pane.
  */
@@ -74,6 +83,7 @@ export {
   LIBRARY_BROWSER_SORT_ARTISTS,
   LIBRARY_BROWSER_SORT_ALBUMS,
   LIBRARY_BROWSER_SORT_TRACKS,
+  LIBRARY_BROWSER_SEARCH,
   libraryBrowserInitArtists,
   libraryBrowserSelectArtist,
   libraryBrowserSelectAlbum,
@@ -81,5 +91,6 @@ export {
   libraryBrowserSortArtists,
   libraryBrowserSortAlbums,
   libraryBrowserSortTracks,
+  libraryBrowserSearch,
   libraryBrowserInit,
 };

@@ -4,7 +4,8 @@ import {
   LIBRARY_BROWSER_SORT_ARTISTS,
   LIBRARY_BROWSER_SORT_ALBUMS,
   LIBRARY_BROWSER_SORT_TRACKS,
-  LIBRARY_BROWSER_SELECT_ALBUM, LIBRARY_BROWSER_INIT_ARTISTS,
+  LIBRARY_BROWSER_SELECT_ALBUM,
+  LIBRARY_BROWSER_INIT_ARTISTS, LIBRARY_BROWSER_SEARCH,
 } from './actions';
 
 
@@ -18,6 +19,7 @@ const initialState = {
   selectedArtists: '0',
   selectedAlbums: '0',
   selectedTracks: '0',
+  search: '',
 };
 
 function libraryBrowser(state = initialState, action, library) {
@@ -125,6 +127,16 @@ function libraryBrowser(state = initialState, action, library) {
       return Object.assign({}, state, {
         ...state,
         sortTracks: action.sortProperty,
+      });
+
+    case LIBRARY_BROWSER_SEARCH:
+      return Object.assign({}, state, {
+        ...state,
+        // Reset previously selected stuff.
+        selectedArtists: '0',
+        selectedAlbums: '0',
+        selectedTracks: '0',
+        search: action.searchTerm,
       });
 
     default:
