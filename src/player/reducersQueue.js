@@ -5,7 +5,7 @@ import {
   QUEUE_CLEAR,
   QUEUE_REMOVE_TRACK, QUEUE_SET_CURRENT,
 } from './actionsQueue';
-import { immutableRemove } from '../utils';
+import { immutableNestedSortTrack, immutableRemove } from '../utils';
 
 
 const initialState = {
@@ -24,10 +24,13 @@ function queue(state = initialState, action, library) {
         current: state.current,
       });
     case QUEUE_ADD_ALBUM:
+      // Get tracks from album.
+      const filteredTracks = library.tracks.filter(item => (action.albumId === item.albumId));
+
       return Object.assign({}, state, {
         tracks: [
           ...state.tracks,
-          ...library.tracks.filter(item => (action.albumId === item.albumId)),
+          ...immutableNestedSortTrack(filteredTracks, 'number'),
         ],
         current: state.current,
       });

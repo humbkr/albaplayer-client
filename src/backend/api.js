@@ -19,6 +19,7 @@ const getLibrary = () => {
         id
         title
         number
+        disc
         duration
         artistId
         albumId
