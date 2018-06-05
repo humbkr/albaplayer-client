@@ -16,7 +16,7 @@ const SearchBarInputWrapper = styled.div`
   display: table-cell;
   vertical-align: middle;
   padding: 8px;
-  background-color: rgba(0, 0, 0, .65);
+  background-color: ${props => props.theme.highlight};
 `;
 
 const SearchBarInput = styled.input`
@@ -44,7 +44,7 @@ LibraryBrowserSearchBar.propTypes = {
 
 const mapStateToProps = state => (
   {
-    searchTerm: state.libraryBrowser.search,
+    searchTerm: state.libraryBrowser.search.term,
   }
 );
 

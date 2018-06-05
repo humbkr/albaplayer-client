@@ -19,7 +19,14 @@ const initialState = {
   selectedArtists: '0',
   selectedAlbums: '0',
   selectedTracks: '0',
-  search: '',
+  search: {
+    term: '',
+    // I don't like that but I don't want to rerun the search each time the user selects
+    // something after a search.
+    filteredArtists: [],
+    filteredAlbums: [],
+    filteredTracks: [],
+  },
 };
 
 function libraryBrowser(state = initialState, action, library) {
@@ -27,29 +34,46 @@ function libraryBrowser(state = initialState, action, library) {
     case LIBRARY_BROWSER_INIT_ARTISTS:
       return Object.assign({}, state, {
         ...state,
-        artists: library.artists,
+        artists: (state.search.term === '') ? library.artists : state.search.filteredArtists,
       });
+
     case LIBRARY_BROWSER_SELECT_ARTIST: {
       let filteredAlbums = [];
       let filteredTracks = [];
 
+      // If the user has searched for something, the filtering is done only on the results already
+      // filtered from the search term. Else we filter on the original library.
+      let albumsToFilter;
+      if (state.search.term === '') {
+        albumsToFilter = [...library.albums];
+      } else {
+        albumsToFilter = [...state.search.filteredAlbums];
+      }
+
+      let tracksToFilter;
+      if (state.search.term === '') {
+        tracksToFilter = [...library.tracks];
+      } else {
+        tracksToFilter = [...state.search.filteredTracks];
+      }
+
       if (action.artistId !== '0') {
         if (action.artistId === '1') {
           // Special case for compilations which are grouped under the "Various artists" artist.
-          filteredAlbums = library.albums.filter(item => (item.artistId === action.artistId));
+          filteredAlbums = albumsToFilter.filter(item => (item.artistId === action.artistId));
           const albumsIds = filteredAlbums.map(item => (item.id));
-          filteredTracks = library.tracks.filter(item => (albumsIds.includes(item.albumId)));
+          filteredTracks = tracksToFilter.filter(item => (albumsIds.includes(item.albumId)));
         } else {
           // To display all the albums containing tracks of an artist, including
           // the compilations, we can't directly filter albums on artistId, we have
           // to instead display all the albums for which tracks have been found.
-          filteredTracks = library.tracks.filter(item => (item.artistId === action.artistId));
+          filteredTracks = tracksToFilter.filter(item => (item.artistId === action.artistId));
           const tracksAlbums = filteredTracks.map(item => (item.albumId));
-          filteredAlbums = library.albums.filter(item => (action.artistId === '0' || tracksAlbums.includes(item.id)));
+          filteredAlbums = albumsToFilter.filter(item => (action.artistId === '0' || tracksAlbums.includes(item.id)));
         }
       } else {
         // Display all albums.
-        filteredAlbums = library.albums;
+        filteredAlbums = albumsToFilter;
       }
 
       return Object.assign({}, state, {
@@ -66,6 +90,13 @@ function libraryBrowser(state = initialState, action, library) {
       let filteredTracks = [];
       let compilationsIds = [];
 
+      let tracksToFilter;
+      if (state.search.term === '') {
+        tracksToFilter = [...library.tracks];
+      } else {
+        tracksToFilter = [...state.search.filteredTracks];
+      }
+
       if (state.selectedArtists === '1') {
         // We want to display all tracks for all the compilations, keep track (hoho) of the albums
         // being compilations.
@@ -73,7 +104,7 @@ function libraryBrowser(state = initialState, action, library) {
       }
 
       if (state.selectedArtists !== '0' || action.albumId !== '0') {
-        filteredTracks = library.tracks.filter((item) => {
+        filteredTracks = tracksToFilter.filter((item) => {
           if (state.selectedArtists === '1' && action.albumId === '0') {
             // If "various artists" artist selected and no specific album selected,
             // Display all tracks for all the compilations.
@@ -129,15 +160,58 @@ function libraryBrowser(state = initialState, action, library) {
         sortTracks: action.sortProperty,
       });
 
-    case LIBRARY_BROWSER_SEARCH:
+    case LIBRARY_BROWSER_SEARCH: {
+      // TODO search should not be done when search term is empty.
+      const albumsIds = [];
+      const artistsIds = [];
+
+      // Filter tracks on title.
+      const filteredTracks = library.tracks.filter(item => (
+        item.title.toUpperCase().includes(action.searchTerm.toUpperCase())
+      ));
+      // Extract all albums and artists id of filtered tracks.
+      filteredTracks.forEach((element) => {
+        albumsIds.push(element.albumId);
+        artistsIds.push(element.artistId);
+      });
+
+      // Filter albums on title or album id is in albumsIds list.
+      const filteredAlbums = library.albums.filter(item => (
+        item.title.toUpperCase().includes(action.searchTerm.toUpperCase()) ||
+        albumsIds.includes(item.id)
+      ));
+      // Extract all artists id of filtered albums.
+      filteredAlbums.forEach((element) => {
+        if (!albumsIds.includes(element.artistId)) {
+          artistsIds.push(element.artistId);
+        }
+      });
+
+      // Filter artists on name or artist id is in artistsIds list.
+      const filteredArtists = library.artists.filter(item => (
+        item.name.toUpperCase().includes(action.searchTerm.toUpperCase()) ||
+        artistsIds.includes(item.id)
+      ));
+
       return Object.assign({}, state, {
         ...state,
         // Reset previously selected stuff.
         selectedArtists: '0',
         selectedAlbums: '0',
         selectedTracks: '0',
-        search: action.searchTerm,
+        // Set search filtered lists and term.
+        search: {
+          term: action.searchTerm,
+          filteredArtists,
+          filteredAlbums,
+          filteredTracks,
+        },
+        // Set display lists.
+        artists: filteredArtists,
+        albums: filteredAlbums,
+        tracks: filteredTracks,
       });
+    }
 
     default:
       return state;
