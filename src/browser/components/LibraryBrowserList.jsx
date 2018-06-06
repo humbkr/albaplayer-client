@@ -11,7 +11,7 @@ const LibraryBrowserListWrapper = styled.div`
 
 const LibraryBrowserList = (props) => {
   const Display = props.itemDisplay;
-  const itemsList = props.items.map(item => (<Display item={item} />));
+  const itemsList = props.items;
 
   // Add a "All" item at the beginning of the list
   const itemAll = {
@@ -21,14 +21,14 @@ const LibraryBrowserList = (props) => {
     artistId: '0',
     albumId: '0',
   };
-  itemsList.unshift(<Display item={itemAll} />);
+  itemsList.unshift(itemAll);
 
   // Magic function used by react-virtualized.
   // eslint-disable-next-line
   function rowRenderer({key, index, isScrolling, isVisible, style}) {
     return (
       <LibraryBrowserListItem border key={key} style={style}>
-        {itemsList[index]}
+        <Display item={itemsList[index]} />
       </LibraryBrowserListItem>
     );
   }

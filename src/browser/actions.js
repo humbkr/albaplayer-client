@@ -53,14 +53,21 @@ const libraryBrowserSortTracks = sortProperty => (
   }
 );
 
-const LIBRARY_BROWSER_SEARCH = 'LIBRARY_BROWSER_SEARCH';
-const libraryBrowserSearch = searchTerm => (
+const LIBRARY_BROWSER_SEARCH_UPDATE_INPUT = 'LIBRARY_BROWSER_SEARCH_UPDATE_INPUT';
+const libraryBrowserSearchUpdateInput = searchTerm => (
   {
-    type: LIBRARY_BROWSER_SEARCH,
+    type: LIBRARY_BROWSER_SEARCH_UPDATE_INPUT,
     searchTerm,
   }
 );
 
+const LIBRARY_BROWSER_SEARCH_FILTER = 'LIBRARY_BROWSER_SEARCH_FILTER';
+const libraryBrowserSearchFilter = searchTerm => (
+  {
+    type: LIBRARY_BROWSER_SEARCH_FILTER,
+    searchTerm,
+  }
+);
 
 /*
  * Called when loading the browser pane.
@@ -75,6 +82,27 @@ const libraryBrowserInit = () => (
   }
 );
 
+const libraryBrowserSearch = (text) => {
+  // Launch the search only if user has typed 3 or more characters.
+  if (text.length > 2) {
+    return (dispatch) => {
+      dispatch(libraryBrowserSearchUpdateInput(text));
+      dispatch(libraryBrowserSearchFilter(text));
+    };
+  } else if (text.length === 0) {
+    // Reinitialise library browser.
+    return (dispatch) => {
+      dispatch(libraryBrowserSearchUpdateInput(text));
+      dispatch(libraryBrowserInit());
+    };
+  }
+
+  // In any case, update the search field.
+  return (dispatch) => {
+    dispatch(libraryBrowserSearchUpdateInput(text));
+  };
+};
+
 export {
   LIBRARY_BROWSER_INIT_ARTISTS,
   LIBRARY_BROWSER_SELECT_ARTIST,
@@ -83,7 +111,8 @@ export {
   LIBRARY_BROWSER_SORT_ARTISTS,
   LIBRARY_BROWSER_SORT_ALBUMS,
   LIBRARY_BROWSER_SORT_TRACKS,
-  LIBRARY_BROWSER_SEARCH,
+  LIBRARY_BROWSER_SEARCH_FILTER,
+  LIBRARY_BROWSER_SEARCH_UPDATE_INPUT,
   libraryBrowserInitArtists,
   libraryBrowserSelectArtist,
   libraryBrowserSelectAlbum,

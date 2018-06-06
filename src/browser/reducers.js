@@ -5,7 +5,7 @@ import {
   LIBRARY_BROWSER_SORT_ALBUMS,
   LIBRARY_BROWSER_SORT_TRACKS,
   LIBRARY_BROWSER_SELECT_ALBUM,
-  LIBRARY_BROWSER_INIT_ARTISTS, LIBRARY_BROWSER_SEARCH,
+  LIBRARY_BROWSER_INIT_ARTISTS, LIBRARY_BROWSER_SEARCH_FILTER, LIBRARY_BROWSER_SEARCH_UPDATE_INPUT,
 } from './actions';
 
 
@@ -160,8 +160,16 @@ function libraryBrowser(state = initialState, action, library) {
         sortTracks: action.sortProperty,
       });
 
-    case LIBRARY_BROWSER_SEARCH: {
-      // TODO search should not be done when search term is empty.
+    case LIBRARY_BROWSER_SEARCH_UPDATE_INPUT:
+      return Object.assign({}, state, {
+        ...state,
+        search: {
+          ...state.search,
+          term: action.searchTerm,
+        },
+      });
+
+    case LIBRARY_BROWSER_SEARCH_FILTER: {
       const albumsIds = [];
       const artistsIds = [];
 
