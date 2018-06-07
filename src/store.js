@@ -17,14 +17,18 @@ const customReducer = (state = {}, action) => (
   }
 );
 
-// const loggerMiddleware = createLogger();
+// Common middleware
+let middleware = [thunkMiddleware];
+
+if (process.env.REACT_APP_DEBUG_MODE === 'true') {
+  const loggerMiddleware = createLogger();
+  middleware = [...middleware, loggerMiddleware];
+}
+
 
 export default function configureStore() {
   return createStore(
     customReducer,
-    applyMiddleware(
-      thunkMiddleware,
-      // loggerMiddleware,
-    ),
+    applyMiddleware(...middleware),
   );
 }
