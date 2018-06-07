@@ -7,17 +7,16 @@ type Query {
   albums: [Album]
   artist(id: ID!): Artist
   artists: [Artist]
+  track(id: ID!): Track
   tracks: [Track]
 }
 
 type Album {
   id: ID!
-  artistId: ID!
   title: String!
   tracks: [Track]
+  artistId: ID!
   artist: Artist
-  # Shorthand property for perfs on albums query.
-  artistName: String
 }
 
 type Artist {
@@ -29,6 +28,13 @@ type Artist {
 type Track {
   id: ID!
   title: String!
+  number: Int
+  disc: String
+  duration: Int
+  src: String!
+  cover: String!
   artistId: ID!
+  artist: Artist
   albumId: ID!
+  album: Album
 }
