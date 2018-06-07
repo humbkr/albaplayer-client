@@ -35,7 +35,7 @@ function library(state = initialState, action) {
           artistName = artists[0].name;
         }
 
-        return {...album, artistName};
+        return { ...album, artistName };
       });
 
       return Object.assign({}, state, {

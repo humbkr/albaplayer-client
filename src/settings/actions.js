@@ -57,15 +57,15 @@ const libraryEraseFailure = response => (
 );
 
 const initSettings = () => (
-  (dispatch) => {
-    return getSettings()
+  dispatch => (
+    getSettings()
       .then((response) => {
         dispatch(settingsInit(response));
       })
       .catch((response) => {
-        //dispatch(libraryUpdateFailure(response));
-      });
-  }
+        dispatch(libraryUpdateFailure(response));
+      })
+  )
 );
 
 const updateLibrary = () => (

@@ -23,7 +23,7 @@ function queue(state = initialState, action, library) {
         ],
         current: state.current,
       });
-    case QUEUE_ADD_ALBUM:
+    case QUEUE_ADD_ALBUM: {
       // Get tracks from album.
       const filteredTracks = library.tracks.filter(item => (action.albumId === item.albumId));
 
@@ -34,6 +34,7 @@ function queue(state = initialState, action, library) {
         ],
         current: state.current,
       });
+    }
     case QUEUE_ADD_ARTIST:
       return Object.assign({}, state, {
         tracks: [
