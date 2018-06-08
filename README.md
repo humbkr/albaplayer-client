@@ -2,16 +2,16 @@
 Minimalistic audio library web player.
 
 ## About
-Alba player is a desktop audio library web-based player. I was tired of all the desktop audio players available on linux 
+Alba player is an audio library web-based player optimized for desktop. I was tired of all the desktop audio players available on linux 
 and macos with questionable user interfaces and/or library management, and I wanted to learn golang and react, so I decided
 to build my own.   
 This player is by purpose very limited in terms of functionalities, as its main goal is to just play music.  
 
-This repository is only for the client part of the application. You can find the server part at TODO   
+This repository is only for the client part of the application. You can find the server part at [https://github.com/humbkr/albaplayer-server](https://github.com/humbkr/albaplayer-server)   
 Although fully operationnal, this project is still under heavy development. Contributions and remarks on the existing 
-code are welcomed!
+code are welcomed (new react dev here)!
 
-TODO Demo here
+WEBSITE (with demo): [https://albaplayer.com](https://albaplayer.com)
 
 ### Basic features
 
@@ -23,11 +23,11 @@ TODO Demo here
 - Can manage huge libraries (tested with 20000+ songs)
 
 **Note:** this player is not adapted for mobile or tablet use. A good mobile UI would be completely different from the
-desktop one, so I focused on the desktop first, as there are already a lot of good mobile players app.
+desktop one, so I focused on the desktop first, as there are already a lot of good mobile players apps.
 
 ## Installation
 
-Grab the archive corresponding to your system on the official website, unzip it somewhere, tinker with the alba.yml
+Grab the archive corresponding to your system on the [official website](https://albaplayer.com), unzip it somewhere, tinker with the alba.yml
 configuration file and run the alba executable from the command line.
 
 ## Developement
@@ -51,7 +51,7 @@ and thus follows its basic code structure.
 This project uses [AirBNB javascript codestyle](https://github.com/airbnb/javascript) with minimal
 tweaks.
 
-Jetbrains IDE setup: https://www.themarketingtechnologist.co/eslint-with-airbnb-javascript-style-guide-in-webstorm/
+Jetbrains IDE setup: [https://www.themarketingtechnologist.co/eslint-with-airbnb-javascript-style-guide-in-webstorm/](https://www.themarketingtechnologist.co/eslint-with-airbnb-javascript-style-guide-in-webstorm/)
 
 ## Development
 
@@ -75,3 +75,10 @@ From inside the container, install the dependencies by running ```yarn install``
 - To access the application in a browser, get the container port from docker: ``docker ps`` (image name is "alba_client"), then go to your browser and
 access localhost:<port>.
 - To change the backend API url, see comments in the /.env file.
+- To run eslint on src/ run ``yarn lint``
+
+## TODO
+- [ ] Write some tests
+- [ ] Improve perfs a little bit more
+- [ ] Implement keyboard navigation in library browser
+- [ ] Make playing queue sortable
