@@ -88,11 +88,7 @@ const sanitizeTrackNumber = (trackNumber) => {
 /*
 Sort function with nested objects capabilities.
  */
-const immutableNestedSortTrack = (items, prop) => {
-  const property = prop.split('.');
-  // Get depth.
-  const len = property.length;
-
+const immutableSortTracks = (items, prop) => {
   let result = 0;
 
   return [...items].sort((propA, propB) => {
@@ -106,12 +102,8 @@ const immutableNestedSortTrack = (items, prop) => {
       a = `${sanitizeDiscNumber(propA.disc)}${sanitizeTrackNumber(propA.number)}`;
       b = `${sanitizeDiscNumber(propB.disc)}${sanitizeTrackNumber(propB.number)}`;
     } else {
-      let i = 0;
-      while (i < len) {
-        a = a[property[i]];
-        b = b[property[i]];
-        i++;
-      }
+      a = a[prop];
+      b = b[prop];
     }
 
     // Sort if value type is string.
@@ -138,7 +130,7 @@ const immutableNestedSortTrack = (items, prop) => {
 
 export {
   immutableNestedSort,
-  immutableNestedSortTrack,
+  immutableSortTracks,
   immutableRemove,
   formatDuration,
   arrayToObject,

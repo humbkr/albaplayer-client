@@ -5,7 +5,7 @@ import {
   QUEUE_CLEAR,
   QUEUE_REMOVE_TRACK, QUEUE_SET_CURRENT,
 } from './actionsQueue';
-import { immutableNestedSortTrack, immutableRemove } from '../utils';
+import { immutableSortTracks, immutableRemove } from '../utils';
 
 
 const initialState = {
@@ -30,7 +30,7 @@ function queue(state = initialState, action, library) {
       return Object.assign({}, state, {
         tracks: [
           ...state.tracks,
-          ...immutableNestedSortTrack(filteredTracks, 'number'),
+          ...immutableSortTracks(filteredTracks, 'number'),
         ],
         current: state.current,
       });
