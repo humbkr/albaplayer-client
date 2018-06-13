@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import LibraryBrowserList from './LibraryBrowserList';
 import TrackTeaser from './TrackTeaser';
-import { immutableSortTracks } from '../../utils';
 import LibraryBrowserListHeader from './LibraryBrowserListHeader';
 import { libraryBrowserSortTracks } from '../actions';
 import TrackContextMenu from './TrackContextMenu';
 import LibraryBrowserPane from './LibraryBrowserPane';
+import { getTracksList } from '../selectors';
 
 
 const TracksPaneWrapper = styled.div`
@@ -77,7 +77,7 @@ TracksPaneContainer.propTypes = {
 
 const mapStateToProps = state => (
   {
-    tracks: immutableSortTracks(state.libraryBrowser.tracks, state.libraryBrowser.sortTracks),
+    tracks: getTracksList(state),
     orderBy: state.libraryBrowser.sortTracks,
   }
 );
