@@ -32,7 +32,7 @@ const sanitizeDiscNumber = (discNumber) => {
   const asString = `${discNumber}`;
   const split = asString.split('/');
 
-  return `D${split[0].padStart(3, '0')}`;
+  return `D${split[0]}`;
 };
 const sanitizeTrackNumber = (trackNumber) => {
   const asString = `${trackNumber}`;
