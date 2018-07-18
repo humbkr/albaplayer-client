@@ -54,13 +54,13 @@ class TracksPaneContainer extends Component {
             orderByOptions={orderByOptions}
             onChange={this.onSortChangeHandler}
           />
-          { tracks.length > 0 &&
+          { tracks.length > 1 &&
             <LibraryBrowserList
               items={tracks}
               itemDisplay={TrackTeaser}
             />
           }
-          { tracks.length === 0 &&
+          { tracks.length === 1 &&
             <NoTracks>Select an artist or album</NoTracks>
           }
           <TrackContextMenu />

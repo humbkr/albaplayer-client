@@ -13,16 +13,6 @@ const LibraryBrowserList = (props) => {
   const Display = props.itemDisplay;
   const itemsList = props.items;
 
-  // Add a "All" item at the beginning of the list
-  const itemAll = {
-    id: '0',
-    name: 'All',
-    title: 'All',
-    artistId: '0',
-    albumId: '0',
-  };
-  itemsList.unshift(itemAll);
-
   // Magic function used by react-virtualized.
   // eslint-disable-next-line
   function rowRenderer({key, index, isScrolling, isVisible, style}) {
