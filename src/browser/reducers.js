@@ -160,11 +160,9 @@ function searchFilter(state, action, library) {
     }
   });
 
-  // Get ids of all albums whose title is matching the search term.
-  // Also get all albums of artists that have been found.
   library.albums.forEach((item) => {
-    if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())
-      || artistsIds.includes(item.artistId)) {
+    // Get ids of all albums whose title is matching the search term.
+    if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
       albumsIds.push(item.id);
 
       // Add album's artist id to the list of artists.
@@ -172,31 +170,44 @@ function searchFilter(state, action, library) {
         artistsIds.push(item.artistId);
       }
     }
-  });
 
-  // Get all tracks whose title is matching the search term
-  // Also get all tracks of artists and albums that have been found.
-  const tracksArtistsIds = [];
-  const tracksAlbumsIds = [];
-  library.tracks.forEach((item) => {
-    if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())
-      || artistsIds.includes(item.artistId)
-      || albumsIds.includes(item.albumId)) {
-      filteredTracks.push(item);
-
-      // Add track's artist id to the list of artists.
-      if (!artistsIds.includes(item.artistId) && !tracksArtistsIds.includes(item.artistId)) {
-        tracksArtistsIds.push(item.artistId);
-      }
-
-      // Add track's album id to the list of albums.
-      if (!albumsIds.includes(item.albumId) && !tracksAlbumsIds.includes(item.albumId)) {
-        tracksAlbumsIds.push(item.albumId);
+    // Also get all albums of artists that have previously been found.
+    if (artistsIds.includes(item.artistId)) {
+      if (!albumsIds.includes(item.id)) {
+        albumsIds.push(item.id);
       }
     }
   });
-  artistsIds.push(...tracksArtistsIds);
-  albumsIds.push(...tracksAlbumsIds);
+
+  // TODO: manage various artists.
+  library.tracks.forEach((item) => {
+    // Get ids of all tracks whose title is matching the search term.
+    if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
+      filteredTracks.push(item);
+
+      // Add track's artist id to the list of artists.
+      if (!artistsIds.includes(item.artistId)) {
+        artistsIds.push(item.artistId);
+      }
+
+      // Add track's album id to the list of albums.
+      if (!albumsIds.includes(item.albumId)) {
+        albumsIds.push(item.albumId);
+      }
+    }
+
+    // Also get all tracks of artists and albums that have previously been found.
+    if (artistsIds.includes(item.artistId)) {
+      if (!filteredTracks.includes(item)) {
+        filteredTracks.push(item);
+      }
+    }
+    if (albumsIds.includes(item.albumId)) {
+      if (!filteredTracks.includes(item)) {
+        filteredTracks.push(item);
+      }
+    }
+  });
 
   // Then filter the artists and albums.
   const filteredArtists = library.artists.filter(item => (artistsIds.includes(item.id)));
