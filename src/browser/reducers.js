@@ -160,6 +160,10 @@ function searchFilter(state, action, library) {
     }
   });
 
+  // Store artists and album ids that are not found with a direct match in separate variables.
+  const undirectAlbumsIds = [];
+  const undirectArtistsIds = [];
+
   library.albums.forEach((item) => {
     // Get ids of all albums whose title is matching the search term.
     if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
@@ -167,35 +171,19 @@ function searchFilter(state, action, library) {
 
       // Add album's artist id to the list of artists.
       if (!artistsIds.includes(item.artistId)) {
-        artistsIds.push(item.artistId);
+        undirectArtistsIds.push(item.artistId);
       }
     }
 
     // Also get all albums of artists that have previously been found.
     if (artistsIds.includes(item.artistId)) {
       if (!albumsIds.includes(item.id)) {
-        albumsIds.push(item.id);
+        undirectAlbumsIds.push(item.id);
       }
     }
   });
 
-  // TODO: manage various artists.
   library.tracks.forEach((item) => {
-    // Get ids of all tracks whose title is matching the search term.
-    if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
-      filteredTracks.push(item);
-
-      // Add track's artist id to the list of artists.
-      if (!artistsIds.includes(item.artistId)) {
-        artistsIds.push(item.artistId);
-      }
-
-      // Add track's album id to the list of albums.
-      if (!albumsIds.includes(item.albumId)) {
-        albumsIds.push(item.albumId);
-      }
-    }
-
     // Also get all tracks of artists and albums that have previously been found.
     if (artistsIds.includes(item.artistId)) {
       if (!filteredTracks.includes(item)) {
@@ -206,6 +194,35 @@ function searchFilter(state, action, library) {
       if (!filteredTracks.includes(item)) {
         filteredTracks.push(item);
       }
+    }
+
+    // Get ids of all tracks whose title is matching the search term.
+    if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
+      filteredTracks.push(item);
+
+      // Add track's artist id to the list of artists.
+      if (!undirectArtistsIds.includes(item.artistId)) {
+        undirectArtistsIds.push(item.artistId);
+      }
+
+      // Add track's album id to the list of albums.
+      if (!undirectAlbumsIds.includes(item.albumId)) {
+        undirectAlbumsIds.push(item.albumId);
+      }
+    }
+  });
+
+  // Add back artists added from album matching.
+  undirectArtistsIds.forEach((item) => {
+    if (!artistsIds.includes(item)) {
+      artistsIds.push(item);
+    }
+  });
+
+  // Add back albums added from artists matching.
+  undirectAlbumsIds.forEach((item) => {
+    if (!albumsIds.includes(item)) {
+      albumsIds.push(item);
     }
   });
 
