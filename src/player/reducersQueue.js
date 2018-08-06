@@ -7,6 +7,18 @@ import {
 } from './actionsQueue';
 import { immutableSortTracks, immutableRemove } from '../utils';
 
+const queueRemoveTrack = (state, action) => {
+  let nextCurrent = state.current;
+  if (action.trackIndex <= state.current) {
+    nextCurrent -= 1;
+  }
+
+  return Object.assign({}, state, {
+    tracks: immutableRemove(state.tracks, action.trackIndex),
+    current: nextCurrent,
+  });
+};
+
 
 const initialState = {
   tracks: [],
@@ -44,10 +56,7 @@ function queue(state = initialState, action, library) {
         current: state.current,
       });
     case QUEUE_REMOVE_TRACK:
-      return Object.assign({}, state, {
-        tracks: immutableRemove(state.tracks, action.trackIndex),
-        current: state.current,
-      });
+      return queueRemoveTrack(state, action);
     case QUEUE_CLEAR:
       return Object.assign({}, state, {
         tracks: [],
@@ -63,6 +72,5 @@ function queue(state = initialState, action, library) {
       return state;
   }
 }
-
 
 export default queue;
