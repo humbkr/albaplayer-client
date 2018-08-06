@@ -27,7 +27,7 @@ class ArtistsPaneContainer extends Component {
   };
 
   render() {
-    const { artists, orderBy } = this.props;
+    const { artists, orderBy, currentPosition } = this.props;
     const orderByOptions = [
       { value: 'name', label: 'name' },
     ];
@@ -45,6 +45,7 @@ class ArtistsPaneContainer extends Component {
           <LibraryBrowserList
             items={artists}
             itemDisplay={ArtistTeaser}
+            currentPosition={currentPosition}
           />
         </LibraryBrowserPane>
       </ArtistsPaneWrapper>
@@ -57,6 +58,7 @@ ArtistsPaneContainer.propTypes = {
     name: PropTypes.string.isRequired,
   })).isRequired,
   orderBy: PropTypes.string.isRequired,
+  currentPosition: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
@@ -64,6 +66,7 @@ const mapStateToProps = state => (
   {
     artists: getArtistsList(state),
     orderBy: state.libraryBrowser.sortArtists,
+    currentPosition: state.libraryBrowser.currentPositionArtists,
   }
 );
 const mapDispatchToProps = dispatch => (

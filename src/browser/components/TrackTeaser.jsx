@@ -34,11 +34,11 @@ const TrackWrapper = styled.div`
 // eslint-disable-next-line react/prefer-stateless-function
 class TrackTeaser extends Component {
   render() {
-    const { item, selectedTracks, onClick } = this.props;
+    const { item, index, selectedTracks, onClick } = this.props;
     const selected = (selectedTracks === item.id) ? { selected: true } : {};
 
     return (
-      <TrackWrapper onClick={() => onClick(item.id)} {...selected}>
+      <TrackWrapper onClick={() => onClick(item.id, index)} {...selected}>
         <TrackTeaserNumber>{item.number}</TrackTeaserNumber>
         <TrackTeaserName>{item.title}</TrackTeaserName>
       </TrackWrapper>
@@ -53,6 +53,7 @@ TrackTeaser.propTypes = {
     number: PropTypes.number,
   }).isRequired,
   selectedTracks: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -63,8 +64,8 @@ const mapStateToProps = state => (
 );
 const mapDispatchToProps = dispatch => (
   {
-    onClick: (trackId) => {
-      dispatch(libraryBrowserSelectTrack(trackId));
+    onClick: (trackId, index) => {
+      dispatch(libraryBrowserSelectTrack(trackId, index));
     },
   }
 );

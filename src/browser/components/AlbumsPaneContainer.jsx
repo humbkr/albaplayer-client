@@ -28,7 +28,7 @@ class AlbumsPaneContainer extends Component {
   };
 
   render() {
-    const { albums, orderBy } = this.props;
+    const { albums, orderBy, currentPosition } = this.props;
     const orderByOptions = [
       { value: 'title', label: 'title' },
       { value: 'year', label: 'year' },
@@ -47,6 +47,7 @@ class AlbumsPaneContainer extends Component {
           <LibraryBrowserList
             items={albums}
             itemDisplay={AlbumTeaser}
+            currentPosition={currentPosition}
           />
           <AlbumContextMenu />
         </LibraryBrowserPane>
@@ -58,12 +59,14 @@ AlbumsPaneContainer.propTypes = {
   albums: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   orderBy: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  currentPosition: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => (
   {
     albums: getAlbumsList(state),
     orderBy: state.libraryBrowser.sortAlbums,
+    currentPosition: state.libraryBrowser.currentPositionAlbums,
   }
 );
 const mapDispatchToProps = dispatch => (

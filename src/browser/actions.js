@@ -6,26 +6,29 @@ const libraryBrowserInitArtists = () => (
 );
 
 const LIBRARY_BROWSER_SELECT_ARTIST = 'LIBRARY_BROWSER_SELECT_ARTIST';
-const libraryBrowserSelectArtist = artistId => (
+const libraryBrowserSelectArtist = (artistId, index) => (
   {
     type: LIBRARY_BROWSER_SELECT_ARTIST,
     artistId,
+    index,
   }
 );
 
 const LIBRARY_BROWSER_SELECT_ALBUM = 'LIBRARY_BROWSER_SELECT_ALBUM';
-const libraryBrowserSelectAlbum = albumId => (
+const libraryBrowserSelectAlbum = (albumId, index) => (
   {
     type: LIBRARY_BROWSER_SELECT_ALBUM,
     albumId,
+    index,
   }
 );
 
 const LIBRARY_BROWSER_SELECT_TRACK = 'LIBRARY_BROWSER_SELECT_TRACK';
-const libraryBrowserSelectTrack = trackId => (
+const libraryBrowserSelectTrack = (trackId, index) => (
   {
     type: LIBRARY_BROWSER_SELECT_TRACK,
     trackId,
+    index,
   }
 );
 
@@ -76,9 +79,18 @@ const libraryBrowserInit = () => (
   (dispatch, getState) => {
     const state = getState();
     dispatch(libraryBrowserInitArtists());
-    dispatch(libraryBrowserSelectArtist(state.libraryBrowser.selectedArtists));
-    dispatch(libraryBrowserSelectAlbum(state.libraryBrowser.selectedAlbums));
-    dispatch(libraryBrowserSelectTrack(state.libraryBrowser.selectedTracks));
+    dispatch(libraryBrowserSelectArtist(
+      state.libraryBrowser.selectedArtists,
+      state.libraryBrowser.currentPositionArtists,
+    ));
+    dispatch(libraryBrowserSelectAlbum(
+      state.libraryBrowser.selectedAlbums,
+      state.libraryBrowser.currentPositionAlbums,
+    ));
+    dispatch(libraryBrowserSelectTrack(
+      state.libraryBrowser.selectedTracks,
+      state.libraryBrowser.currentPositionTracks,
+    ));
   }
 );
 

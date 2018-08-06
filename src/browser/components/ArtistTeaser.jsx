@@ -26,11 +26,11 @@ const ArtistTeaserWrapper = styled.div`
 // eslint-disable-next-line react/prefer-stateless-function
 class ArtistTeaser extends Component {
   render() {
-    const { item, onClick, selectedArtists } = this.props;
+    const { item, index, onClick, selectedArtists } = this.props;
     const selected = (selectedArtists === item.id) ? { selected: true } : {};
 
     return (
-      <ArtistTeaserWrapper onClick={() => onClick(item.id)} {...selected}>
+      <ArtistTeaserWrapper onClick={() => onClick(item.id, index)} {...selected}>
         <ArtistTeaserName>{item.name}</ArtistTeaserName>
       </ArtistTeaserWrapper>
     );
@@ -41,6 +41,7 @@ ArtistTeaser.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
+  index: PropTypes.number.isRequired,
   selectedArtists: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
@@ -52,8 +53,8 @@ const mapStateToProps = state => (
 );
 const mapDispatchToProps = dispatch => (
   {
-    onClick: (artistId) => {
-      dispatch(libraryBrowserSelectArtist(artistId));
+    onClick: (artistId, index) => {
+      dispatch(libraryBrowserSelectArtist(artistId, index));
     },
   }
 );

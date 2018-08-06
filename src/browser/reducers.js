@@ -19,6 +19,9 @@ const initialState = {
   selectedArtists: '0',
   selectedAlbums: '0',
   selectedTracks: '0',
+  currentPositionArtists: 0,
+  currentPositionAlbums: 0,
+  currentPositionTracks: 0,
   search: {
     term: '',
     // I don't like that but I don't want to rerun the search each time the user selects
@@ -73,6 +76,7 @@ function selectArtist(state, action, library) {
     selectedAlbums: '0',
     selectedTracks: '0',
     selectedArtists: action.artistId,
+    currentPositionArtists: action.index,
     albums: filteredAlbums,
     tracks: filteredTracks,
   });
@@ -124,6 +128,7 @@ function selectAlbum(state, action, library) {
     ...state,
     selectedTracks: '0',
     selectedAlbums: action.albumId,
+    currentPositionAlbums: action.index,
     tracks: filteredTracks,
   });
 }
@@ -269,6 +274,7 @@ function libraryBrowser(state = initialState, action, library) {
       return Object.assign({}, state, {
         ...state,
         selectedTracks: action.trackId,
+        currentPositionTracks: action.index,
       });
 
     case LIBRARY_BROWSER_SORT_ARTISTS:

@@ -37,7 +37,7 @@ class TracksPaneContainer extends Component {
   };
 
   render() {
-    const { tracks, orderBy } = this.props;
+    const { tracks, orderBy, currentPosition } = this.props;
     const orderByOptions = [
       { value: 'title', label: 'title' },
       { value: 'number', label: 'track number' },
@@ -58,6 +58,7 @@ class TracksPaneContainer extends Component {
             <LibraryBrowserList
               items={tracks}
               itemDisplay={TrackTeaser}
+              currentPosition={currentPosition}
             />
           }
           { tracks.length === 1 &&
@@ -73,12 +74,14 @@ TracksPaneContainer.propTypes = {
   tracks: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   orderBy: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  currentPosition: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => (
   {
     tracks: getTracksList(state),
     orderBy: state.libraryBrowser.sortTracks,
+    currentPosition: state.libraryBrowser.currentPositionTracks,
   }
 );
 const mapDispatchToProps = dispatch => (
