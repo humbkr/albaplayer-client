@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { DebounceInput } from 'react-debounce-input';
 import { libraryBrowserSearch } from '../actions';
 
 
@@ -19,7 +20,7 @@ const SearchBarInputWrapper = styled.div`
   background-color: ${props => props.theme.highlight};
 `;
 
-const SearchBarInput = styled.input`
+const SearchBarInput = styled(DebounceInput)`
   height: 100%;
   width: 100%;
   font-size: 1em;
@@ -32,7 +33,14 @@ const LibraryBrowserSearchBar = (props) => {
   return (
     <LibraryBrowserSearchBarWrapper>
       <SearchBarInputWrapper>
-        <SearchBarInput onChange={event => onChange(event.target.value)} type="text" id="search-input" value={searchTerm} placeholder="Search" />
+        <SearchBarInput
+          debounceTimeout={300}
+          onChange={event => onChange(event.target.value)}
+          type="text"
+          id="search-input"
+          value={searchTerm}
+          placeholder="Search"
+        />
       </SearchBarInputWrapper>
     </LibraryBrowserSearchBarWrapper>
   );

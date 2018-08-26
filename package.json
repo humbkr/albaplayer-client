@@ -12,6 +12,7 @@
     "react": "^16.0.0",
     "react-apollo": "^2.0.4",
     "react-contexify": "^2.1.4",
+    "react-debounce-input": "^3.2.0",
     "react-dom": "^16.0.0",
     "react-motion": "^0.5.2",
     "react-redux": "^5.0.6",
