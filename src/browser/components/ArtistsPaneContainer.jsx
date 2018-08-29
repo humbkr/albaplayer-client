@@ -20,7 +20,6 @@ const ArtistsPaneWrapper = styled.div`
 `;
 
 class ArtistsPaneContainer extends Component {
-
   // Change event handler for LibraryBrowserListHeader.
   onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.

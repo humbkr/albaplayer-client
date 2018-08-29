@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { menuProvider } from 'react-contexify';
-import { libraryBrowserSelectArtist } from '../actions';
 
 
 const ArtistTeaserName = styled.h2`
@@ -50,6 +49,4 @@ const mapStateToProps = state => (
 // Bind the context menu event.
 const addContextMenu = menuProvider('artist-context-menu');
 
-export default connect(
-  mapStateToProps,
-)(addContextMenu(ArtistTeaser));
+export default connect(mapStateToProps)(addContextMenu(ArtistTeaser));

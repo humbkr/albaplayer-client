@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import LibraryBrowserList from './LibraryBrowserList';
 import TrackTeaser from './TrackTeaser';
 import LibraryBrowserListHeader from './LibraryBrowserListHeader';
-import { libraryBrowserSortTracks } from '../actions';
+import { libraryBrowserSelectTrack, libraryBrowserSortTracks } from '../actions';
 import TrackContextMenu from './TrackContextMenu';
 import LibraryBrowserPane from './LibraryBrowserPane';
 import { getTracksList } from '../selectors';
@@ -33,11 +33,11 @@ class TracksPaneContainer extends Component {
   // Change event handler for LibraryBrowserListHeader.
   onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.
-    this.props.onChange(event.target.value);
+    this.props.onSortChange(event.target.value);
   };
 
   render() {
-    const { tracks, orderBy, currentPosition } = this.props;
+    const { tracks, orderBy, currentPosition, onItemClick } = this.props;
     const orderByOptions = [
       { value: 'title', label: 'title' },
       { value: 'number', label: 'track number' },
@@ -59,6 +59,7 @@ class TracksPaneContainer extends Component {
               items={tracks}
               itemDisplay={TrackTeaser}
               currentPosition={currentPosition}
+              onItemClick={onItemClick}
             />
           }
           { tracks.length === 1 &&
@@ -71,10 +72,14 @@ class TracksPaneContainer extends Component {
   }
 }
 TracksPaneContainer.propTypes = {
-  tracks: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  tracks: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+  })).isRequired,
   orderBy: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
   currentPosition: PropTypes.number.isRequired,
+  onSortChange: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => (
@@ -86,8 +91,11 @@ const mapStateToProps = state => (
 );
 const mapDispatchToProps = dispatch => (
   {
-    onChange: (sortProperty) => {
+    onSortChange: (sortProperty) => {
       dispatch(libraryBrowserSortTracks(sortProperty));
+    },
+    onItemClick: (itemId, index) => {
+      dispatch(libraryBrowserSelectTrack(itemId, index));
     },
   }
 );

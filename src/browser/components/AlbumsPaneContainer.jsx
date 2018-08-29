@@ -6,7 +6,7 @@ import LibraryBrowserList from './LibraryBrowserList';
 import AlbumTeaser from './AlbumTeaser';
 import LibraryBrowserListHeader from './LibraryBrowserListHeader';
 import LibraryBrowserPane from './LibraryBrowserPane';
-import { libraryBrowserSortAlbums } from '../actions';
+import {libraryBrowserSelectAlbum, libraryBrowserSortAlbums} from '../actions';
 import AlbumContextMenu from './AlbumContextMenu';
 import { getAlbumsList } from '../selectors';
 
@@ -24,11 +24,11 @@ class AlbumsPaneContainer extends Component {
   // Change event handler for LibraryBrowserListHeader.
   onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.
-    this.props.onChange(event.target.value);
+    this.props.onSortChange(event.target.value);
   };
 
   render() {
-    const { albums, orderBy, currentPosition } = this.props;
+    const { albums, orderBy, currentPosition, onItemClick } = this.props;
     const orderByOptions = [
       { value: 'title', label: 'title' },
       { value: 'year', label: 'year' },
@@ -48,6 +48,7 @@ class AlbumsPaneContainer extends Component {
             items={albums}
             itemDisplay={AlbumTeaser}
             currentPosition={currentPosition}
+            onItemClick={onItemClick}
           />
           <AlbumContextMenu />
         </LibraryBrowserPane>
@@ -56,10 +57,16 @@ class AlbumsPaneContainer extends Component {
   }
 }
 AlbumsPaneContainer.propTypes = {
-  albums: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  albums: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    year: PropTypes.string,
+    artistName: PropTypes.string,
+  })).isRequired,
   orderBy: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
   currentPosition: PropTypes.number.isRequired,
+  onSortChange: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => (
@@ -71,8 +78,11 @@ const mapStateToProps = state => (
 );
 const mapDispatchToProps = dispatch => (
   {
-    onChange: (sortProperty) => {
+    onSortChange: (sortProperty) => {
       dispatch(libraryBrowserSortAlbums(sortProperty));
+    },
+    onItemClick: (itemId, index) => {
+      dispatch(libraryBrowserSelectAlbum(itemId, index));
     },
   }
 );

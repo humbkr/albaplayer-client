@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { menuProvider } from 'react-contexify';
-import { libraryBrowserSelectAlbum } from '../actions';
+
 
 const AlbumTeaserTitle = styled.h2`
   font-size: 1em;
@@ -25,7 +25,6 @@ const AlbumTeaserWrapper = styled.div`
   display: table;
   width: 100%;
   height: ${props => props.theme.itemHeight};
-  ${props => props.selected ? `background-color: ${props.theme.highlight}` : ''};
   padding: 0 15px;
   overflow: hidden; 
   white-space: nowrap; 
@@ -41,8 +40,7 @@ const AlbumTeaserWrapper = styled.div`
 // eslint-disable-next-line react/prefer-stateless-function
 class AlbumTeaser extends Component {
   render() {
-    const { item, index, onClick, selectedAlbums } = this.props;
-    const selected = (selectedAlbums === item.id) ? { selected: true } : {};
+    const { item } = this.props;
 
     let artistName = '';
     if (item.artistName) {
@@ -52,7 +50,7 @@ class AlbumTeaser extends Component {
     }
 
     return (
-      <AlbumTeaserWrapper onClick={() => onClick(item.id, index)} {...selected}>
+      <AlbumTeaserWrapper>
         <div>
           <AlbumTeaserTitle>{item.title}</AlbumTeaserTitle>
           <AlbumSubInfo>
@@ -72,9 +70,6 @@ AlbumTeaser.propTypes = {
     artistName: PropTypes.string,
     year: PropTypes.string,
   }).isRequired,
-  index: PropTypes.number.isRequired,
-  selectedAlbums: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => (
@@ -82,18 +77,8 @@ const mapStateToProps = state => (
     selectedAlbums: state.libraryBrowser.selectedAlbums,
   }
 );
-const mapDispatchToProps = dispatch => (
-  {
-    onClick: (albumId, index) => {
-      dispatch(libraryBrowserSelectAlbum(albumId, index));
-    },
-  }
-);
 
 // Bind the context menu event.
 const addContextMenu = menuProvider('album-context-menu');
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(addContextMenu(AlbumTeaser));
+export default connect(mapStateToProps)(addContextMenu(AlbumTeaser));

@@ -1,24 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
-import { AutoSizer, List } from 'react-virtualized';
+import { ArrowKeyStepper, AutoSizer, List } from 'react-virtualized';
 import LibraryBrowserListItem from './LibraryBrowserListItem';
 
 
 const LibraryBrowserListWrapper = styled.div`
-  flex: 1 1 auto;
+  display: flex;
+  flex: 1;
+  
+  // Needed for the autosizer to work correctly.
+  .autosizer-wrapper {
+    flex: 1;
+    overflow: auto;
+  }
 `;
 
 class LibraryBrowserList extends React.Component {
   selectRow = ({ scrollToRow, itemId }) => {
-    this.props.onItemClick(itemId, scrollToRow);
+    let itemID = itemId;
+    if (itemID === undefined) {
+      // Get the item id from the list.
+      const { items } = this.props;
+      itemID = items[scrollToRow].id;
+    }
+    this.props.onItemClick(itemID, scrollToRow);
   };
 
   // Magic function used by react-virtualized.
   rowRenderer = ({ items, scrollToRow, key, index, style }) => {
     const Display = this.props.itemDisplay;
-
-    // TODO manage selected.
     const selected = { selected: (index === scrollToRow) };
 
     return (
@@ -35,24 +46,42 @@ class LibraryBrowserList extends React.Component {
   };
 
   render() {
-    const { items, currentPosition } = this.props;
+    const { items } = this.props;
+    const scrollToRow = this.props.currentPosition;
 
     return (
       <LibraryBrowserListWrapper>
-        <AutoSizer>
-          {({ height, width }) => (
-            <List
-              width={width}
-              height={height}
-              rowCount={items.length}
-              rowHeight={parseInt(this.props.theme.itemHeight, 0)}
-              rowRenderer={({ key, index, style }) =>
-                this.rowRenderer({ items, scrollToRow: currentPosition, key, index, style })
-              }
-              scrollToIndex={currentPosition}
-            />
+        <ArrowKeyStepper
+          className="autosizer-wrapper"
+          columnCount={1}
+          rowCount={items.length}
+          mode="cells"
+          isControlled
+          onScrollToChange={this.selectRow}
+          scrollToRow={scrollToRow}
+        >
+          {
+            // eslint-disable-next-line no-shadow
+          }{({ onSectionRendered, scrollToRow }) => (
+            <AutoSizer>
+              {({ height, width }) => (
+                <List
+                  width={width}
+                  height={height}
+                  rowHeight={parseInt(this.props.theme.itemHeight, 0)}
+                  rowCount={items.length}
+                  rowRenderer={({ key, index, style }) =>
+                    this.rowRenderer({ items, scrollToRow, key, index, style })
+                  }
+                  onRowsRendered={({ startIndex, stopIndex }) => {
+                    onSectionRendered({ rowStartIndex: startIndex, rowStopIndex: stopIndex });
+                  }}
+                  scrollToIndex={scrollToRow}
+                />
+              )}
+            </AutoSizer>
           )}
-        </AutoSizer>
+        </ArrowKeyStepper>
       </LibraryBrowserListWrapper>
     );
   }
