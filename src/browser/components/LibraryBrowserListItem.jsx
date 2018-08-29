@@ -12,6 +12,8 @@ const LibraryBrowserListItem = styled.div`
     background-color: ${props => props.theme.highlight};
   }
   
+  ${props => props.selected ? `background-color: ${props.theme.highlight}` : ''};
+  
   > * {
     display: block;
     position: relative;

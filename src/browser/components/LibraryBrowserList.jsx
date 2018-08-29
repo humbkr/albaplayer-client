@@ -9,44 +9,61 @@ const LibraryBrowserListWrapper = styled.div`
   flex: 1 1 auto;
 `;
 
-const LibraryBrowserList = (props) => {
-  const Display = props.itemDisplay;
-  const itemsList = props.items;
-  const currentPosition = props.currentPosition;
+class LibraryBrowserList extends React.Component {
+  selectRow = ({ scrollToRow, itemId }) => {
+    this.props.onItemClick(itemId, scrollToRow);
+  };
 
   // Magic function used by react-virtualized.
-  // eslint-disable-next-line
-  function rowRenderer({key, index, isScrolling, isVisible, style}) {
+  rowRenderer = ({ items, scrollToRow, key, index, style }) => {
+    const Display = this.props.itemDisplay;
+
+    // TODO manage selected.
+    const selected = { selected: (index === scrollToRow) };
+
     return (
-      <LibraryBrowserListItem border key={key} style={style}>
-        <Display item={itemsList[index]} index={index}/>
+      <LibraryBrowserListItem
+        border
+        key={key}
+        style={style}
+        {...selected}
+        onClick={() => this.selectRow({ scrollToRow: index, itemId: items[index].id })}
+      >
+        <Display item={items[index]} index={index} />
       </LibraryBrowserListItem>
     );
-  }
+  };
 
-  return (
-    <LibraryBrowserListWrapper>
-      <AutoSizer>
-        {({ height, width }) => (
-          <List
-            width={width}
-            height={height}
-            rowCount={itemsList.length}
-            rowHeight={parseInt(props.theme.itemHeight, 0)}
-            rowRenderer={rowRenderer}
-            scrollToIndex={currentPosition}
-          />
-        )}
-      </AutoSizer>
-    </LibraryBrowserListWrapper>
-  );
-};
+  render() {
+    const { items, currentPosition } = this.props;
+
+    return (
+      <LibraryBrowserListWrapper>
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              width={width}
+              height={height}
+              rowCount={items.length}
+              rowHeight={parseInt(this.props.theme.itemHeight, 0)}
+              rowRenderer={({ key, index, style }) =>
+                this.rowRenderer({ items, scrollToRow: currentPosition, key, index, style })
+              }
+              scrollToIndex={currentPosition}
+            />
+          )}
+        </AutoSizer>
+      </LibraryBrowserListWrapper>
+    );
+  }
+}
 LibraryBrowserList.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   theme: PropTypes.object.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   itemDisplay: PropTypes.func.isRequired,
   currentPosition: PropTypes.number.isRequired,
+  onItemClick: PropTypes.func.isRequired,
 };
 
 

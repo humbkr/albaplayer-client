@@ -17,7 +17,6 @@ const ArtistTeaserWrapper = styled.div`
   display: table;
   width: 100%;
   height: ${props => props.theme.itemHeight};
-  ${props => props.selected ? `background-color: ${props.theme.highlight}` : ''};
   padding: 0 15px;
   cursor: pointer;
 `;
@@ -26,11 +25,10 @@ const ArtistTeaserWrapper = styled.div`
 // eslint-disable-next-line react/prefer-stateless-function
 class ArtistTeaser extends Component {
   render() {
-    const { item, index, onClick, selectedArtists } = this.props;
-    const selected = (selectedArtists === item.id) ? { selected: true } : {};
+    const { item } = this.props;
 
     return (
-      <ArtistTeaserWrapper onClick={() => onClick(item.id, index)} {...selected}>
+      <ArtistTeaserWrapper>
         <ArtistTeaserName>{item.name}</ArtistTeaserName>
       </ArtistTeaserWrapper>
     );
@@ -41,21 +39,11 @@ ArtistTeaser.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
-  index: PropTypes.number.isRequired,
-  selectedArtists: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => (
   {
     selectedArtists: state.libraryBrowser.selectedArtists,
-  }
-);
-const mapDispatchToProps = dispatch => (
-  {
-    onClick: (artistId, index) => {
-      dispatch(libraryBrowserSelectArtist(artistId, index));
-    },
   }
 );
 
@@ -64,5 +52,4 @@ const addContextMenu = menuProvider('artist-context-menu');
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
 )(addContextMenu(ArtistTeaser));

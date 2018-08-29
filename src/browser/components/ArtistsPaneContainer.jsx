@@ -6,7 +6,7 @@ import LibraryBrowserList from './LibraryBrowserList';
 import ArtistTeaser from './ArtistTeaser';
 import LibraryBrowserPane from './LibraryBrowserPane';
 import LibraryBrowserListHeader from './LibraryBrowserListHeader';
-import { libraryBrowserSortArtists } from '../actions';
+import { libraryBrowserSelectArtist, libraryBrowserSortArtists } from '../actions';
 import ArtistContextMenu from './ArtistContextMenu';
 import { getArtistsList } from '../selectors';
 
@@ -20,14 +20,15 @@ const ArtistsPaneWrapper = styled.div`
 `;
 
 class ArtistsPaneContainer extends Component {
+
   // Change event handler for LibraryBrowserListHeader.
   onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.
-    this.props.onChange(event.target.value);
+    this.props.onSortChange(event.target.value);
   };
 
   render() {
-    const { artists, orderBy, currentPosition } = this.props;
+    const { artists, orderBy, currentPosition, onItemClick } = this.props;
     const orderByOptions = [
       { value: 'name', label: 'name' },
     ];
@@ -46,6 +47,7 @@ class ArtistsPaneContainer extends Component {
             items={artists}
             itemDisplay={ArtistTeaser}
             currentPosition={currentPosition}
+            onItemClick={onItemClick}
           />
         </LibraryBrowserPane>
       </ArtistsPaneWrapper>
@@ -59,7 +61,8 @@ ArtistsPaneContainer.propTypes = {
   })).isRequired,
   orderBy: PropTypes.string.isRequired,
   currentPosition: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onSortChange: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => (
@@ -71,8 +74,11 @@ const mapStateToProps = state => (
 );
 const mapDispatchToProps = dispatch => (
   {
-    onChange: (sortProperty) => {
+    onSortChange: (sortProperty) => {
       dispatch(libraryBrowserSortArtists(sortProperty));
+    },
+    onItemClick: (itemId, index) => {
+      dispatch(libraryBrowserSelectArtist(itemId, index));
     },
   }
 );

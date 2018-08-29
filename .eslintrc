@@ -14,6 +14,7 @@
       "enforceForRenamedProperties": false
     }],
     "no-confusing-arrow": ["warn", {"allowParens": false}],
-    "no-plusplus": ["off"]
+    "no-plusplus": ["off"],
+    "object-curly-newline": ["off"]
   }
 }

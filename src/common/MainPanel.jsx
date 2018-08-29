@@ -7,6 +7,7 @@ import LibraryBrowser from '../browser/components/LibraryBrowser';
 import NowPlayingPane from '../now_playing/NowPlayingPane';
 import LoadingScreen from './LoadingScreen';
 import SettingsPane from '../settings/components/SettingsPane';
+import Navi from '../test/Navi';
 
 
 const MainPanelWrapper = styled.div`
@@ -30,6 +31,8 @@ const MainPanel = (props) => {
         <Route path="/queue" component={NowPlayingPane} />
         <Route path="/library" component={LibraryBrowser} />
         <Route path="/settings" component={SettingsPane} />
+
+        <Route path="/test" component={Navi} />
       </MainPanelWrapper>
       }
     </div>

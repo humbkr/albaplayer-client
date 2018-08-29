@@ -82,3 +82,4 @@ access localhost:<port>.
 - [ ] Improve perfs a little bit more
 - [ ] Implement keyboard navigation in library browser
 - [ ] Make playing queue sortable
+- [ ] Player options should be stored locally so we can get them back at each reload of the app.
