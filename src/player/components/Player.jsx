@@ -1,14 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled, { withTheme } from 'styled-components'
-import TrackInfo from './TrackInfo'
-import Controls from './Controls'
-import Audio from './Audio'
-import Timeline from './Timeline'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled, { withTheme } from 'styled-components';
+import TrackInfo from './TrackInfo';
+import Controls from './Controls';
+import Audio from './Audio';
+import Timeline from './Timeline';
+
 
 const PlayerWrapper = styled.div`
   width: 100%;
-`
+`;
 
 class Player extends React.Component {
   getChildContext() {
@@ -17,7 +18,7 @@ class Player extends React.Component {
       // TODO theme.
       color: '#fff',
       colorEnabled: '#f97c4b',
-    }
+    };
   }
 
   render() {
@@ -28,7 +29,7 @@ class Player extends React.Component {
       timelineCallbacks,
       controlState,
       controlCallbacks,
-    } = this.props
+    } = this.props;
 
     return (
       <PlayerWrapper>
@@ -39,9 +40,12 @@ class Player extends React.Component {
           {...timelineState}
           {...timelineCallbacks}
         />
-        <Controls {...controlState} {...controlCallbacks} />
+        <Controls
+          {...controlState}
+          {...controlCallbacks}
+        />
       </PlayerWrapper>
-    )
+    );
   }
 }
 Player.propTypes = {
@@ -76,13 +80,14 @@ Player.propTypes = {
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   theme: PropTypes.object.isRequired,
-}
+};
 Player.defaultProps = {
   track: null,
-}
+};
 Player.childContextTypes = {
   color: PropTypes.string,
   colorEnabled: PropTypes.string,
-}
+};
 
-export default Audio(withTheme(Player))
+
+export default Audio(withTheme(Player));

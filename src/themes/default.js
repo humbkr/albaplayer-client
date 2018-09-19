@@ -35,6 +35,6 @@ const themeDefault = {
     colorHover: '#00bdab',
     colorDisabled: '#b2b2b2',
   },
-}
+};
 
-export default themeDefault
+export default themeDefault;

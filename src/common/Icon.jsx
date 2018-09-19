@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
+
 
 const Icon = styled.i`
   font-family: 'Material Icons';
@@ -23,6 +24,6 @@ const Icon = styled.i`
 
   /* Support for IE. */
   font-feature-settings: 'liga';
-`
+`;
 
-export default Icon
+export default Icon;

@@ -1,6 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+
 
 const Select = styled.select`
   border: none;
@@ -8,23 +9,21 @@ const Select = styled.select`
   font-weight: bold;
   font-size: 1em;
   text-align-last: center;
-
+  
   :hover {
     cursor: pointer;
   }
-`
+`;
 
 const SelectWrapper = styled.div`
   text-align: right;
-`
+`;
 
 const SelectContainer = (props) => {
-  const { value, onChangeHandler, options } = props
+  const { value, onChangeHandler, options } = props;
   const optionsHtml = options.map(option => (
-    <option key={option.value} value={option.value}>
-      {option.label}
-    </option>
-  ))
+    <option key={option.value} value={option.value}>{option.label}</option>
+  ));
 
   return (
     <SelectWrapper>
@@ -32,17 +31,15 @@ const SelectContainer = (props) => {
         {optionsHtml}
       </Select>
     </SelectWrapper>
-  )
-}
+  );
+};
 SelectContainer.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    })
-  ).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string,
+    label: PropTypes.string,
+  })).isRequired,
   value: PropTypes.string.isRequired,
   onChangeHandler: PropTypes.func.isRequired,
-}
+};
 
-export default SelectContainer
+export default SelectContainer;

@@ -4,10 +4,9 @@ import {
   LIBRARY_ERASE_SUCCESS,
   LIBRARY_UPDATE_FAILURE,
   LIBRARY_UPDATE_START,
-  LIBRARY_UPDATE_SUCCESS,
-  SETTINGS_INIT,
-} from './actions'
-import { processApiError } from '../backend/api'
+  LIBRARY_UPDATE_SUCCESS, SETTINGS_INIT,
+} from './actions';
+import { processApiError } from '../backend/api';
 
 const initialState = {
   library: {
@@ -15,7 +14,7 @@ const initialState = {
     error: '',
     config: {},
   },
-}
+};
 
 function settings(state = initialState, action) {
   switch (action.type) {
@@ -27,7 +26,7 @@ function settings(state = initialState, action) {
           error: '',
           config: action.response.settings,
         },
-      })
+      });
     case LIBRARY_ERASE_START:
     case LIBRARY_UPDATE_START:
       return Object.assign({}, state, {
@@ -37,7 +36,7 @@ function settings(state = initialState, action) {
           isUpdating: true,
           error: '',
         },
-      })
+      });
 
     case LIBRARY_ERASE_SUCCESS:
     case LIBRARY_UPDATE_SUCCESS:
@@ -48,7 +47,7 @@ function settings(state = initialState, action) {
           isUpdating: false,
           error: '',
         },
-      })
+      });
 
     case LIBRARY_ERASE_FAILURE:
     case LIBRARY_UPDATE_FAILURE:
@@ -60,11 +59,12 @@ function settings(state = initialState, action) {
           isUpdating: false,
           error: processApiError(action.response),
         },
-      })
+      });
 
     default:
-      return state
+      return state;
   }
 }
 
-export default settings
+
+export default settings;

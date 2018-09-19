@@ -1,59 +1,69 @@
-import { getLibrary } from './backend/api'
+import { getLibrary } from './backend/api';
 
-const LIBRARY_INIT_START = 'LIBRARY_INIT_START'
-const libraryInitStart = () => ({
-  type: LIBRARY_INIT_START,
-})
+const LIBRARY_INIT_START = 'LIBRARY_INIT_START';
+const libraryInitStart = () => (
+  {
+    type: LIBRARY_INIT_START,
+  }
+);
 
-const LIBRARY_INIT_SUCCESS = 'LIBRARY_INIT_SUCCESS'
-const libraryInitSuccess = response => ({
-  type: LIBRARY_INIT_SUCCESS,
-  response: response.data,
-})
+const LIBRARY_INIT_SUCCESS = 'LIBRARY_INIT_SUCCESS';
+const libraryInitSuccess = response => (
+  {
+    type: LIBRARY_INIT_SUCCESS,
+    response: response.data,
+  }
+);
 
-const LIBRARY_INIT_FAILURE = 'LIBRARY_INIT_FAILURE'
-const libraryInitFailure = response => ({
-  type: LIBRARY_INIT_FAILURE,
-  response,
-})
+const LIBRARY_INIT_FAILURE = 'LIBRARY_INIT_FAILURE';
+const libraryInitFailure = response => (
+  {
+    type: LIBRARY_INIT_FAILURE,
+    response,
+  }
+);
 
-const fetchLibrary = () => (dispatch) => {
-  // First the app state is updated to inform that the API call is starting.
-  dispatch(libraryInitStart())
+const fetchLibrary = () => (
+  (dispatch) => {
+    // First the app state is updated to inform that the API call is starting.
+    dispatch(libraryInitStart());
 
-  // Then we make the API call.
-  return getLibrary()
-    .then((response) => {
-      dispatch(libraryInitSuccess(response))
-    })
-    .catch((response) => {
-      dispatch(libraryInitFailure(response))
-    })
-}
+    // Then we make the API call.
+    return getLibrary()
+      .then((response) => {
+        dispatch(libraryInitSuccess(response));
+      })
+      .catch((response) => {
+        dispatch(libraryInitFailure(response));
+      });
+  }
+);
 
 const shouldFetchLibrary = (state) => {
-  const libraryData = state.library
+  const libraryData = state.library;
 
   if (!libraryData.isInitialized) {
-    return true
-  }
-  if (libraryData.isFetching) {
-    return false
+    return true;
+  } else if (libraryData.isFetching) {
+    return false;
   }
 
-  return false
-}
+  return false;
+};
 
-const initLibrary = force => (dispatch, getState) => {
-  if (force || shouldFetchLibrary(getState())) {
-    return dispatch(fetchLibrary())
+const initLibrary = force => (
+  (dispatch, getState) => {
+    if (force || shouldFetchLibrary(getState())) {
+      return dispatch(fetchLibrary());
+    }
+    return null;
   }
-  return null
-}
+);
+
 
 export {
   LIBRARY_INIT_START,
   LIBRARY_INIT_SUCCESS,
   LIBRARY_INIT_FAILURE,
   initLibrary,
-}
+};

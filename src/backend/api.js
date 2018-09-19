@@ -1,5 +1,5 @@
-import gql from 'graphql-tag'
-import apolloClient from './apollo'
+import gql from 'graphql-tag';
+import apolloClient from './apollo';
 
 const getLibrary = () => {
   // Query used to initialise the browser with all the data from the server.
@@ -26,10 +26,11 @@ const getLibrary = () => {
         cover
       }
     }
-  `
+`;
 
-  return apolloClient.query({ query: libraryInit })
-}
+  return apolloClient.query({ query: libraryInit });
+};
+
 
 const getFullTrackInfo = (trackId) => {
   const fullTrackInfoQuery = gql`
@@ -52,61 +53,61 @@ const getFullTrackInfo = (trackId) => {
         }
       }
     }
-`
+`;
 
-  return apolloClient.query({ query: fullTrackInfoQuery })
-}
+  return apolloClient.query({ query: fullTrackInfoQuery });
+};
 
 const scanLibrary = () => {
   // TODO not sure we should use a query here, but apollo doesn't allow a mutation without parameter
   const scanLibraryQuery = gql`
     query scanLibraryQuery {
-      updateLibrary {
-        tracksNumber
-      }
+        updateLibrary {
+            tracksNumber
+        }
     }
-  `
+`;
 
-  return apolloClient.query({ query: scanLibraryQuery })
-}
+  return apolloClient.query({ query: scanLibraryQuery });
+};
 
 const emptyLibrary = () => {
   // TODO not sure we should use a query here, but apollo doesn't allow a mutation without parameter
   const emptyLibraryQuery = gql`
-    query emptyLibraryQuery {
-      eraseLibrary {
-        tracksNumber
+      query emptyLibraryQuery {
+          eraseLibrary {
+              tracksNumber
+          }
       }
-    }
-  `
+  `;
 
-  return apolloClient.query({ query: emptyLibraryQuery })
-}
+  return apolloClient.query({ query: emptyLibraryQuery });
+};
 
 const getSettings = () => {
   const getSettingsQuery = gql`
-    query getSettingsQuery {
-      settings {
-        libraryPath
-        coversPreferredSource
-        disableLibrarySettings
+      query getSettingsQuery {
+          settings {
+              libraryPath
+              coversPreferredSource
+              disableLibrarySettings
+          }
       }
-    }
-  `
+  `;
 
-  return apolloClient.query({ query: getSettingsQuery })
-}
+  return apolloClient.query({ query: getSettingsQuery });
+};
 
 const processApiError = (response) => {
-  let result = 'Unknown error'
+  let result = 'Unknown error';
   if (response.graphQLErrors.length > 0 && response.graphQLErrors[0].message) {
-    result = response.graphQLErrors[0].message
+    result = response.graphQLErrors[0].message;
   } else if (response.message) {
-    result = response.message
+    result = response.message;
   }
 
-  return result
-}
+  return result;
+};
 
 export {
   getLibrary,
@@ -115,4 +116,4 @@ export {
   emptyLibrary,
   getSettings,
   processApiError,
-}
+};

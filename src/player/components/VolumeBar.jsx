@@ -1,13 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const VolumeBar = (
-  {
-    width, height, barThickness, handlerWidth, translate, onClick, children,
-  },
-  { color }
-) => {
-  const diff = (height - barThickness) / 2
+const VolumeBar = ({
+  width,
+  height,
+  barThickness,
+  handlerWidth,
+  translate,
+  onClick,
+  children,
+}, { color }) => {
+  const diff = (height - barThickness) / 2;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -31,10 +34,10 @@ const VolumeBar = (
           fill="#E0E0E0"
         />
       </g>
-      {children}
+      { children }
     </svg>
-  )
-}
+  );
+};
 VolumeBar.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
@@ -43,9 +46,9 @@ VolumeBar.propTypes = {
   translate: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
-}
+};
 VolumeBar.contextTypes = {
   color: PropTypes.string,
-}
+};
 
-export default VolumeBar
+export default VolumeBar;

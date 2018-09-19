@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const IconButton = styled.button`
   display: inline-block;
@@ -8,12 +8,12 @@ const IconButton = styled.button`
   border: none;
   background-color: transparent;
   padding: 8px;
-
+  
   color: ${props => props.theme.textPrimaryColor};
-
+  
   :hover {
     cursor: pointer;
   }
-`
+`;
 
-export default IconButton
+export default IconButton;

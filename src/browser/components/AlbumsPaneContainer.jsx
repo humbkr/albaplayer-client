@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
-import LibraryBrowserList from './LibraryBrowserList'
-import AlbumTeaser from './AlbumTeaser'
-import LibraryBrowserListHeader from './LibraryBrowserListHeader'
-import LibraryBrowserPane from './LibraryBrowserPane'
-import { libraryBrowserSortAlbums } from '../actions'
-import AlbumContextMenu from './AlbumContextMenu'
-import { getAlbumsList } from '../selectors'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
+import LibraryBrowserList from './LibraryBrowserList';
+import AlbumTeaser from './AlbumTeaser';
+import LibraryBrowserListHeader from './LibraryBrowserListHeader';
+import LibraryBrowserPane from './LibraryBrowserPane';
+import { libraryBrowserSortAlbums } from '../actions';
+import AlbumContextMenu from './AlbumContextMenu';
+import { getAlbumsList } from '../selectors';
 
 const AlbumsPaneWrapper = styled.div`
   display: inline-block;
@@ -18,22 +18,22 @@ const AlbumsPaneWrapper = styled.div`
   height: 100%;
   border-left: 1px solid ${props => props.theme.separatorColor};
   border-right: 1px solid ${props => props.theme.separatorColor};
-`
+`;
 
 class AlbumsPaneContainer extends Component {
   // Change event handler for LibraryBrowserListHeader.
-  onSortChangeHandler = event => {
+  onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.
-    this.props.onChange(event.target.value)
-  }
+    this.props.onChange(event.target.value);
+  };
 
   render() {
-    const { albums, orderBy, currentPosition } = this.props
+    const { albums, orderBy, currentPosition } = this.props;
     const orderByOptions = [
       { value: 'title', label: 'title' },
       { value: 'year', label: 'year' },
       { value: 'artistName', label: 'artist' },
-    ]
+    ];
 
     return (
       <AlbumsPaneWrapper>
@@ -52,7 +52,7 @@ class AlbumsPaneContainer extends Component {
           <AlbumContextMenu />
         </LibraryBrowserPane>
       </AlbumsPaneWrapper>
-    )
+    );
   }
 }
 AlbumsPaneContainer.propTypes = {
@@ -60,20 +60,25 @@ AlbumsPaneContainer.propTypes = {
   orderBy: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   currentPosition: PropTypes.number.isRequired,
-}
+};
 
-const mapStateToProps = state => ({
-  albums: getAlbumsList(state),
-  orderBy: state.libraryBrowser.sortAlbums,
-  currentPosition: state.libraryBrowser.currentPositionAlbums,
-})
-const mapDispatchToProps = dispatch => ({
-  onChange: sortProperty => {
-    dispatch(libraryBrowserSortAlbums(sortProperty))
-  },
-})
+const mapStateToProps = state => (
+  {
+    albums: getAlbumsList(state),
+    orderBy: state.libraryBrowser.sortAlbums,
+    currentPosition: state.libraryBrowser.currentPositionAlbums,
+  }
+);
+const mapDispatchToProps = dispatch => (
+  {
+    onChange: (sortProperty) => {
+      dispatch(libraryBrowserSortAlbums(sortProperty));
+    },
+  }
+);
+
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(AlbumsPaneContainer)
+  mapDispatchToProps,
+)(AlbumsPaneContainer);

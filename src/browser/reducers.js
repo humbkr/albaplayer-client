@@ -5,10 +5,9 @@ import {
   LIBRARY_BROWSER_SORT_ALBUMS,
   LIBRARY_BROWSER_SORT_TRACKS,
   LIBRARY_BROWSER_SELECT_ALBUM,
-  LIBRARY_BROWSER_INIT_ARTISTS,
-  LIBRARY_BROWSER_SEARCH_FILTER,
-  LIBRARY_BROWSER_SEARCH_UPDATE_INPUT,
-} from './actions'
+  LIBRARY_BROWSER_INIT_ARTISTS, LIBRARY_BROWSER_SEARCH_FILTER, LIBRARY_BROWSER_SEARCH_UPDATE_INPUT,
+} from './actions';
+
 
 const initialState = {
   artists: [],
@@ -31,51 +30,45 @@ const initialState = {
     filteredAlbums: [],
     filteredTracks: [],
   },
-}
+};
 
 function selectArtist(state, action, library) {
-  let filteredAlbums = []
-  let filteredTracks = []
+  let filteredAlbums = [];
+  let filteredTracks = [];
 
   // If the user has searched for something, the filtering is done only on the results already
   // filtered from the search term. Else we filter on the original library.
-  let albumsToFilter
+  let albumsToFilter;
   if (state.search.term === '') {
-    albumsToFilter = [...library.albums]
+    albumsToFilter = [...library.albums];
   } else {
-    albumsToFilter = [...state.search.filteredAlbums]
+    albumsToFilter = [...state.search.filteredAlbums];
   }
 
-  let tracksToFilter
+  let tracksToFilter;
   if (state.search.term === '') {
-    tracksToFilter = [...library.tracks]
+    tracksToFilter = [...library.tracks];
   } else {
-    tracksToFilter = [...state.search.filteredTracks]
+    tracksToFilter = [...state.search.filteredTracks];
   }
 
   if (action.artistId !== '0') {
     if (action.artistId === '1') {
       // Special case for compilations which are grouped under the "Various artists" artist.
-      filteredAlbums = albumsToFilter.filter(
-        item => item.artistId === action.artistId
-      )
-      const albumsIds = filteredAlbums.map(item => item.id)
-      filteredTracks = tracksToFilter.filter(item => albumsIds.includes(item.albumId))
+      filteredAlbums = albumsToFilter.filter(item => (item.artistId === action.artistId));
+      const albumsIds = filteredAlbums.map(item => (item.id));
+      filteredTracks = tracksToFilter.filter(item => (albumsIds.includes(item.albumId)));
     } else {
       // To display all the albums containing tracks of an artist, including
       // the compilations, we can't directly filter albums on artistId, we have
       // to instead display all the albums for which tracks have been found.
-      filteredTracks = tracksToFilter.filter(
-        item => item.artistId === action.artistId
-      )
-      const tracksAlbums = filteredTracks.map(item => item.albumId)
-      filteredAlbums = albumsToFilter.filter(
-        item => action.artistId === '0' || tracksAlbums.includes(item.id)
-      )
+      filteredTracks = tracksToFilter.filter(item => (item.artistId === action.artistId));
+      const tracksAlbums = filteredTracks.map(item => (item.albumId));
+      filteredAlbums = albumsToFilter.filter(item => (action.artistId === '0' || tracksAlbums.includes(item.id)));
     }
   } else {
     // Display all albums.
-    filteredAlbums = albumsToFilter
+    filteredAlbums = albumsToFilter;
   }
 
   return Object.assign({}, state, {
@@ -86,24 +79,24 @@ function selectArtist(state, action, library) {
     currentPositionArtists: action.index,
     albums: filteredAlbums,
     tracks: filteredTracks,
-  })
+  });
 }
 
 function selectAlbum(state, action, library) {
-  let filteredTracks = []
-  let compilationsIds = []
+  let filteredTracks = [];
+  let compilationsIds = [];
 
-  let tracksToFilter
+  let tracksToFilter;
   if (state.search.term === '') {
-    tracksToFilter = [...library.tracks]
+    tracksToFilter = [...library.tracks];
   } else {
-    tracksToFilter = [...state.search.filteredTracks]
+    tracksToFilter = [...state.search.filteredTracks];
   }
 
   if (state.selectedArtists === '1') {
     // We want to display all tracks for all the compilations, keep track (hoho) of the albums
     // being compilations.
-    compilationsIds = state.albums.map(item => item.id)
+    compilationsIds = state.albums.map(item => (item.id));
   }
 
   if (state.selectedArtists !== '0' || action.albumId !== '0') {
@@ -111,30 +104,24 @@ function selectAlbum(state, action, library) {
       if (state.selectedArtists === '1' && action.albumId === '0') {
         // If "various artists" artist selected and no specific album selected,
         // Display all tracks for all the compilations.
-        return compilationsIds.includes(item.albumId)
-      }
-      if (state.selectedArtists === '1') {
+        return (compilationsIds.includes(item.albumId));
+      } else if (state.selectedArtists === '1') {
         // If "various artists" artist selected and specific album selected,
         // Display all tracks for this album.
-        return item.albumId === action.albumId
-      }
-      if (state.selectedArtists !== '0' && action.albumId === '0') {
+        return (item.albumId === action.albumId);
+      } else if (state.selectedArtists !== '0' && action.albumId === '0') {
         // If no specific album selected, display all the tracks of
         // the selected artist for all albums of this artist.
-        return item.artistId === state.selectedArtists
-      }
-      if (state.selectedArtists === '0') {
+        return item.artistId === state.selectedArtists;
+      } else if (state.selectedArtists === '0') {
         // If no artist selected, display all the tracks
         // for the selected album.
-        return item.albumId === action.albumId
+        return (item.albumId === action.albumId);
       }
 
       // Else return the tracks for the selected album and artist.
-      return (
-        item.albumId === action.albumId
-        && item.artistId === state.selectedArtists
-      )
-    })
+      return (item.albumId === action.albumId && item.artistId === state.selectedArtists);
+    });
   }
 
   return Object.assign({}, state, {
@@ -143,7 +130,7 @@ function selectAlbum(state, action, library) {
     selectedAlbums: action.albumId,
     currentPositionAlbums: action.index,
     tracks: filteredTracks,
-  })
+  });
 }
 
 /**
@@ -164,88 +151,89 @@ function selectAlbum(state, action, library) {
 function searchFilter(state, action, library) {
   // Artists and albums are updated with search results from respectively albums + tracks and
   // tracks so we can't directly filter the original lists.
-  const artistsIds = []
-  const albumsIds = []
+  const artistsIds = [];
+  const albumsIds = [];
   // Tracks list can be filtered directly though because we already have all the artists and
   // albums info we need at the moment of browsing the tracks list.
-  const filteredTracks = []
+  const filteredTracks = [];
+
 
   // Get ids of all artists whose name is matching the search term.
   library.artists.forEach((item) => {
     if (item.name.toUpperCase().includes(action.searchTerm.toUpperCase())) {
-      artistsIds.push(item.id)
+      artistsIds.push(item.id);
     }
-  })
+  });
 
   // Store artists and album ids that are not found with a direct match in separate variables.
-  const undirectAlbumsIds = []
-  const undirectArtistsIds = []
+  const undirectAlbumsIds = [];
+  const undirectArtistsIds = [];
 
   library.albums.forEach((item) => {
     // Get ids of all albums whose title is matching the search term.
     if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
-      albumsIds.push(item.id)
+      albumsIds.push(item.id);
 
       // Add album's artist id to the list of artists.
       if (!artistsIds.includes(item.artistId)) {
-        undirectArtistsIds.push(item.artistId)
+        undirectArtistsIds.push(item.artistId);
       }
     }
 
     // Also get all albums of artists that have previously been found.
     if (artistsIds.includes(item.artistId)) {
       if (!albumsIds.includes(item.id)) {
-        undirectAlbumsIds.push(item.id)
+        undirectAlbumsIds.push(item.id);
       }
     }
-  })
+  });
 
   library.tracks.forEach((item) => {
     // Also get all tracks of artists and albums that have previously been found.
     if (artistsIds.includes(item.artistId)) {
       if (!filteredTracks.includes(item)) {
-        filteredTracks.push(item)
+        filteredTracks.push(item);
       }
     }
     if (albumsIds.includes(item.albumId)) {
       if (!filteredTracks.includes(item)) {
-        filteredTracks.push(item)
+        filteredTracks.push(item);
       }
     }
 
     // Get ids of all tracks whose title is matching the search term.
     if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
-      filteredTracks.push(item)
+      filteredTracks.push(item);
 
       // Add track's artist id to the list of artists.
       if (!undirectArtistsIds.includes(item.artistId)) {
-        undirectArtistsIds.push(item.artistId)
+        undirectArtistsIds.push(item.artistId);
       }
 
       // Add track's album id to the list of albums.
       if (!undirectAlbumsIds.includes(item.albumId)) {
-        undirectAlbumsIds.push(item.albumId)
+        undirectAlbumsIds.push(item.albumId);
       }
     }
-  })
+  });
 
   // Add back artists added from album matching.
   undirectArtistsIds.forEach((item) => {
     if (!artistsIds.includes(item)) {
-      artistsIds.push(item)
+      artistsIds.push(item);
     }
-  })
+  });
 
   // Add back albums added from artists matching.
   undirectAlbumsIds.forEach((item) => {
     if (!albumsIds.includes(item)) {
-      albumsIds.push(item)
+      albumsIds.push(item);
     }
-  })
+  });
 
   // Then filter the artists and albums.
-  const filteredArtists = library.artists.filter(item => artistsIds.includes(item.id))
-  const filteredAlbums = library.albums.filter(item => albumsIds.includes(item.id))
+  const filteredArtists = library.artists.filter(item => (artistsIds.includes(item.id)));
+  const filteredAlbums = library.albums.filter(item => (albumsIds.includes(item.id)));
 
   return Object.assign({}, state, {
     ...state,
@@ -264,7 +252,7 @@ function searchFilter(state, action, library) {
     artists: filteredArtists,
     albums: filteredAlbums,
     tracks: filteredTracks,
-  })
+  });
 }
 
 function libraryBrowser(state = initialState, action, library) {
@@ -272,43 +260,40 @@ function libraryBrowser(state = initialState, action, library) {
     case LIBRARY_BROWSER_INIT_ARTISTS:
       return Object.assign({}, state, {
         ...state,
-        artists:
-          state.search.term === ''
-            ? library.artists
-            : state.search.filteredArtists,
-      })
+        artists: (state.search.term === '') ? library.artists : state.search.filteredArtists,
+      });
 
     case LIBRARY_BROWSER_SELECT_ARTIST: {
-      return selectArtist(state, action, library)
+      return selectArtist(state, action, library);
     }
 
     case LIBRARY_BROWSER_SELECT_ALBUM:
-      return selectAlbum(state, action, library)
+      return selectAlbum(state, action, library);
 
     case LIBRARY_BROWSER_SELECT_TRACK:
       return Object.assign({}, state, {
         ...state,
         selectedTracks: action.trackId,
         currentPositionTracks: action.index,
-      })
+      });
 
     case LIBRARY_BROWSER_SORT_ARTISTS:
       return Object.assign({}, state, {
         ...state,
         sortArtists: action.sortProperty,
-      })
+      });
 
     case LIBRARY_BROWSER_SORT_ALBUMS:
       return Object.assign({}, state, {
         ...state,
         sortAlbums: action.sortProperty,
-      })
+      });
 
     case LIBRARY_BROWSER_SORT_TRACKS:
       return Object.assign({}, state, {
         ...state,
         sortTracks: action.sortProperty,
-      })
+      });
 
     case LIBRARY_BROWSER_SEARCH_UPDATE_INPUT:
       return Object.assign({}, state, {
@@ -317,14 +302,14 @@ function libraryBrowser(state = initialState, action, library) {
           ...state.search,
           term: action.searchTerm,
         },
-      })
+      });
 
     case LIBRARY_BROWSER_SEARCH_FILTER:
-      return searchFilter(state, action, library)
+      return searchFilter(state, action, library);
 
     default:
-      return state
+      return state;
   }
 }
 
-export default libraryBrowser
+export default libraryBrowser;

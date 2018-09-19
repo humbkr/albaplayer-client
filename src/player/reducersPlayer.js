@@ -7,7 +7,7 @@ import {
   PLAYER_SET_DURATION,
   PLAYER_SET_PROGRESS,
   PLAYER_SET_VOLUME,
-} from './actionsPlayer'
+} from './actionsPlayer';
 
 /*
  * Calculates the next / previous position in an list of consecutive integers
@@ -23,14 +23,14 @@ import {
  *
  */
 function setCycleNumPos(currentValue, change, length) {
-  let newPos = currentValue + change
+  let newPos = currentValue + change;
   if (newPos >= length) {
-    newPos -= length
+    newPos -= length;
   }
   if (newPos < 0) {
-    newPos += length
+    newPos += length;
   }
-  return newPos
+  return newPos;
 }
 
 const initialState = {
@@ -44,51 +44,49 @@ const initialState = {
   progress: 0,
   // Track currently loaded in audio.
   track: null,
-}
+};
 
 function player(state = initialState, action) {
   switch (action.type) {
     case PLAYER_TOGGLE_PLAY_PAUSE:
       return {
         ...state,
-        playing:
-          action.forcedValue === undefined
-            ? !state.playing
-            : action.forcedValue,
-      }
+        playing: (action.forcedValue === undefined) ? !state.playing : action.forcedValue,
+      };
     case PLAYER_TOGGLE_SHUFFLE:
       return {
         ...state,
         shuffle: !state.shuffle,
-      }
+      };
     case PLAYER_TOGGLE_REPEAT:
       return {
         ...state,
         repeat: setCycleNumPos(state.repeat, 1, 3),
-      }
+      };
     case PLAYER_SET_VOLUME:
       return {
         ...state,
         volume: action.volume,
-      }
+      };
     case PLAYER_SET_TRACK:
       return {
         ...state,
         track: action.track,
-      }
+      };
     case PLAYER_SET_DURATION:
       return {
         ...state,
         duration: action.duration,
-      }
+      };
     case PLAYER_SET_PROGRESS:
       return {
         ...state,
         progress: action.currentTime,
-      }
+      };
     default:
-      return state
+      return state;
   }
 }
 
-export default player
+
+export default player;
