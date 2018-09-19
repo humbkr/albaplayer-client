@@ -3,12 +3,18 @@ module.exports = {
   env: {
     browser: true,
   },
+  parser: 'babel-eslint',
   parserOptions: {
-    parser: 'babel-eslint',
     ecmaVersion: 2018,
     ecmaFeatures: {
       'jsx': true,
-    }
+    },
+    sourceType: 'module',
+  },
+  settings: {
+    react: {
+      version: '16.5',
+    },
   },
   extends: [
     'airbnb',
@@ -20,19 +26,24 @@ module.exports = {
   rules: {
     'linebreak-style': [2, 'unix'],
     'semi': [2, 'never'],
-    'import/newline-after-import': 'warn',
+    'import/export': 'error',
+    'import/first': ['error', 'absolute-first'],
+    'import/newline-after-import': 'error',
     'import/no-unresolved': ['error', { commonjs: true, caseSensitive: true }],
     'import/no-duplicates': 'error',
-    'no-debugger': 'warn',
+    'eqeqeq': ['error', 'always', { null: 'ignore' }],
+    'no-debugger': 'error',
+    'no-console': ['error', { allow: ['warn', 'error'] }],
     'no-multi-assign': ['error'],
     'no-negated-condition': 'off',
-    'no-nested-ternary': 'warn',
+    'no-nested-ternary': 'error',
     'no-unused-vars': [
-      'warn',
+      'error',
       { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
     ],
-    'no-useless-constructor': 'warn',
-    'no-var': 'warn',
+    'no-useless-constructor': 'error',
+    'no-var': 'error',
+    'no-empty': 'error',
     'capitalized-comments': [
       'warn',
       'always',
