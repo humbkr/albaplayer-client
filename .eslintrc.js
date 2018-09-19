@@ -6,18 +6,20 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint',
     ecmaVersion: 2018,
+    ecmaFeatures: {
+      'jsx': true,
+    }
   },
   extends: [
     'airbnb',
-    'prettier',
-    'prettier/react',
   ],
   plugins: [
     'react',
-    'prettier',
   ],
   // Custom rules.
   rules: {
+    'linebreak-style': [2, 'unix'],
+    'semi': [2, 'never'],
     'import/newline-after-import': 'warn',
     'import/no-unresolved': ['error', { commonjs: true, caseSensitive: true }],
     'import/no-duplicates': 'error',
@@ -31,7 +33,6 @@ module.exports = {
     ],
     'no-useless-constructor': 'warn',
     'no-var': 'warn',
-    'prettier/prettier': 'warn',
     'capitalized-comments': [
       'warn',
       'always',
@@ -46,5 +47,14 @@ module.exports = {
     }],
     'no-confusing-arrow': ['warn', { 'allowParens': false }],
     'no-plusplus': ['off'],
+    'comma-dangle': ['error', {
+      'arrays': 'always-multiline',
+      'objects': 'always-multiline',
+      'imports': 'always-multiline',
+      'exports': 'always-multiline',
+      'functions': 'ignore',
+    }],
+    'react/destructuring-assignment': [1, 'never', { 'ignoreClassFields': true }],
+    'react/jsx-one-expression-per-line': [0, {'allow': 'single-child'}],
   },
 };
