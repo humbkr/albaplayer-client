@@ -1,40 +1,40 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import * as Buttons from './buttons/index';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import * as Buttons from './buttons/index'
 import {
   PLAYER_REPEAT_LOOP_ALL,
   PLAYER_REPEAT_LOOP_ONE,
   PLAYER_REPEAT_NO_REPEAT,
-} from '../actionsPlayer';
-import VolumeContainer from './VolumeContainer';
+} from '../actionsPlayer'
+import VolumeContainer from './VolumeContainer'
 
 const ControlsWrapper = styled.div`
   margin: 10px 0;
-`;
+`
 
 const ControlsPrimary = styled.div`
   display: table;
   margin: 0 auto 15px;
-  
+
   > * {
     display: table-cell;
     vertical-align: middle;
   }
-`;
+`
 
 const ControlsSecondary = styled.div`
   display: table;
   margin: 0 auto;
   width: 100%;
-  
+
   > * {
     display: table-cell;
     vertical-align: middle;
     width: 25%;
     text-align: center;
   }
-`;
+`
 
 const Controls = ({
   playing,
@@ -48,34 +48,34 @@ const Controls = ({
   skipToNext,
   skipToPrevious,
 }) => {
-  let PlayPauseButton;
+  let PlayPauseButton
   switch (playing) {
     case true:
-      PlayPauseButton = Buttons.PauseBtn;
-      break;
+      PlayPauseButton = Buttons.PauseBtn
+      break
     case false:
-      PlayPauseButton = Buttons.PlayBtn;
-      break;
+      PlayPauseButton = Buttons.PlayBtn
+      break
     default:
-      break;
+      break
   }
 
-  let RepeatButton;
-  let repeatButtonEnabled = false;
+  let RepeatButton
+  let repeatButtonEnabled = false
   switch (repeat) {
     case PLAYER_REPEAT_NO_REPEAT:
-      RepeatButton = Buttons.CycleBtn;
-      break;
+      RepeatButton = Buttons.CycleBtn
+      break
     case PLAYER_REPEAT_LOOP_ALL:
-      RepeatButton = Buttons.CycleBtn;
-      repeatButtonEnabled = true;
-      break;
+      RepeatButton = Buttons.CycleBtn
+      repeatButtonEnabled = true
+      break
     case PLAYER_REPEAT_LOOP_ONE:
-      RepeatButton = Buttons.RepeatBtn;
-      repeatButtonEnabled = true;
-      break;
+      RepeatButton = Buttons.RepeatBtn
+      repeatButtonEnabled = true
+      break
     default:
-      break;
+      break
   }
 
   return (
@@ -87,18 +87,19 @@ const Controls = ({
       </ControlsPrimary>
       <ControlsSecondary>
         <div>
-          <VolumeContainer
-            volume={volume}
-            setVolume={setVolume}
-          />
+          <VolumeContainer volume={volume} setVolume={setVolume} />
         </div>
-        <div><RepeatButton onClick={toggleRepeat} enabled={repeatButtonEnabled} /></div>
-        <div><Buttons.ShuffleBtn onClick={toggleShuffle} enabled={shuffle} /></div>
+        <div>
+          <RepeatButton onClick={toggleRepeat} enabled={repeatButtonEnabled} />
+        </div>
+        <div>
+          <Buttons.ShuffleBtn onClick={toggleShuffle} enabled={shuffle} />
+        </div>
         <div />
       </ControlsSecondary>
     </ControlsWrapper>
-  );
-};
+  )
+}
 Controls.propTypes = {
   playing: PropTypes.bool.isRequired,
   shuffle: PropTypes.bool.isRequired,
@@ -110,6 +111,6 @@ Controls.propTypes = {
   toggleRepeat: PropTypes.func.isRequired,
   skipToNext: PropTypes.func.isRequired,
   skipToPrevious: PropTypes.func.isRequired,
-};
+}
 
-export default Controls;
+export default Controls

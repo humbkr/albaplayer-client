@@ -1,17 +1,16 @@
-import styled from 'styled-components';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { menuProvider } from 'react-contexify';
-import { libraryBrowserSelectArtist } from '../actions';
-
+import styled from 'styled-components'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { menuProvider } from 'react-contexify'
+import { libraryBrowserSelectArtist } from '../actions'
 
 const ArtistTeaserName = styled.h2`
   display: table-cell;
   vertical-align: middle;
   font-size: 1em;
   font-weight: normal;
-`;
+`
 
 const ArtistTeaserWrapper = styled.div`
   display: table;
@@ -20,20 +19,25 @@ const ArtistTeaserWrapper = styled.div`
   ${props => props.selected ? `background-color: ${props.theme.highlight}` : ''};
   padding: 0 15px;
   cursor: pointer;
-`;
+`
 
 // Needs to be declared as a stateful component so menuProvider can work.
 // eslint-disable-next-line react/prefer-stateless-function
 class ArtistTeaser extends Component {
   render() {
-    const { item, index, onClick, selectedArtists } = this.props;
-    const selected = (selectedArtists === item.id) ? { selected: true } : {};
+    const {
+      item, index, onClick, selectedArtists,
+    } = this.props
+    const selected = selectedArtists === item.id ? { selected: true } : {}
 
     return (
-      <ArtistTeaserWrapper onClick={() => onClick(item.id, index)} {...selected}>
+      <ArtistTeaserWrapper
+        onClick={() => onClick(item.id, index)}
+        {...selected}
+      >
         <ArtistTeaserName>{item.name}</ArtistTeaserName>
       </ArtistTeaserWrapper>
-    );
+    )
   }
 }
 ArtistTeaser.propTypes = {
@@ -44,25 +48,21 @@ ArtistTeaser.propTypes = {
   index: PropTypes.number.isRequired,
   selectedArtists: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-};
+}
 
-const mapStateToProps = state => (
-  {
-    selectedArtists: state.libraryBrowser.selectedArtists,
-  }
-);
-const mapDispatchToProps = dispatch => (
-  {
-    onClick: (artistId, index) => {
-      dispatch(libraryBrowserSelectArtist(artistId, index));
-    },
-  }
-);
+const mapStateToProps = state => ({
+  selectedArtists: state.libraryBrowser.selectedArtists,
+})
+const mapDispatchToProps = dispatch => ({
+  onClick: (artistId, index) => {
+    dispatch(libraryBrowserSelectArtist(artistId, index))
+  },
+})
 
 // Bind the context menu event.
-const addContextMenu = menuProvider('artist-context-menu');
+const addContextMenu = menuProvider('artist-context-menu')
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-)(addContextMenu(ArtistTeaser));
+  mapDispatchToProps
+)(addContextMenu(ArtistTeaser))

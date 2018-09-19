@@ -1,25 +1,25 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { menuProvider } from 'react-contexify';
-import { libraryBrowserSelectAlbum } from '../actions';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { connect } from 'react-redux'
+import { menuProvider } from 'react-contexify'
+import { libraryBrowserSelectAlbum } from '../actions'
 
 const AlbumTeaserTitle = styled.h2`
   font-size: 1em;
   font-weight: normal;
   max-height: 18px;
-`;
+`
 
 const AlbumSubInfo = styled.div`
   color: ${props => props.theme.textSecondaryColor};
   font-size: 0.8em;
   margin-top: 5px;
-`;
+`
 
 const AlbumTeaserArtist = styled.span`
   font-style: italic;
-`;
+`
 
 const AlbumTeaserWrapper = styled.div`
   display: table;
@@ -27,28 +27,30 @@ const AlbumTeaserWrapper = styled.div`
   height: ${props => props.theme.itemHeight};
   ${props => props.selected ? `background-color: ${props.theme.highlight}` : ''};
   padding: 0 15px;
-  overflow: hidden; 
-  white-space: nowrap; 
+  overflow: hidden;
+  white-space: nowrap;
   cursor: pointer;
-  
+
   > div {
     display: table-cell;
     vertical-align: middle;
   }
-`;
+`
 
 // Needs to be declared as a stateful component so menuProvider can work.
 // eslint-disable-next-line react/prefer-stateless-function
 class AlbumTeaser extends Component {
   render() {
-    const { item, index, onClick, selectedAlbums } = this.props;
-    const selected = (selectedAlbums === item.id) ? { selected: true } : {};
+    const {
+      item, index, onClick, selectedAlbums,
+    } = this.props
+    const selected = selectedAlbums === item.id ? { selected: true } : {}
 
-    let artistName = '';
+    let artistName = ''
     if (item.artistName) {
-      artistName = item.artistName;
+      artistName = item.artistName
     } else if (item.id !== '0') {
-      artistName = 'Unknown artist';
+      artistName = 'Unknown artist'
     }
 
     return (
@@ -62,7 +64,7 @@ class AlbumTeaser extends Component {
           </AlbumSubInfo>
         </div>
       </AlbumTeaserWrapper>
-    );
+    )
   }
 }
 AlbumTeaser.propTypes = {
@@ -75,25 +77,21 @@ AlbumTeaser.propTypes = {
   index: PropTypes.number.isRequired,
   selectedAlbums: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-};
+}
 
-const mapStateToProps = state => (
-  {
-    selectedAlbums: state.libraryBrowser.selectedAlbums,
-  }
-);
-const mapDispatchToProps = dispatch => (
-  {
-    onClick: (albumId, index) => {
-      dispatch(libraryBrowserSelectAlbum(albumId, index));
-    },
-  }
-);
+const mapStateToProps = state => ({
+  selectedAlbums: state.libraryBrowser.selectedAlbums,
+})
+const mapDispatchToProps = dispatch => ({
+  onClick: (albumId, index) => {
+    dispatch(libraryBrowserSelectAlbum(albumId, index))
+  },
+})
 
 // Bind the context menu event.
-const addContextMenu = menuProvider('album-context-menu');
+const addContextMenu = menuProvider('album-context-menu')
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-)(addContextMenu(AlbumTeaser));
+  mapDispatchToProps
+)(addContextMenu(AlbumTeaser))

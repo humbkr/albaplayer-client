@@ -1,3 +1,3 @@
-const getBackendUrl = () => (process.env.REACT_APP_BACKEND_URL);
+const getBackendUrl = () => process.env.REACT_APP_BACKEND_URL
 
-export default getBackendUrl;
+export default getBackendUrl

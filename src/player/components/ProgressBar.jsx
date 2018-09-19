@@ -1,17 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-const ProgressBar = ({
-  width,
-  height,
-  barHeight,
-  translate,
-  onMouseDown,
-  onMouseOver,
-  onMouseOut,
-  children,
-}, { color }) => {
-  const diff = (height - barHeight) / 2;
+const ProgressBar = (
+  {
+    width,
+    height,
+    barHeight,
+    translate,
+    onMouseDown,
+    onMouseOver,
+    onMouseOut,
+    children,
+  },
+  { color }
+) => {
+  const diff = (height - barHeight) / 2
 
   return (
     <svg
@@ -24,20 +27,8 @@ const ProgressBar = ({
     >
       <g onMouseDown={onMouseDown}>
         {/* A rect to expand the area of clicking */}
-        <rect
-          x={0}
-          y={0}
-          width={width}
-          height={height}
-          opacity="0"
-        />
-        <rect
-          x={0}
-          y={diff}
-          width={width}
-          height={barHeight}
-          fill="#747474"
-        />
+        <rect x={0} y={0} width={width} height={height} opacity="0" />
+        <rect x={0} y={diff} width={width} height={barHeight} fill="#747474" />
         <rect
           x={0}
           y={diff}
@@ -46,10 +37,10 @@ const ProgressBar = ({
           fill={color}
         />
       </g>
-      { children }
+      {children}
     </svg>
-  );
-};
+  )
+}
 ProgressBar.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
@@ -59,10 +50,9 @@ ProgressBar.propTypes = {
   onMouseOver: PropTypes.func.isRequired,
   onMouseOut: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
-};
+}
 ProgressBar.contextTypes = {
   color: PropTypes.string,
-};
+}
 
-
-export default ProgressBar;
+export default ProgressBar
