@@ -1,10 +1,19 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
+import LibraryBrowserListItem from './LibraryBrowserListItem'
 
 const LibraryBrowserPane = styled.div`
   display: flex;
   flex-flow: column;
   height: 100%;
   width: 100%;
-`;
 
-export default LibraryBrowserPane;
+  :focus-within {
+    // Can't find a way to manage that directly in the
+    // LibraryBrowserListItem component.
+    ${LibraryBrowserListItem}.selected {
+      ${props => `background-color: ${props.theme.highlightFocus}`};
+    }
+  }
+`
+
+export default LibraryBrowserPane

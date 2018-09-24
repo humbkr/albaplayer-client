@@ -52,7 +52,11 @@ class LibraryBrowser extends Component {
     if (e.keyCode === 37) {
       // eslint-disable-next-line react/no-find-dom-node
       ReactDOM.findDOMNode(this.artistsPane.current).focus()
-    } else if (e.keyCode === 39) {
+      // eslint-disable-next-line react/no-find-dom-node
+    } else if (
+      e.keyCode === 39
+      && ReactDOM.findDOMNode(this.tracksPane.current)
+    ) {
       // eslint-disable-next-line react/no-find-dom-node
       ReactDOM.findDOMNode(this.tracksPane.current).focus()
     }

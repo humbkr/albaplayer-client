@@ -35,6 +35,7 @@ class LibraryBrowserList extends React.Component {
 
     return (
       <LibraryBrowserListItem
+        className={selected.selected ? 'selected' : ''}
         border
         key={key}
         style={style}
@@ -54,6 +55,7 @@ class LibraryBrowserList extends React.Component {
     return (
       <LibraryBrowserListWrapper onKeyDown={switchPaneHandler}>
         <ArrowKeyStepper
+          // This class is used to manage the focused style in LibraryBrowserPane.
           className="autosizer-wrapper"
           columnCount={1}
           rowCount={items.length}
@@ -75,7 +77,11 @@ class LibraryBrowserList extends React.Component {
                   rowHeight={parseInt(this.props.theme.itemHeight, 0)}
                   rowCount={items.length}
                   rowRenderer={({ key, index, style }) => this.rowRenderer({
-                    items, scrollToRow, key, index, style,
+                    items,
+                    scrollToRow,
+                    key,
+                    index,
+                    style,
                   })
                   }
                   onRowsRendered={({ startIndex, stopIndex }) => {

@@ -1,6 +1,7 @@
 const themeDefault = {
   itemHeight: '50px',
-  highlight: '#cccccc',
+  highlight: '#dcdcdc',
+  highlightFocus: '#67dbd0',
   separatorColor: '#efeff2',
   backgroundColor: '#ffffff',
   textPrimaryColor: '#000000',
@@ -35,6 +36,6 @@ const themeDefault = {
     colorHover: '#00bdab',
     colorDisabled: '#b2b2b2',
   },
-};
+}
 
-export default themeDefault;
+export default themeDefault
