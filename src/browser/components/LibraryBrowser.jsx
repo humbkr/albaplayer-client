@@ -39,6 +39,11 @@ class LibraryBrowser extends Component {
   componentDidMount() {
     const dispatch = this.props.dispatch
     dispatch(libraryBrowserInit())
+
+    // Give focus to the artist pane so the user is directly able
+    // to browse with the keyboard.
+    // eslint-disable-next-line react/no-find-dom-node
+    ReactDOM.findDOMNode(this.artistsPane.current).focus()
   }
 
   handleSwitchPaneArtists = (e) => {
@@ -52,9 +57,9 @@ class LibraryBrowser extends Component {
     if (e.keyCode === 37) {
       // eslint-disable-next-line react/no-find-dom-node
       ReactDOM.findDOMNode(this.artistsPane.current).focus()
-      // eslint-disable-next-line react/no-find-dom-node
     } else if (
       e.keyCode === 39
+      // eslint-disable-next-line react/no-find-dom-node
       && ReactDOM.findDOMNode(this.tracksPane.current)
     ) {
       // eslint-disable-next-line react/no-find-dom-node
