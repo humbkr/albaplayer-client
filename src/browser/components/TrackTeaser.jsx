@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { menuProvider } from 'react-contexify';
-
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { connect } from 'react-redux'
+import { ContextMenuProvider } from 'react-contexify'
 
 const TrackTeaserNumber = styled.div`
   display: table-cell;
@@ -11,14 +10,14 @@ const TrackTeaserNumber = styled.div`
   text-align: center;
   vertical-align: middle;
   font-size: 0.8em;
-`;
+`
 
 const TrackTeaserName = styled.h2`
   display: table-cell;
   font-size: 1em;
   font-weight: normal;
   vertical-align: middle;
-`;
+`
 
 const TrackWrapper = styled.div`
   display: table;
@@ -26,20 +25,22 @@ const TrackWrapper = styled.div`
   height: ${props => props.theme.itemHeight};
   padding: 0 15px 0 0;
   cursor: pointer;
-`;
+`
 
 // Needs to be declared as a stateful component so menuProvider can work.
 // eslint-disable-next-line react/prefer-stateless-function
 class TrackTeaser extends Component {
   render() {
-    const { item } = this.props;
+    const { item } = this.props
 
     return (
-      <TrackWrapper>
-        <TrackTeaserNumber>{item.number}</TrackTeaserNumber>
-        <TrackTeaserName>{item.title}</TrackTeaserName>
-      </TrackWrapper>
-    );
+      <ContextMenuProvider id="track-context-menu">
+        <TrackWrapper id={item.id}>
+          <TrackTeaserNumber>{item.number}</TrackTeaserNumber>
+          <TrackTeaserName>{item.title}</TrackTeaserName>
+        </TrackWrapper>
+      </ContextMenuProvider>
+    )
   }
 }
 TrackTeaser.propTypes = {
@@ -49,15 +50,10 @@ TrackTeaser.propTypes = {
     duration: PropTypes.number,
     number: PropTypes.number,
   }).isRequired,
-};
+}
 
-const mapStateToProps = state => (
-  {
-    selectedTracks: state.libraryBrowser.selectedTracks,
-  }
-);
+const mapStateToProps = state => ({
+  selectedTracks: state.libraryBrowser.selectedTracks,
+})
 
-// Bind the context menu event.
-const addContextMenu = menuProvider('track-context-menu');
-
-export default connect(mapStateToProps)(addContextMenu(TrackTeaser));
+export default connect(mapStateToProps)(TrackTeaser)

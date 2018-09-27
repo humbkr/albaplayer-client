@@ -6542,7 +6542,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
@@ -6688,12 +6688,12 @@ react-apollo@^2.0.4:
     lodash "^4.17.10"
     prop-types "^15.6.0"
 
-react-contexify@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/react-contexify/-/react-contexify-2.1.4.tgz#747a77e28dd378707eff18dac5a1a35197a362c1"
+react-contexify@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-contexify/-/react-contexify-3.0.3.tgz#30d5c349dbc7726b03f9874d16e30e79ee552877"
   dependencies:
     classnames "^2.2.5"
-    prop-types "^15.5.9"
+    prop-types "^15.6.0"
 
 react-debounce-input@^3.2.0:
   version "3.2.0"
