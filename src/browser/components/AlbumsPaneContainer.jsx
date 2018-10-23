@@ -9,6 +9,8 @@ import LibraryBrowserPane from './LibraryBrowserPane'
 import { libraryBrowserSelectAlbum, libraryBrowserSortAlbums } from '../actions'
 import AlbumContextMenu from './AlbumContextMenu'
 import { getAlbumsList } from '../selectors'
+import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import { addAlbum, playAlbum } from '../../player/actions'
 
 const AlbumsPaneWrapper = styled.div`
   display: inline-block;
@@ -21,10 +23,36 @@ const AlbumsPaneWrapper = styled.div`
 `
 
 class AlbumsPaneContainer extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalIsOpen: false,
+    }
+  }
+
   // Change event handler for LibraryBrowserListHeader.
   onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.
     this.props.onSortChange(event.target.value)
+  }
+
+  onKeyDown = (e) => {
+    const { switchPaneHandler } = this.props
+
+    if (e.keyCode === 13) {
+      this.openModal()
+    } else {
+      switchPaneHandler(e)
+    }
+  }
+
+  openModal = () => {
+    this.setState({ modalIsOpen: true })
+  }
+
+  closeModal = () => {
+    this.setState({ modalIsOpen: false })
   }
 
   render() {
@@ -32,9 +60,11 @@ class AlbumsPaneContainer extends Component {
       albums,
       orderBy,
       currentPosition,
+      currentAlbum,
       onItemClick,
-      switchPaneHandler,
       forwardedRef,
+      handlePlayNow,
+      handleAddToQueue,
     } = this.props
 
     const orderByOptions = [
@@ -58,9 +88,17 @@ class AlbumsPaneContainer extends Component {
             itemDisplay={AlbumTeaser}
             currentPosition={currentPosition}
             onItemClick={onItemClick}
-            switchPaneHandler={switchPaneHandler}
+            onKeyDown={this.onKeyDown}
           />
           <AlbumContextMenu />
+          <KeyboardNavPlayPopup
+            id="albums-nav-modal"
+            onClose={this.closeModal}
+            isOpen={this.state.modalIsOpen}
+            itemId={currentAlbum}
+            handlePlayNow={handlePlayNow}
+            handleAddToQueue={handleAddToQueue}
+          />
         </LibraryBrowserPane>
       </AlbumsPaneWrapper>
     )
@@ -77,16 +115,20 @@ AlbumsPaneContainer.propTypes = {
   ).isRequired,
   orderBy: PropTypes.string.isRequired,
   currentPosition: PropTypes.number.isRequired,
+  currentAlbum: PropTypes.string.isRequired,
   onSortChange: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   switchPaneHandler: PropTypes.func.isRequired,
   forwardedRef: PropTypes.shape().isRequired,
+  handlePlayNow: PropTypes.func.isRequired,
+  handleAddToQueue: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   albums: getAlbumsList(state),
   orderBy: state.libraryBrowser.sortAlbums,
   currentPosition: state.libraryBrowser.currentPositionAlbums,
+  currentAlbum: state.libraryBrowser.selectedAlbums,
 })
 const mapDispatchToProps = dispatch => ({
   onSortChange: (sortProperty) => {
@@ -94,6 +136,12 @@ const mapDispatchToProps = dispatch => ({
   },
   onItemClick: (itemId, index) => {
     dispatch(libraryBrowserSelectAlbum(itemId, index))
+  },
+  handlePlayNow: (albumId) => {
+    dispatch(playAlbum(albumId))
+  },
+  handleAddToQueue: (albumId) => {
+    dispatch(addAlbum(albumId))
   },
 })
 

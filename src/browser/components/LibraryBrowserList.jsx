@@ -49,11 +49,11 @@ class LibraryBrowserList extends React.Component {
   }
 
   render() {
-    const { items, switchPaneHandler, forwardedRef } = this.props
+    const { items, onKeyDown, forwardedRef } = this.props
     const scrollToRow = this.props.currentPosition
 
     return (
-      <LibraryBrowserListWrapper onKeyDown={switchPaneHandler}>
+      <LibraryBrowserListWrapper onKeyDown={onKeyDown}>
         <ArrowKeyStepper
           // This class is used to manage the focused style in LibraryBrowserPane.
           className="autosizer-wrapper"
@@ -107,7 +107,7 @@ LibraryBrowserList.propTypes = {
   itemDisplay: PropTypes.func.isRequired,
   currentPosition: PropTypes.number.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  switchPaneHandler: PropTypes.func.isRequired,
+  onKeyDown: PropTypes.func.isRequired,
   forwardedRef: PropTypes.shape().isRequired,
 }
 

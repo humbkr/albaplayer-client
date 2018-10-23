@@ -1,7 +1,8 @@
 const themeDefault = {
   itemHeight: '50px',
   highlight: '#dcdcdc',
-  highlightFocus: '#67dbd0',
+  highlightFocus: '#00bdab',
+  highlightText: '#007166',
   separatorColor: '#efeff2',
   backgroundColor: '#ffffff',
   textPrimaryColor: '#000000',

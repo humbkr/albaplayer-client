@@ -9,6 +9,8 @@ import { libraryBrowserSelectTrack, libraryBrowserSortTracks } from '../actions'
 import TrackContextMenu from './TrackContextMenu'
 import LibraryBrowserPane from './LibraryBrowserPane'
 import { getTracksList } from '../selectors'
+import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import { addTrack, playTrack } from '../../player/actions'
 
 const TracksPaneWrapper = styled.div`
   display: inline-block;
@@ -29,10 +31,36 @@ const NoTracks = styled.div`
 `
 
 class TracksPaneContainer extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalIsOpen: false,
+    }
+  }
+
   // Change event handler for LibraryBrowserListHeader.
   onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.
     this.props.onSortChange(event.target.value)
+  }
+
+  onKeyDown = (e) => {
+    const { switchPaneHandler } = this.props
+
+    if (e.keyCode === 13) {
+      this.openModal()
+    } else {
+      switchPaneHandler(e)
+    }
+  }
+
+  openModal = () => {
+    this.setState({ modalIsOpen: true })
+  }
+
+  closeModal = () => {
+    this.setState({ modalIsOpen: false })
   }
 
   render() {
@@ -40,9 +68,11 @@ class TracksPaneContainer extends Component {
       tracks,
       orderBy,
       currentPosition,
+      currentTrack,
       onItemClick,
-      switchPaneHandler,
       forwardedRef,
+      handlePlayNow,
+      handleAddToQueue,
     } = this.props
 
     const orderByOptions = [
@@ -68,13 +98,21 @@ class TracksPaneContainer extends Component {
               itemDisplay={TrackTeaser}
               currentPosition={currentPosition}
               onItemClick={onItemClick}
-              switchPaneHandler={switchPaneHandler}
+              onKeyDown={this.onKeyDown}
             />
           )}
           {tracks.length === 1 && (
             <NoTracks>Select an artist or album</NoTracks>
           )}
           <TrackContextMenu />
+          <KeyboardNavPlayPopup
+            id="tracks-nav-modal"
+            onClose={this.closeModal}
+            isOpen={this.state.modalIsOpen}
+            itemId={currentTrack}
+            handlePlayNow={handlePlayNow}
+            handleAddToQueue={handleAddToQueue}
+          />
         </LibraryBrowserPane>
       </TracksPaneWrapper>
     )
@@ -89,16 +127,20 @@ TracksPaneContainer.propTypes = {
   ).isRequired,
   orderBy: PropTypes.string.isRequired,
   currentPosition: PropTypes.number.isRequired,
+  currentTrack: PropTypes.string.isRequired,
   onSortChange: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   switchPaneHandler: PropTypes.func.isRequired,
   forwardedRef: PropTypes.shape().isRequired,
+  handlePlayNow: PropTypes.func.isRequired,
+  handleAddToQueue: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   tracks: getTracksList(state),
   orderBy: state.libraryBrowser.sortTracks,
   currentPosition: state.libraryBrowser.currentPositionTracks,
+  currentTrack: state.libraryBrowser.selectedTracks,
 })
 const mapDispatchToProps = dispatch => ({
   onSortChange: (sortProperty) => {
@@ -106,6 +148,12 @@ const mapDispatchToProps = dispatch => ({
   },
   onItemClick: (itemId, index) => {
     dispatch(libraryBrowserSelectTrack(itemId, index))
+  },
+  handlePlayNow: (trackId) => {
+    dispatch(playTrack(trackId))
+  },
+  handleAddToQueue: (trackId) => {
+    dispatch(addTrack(trackId))
   },
 })
 

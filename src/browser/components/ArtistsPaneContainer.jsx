@@ -12,6 +12,8 @@ import {
 } from '../actions'
 import ArtistContextMenu from './ArtistContextMenu'
 import { getArtistsList } from '../selectors'
+import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import { addArtist, playArtist } from '../../player/actions'
 
 const ArtistsPaneWrapper = styled.div`
   display: inline-block;
@@ -22,10 +24,36 @@ const ArtistsPaneWrapper = styled.div`
 `
 
 class ArtistsPaneContainer extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalIsOpen: false,
+    }
+  }
+
   // Change event handler for LibraryBrowserListHeader.
   onSortChangeHandler = (event) => {
     // Pass the new selected sort option to the dispatcher.
     this.props.onSortChange(event.target.value)
+  }
+
+  onKeyDown = (e) => {
+    const { switchPaneHandler } = this.props
+
+    if (e.keyCode === 13) {
+      this.openModal()
+    } else {
+      switchPaneHandler(e)
+    }
+  }
+
+  openModal = () => {
+    this.setState({ modalIsOpen: true })
+  }
+
+  closeModal = () => {
+    this.setState({ modalIsOpen: false })
   }
 
   render() {
@@ -33,9 +61,11 @@ class ArtistsPaneContainer extends React.Component {
       artists,
       orderBy,
       currentPosition,
+      currentArtist,
       onItemClick,
-      switchPaneHandler,
       forwardedRef,
+      handlePlayNow,
+      handleAddToQueue,
     } = this.props
 
     const orderByOptions = [{ value: 'name', label: 'name' }]
@@ -49,14 +79,22 @@ class ArtistsPaneContainer extends React.Component {
             orderByOptions={orderByOptions}
             onChange={this.onSortChangeHandler}
           />
-          <ArtistContextMenu />
           <LibraryBrowserList
             ref={forwardedRef}
             items={artists}
             itemDisplay={ArtistTeaser}
             currentPosition={currentPosition}
             onItemClick={onItemClick}
-            switchPaneHandler={switchPaneHandler}
+            onKeyDown={this.onKeyDown}
+          />
+          <ArtistContextMenu />
+          <KeyboardNavPlayPopup
+            id="artists-nav-modal"
+            onClose={this.closeModal}
+            isOpen={this.state.modalIsOpen}
+            itemId={currentArtist}
+            handlePlayNow={handlePlayNow}
+            handleAddToQueue={handleAddToQueue}
           />
         </LibraryBrowserPane>
       </ArtistsPaneWrapper>
@@ -72,16 +110,20 @@ ArtistsPaneContainer.propTypes = {
   ).isRequired,
   orderBy: PropTypes.string.isRequired,
   currentPosition: PropTypes.number.isRequired,
+  currentArtist: PropTypes.string.isRequired,
   onSortChange: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   switchPaneHandler: PropTypes.func.isRequired,
   forwardedRef: PropTypes.shape().isRequired,
+  handlePlayNow: PropTypes.func.isRequired,
+  handleAddToQueue: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   artists: getArtistsList(state),
   orderBy: state.libraryBrowser.sortArtists,
   currentPosition: state.libraryBrowser.currentPositionArtists,
+  currentArtist: state.libraryBrowser.selectedArtists,
 })
 const mapDispatchToProps = dispatch => ({
   onSortChange: (sortProperty) => {
@@ -89,6 +131,12 @@ const mapDispatchToProps = dispatch => ({
   },
   onItemClick: (itemId, index) => {
     dispatch(libraryBrowserSelectArtist(itemId, index))
+  },
+  handlePlayNow: (artistId) => {
+    dispatch(playArtist(artistId))
+  },
+  handleAddToQueue: (artistId) => {
+    dispatch(addArtist(artistId))
   },
 })
 
