@@ -2,11 +2,11 @@ const themeDefault = {
   itemHeight: '50px',
   highlight: '#dcdcdc',
   highlightFocus: '#00bdab',
-  highlightText: '#007166',
   separatorColor: '#efeff2',
   backgroundColor: '#ffffff',
   textPrimaryColor: '#000000',
   textSecondaryColor: '#92929d',
+  textHighlightFocusColor: '#007166',
 
   messages: {
     info: {

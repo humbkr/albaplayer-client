@@ -114,15 +114,18 @@ function selectAlbum(state, action, library) {
         // If "various artists" artist selected and no specific album selected,
         // Display all tracks for all the compilations.
         return compilationsIds.includes(item.albumId)
-      } if (state.selectedArtists === '1') {
+      }
+      if (state.selectedArtists === '1') {
         // If "various artists" artist selected and specific album selected,
         // Display all tracks for this album.
         return item.albumId === action.albumId
-      } if (state.selectedArtists !== '0' && action.albumId === '0') {
+      }
+      if (state.selectedArtists !== '0' && action.albumId === '0') {
         // If no specific album selected, display all the tracks of
         // the selected artist for all albums of this artist.
         return item.artistId === state.selectedArtists
-      } if (state.selectedArtists === '0') {
+      }
+      if (state.selectedArtists === '0') {
         // If no artist selected, display all the tracks
         // for the selected album.
         return item.albumId === action.albumId
@@ -167,7 +170,7 @@ function searchFilter(state, action, library) {
   const artistsIds = []
   const albumsIds = []
   // Tracks list can be filtered directly though because we already have all the artists and
-  // albums info we need at the moment of browsing the tracks list.
+  // albums info we need at the moment of filtering the tracks list.
   const filteredTracks = []
 
   // Get ids of all artists whose name is matching the search term.
@@ -215,7 +218,9 @@ function searchFilter(state, action, library) {
 
     // Get ids of all tracks whose title is matching the search term.
     if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
-      filteredTracks.push(item)
+      if (!filteredTracks.includes(item)) {
+        filteredTracks.push(item)
+      }
 
       // Add track's artist id to the list of artists.
       if (!undirectArtistsIds.includes(item.artistId)) {

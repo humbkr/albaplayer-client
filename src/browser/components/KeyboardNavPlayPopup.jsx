@@ -6,6 +6,12 @@ import Modal from 'react-modal'
 // http://reactcommunity.org/react-modal/accessibility/
 Modal.setAppElement('#root')
 
+const ModalContent = styled.div`
+  > div:first-child {
+    margin-bottom: 10px;
+  }
+`
+
 const Action = styled.div`
   display: inline-block;
   border: 1px solid #000000;
@@ -21,6 +27,7 @@ const modalStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
+    boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
   },
   overlay: {
     backgroundColor: '',
@@ -72,7 +79,7 @@ class KeyboardNavPlayPopup extends React.Component {
         onRequestClose={onClose}
         onAfterOpen={this.afterOpenModal}
       >
-        <div
+        <ModalContent
           role="button"
           ref={this.modal}
           tabIndex="0"
@@ -85,7 +92,7 @@ class KeyboardNavPlayPopup extends React.Component {
           <div>
             Press <Action>Space</Action> to add to the current playlist
           </div>
-        </div>
+        </ModalContent>
       </Modal>
     )
   }

@@ -43,7 +43,7 @@ class LibraryBrowserList extends React.Component {
         onClick={() => this.selectRow({ scrollToRow: index, itemId: items[index].id })
         }
       >
-        <Display item={items[index]} index={index} />
+        <Display item={items[index]} index={index} {...selected} />
       </LibraryBrowserListItem>
     )
   }

@@ -13,6 +13,9 @@ const LibraryBrowserPane = styled.div`
     ${LibraryBrowserListItem}.selected {
       ${props => `background-color: ${props.theme.highlightFocus}`};
     }
+    ${LibraryBrowserListItem} .selected {
+      ${props => `color: ${props.theme.textHighlightFocusColor}`};
+    }
   }
 `
 

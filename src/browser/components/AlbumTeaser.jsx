@@ -11,7 +11,9 @@ const AlbumTeaserTitle = styled.h2`
 `
 
 const AlbumSubInfo = styled.div`
-  color: ${props => props.theme.textSecondaryColor};
+  color: ${props => props.selected
+    ? props.theme.textHighlightColor
+    : props.theme.textSecondaryColor};
   font-size: 0.8em;
   margin-top: 5px;
 `
@@ -39,7 +41,7 @@ const AlbumTeaserWrapper = styled.div`
 // eslint-disable-next-line react/prefer-stateless-function
 class AlbumTeaser extends Component {
   render() {
-    const { item } = this.props
+    const { item, selected } = this.props
 
     let artistName = ''
     if (item.artistName) {
@@ -53,7 +55,7 @@ class AlbumTeaser extends Component {
         <AlbumTeaserWrapper id={item.id}>
           <div>
             <AlbumTeaserTitle>{item.title}</AlbumTeaserTitle>
-            <AlbumSubInfo>
+            <AlbumSubInfo className={selected ? 'selected' : ''}>
               {item.year && <span>{item.year}</span>}
               {item.year && ' - '}
               <AlbumTeaserArtist>{artistName}</AlbumTeaserArtist>
@@ -71,6 +73,7 @@ AlbumTeaser.propTypes = {
     artistName: PropTypes.string,
     year: PropTypes.string,
   }).isRequired,
+  selected: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({
