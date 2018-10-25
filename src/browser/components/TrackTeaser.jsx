@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -27,21 +27,17 @@ const TrackWrapper = styled.div`
   cursor: pointer;
 `
 
-// Needs to be declared as a stateful component so menuProvider can work.
-// eslint-disable-next-line react/prefer-stateless-function
-class TrackTeaser extends Component {
-  render() {
-    const { item } = this.props
+const TrackTeaser = (props) => {
+  const { item } = props
 
-    return (
-      <ContextMenuProvider id="track-context-menu">
-        <TrackWrapper id={item.id}>
-          <TrackTeaserNumber>{item.number}</TrackTeaserNumber>
-          <TrackTeaserName>{item.title}</TrackTeaserName>
-        </TrackWrapper>
-      </ContextMenuProvider>
-    )
-  }
+  return (
+    <ContextMenuProvider id="track-context-menu">
+      <TrackWrapper id={item.id}>
+        <TrackTeaserNumber>{item.number}</TrackTeaserNumber>
+        <TrackTeaserName>{item.title}</TrackTeaserName>
+      </TrackWrapper>
+    </ContextMenuProvider>
+  )
 }
 TrackTeaser.propTypes = {
   item: PropTypes.shape({

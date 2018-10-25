@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { ContextMenuProvider } from 'react-contexify'
@@ -19,20 +19,16 @@ const ArtistTeaserWrapper = styled.div`
   cursor: pointer;
 `
 
-// Needs to be declared as a stateful component so menuProvider can work.
-// eslint-disable-next-line react/prefer-stateless-function
-class ArtistTeaser extends Component {
-  render() {
-    const { item } = this.props
+const ArtistTeaser = (props) => {
+  const { item } = props
 
-    return (
-      <ContextMenuProvider id="artist-context-menu">
-        <ArtistTeaserWrapper id={item.id}>
-          <ArtistTeaserName>{item.name}</ArtistTeaserName>
-        </ArtistTeaserWrapper>
-      </ContextMenuProvider>
-    )
-  }
+  return (
+    <ContextMenuProvider id="artist-context-menu">
+      <ArtistTeaserWrapper id={item.id}>
+        <ArtistTeaserName>{item.name}</ArtistTeaserName>
+      </ArtistTeaserWrapper>
+    </ContextMenuProvider>
+  )
 }
 ArtistTeaser.propTypes = {
   item: PropTypes.shape({

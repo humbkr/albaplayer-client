@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -37,34 +37,30 @@ const AlbumTeaserWrapper = styled.div`
   }
 `
 
-// Needs to be declared as a stateful component so menuProvider can work.
-// eslint-disable-next-line react/prefer-stateless-function
-class AlbumTeaser extends Component {
-  render() {
-    const { item, selected } = this.props
+const AlbumTeaser = (props) => {
+  const { item, selected } = props
 
-    let artistName = ''
-    if (item.artistName) {
-      artistName = item.artistName
-    } else if (item.id !== '0') {
-      artistName = 'Unknown artist'
-    }
-
-    return (
-      <ContextMenuProvider id="album-context-menu">
-        <AlbumTeaserWrapper id={item.id}>
-          <div>
-            <AlbumTeaserTitle>{item.title}</AlbumTeaserTitle>
-            <AlbumSubInfo className={selected ? 'selected' : ''}>
-              {item.year && <span>{item.year}</span>}
-              {item.year && ' - '}
-              <AlbumTeaserArtist>{artistName}</AlbumTeaserArtist>
-            </AlbumSubInfo>
-          </div>
-        </AlbumTeaserWrapper>
-      </ContextMenuProvider>
-    )
+  let artistName = ''
+  if (item.artistName) {
+    artistName = item.artistName
+  } else if (item.id !== '0') {
+    artistName = 'Unknown artist'
   }
+
+  return (
+    <ContextMenuProvider id="album-context-menu">
+      <AlbumTeaserWrapper id={item.id}>
+        <div>
+          <AlbumTeaserTitle>{item.title}</AlbumTeaserTitle>
+          <AlbumSubInfo className={selected ? 'selected' : ''}>
+            {item.year && <span>{item.year}</span>}
+            {item.year && ' - '}
+            <AlbumTeaserArtist>{artistName}</AlbumTeaserArtist>
+          </AlbumSubInfo>
+        </div>
+      </AlbumTeaserWrapper>
+    </ContextMenuProvider>
+  )
 }
 AlbumTeaser.propTypes = {
   item: PropTypes.shape({
@@ -74,6 +70,9 @@ AlbumTeaser.propTypes = {
     year: PropTypes.string,
   }).isRequired,
   selected: PropTypes.bool,
+}
+AlbumTeaser.defaultProps = {
+  selected: false,
 }
 
 const mapStateToProps = state => ({
