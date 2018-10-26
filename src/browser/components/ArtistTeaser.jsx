@@ -23,8 +23,8 @@ const ArtistTeaser = (props) => {
   const { item } = props
 
   return (
-    <ContextMenuProvider id="artist-context-menu">
-      <ArtistTeaserWrapper id={item.id}>
+    <ContextMenuProvider id="artist-context-menu" data={item}>
+      <ArtistTeaserWrapper>
         <ArtistTeaserName>{item.name}</ArtistTeaserName>
       </ArtistTeaserWrapper>
     </ContextMenuProvider>

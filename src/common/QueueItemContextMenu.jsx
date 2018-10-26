@@ -8,14 +8,16 @@ import { queueRemoveTrack } from '../player/actionsQueue'
 import { setTrackFromQueue } from '../player/actions'
 
 class QueueItemContextMenu extends Component {
-  handlePlayTrack = ({ ref }) => {
-    const item = ref.props.item
-    this.props.handlePlayTrack(item.position - 1)
+  handlePlayTrack = ({ dataFromProvider }) => {
+    // Position is the position to display so it starts ar 1,
+    // bit the position in the state queue starts from 0.
+    this.props.handlePlayTrack(dataFromProvider.position - 1)
   }
 
-  handleRemoveTrack = ({ ref }) => {
-    const item = ref.props.item
-    this.props.handleRemoveTrack(item.position - 1)
+  handleRemoveTrack = ({ dataFromProvider }) => {
+    // Position is the position to display so it starts ar 1,
+    // bit the position in the state queue starts from 0.
+    this.props.handleRemoveTrack(dataFromProvider.position - 1)
   }
 
   render() {

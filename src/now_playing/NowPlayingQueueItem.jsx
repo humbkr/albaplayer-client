@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { ContextMenuProvider } from 'react-contexify'
@@ -29,24 +29,20 @@ const QueueItemTrackTitle = styled.div`
   vertical-align: middle;
 `
 
-// Needs to be declared as a stateful component so menuProvider can work.
-// eslint-disable-next-line react/prefer-stateless-function
-class NowPlayingQueueItem extends Component {
-  render() {
-    const { item, itemHeight, current } = this.props
+const NowPlayingQueueItem = (props) => {
+  const { item, itemHeight, current } = props
 
-    return (
-      <ContextMenuProvider id="queue-item-context-menu">
-        <QueueItemWrapper
-          style={{ height: itemHeight }}
-          isCurrent={current + 1 === item.position}
-        >
-          <QueueItemPosition>{item.position}</QueueItemPosition>
-          <QueueItemTrackTitle>{item.title}</QueueItemTrackTitle>
-        </QueueItemWrapper>
-      </ContextMenuProvider>
-    )
-  }
+  return (
+    <ContextMenuProvider id="queue-item-context-menu" data={item}>
+      <QueueItemWrapper
+        style={{ height: itemHeight }}
+        isCurrent={current + 1 === item.position}
+      >
+        <QueueItemPosition>{item.position}</QueueItemPosition>
+        <QueueItemTrackTitle>{item.title}</QueueItemTrackTitle>
+      </QueueItemWrapper>
+    </ContextMenuProvider>
+  )
 }
 NowPlayingQueueItem.propTypes = {
   item: PropTypes.shape({

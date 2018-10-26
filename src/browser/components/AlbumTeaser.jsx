@@ -48,8 +48,8 @@ const AlbumTeaser = (props) => {
   }
 
   return (
-    <ContextMenuProvider id="album-context-menu">
-      <AlbumTeaserWrapper id={item.id}>
+    <ContextMenuProvider id="album-context-menu" data={item}>
+      <AlbumTeaserWrapper>
         <div>
           <AlbumTeaserTitle>{item.title}</AlbumTeaserTitle>
           <AlbumSubInfo className={selected ? 'selected' : ''}>

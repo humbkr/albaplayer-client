@@ -6,12 +6,12 @@ import 'react-contexify/dist/ReactContexify.min.css'
 import { addTrack, playTrack } from '../../player/actions'
 
 class TrackContextMenu extends Component {
-  handlePlayNow = ({ ref }) => {
-    this.props.handlePlayNow(ref.id)
+  handlePlayNow = ({ dataFromProvider }) => {
+    this.props.handlePlayNow(dataFromProvider.id)
   }
 
-  handleAddToQueue = ({ ref }) => {
-    this.props.handleAddToQueue(ref.id)
+  handleAddToQueue = ({ dataFromProvider }) => {
+    this.props.handleAddToQueue(dataFromProvider.id)
   }
 
   render() {

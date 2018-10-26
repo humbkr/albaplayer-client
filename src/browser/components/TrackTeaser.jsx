@@ -31,8 +31,8 @@ const TrackTeaser = (props) => {
   const { item } = props
 
   return (
-    <ContextMenuProvider id="track-context-menu">
-      <TrackWrapper id={item.id}>
+    <ContextMenuProvider id="track-context-menu" data={item}>
+      <TrackWrapper>
         <TrackTeaserNumber>{item.number}</TrackTeaserNumber>
         <TrackTeaserName>{item.title}</TrackTeaserName>
       </TrackWrapper>
