@@ -12,13 +12,13 @@ const QueueTitle = styled.h2`
 `
 
 const NowPlayingQueue = (props) => {
-  const tracks = props.tracks
+  const { tracks } = props
 
   // Add a position info to each playlist element.
   const items = tracks.map((item, index) => ({ ...item, position: index + 1 }))
 
   return (
-    <div>
+    <React.Fragment>
       <QueueTitle>Queue</QueueTitle>
       <NowPlayingQueueActions />
       <NowPlayingQueueHeader />
@@ -30,7 +30,7 @@ const NowPlayingQueue = (props) => {
         />
       )}
       <QueueItemContextMenu />
-    </div>
+    </React.Fragment>
   )
 }
 

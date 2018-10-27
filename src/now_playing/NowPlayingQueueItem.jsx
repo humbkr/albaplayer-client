@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { ContextMenuProvider } from 'react-contexify'
 
-const QueueItemWrapper = styled.li`
+const QueueItemWrapper = styled.div`
   display: table;
   table-layout: fixed;
   width: 100%;
@@ -30,14 +30,11 @@ const QueueItemTrackTitle = styled.div`
 `
 
 const NowPlayingQueueItem = (props) => {
-  const { item, itemHeight, current } = props
+  const { item, current, style } = props
 
   return (
     <ContextMenuProvider id="queue-item-context-menu" data={item}>
-      <QueueItemWrapper
-        style={{ height: itemHeight }}
-        isCurrent={current + 1 === item.position}
-      >
+      <QueueItemWrapper style={style} isCurrent={current + 1 === item.position}>
         <QueueItemPosition>{item.position}</QueueItemPosition>
         <QueueItemTrackTitle>{item.title}</QueueItemTrackTitle>
       </QueueItemWrapper>
@@ -50,7 +47,7 @@ NowPlayingQueueItem.propTypes = {
     title: PropTypes.string.isRequired,
     duration: PropTypes.number,
   }).isRequired,
-  itemHeight: PropTypes.number.isRequired,
+  style: PropTypes.shape().isRequired,
   current: PropTypes.number.isRequired,
 }
 

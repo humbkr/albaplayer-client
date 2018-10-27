@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const QueueHeaderRow = styled.li`
+const QueueHeaderRow = styled.div`
   display: table;
   width: 100%;
   height: ${props => props.theme.itemHeight};
