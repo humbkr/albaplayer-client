@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { List, WindowScroller } from 'react-virtualized'
+import { AutoSizer, List, WindowScroller } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import NowPlayingQueueItem from './NowPlayingQueueItem'
 
@@ -31,23 +31,27 @@ class NowPlayingQueueList extends React.Component {
         {({
           height, isScrolling, onChildScroll, scrollTop,
         }) => (
-          <List
-            autoHeight
-            height={height}
-            isScrolling={isScrolling}
-            onScroll={onChildScroll}
-            rowCount={items.length}
-            rowHeight={itemHeight}
-            rowRenderer={({ key, index, style }) => this.rowRenderer({
-              items,
-              key,
-              index,
-              style,
-            })
-            }
-            scrollTop={scrollTop}
-            width={1000}
-          />
+          <AutoSizer disableHeight>
+            {({ width }) => (
+              <List
+                autoHeight
+                height={height}
+                isScrolling={isScrolling}
+                onScroll={onChildScroll}
+                rowCount={items.length}
+                rowHeight={itemHeight}
+                rowRenderer={({ key, index, style }) => this.rowRenderer({
+                  items,
+                  key,
+                  index,
+                  style,
+                })
+                }
+                scrollTop={scrollTop}
+                width={width}
+              />
+            )}
+          </AutoSizer>
         )}
       </WindowScroller>
     )
