@@ -82,7 +82,7 @@ const Controls = ({
     <ControlsWrapper>
       <ControlsPrimary>
         <Buttons.SkipPrevBtn onClick={skipToPrevious} />
-        <PlayPauseButton onClick={togglePlayPause} size={45} />
+        <PlayPauseButton onClick={() => togglePlayPause()} size={45} />
         <Buttons.SkipNextBtn onClick={skipToNext} />
       </ControlsPrimary>
       <ControlsSecondary>

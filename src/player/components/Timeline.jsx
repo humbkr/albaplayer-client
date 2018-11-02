@@ -18,7 +18,8 @@ class Timeline extends React.Component {
     this.onMouseMoveFunctionRef = null
   }
 
-  componentWillReceiveProps(nextProps) {
+  // eslint-disable-next-line
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (
       !Number.isNaN(nextProps.duration)
       && nextProps.duration !== 0

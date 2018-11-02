@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
 import { ContextMenuProvider } from 'react-contexify'
 
 const AlbumTeaserTitle = styled.h2`
@@ -75,8 +74,4 @@ AlbumTeaser.defaultProps = {
   selected: false,
 }
 
-const mapStateToProps = state => ({
-  selectedAlbums: state.libraryBrowser.selectedAlbums,
-})
-
-export default connect(mapStateToProps)(AlbumTeaser)
+export default AlbumTeaser

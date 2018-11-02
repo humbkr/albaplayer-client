@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
 import { ContextMenuProvider } from 'react-contexify'
 
 const TrackTeaserNumber = styled.div`
@@ -48,8 +47,4 @@ TrackTeaser.propTypes = {
   }).isRequired,
 }
 
-const mapStateToProps = state => ({
-  selectedTracks: state.libraryBrowser.selectedTracks,
-})
-
-export default connect(mapStateToProps)(TrackTeaser)
+export default TrackTeaser

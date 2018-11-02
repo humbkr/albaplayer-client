@@ -21,7 +21,10 @@ const QueueHeaderPosition = styled.div`
   text-align: center;
 `
 
-const QueueHeaderTrackTitle = styled.div``
+const QueueHeaderTrackTitle = styled.div`
+  //width: 40%;
+`
+const QueueHeaderTrackInfo = styled.div``
 
 const NowPlayingQueueHeader = () => (
   <QueueHeaderRow>

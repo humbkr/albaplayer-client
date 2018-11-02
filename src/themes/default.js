@@ -1,6 +1,6 @@
 const themeDefault = {
   itemHeight: '50px',
-  highlight: '#dcdcdc',
+  highlight: '#efeff2',
   highlightFocus: '#00bdab',
   separatorColor: '#efeff2',
   backgroundColor: '#ffffff',

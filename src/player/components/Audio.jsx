@@ -22,11 +22,21 @@ const Audio = (Player) => {
     }
 
     componentDidUpdate(prevProps) {
-      // Manage the current track being player in audio element.
-      if (prevProps.track !== this.props.track) {
+      const { playing, track } = this.props
+
+      // Manage the current track being played in audio element.
+      if (prevProps.track !== track) {
         // Clear progress update interval.
         this.clearInterval()
         this.loadTrack()
+      }
+
+      if (prevProps.playing !== playing) {
+        if (playing) {
+          this.onPlay()
+        } else {
+          this.onPause()
+        }
       }
     }
 
@@ -67,15 +77,6 @@ const Audio = (Player) => {
       }
     }
 
-    /* Handlers managing the html5 audio player from sub components */
-    handlePlayPause = () => {
-      if (this.props.playing) {
-        this.onPause()
-      } else {
-        this.onPlay()
-      }
-    }
-
     handleSetProgress = (newProgress) => {
       let progress = newProgress
       const duration = this.audioElement.duration
@@ -112,7 +113,7 @@ const Audio = (Player) => {
         progress: this.props.progress,
       }
       const timelineCallbacks = {
-        togglePlayPause: this.handlePlayPause,
+        togglePlayPause: this.props.onPlayPausePress,
         setProgress: this.handleSetProgress,
       }
       const controlState = {
@@ -122,7 +123,7 @@ const Audio = (Player) => {
         volume: this.props.volume,
       }
       const controlCallbacks = {
-        togglePlayPause: this.handlePlayPause,
+        togglePlayPause: this.props.onPlayPausePress,
         skipToPrevious: this.props.onPrevPress,
         skipToNext: this.props.onNextPress,
         toggleShuffle: this.props.onShufflePress,

@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import React from 'react'
-import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { ContextMenuProvider } from 'react-contexify'
 
@@ -37,8 +36,4 @@ ArtistTeaser.propTypes = {
   }).isRequired,
 }
 
-const mapStateToProps = state => ({
-  selectedArtists: state.libraryBrowser.selectedArtists,
-})
-
-export default connect(mapStateToProps)(ArtistTeaser)
+export default ArtistTeaser
