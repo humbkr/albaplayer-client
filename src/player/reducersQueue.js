@@ -3,6 +3,7 @@ import {
   QUEUE_ADD_ARTIST,
   QUEUE_ADD_TRACK,
   QUEUE_CLEAR,
+  QUEUE_UPDATE,
   QUEUE_REMOVE_TRACK,
   QUEUE_SET_CURRENT,
 } from './actionsQueue'
@@ -27,19 +28,27 @@ const initialState = {
 
 function queue(state = initialState, action, library) {
   switch (action.type) {
-    case QUEUE_ADD_TRACK:
+    case QUEUE_ADD_TRACK: {
+      const track = library.tracks[action.trackId]
+      track.artist = library.artists[track.artistId]
+      track.album = library.albums[track.albumId]
+
       return Object.assign({}, state, {
-        tracks: [
-          ...state.tracks,
-          ...library.tracks.filter(item => action.trackId === item.id),
-        ],
+        tracks: [...state.tracks, track],
         current: state.current,
       })
+    }
     case QUEUE_ADD_ALBUM: {
       // Get tracks from album.
-      const filteredTracks = library.tracks.filter(
+      const filteredTracks = Object.values(library.tracks).filter(
         item => action.albumId === item.albumId
       )
+      filteredTracks.forEach((track) => {
+        // eslint-disable-next-line no-param-reassign
+        track.artist = library.artists[track.artistId]
+        // eslint-disable-next-line no-param-reassign
+        track.album = library.albums[track.albumId]
+      })
 
       return Object.assign({}, state, {
         tracks: [
@@ -49,20 +58,34 @@ function queue(state = initialState, action, library) {
         current: state.current,
       })
     }
-    case QUEUE_ADD_ARTIST:
+    case QUEUE_ADD_ARTIST: {
+      // Get tracks from artist.
+      const filteredTracks = Object.values(library.tracks).filter(
+        item => action.artistId === item.artistId
+      )
+      filteredTracks.forEach((track) => {
+        // eslint-disable-next-line no-param-reassign
+        track.artist = library.artists[track.artistId]
+        // eslint-disable-next-line no-param-reassign
+        track.albums = library.album[track.albumId]
+      })
+
       return Object.assign({}, state, {
-        tracks: [
-          ...state.tracks,
-          ...library.tracks.filter(item => action.artistId === item.artistId),
-        ],
+        tracks: [...state.tracks, ...filteredTracks],
         current: state.current,
       })
+    }
     case QUEUE_REMOVE_TRACK:
       return queueRemoveTrack(state, action)
     case QUEUE_CLEAR:
       return Object.assign({}, state, {
         tracks: [],
         current: '',
+      })
+    case QUEUE_UPDATE:
+      return Object.assign({}, state, {
+        ...state,
+        tracks: action.newQueue,
       })
     case QUEUE_SET_CURRENT:
       return Object.assign({}, state, {

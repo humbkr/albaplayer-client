@@ -27,6 +27,12 @@ const queueClear = () => ({
   type: QUEUE_CLEAR,
 })
 
+const QUEUE_UPDATE = 'QUEUE_UPDATE'
+const queueUpdate = newQueue => ({
+  type: QUEUE_UPDATE,
+  newQueue,
+})
+
 const QUEUE_SET_CURRENT = 'QUEUE_SET_CURRENT'
 const queueSetCurrent = position => ({
   type: QUEUE_SET_CURRENT,
@@ -39,11 +45,13 @@ export {
   QUEUE_ADD_ARTIST,
   QUEUE_REMOVE_TRACK,
   QUEUE_CLEAR,
+  QUEUE_UPDATE,
   QUEUE_SET_CURRENT,
   queueAddTrack,
   queueAddAlbum,
   queueAddArtist,
   queueRemoveTrack,
   queueClear,
+  queueUpdate,
   queueSetCurrent,
 }

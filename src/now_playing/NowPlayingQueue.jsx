@@ -6,13 +6,14 @@ import NowPlayingQueueHeader from './NowPlayingQueueHeader'
 import NowPlayingQueueList from './NowPlayingQueueList'
 import NowPlayingQueueActions from './NowPlayingQueueActions'
 import QueueItemContextMenu from '../common/QueueItemContextMenu'
+import { queueSetCurrent, queueUpdate } from '../player/actionsQueue'
 
 const QueueTitle = styled.h2`
   display: inline;
 `
 
 const NowPlayingQueue = (props) => {
-  const { tracks } = props
+  const { tracks, current, handleUpdateQueue } = props
 
   // Add a position info to each playlist element.
   const items = tracks.map((item, index) => ({ ...item, position: index + 1 }))
@@ -26,14 +27,14 @@ const NowPlayingQueue = (props) => {
         <NowPlayingQueueList
           items={items}
           itemHeight={parseInt(props.theme.itemHeight, 0)}
-          current={props.current}
+          current={current}
+          onQueueUpdate={handleUpdateQueue}
         />
       )}
       <QueueItemContextMenu />
     </React.Fragment>
   )
 }
-
 NowPlayingQueue.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   theme: PropTypes.object.isRequired,
@@ -43,6 +44,7 @@ NowPlayingQueue.propTypes = {
     })
   ).isRequired,
   current: PropTypes.number,
+  handleUpdateQueue: PropTypes.func.isRequired,
 }
 NowPlayingQueue.defaultProps = {
   current: 0,
@@ -52,5 +54,16 @@ const mapStateToProps = state => ({
   tracks: state.queue.tracks,
   current: state.queue.current,
 })
+const mapDispatchToProps = dispatch => ({
+  handleUpdateQueue: (newQueue, newCurrent) => {
+    dispatch(queueUpdate(newQueue))
+    dispatch(queueSetCurrent(newCurrent))
+  },
+})
 
-export default withTheme(connect(mapStateToProps)(NowPlayingQueue))
+export default withTheme(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(NowPlayingQueue)
+)

@@ -41,14 +41,14 @@ function selectArtist(state, action, library) {
   // filtered from the search term. Else we filter on the original library.
   let albumsToFilter
   if (state.search.term === '') {
-    albumsToFilter = [...library.albums]
+    albumsToFilter = Object.values(library.albums)
   } else {
     albumsToFilter = [...state.search.filteredAlbums]
   }
 
   let tracksToFilter
   if (state.search.term === '') {
-    tracksToFilter = [...library.tracks]
+    tracksToFilter = Object.values(library.tracks)
   } else {
     tracksToFilter = [...state.search.filteredTracks]
   }
@@ -97,7 +97,7 @@ function selectAlbum(state, action, library) {
 
   let tracksToFilter
   if (state.search.term === '') {
-    tracksToFilter = [...library.tracks]
+    tracksToFilter = Object.values(library.tracks)
   } else {
     tracksToFilter = [...state.search.filteredTracks]
   }
@@ -165,6 +165,11 @@ function selectAlbum(state, action, library) {
  *
  */
 function searchFilter(state, action, library) {
+  // Get library lists as arrays.
+  const libraryArtists = Object.values(library.artists)
+  const libraryAlbums = Object.values(library.albums)
+  const libraryTracks = Object.values(library.tracks)
+
   // Artists and albums are updated with search results from respectively albums + tracks and
   // tracks so we can't directly filter the original lists.
   const artistsIds = []
@@ -174,7 +179,7 @@ function searchFilter(state, action, library) {
   const filteredTracks = []
 
   // Get ids of all artists whose name is matching the search term.
-  library.artists.forEach((item) => {
+  libraryArtists.forEach((item) => {
     if (item.name.toUpperCase().includes(action.searchTerm.toUpperCase())) {
       artistsIds.push(item.id)
     }
@@ -184,7 +189,7 @@ function searchFilter(state, action, library) {
   const undirectAlbumsIds = []
   const undirectArtistsIds = []
 
-  library.albums.forEach((item) => {
+  libraryAlbums.forEach((item) => {
     // Get ids of all albums whose title is matching the search term.
     if (item.title.toUpperCase().includes(action.searchTerm.toUpperCase())) {
       albumsIds.push(item.id)
@@ -203,7 +208,7 @@ function searchFilter(state, action, library) {
     }
   })
 
-  library.tracks.forEach((item) => {
+  libraryTracks.forEach((item) => {
     // Also get all tracks of artists and albums that have previously been found.
     if (artistsIds.includes(item.artistId)) {
       if (!filteredTracks.includes(item)) {
@@ -249,8 +254,8 @@ function searchFilter(state, action, library) {
   })
 
   // Then filter the artists and albums.
-  const filteredArtists = library.artists.filter(item => artistsIds.includes(item.id))
-  const filteredAlbums = library.albums.filter(item => albumsIds.includes(item.id))
+  const filteredArtists = libraryArtists.filter(item => artistsIds.includes(item.id))
+  const filteredAlbums = libraryAlbums.filter(item => albumsIds.includes(item.id))
 
   return Object.assign({}, state, {
     ...state,
@@ -279,7 +284,7 @@ function libraryBrowser(state = initialState, action, library) {
         ...state,
         artists:
           state.search.term === ''
-            ? library.artists
+            ? Object.values(library.artists)
             : state.search.filteredArtists,
       })
 

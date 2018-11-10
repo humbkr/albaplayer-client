@@ -22,7 +22,7 @@ const QueueHeaderPosition = styled.div`
 `
 
 const QueueHeaderTrackTitle = styled.div`
-  //width: 40%;
+  width: 40%;
 `
 const QueueHeaderTrackInfo = styled.div``
 
@@ -30,6 +30,7 @@ const NowPlayingQueueHeader = () => (
   <QueueHeaderRow>
     <QueueHeaderPosition>#</QueueHeaderPosition>
     <QueueHeaderTrackTitle>track</QueueHeaderTrackTitle>
+    <QueueHeaderTrackInfo>artist</QueueHeaderTrackInfo>
   </QueueHeaderRow>
 )
 

@@ -25,12 +25,14 @@ const QueueItemActions = styled.div`
   vertical-align: middle;
   text-align: right;
   color: ${props => props.theme.textSecondaryColor};
+  background-color: #e0eefd;
 `
 
 const QueueItemWrapper = styled.div`
   display: table;
   table-layout: fixed;
   width: 100%;
+  height: ${props => props.theme.itemHeight};
   border-bottom: 1px solid ${props => props.theme.separatorColor};
 
   ${props => (props.isCurrent ? 'font-weight: bold' : '')};
@@ -65,14 +67,10 @@ const QueueItemTrackTitle = styled.div`
 const QueueItemInfo = styled.div`
   display: table-cell;
   vertical-align: middle;
-  font-size: 0.9em;
+  font-weight: normal;
   color: ${props => props.selected
     ? props.theme.textHighlightColor
     : props.theme.textSecondaryColor};
-`
-
-const QueueItemAlbumName = styled.div`
-  font-style: italic;
 `
 
 class NowPlayingQueueItem extends React.Component {
@@ -109,8 +107,12 @@ class NowPlayingQueueItem extends React.Component {
     const playbackButtonIcon = isCurrent && isPlaying ? 'pause' : 'play_arrow'
 
     return (
-      <ContextMenuProvider id="queue-item-context-menu" data={item}>
-        <QueueItemWrapper style={style} isCurrent={isCurrent}>
+      <ContextMenuProvider
+        style={style}
+        id="queue-item-context-menu"
+        data={item}
+      >
+        <QueueItemWrapper isCurrent={isCurrent}>
           <QueueItemFirstColumn>
             <QueueItemPosition>{item.position}</QueueItemPosition>
             <QueueActionButtonIcon
@@ -119,10 +121,7 @@ class NowPlayingQueueItem extends React.Component {
             />
           </QueueItemFirstColumn>
           <QueueItemTrackTitle>{item.title}</QueueItemTrackTitle>
-          <QueueItemInfo>
-            <div />
-            <QueueItemAlbumName />
-          </QueueItemInfo>
+          <QueueItemInfo>{item.artist.name}</QueueItemInfo>
           <QueueItemActions>
             <ActionButtonIcon icon="delete" onClick={this.handleRemoveTrack} />
           </QueueItemActions>
@@ -147,6 +146,7 @@ NowPlayingQueueItem.propTypes = {
 
 const mapStateToProps = state => ({
   isPlaying: state.player.playing,
+  library: state.library,
 })
 
 const mapDispatchToProps = dispatch => ({

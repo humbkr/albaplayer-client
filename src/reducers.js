@@ -10,9 +10,9 @@ const initialState = {
   error: '',
   isInitialized: false,
   initHasFailed: false,
-  artists: [],
-  albums: [],
-  tracks: [],
+  artists: {},
+  albums: {},
+  tracks: {},
 }
 
 function library(state = initialState, action) {
@@ -39,13 +39,29 @@ function library(state = initialState, action) {
         return { ...album, artistName }
       })
 
+      // Transform the lists into objects.
+      const artists = {}
+      action.response.artists.forEach((item) => {
+        artists[item.id] = item
+      })
+
+      const albums = {}
+      hydratedAlbums.forEach((item) => {
+        albums[item.id] = item
+      })
+
+      const tracks = {}
+      action.response.tracks.forEach((item) => {
+        tracks[item.id] = item
+      })
+
       return Object.assign({}, state, {
         ...state,
         isFetching: false,
         isInitialized: true,
-        artists: action.response.artists,
-        albums: hydratedAlbums,
-        tracks: action.response.tracks,
+        artists,
+        albums,
+        tracks,
       })
     }
 
