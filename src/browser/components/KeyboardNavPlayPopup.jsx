@@ -58,11 +58,11 @@ class KeyboardNavPlayPopup extends React.Component {
 
     e.preventDefault()
     if (e.keyCode === 13) {
-      // If Enter plays the element directly.
-      this.handlePlayNow(itemId)
-    } else if (e.keyCode === 32) {
-      // If Space adds element to the end of the playlist.
+      // If Enter adds element to the end of the playlist.
       this.handleAddToQueue(itemId)
+    } else if (e.keyCode === 32) {
+      // If Space plays the element directly.
+      this.handlePlayNow(itemId)
     }
     // Else just close the popup and do nothing else.
     onClose()
@@ -86,11 +86,11 @@ class KeyboardNavPlayPopup extends React.Component {
           onKeyDown={this.handleKeyDown}
         >
           <div>
-            Press <Action>Enter</Action> again to replace playlist with current
-            selection
+            Press <Action>Enter</Action> again to add to the current playlist
           </div>
           <div>
-            Press <Action>Space</Action> to add to the current playlist
+            Press <Action>Space</Action> to replace playlist with current
+            selection
           </div>
         </ModalContent>
       </Modal>
