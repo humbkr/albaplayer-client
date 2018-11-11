@@ -67,7 +67,7 @@ function queue(state = initialState, action, library) {
         // eslint-disable-next-line no-param-reassign
         track.artist = library.artists[track.artistId]
         // eslint-disable-next-line no-param-reassign
-        track.albums = library.album[track.albumId]
+        track.albums = library.albums[track.albumId]
       })
 
       return Object.assign({}, state, {
