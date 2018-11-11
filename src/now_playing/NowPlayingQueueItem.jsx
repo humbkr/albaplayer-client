@@ -10,9 +10,9 @@ import { queueRemoveTrack } from '../player/actionsQueue'
 
 // Required to control the div independently.
 const QueueItemPosition = styled.div``
+
 const QueueActionButtonIcon = styled(ActionButtonIcon)`
   display: none;
-  width: 100%;
   color: ${props => props.theme.buttons.color};
 
   :hover {
@@ -25,17 +25,18 @@ const QueueItemActions = styled.div`
   vertical-align: middle;
   text-align: right;
   color: ${props => props.theme.textSecondaryColor};
-  background-color: #e0eefd;
 `
 
 const QueueItemWrapper = styled.div`
-  display: table;
-  table-layout: fixed;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 60px 40% auto 44px;
   height: ${props => props.theme.itemHeight};
   border-bottom: 1px solid ${props => props.theme.separatorColor};
-
   ${props => (props.isCurrent ? 'font-weight: bold' : '')};
+
+  > * {
+    align-self: center;
+  }
 
   :hover {
     background-color: ${props => props.theme.highlight};
@@ -51,22 +52,11 @@ const QueueItemWrapper = styled.div`
 `
 
 const QueueItemFirstColumn = styled.div`
-  display: table-cell;
-  width: 60px;
-  text-align: center;
-  vertical-align: middle;
+  justify-self: center;
   color: ${props => props.theme.textSecondaryColor};
 `
 
-const QueueItemTrackTitle = styled.div`
-  display: table-cell;
-  vertical-align: middle;
-  width: 40%;
-`
-
 const QueueItemInfo = styled.div`
-  display: table-cell;
-  vertical-align: middle;
   font-weight: normal;
   color: ${props => props.selected
     ? props.theme.textHighlightColor
@@ -120,7 +110,7 @@ class NowPlayingQueueItem extends React.Component {
               onClick={this.handlePlayBackButton}
             />
           </QueueItemFirstColumn>
-          <QueueItemTrackTitle>{item.title}</QueueItemTrackTitle>
+          <div>{item.title}</div>
           <QueueItemInfo>{item.artist.name}</QueueItemInfo>
           <QueueItemActions>
             <ActionButtonIcon icon="delete" onClick={this.handleRemoveTrack} />
