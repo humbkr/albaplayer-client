@@ -29,6 +29,8 @@ class LibraryBrowser extends Component {
   constructor(props) {
     super(props)
 
+    // Used to focus the search input at mount.
+    this.searchBar = React.createRef()
     // These refs are forwarded to the underlying react-virtualized
     // List components of each pane.
     this.artistsPane = React.createRef()
@@ -40,10 +42,9 @@ class LibraryBrowser extends Component {
     const dispatch = this.props.dispatch
     dispatch(libraryBrowserInit())
 
-    // Give focus to the artist pane so the user is directly able
-    // to browse with the keyboard.
+    // Give focus to the search bar.
     // eslint-disable-next-line react/no-find-dom-node
-    ReactDOM.findDOMNode(this.artistsPane.current).focus()
+    ReactDOM.findDOMNode(this.searchBar.current).focus()
   }
 
   handleSwitchPaneArtists = (e) => {
@@ -77,7 +78,7 @@ class LibraryBrowser extends Component {
   render() {
     return (
       <LibraryBrowserWrapper>
-        <LibraryBrowserSearchBar />
+        <LibraryBrowserSearchBar ref={this.searchBar} />
         <LibraryBrowserListsWrapper>
           <ArtistsPaneContainer
             switchPaneHandler={this.handleSwitchPaneArtists}

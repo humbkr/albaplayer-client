@@ -19,7 +19,9 @@ const SelectWrapper = styled.div`
 `
 
 const SelectContainer = (props) => {
-  const { value, onChangeHandler, options } = props
+  const {
+    value, onChangeHandler, options, tabIndex,
+  } = props
   const optionsHtml = options.map(option => (
     <option key={option.value} value={option.value}>
       {option.label}
@@ -28,7 +30,12 @@ const SelectContainer = (props) => {
 
   return (
     <SelectWrapper>
-      <Select id="select" value={value} onChange={onChangeHandler}>
+      <Select
+        tabIndex={tabIndex}
+        id="select"
+        value={value}
+        onChange={onChangeHandler}
+      >
         {optionsHtml}
       </Select>
     </SelectWrapper>
@@ -43,6 +50,10 @@ SelectContainer.propTypes = {
   ).isRequired,
   value: PropTypes.string.isRequired,
   onChangeHandler: PropTypes.func.isRequired,
+  tabIndex: PropTypes.number,
+}
+SelectContainer.defaultProps = {
+  tabIndex: null,
 }
 
 export default SelectContainer

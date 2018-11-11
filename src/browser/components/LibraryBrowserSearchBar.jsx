@@ -17,6 +17,10 @@ const SearchBarInputWrapper = styled.div`
   vertical-align: middle;
   padding: 8px;
   background-color: ${props => props.theme.highlight};
+
+  :focus-within {
+    background-color: ${props => props.theme.highlightFocus};
+  }
 `
 
 const SearchBarInput = styled(DebounceInput)`
@@ -27,12 +31,13 @@ const SearchBarInput = styled(DebounceInput)`
 `
 
 const LibraryBrowserSearchBar = (props) => {
-  const { searchTerm, onChange } = props
+  const { searchTerm, onChange, forwardedRef } = props
 
   return (
     <LibraryBrowserSearchBarWrapper>
       <SearchBarInputWrapper>
         <SearchBarInput
+          ref={forwardedRef}
           debounceTimeout={300}
           onChange={event => onChange(event.target.value)}
           type="text"
@@ -59,7 +64,11 @@ const mapDispatchToProps = dispatch => ({
   },
 })
 
-export default connect(
+const ConnectedLibraryBrowserSearchBar = connect(
   mapStateToProps,
   mapDispatchToProps
 )(LibraryBrowserSearchBar)
+
+export default React.forwardRef((props, ref) => (
+  <ConnectedLibraryBrowserSearchBar {...props} forwardedRef={ref} />
+))

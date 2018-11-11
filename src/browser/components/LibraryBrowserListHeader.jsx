@@ -36,6 +36,7 @@ const LibraryBrowserListHeader = (props) => {
       <ContentWrapper>
         <h2>{title}</h2>
         <SelectContainer
+          tabIndex="-1"
           options={orderByOptions}
           value={orderBy}
           onChangeHandler={onChange}
