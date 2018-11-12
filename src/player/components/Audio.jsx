@@ -178,7 +178,7 @@ const Audio = (Player) => {
       dispatch(playerTogglePlayPause(value))
     },
     onTrackEnded: () => {
-      dispatch(setNextTrack())
+      dispatch(setNextTrack(true))
     },
     onPrevPress: () => {
       dispatch(setPreviousTrack())

@@ -2,6 +2,7 @@ import getBackendUrl from '../backend/config'
 import {
   PLAYER_REPEAT_LOOP_ALL,
   PLAYER_REPEAT_LOOP_ONE,
+  playerSetProgress,
   playerSetTrack,
   playerTogglePlayPause,
 } from './actionsPlayer'
@@ -40,7 +41,7 @@ const setTrackFromQueue = trackPosition => (dispatch, getState) => {
  * Select the next track to play from the queue, get its info,
  * and dispatch required actions.
  */
-const setNextTrack = () => (dispatch, getState) => {
+const setNextTrack = endOfTrack => (dispatch, getState) => {
   const state = getState()
 
   let nextTrackId = 0
@@ -77,7 +78,13 @@ const setNextTrack = () => (dispatch, getState) => {
     newQueuePosition = 0
     nextTrackId = state.queue.tracks[0].id
   } else {
-    // No further track to play, do nothing.
+    // No further track to play.
+    if (endOfTrack) {
+      // If the last track of the queue finished playing reset the player
+      dispatch(playerSetProgress(0))
+      dispatch(playerTogglePlayPause(false))
+    }
+    // Else setNextTrack call is the result of a user action so do nothing.
     return null
   }
 
