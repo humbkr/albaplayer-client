@@ -28,6 +28,7 @@ function settings(state = initialState, action) {
           config: action.response.settings,
         },
       })
+
     case LIBRARY_ERASE_START:
     case LIBRARY_UPDATE_START:
       return Object.assign({}, state, {

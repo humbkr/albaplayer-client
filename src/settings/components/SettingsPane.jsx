@@ -79,7 +79,11 @@ class SettingsPane extends Component {
             <ActionButton
               disabled={librarySettings.disableLibrarySettings}
               onClick={() => {
-                if (window.confirm('Are you sure you wish empty the library?')) emptyLibrary()
+                if (
+                  window.confirm('Are you sure you wish to empty the library?')
+                ) {
+                  emptyLibrary()
+                }
               }}
             >
               Empty library
@@ -114,9 +118,9 @@ SettingsPane.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  artistsNumber: state.library.artists.length,
-  albumsNumber: state.library.albums.length,
-  tracksNumber: state.library.tracks.length,
+  artistsNumber: Object.keys(state.library.artists).length,
+  albumsNumber: Object.keys(state.library.albums).length,
+  tracksNumber: Object.keys(state.library.tracks).length,
   libraryIsUpdating: state.settings.library.isUpdating,
   libraryError: state.settings.library.error,
   librarySettings: state.settings.library.config,

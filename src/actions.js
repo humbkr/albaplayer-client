@@ -27,6 +27,7 @@ const fetchLibrary = () => (dispatch) => {
       dispatch(libraryInitSuccess(response))
     })
     .catch((response) => {
+      // TODO log failure.
       dispatch(libraryInitFailure(response))
     })
 }

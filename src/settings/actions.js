@@ -58,9 +58,10 @@ const updateLibrary = () => (dispatch) => {
   return scanLibrary()
     .then((response) => {
       // TODO: not fan of calling apolloClient here.
-      apolloClient.resetStore()
-      dispatch(libraryUpdateSuccess(response))
-      dispatch(initLibrary(true))
+      apolloClient.resetStore().then(() => {
+        dispatch(libraryUpdateSuccess(response))
+        dispatch(initLibrary(true))
+      })
     })
     .catch((response) => {
       dispatch(libraryUpdateFailure(response))
@@ -75,9 +76,10 @@ const eraseLibrary = () => (dispatch) => {
   return emptyLibrary()
     .then((response) => {
       // TODO: not fan of calling apolloClient here.
-      apolloClient.resetStore()
-      dispatch(libraryEraseSuccess(response))
-      dispatch(initLibrary(true))
+      apolloClient.resetStore().then(() => {
+        dispatch(libraryEraseSuccess(response))
+        dispatch(initLibrary(true))
+      })
     })
     .catch((response) => {
       dispatch(libraryEraseFailure(response))
