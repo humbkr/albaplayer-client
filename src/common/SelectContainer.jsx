@@ -50,7 +50,7 @@ SelectContainer.propTypes = {
   ).isRequired,
   value: PropTypes.string.isRequired,
   onChangeHandler: PropTypes.func.isRequired,
-  tabIndex: PropTypes.number,
+  tabIndex: PropTypes.string,
 }
 SelectContainer.defaultProps = {
   tabIndex: null,
