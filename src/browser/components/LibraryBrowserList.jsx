@@ -42,6 +42,8 @@ class LibraryBrowserList extends React.Component {
         {...selected}
         onClick={() => this.selectRow({ scrollToRow: index, itemId: items[index].id })
         }
+        onContextMenu={() => this.selectRow({ scrollToRow: index, itemId: items[index].id })
+        }
       >
         <Display item={items[index]} index={index} {...selected} />
       </LibraryBrowserListItem>
