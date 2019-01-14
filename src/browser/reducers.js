@@ -263,6 +263,9 @@ function searchFilter(state, action, library) {
     selectedArtists: '0',
     selectedAlbums: '0',
     selectedTracks: '0',
+    currentPositionArtists: 0,
+    currentPositionAlbums: 0,
+    currentPositionTracks: 0,
     // Set search filtered lists and term.
     search: {
       term: action.searchTerm,

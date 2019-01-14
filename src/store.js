@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import library from './reducers'
@@ -23,6 +23,12 @@ if (process.env.REACT_APP_DEBUG_MODE === 'true') {
   middleware = [...middleware, loggerMiddleware]
 }
 
+// eslint-disable-next-line no-underscore-dangle
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
 export default function configureStore() {
-  return createStore(customReducer, applyMiddleware(...middleware))
+  return createStore(
+    customReducer,
+    composeEnhancers(applyMiddleware(...middleware))
+  )
 }
