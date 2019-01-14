@@ -1715,9 +1715,10 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.3, classnames@^2.2.5:
+classnames@^2.2.3, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 clean-css@4.2.x:
   version "4.2.1"
@@ -6692,12 +6693,13 @@ react-apollo@^2.0.4:
     lodash "^4.17.10"
     prop-types "^15.6.0"
 
-react-contexify@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/react-contexify/-/react-contexify-3.0.3.tgz#30d5c349dbc7726b03f9874d16e30e79ee552877"
+react-contexify@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-contexify/-/react-contexify-4.0.1.tgz#154600f9a0cab6176e0d7f1900b76d0acf25ea8a"
+  integrity sha512-CKgx4B44Fx6Qgfy2Hz5UUNcbeLfzEJVWUDxIbUthzxX9MHLOkYE4G8PYdWGRL47oSyFi8Y4Ho+X+rXuW7U3QAQ==
   dependencies:
-    classnames "^2.2.5"
-    prop-types "^15.6.0"
+    classnames "^2.2.6"
+    prop-types "^15.6.2"
 
 react-debounce-input@^3.2.0:
   version "3.2.0"

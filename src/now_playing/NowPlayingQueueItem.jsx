@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { ContextMenuProvider } from 'react-contexify'
+import { MenuProvider as ContextMenuProvider } from 'react-contexify'
 import { connect } from 'react-redux'
 import ActionButtonIcon from '../common/ActionButtonIcon'
 import { setTrackFromQueue } from '../player/actions'

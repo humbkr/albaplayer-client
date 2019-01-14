@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { ContextMenuProvider } from 'react-contexify'
+import { MenuProvider as ContextMenuProvider } from 'react-contexify'
 
 const AlbumTeaserTitle = styled.h2`
   font-size: 1em;

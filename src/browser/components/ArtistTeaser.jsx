@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ContextMenuProvider } from 'react-contexify'
+import { MenuProvider as ContextMenuProvider } from 'react-contexify'
 
 const ArtistTeaserName = styled.h2`
   display: table-cell;

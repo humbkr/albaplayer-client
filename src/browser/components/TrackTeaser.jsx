@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { ContextMenuProvider } from 'react-contexify'
+import { MenuProvider as ContextMenuProvider } from 'react-contexify'
 
 const TrackTeaserNumber = styled.div`
   display: table-cell;

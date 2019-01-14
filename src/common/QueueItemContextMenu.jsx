@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ContextMenu, Item } from 'react-contexify'
+import { Menu as ContextMenu, Item } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -8,16 +8,16 @@ import { queueRemoveTrack } from '../player/actionsQueue'
 import { setTrackFromQueue } from '../player/actions'
 
 class QueueItemContextMenu extends Component {
-  handlePlayTrack = ({ dataFromProvider }) => {
+  handlePlayTrack = ({ props }) => {
     // Position is the position to display so it starts ar 1,
     // bit the position in the state queue starts from 0.
-    this.props.handlePlayTrack(dataFromProvider.position - 1)
+    this.props.handlePlayTrack(props.position - 1)
   }
 
-  handleRemoveTrack = ({ dataFromProvider }) => {
+  handleRemoveTrack = ({ props }) => {
     // Position is the position to display so it starts ar 1,
     // bit the position in the state queue starts from 0.
-    this.props.handleRemoveTrack(dataFromProvider.position - 1)
+    this.props.handleRemoveTrack(props.position - 1)
   }
 
   render() {

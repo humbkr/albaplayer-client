@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { ContextMenu, Item } from 'react-contexify'
+import { Menu as ContextMenu, Item } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
 import { addTrack, playTrack } from '../../player/actions'
 
 class TrackContextMenu extends Component {
-  handlePlayNow = ({ dataFromProvider }) => {
-    this.props.handlePlayNow(dataFromProvider.id)
+  handlePlayNow = ({ props }) => {
+    this.props.handlePlayNow(props.id)
   }
 
-  handleAddToQueue = ({ dataFromProvider }) => {
-    this.props.handleAddToQueue(dataFromProvider.id)
+  handleAddToQueue = ({ props }) => {
+    this.props.handleAddToQueue(props.id)
   }
 
   render() {
