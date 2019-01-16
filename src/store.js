@@ -2,10 +2,10 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import library from './reducers'
-import libraryBrowser from './browser/reducers'
-import queue from './player/reducersQueue'
-import player from './player/reducersPlayer'
-import settings from './settings/reducers'
+import libraryBrowser from './modules/browser/reducers'
+import queue from './modules/player/reducersQueue'
+import player from './modules/player/reducersPlayer'
+import settings from './modules/settings/reducers'
 
 const customReducer = (state = {}, action) => ({
   library: library(state.library, action),

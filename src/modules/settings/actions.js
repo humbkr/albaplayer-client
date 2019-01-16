@@ -1,6 +1,6 @@
-import { emptyLibrary, getSettings, scanLibrary } from '../backend/api'
-import { initLibrary } from '../actions'
-import apolloClient from '../backend/apollo'
+import { emptyLibrary, getSettings, scanLibrary } from '../../api/api'
+import { initLibrary } from '../../actions'
+import apolloClient from '../../api/apollo'
 
 const SETTINGS_INIT = 'SETTINGS_INIT'
 const settingsInit = response => ({

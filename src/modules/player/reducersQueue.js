@@ -7,7 +7,7 @@ import {
   QUEUE_REMOVE_TRACK,
   QUEUE_SET_CURRENT,
 } from './actionsQueue'
-import { immutableSortTracks, immutableRemove } from '../utils'
+import { immutableSortTracks, immutableRemove } from '../../common/utils/utils'
 
 const queueRemoveTrack = (state, action) => {
   let nextCurrent = state.current

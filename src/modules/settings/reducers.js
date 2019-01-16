@@ -7,7 +7,7 @@ import {
   LIBRARY_UPDATE_SUCCESS,
   SETTINGS_INIT,
 } from './actions'
-import { processApiError } from '../backend/api'
+import { processApiError } from '../../api/api'
 
 const initialState = {
   library: {

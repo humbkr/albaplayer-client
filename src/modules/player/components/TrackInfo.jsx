@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import coverPlaceholder from '../../assets/cover_placeholder.png'
+import coverPlaceholder from '../../../common/assets/cover_placeholder.png'
 
 const TrackInfoWrapper = styled.div`
   position: relative;

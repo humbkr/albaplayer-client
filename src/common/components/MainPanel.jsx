@@ -3,10 +3,10 @@ import styled from 'styled-components'
 import { Route, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import LibraryBrowser from '../browser/components/LibraryBrowser'
-import NowPlayingPane from '../now_playing/NowPlayingPane'
+import LibraryBrowser from '../../modules/browser/components/LibraryBrowser'
+import NowPlayingPane from '../../modules/now_playing/NowPlayingPane'
 import LoadingScreen from './LoadingScreen'
-import SettingsPane from '../settings/components/SettingsPane'
+import SettingsPane from '../../modules/settings/components/SettingsPane'
 
 const MainPanelWrapper = styled.div`
   margin-left: ${props => props.theme.sidebar.width};

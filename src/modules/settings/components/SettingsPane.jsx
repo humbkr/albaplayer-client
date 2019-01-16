@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import ActionButton from '../../common/ActionButton'
+import ActionButton from '../../../common/components/ActionButton'
 import { eraseLibrary, initSettings, updateLibrary } from '../actions'
-import Loading from '../../common/Loading'
-import Message from '../../common/Message'
+import Loading from '../../../common/components/Loading'
+import Message from '../../../common/components/Message'
 
 const SettingsScreenWrapper = styled.div`
   padding: 40px 30px;

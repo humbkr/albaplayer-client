@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import ActionButton from '../common/ActionButton'
+import ActionButton from '../../common/components/ActionButton'
 import { queueClear } from '../player/actionsQueue'
 
 const QueueActionsWrapper = styled.div`

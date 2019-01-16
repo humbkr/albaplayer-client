@@ -5,7 +5,7 @@ import styled, { withTheme } from 'styled-components'
 import NowPlayingQueueHeader from './NowPlayingQueueHeader'
 import NowPlayingQueueList from './NowPlayingQueueList'
 import NowPlayingQueueActions from './NowPlayingQueueActions'
-import QueueItemContextMenu from '../common/QueueItemContextMenu'
+import QueueItemContextMenu from '../../common/components/QueueItemContextMenu'
 import { queueSetCurrent, queueUpdate } from '../player/actionsQueue'
 
 const QueueTitle = styled.h2`

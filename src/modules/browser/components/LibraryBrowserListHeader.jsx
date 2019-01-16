@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import SelectContainer from '../../common/SelectContainer'
+import SelectContainer from '../../../common/components/SelectContainer'
 
 const LibraryBrowserListHeaderWrapper = styled.div`
   flex: 0 1 ${props => props.theme.itemHeight};

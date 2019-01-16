@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import coverPlaceholder from '../assets/cover_placeholder.png'
-import { formatDuration } from '../utils'
-import ActionButtonCircle from '../common/ActionButtonCircle'
+import coverPlaceholder from '../../common/assets/cover_placeholder.png'
+import { formatDuration } from '../../common/utils/utils'
+import ActionButtonCircle from '../../common/components/ActionButtonCircle'
 
 const NowPlayingWrapper = styled.div`
   width: 100%;

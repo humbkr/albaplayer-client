@@ -1,4 +1,4 @@
-import { getLibrary } from './backend/api'
+import { getLibrary } from './api/api'
 
 const LIBRARY_INIT_START = 'LIBRARY_INIT_START'
 const libraryInitStart = () => ({

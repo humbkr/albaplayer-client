@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Motion, spring } from 'react-motion'
 import ProgressBarHandler from './ProgressBarHandler'
 import VolumeBar from './VolumeBar'
-import * as Buttons from './buttons'
+import * as Buttons from './buttons/index'
 
 const VolumeContainerWrapper = styled.div`
   display: flex;

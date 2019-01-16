@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import SidebarNavLink from './SidebarNavLink'
-import Player from '../player/components/Player'
+import Player from '../../modules/player/components/Player'
 
 const SidebarWrapper = styled.div`
   position: fixed;

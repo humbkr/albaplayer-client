@@ -1,4 +1,4 @@
-import getBackendUrl from '../backend/config'
+import getBackendUrl from '../../api/config'
 import {
   PLAYER_REPEAT_LOOP_ALL,
   PLAYER_REPEAT_LOOP_ONE,
@@ -13,7 +13,7 @@ import {
   queueClear,
   queueSetCurrent,
 } from './actionsQueue'
-import { getFullTrackInfo } from '../backend/api'
+import { getFullTrackInfo } from '../../api/api'
 
 const setTrackFromQueue = trackPosition => (dispatch, getState) => {
   const state = getState()

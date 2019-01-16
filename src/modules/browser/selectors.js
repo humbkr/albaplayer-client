@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { immutableSortTracks } from '../utils'
+import { immutableSortTracks } from '../../common/utils/utils'
 
 const immutableNestedSort = (items, prop) => {
   const property = prop.split('.')
