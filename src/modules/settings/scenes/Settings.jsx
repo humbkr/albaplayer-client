@@ -30,7 +30,7 @@ const ActionButtons = styled.div`
 `
 
 const ActionWaiting = styled.div`
-  color: ${props => props.theme.textSecondaryColor};
+  color: ${(props) => props.theme.textSecondaryColor};
   font-style: italic;
 
   > * {
@@ -42,7 +42,7 @@ const ActionWaiting = styled.div`
   }
 `
 
-class SettingsPane extends Component {
+class Settings extends Component {
   componentDidMount() {
     this.props.initSettings()
   }
@@ -105,7 +105,7 @@ class SettingsPane extends Component {
     )
   }
 }
-SettingsPane.propTypes = {
+Settings.propTypes = {
   artistsNumber: PropTypes.number.isRequired,
   albumsNumber: PropTypes.number.isRequired,
   tracksNumber: PropTypes.number.isRequired,
@@ -117,7 +117,7 @@ SettingsPane.propTypes = {
   librarySettings: PropTypes.shape().isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   artistsNumber: Object.keys(state.library.artists).length,
   albumsNumber: Object.keys(state.library.albums).length,
   tracksNumber: Object.keys(state.library.tracks).length,
@@ -125,7 +125,7 @@ const mapStateToProps = state => ({
   libraryError: state.settings.library.error,
   librarySettings: state.settings.library.config,
 })
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   initSettings: () => {
     dispatch(initSettings())
   },
@@ -140,4 +140,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SettingsPane)
+)(Settings)

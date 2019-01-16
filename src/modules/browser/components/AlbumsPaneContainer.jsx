@@ -6,10 +6,9 @@ import LibraryBrowserList from './LibraryBrowserList'
 import AlbumTeaser from './AlbumTeaser'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import LibraryBrowserPane from './LibraryBrowserPane'
-import { libraryBrowserSelectAlbum, libraryBrowserSortAlbums } from '../actions'
 import AlbumContextMenu from './AlbumContextMenu'
-import { getAlbumsList } from '../selectors'
 import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import { actions, selectors } from '../duck'
 import { addAlbum, playAlbum } from '../../player/actions'
 
 const AlbumsPaneWrapper = styled.div`
@@ -18,8 +17,8 @@ const AlbumsPaneWrapper = styled.div`
   overflow: hidden;
   width: 33%;
   height: 100%;
-  border-left: 1px solid ${props => props.theme.separatorColor};
-  border-right: 1px solid ${props => props.theme.separatorColor};
+  border-left: 1px solid ${(props) => props.theme.separatorColor};
+  border-right: 1px solid ${(props) => props.theme.separatorColor};
 `
 
 class AlbumsPaneContainer extends Component {
@@ -124,18 +123,18 @@ AlbumsPaneContainer.propTypes = {
   handleAddToQueue: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
-  albums: getAlbumsList(state),
+const mapStateToProps = (state) => ({
+  albums: selectors.getAlbumsList(state),
   orderBy: state.libraryBrowser.sortAlbums,
   currentPosition: state.libraryBrowser.currentPositionAlbums,
   currentAlbum: state.libraryBrowser.selectedAlbums,
 })
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onSortChange: (sortProperty) => {
-    dispatch(libraryBrowserSortAlbums(sortProperty))
+    dispatch(actions.libraryBrowserSortAlbums(sortProperty))
   },
   onItemClick: (itemId, index) => {
-    dispatch(libraryBrowserSelectAlbum(itemId, index))
+    dispatch(actions.libraryBrowserSelectAlbum(itemId, index))
   },
   handlePlayNow: (albumId) => {
     dispatch(playAlbum(albumId))

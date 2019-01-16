@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import { Route, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import LibraryBrowser from '../../modules/browser/components/LibraryBrowser'
-import NowPlayingPane from '../../modules/now_playing/NowPlayingPane'
+import LibraryBrowser from '../../modules/browser/scenes/LibraryBrowser'
+import NowPlaying from '../../modules/now_playing/scenes/NowPlaying'
 import LoadingScreen from './LoadingScreen'
-import SettingsPane from '../../modules/settings/components/SettingsPane'
+import Settings from '../../modules/settings/scenes/Settings'
 
 const MainPanelWrapper = styled.div`
-  margin-left: ${props => props.theme.sidebar.width};
+  margin-left: ${(props) => props.theme.sidebar.width};
   height: 100vh;
 `
 
@@ -27,9 +27,9 @@ const MainPanel = (props) => {
         && isInitialized && (
           <MainPanelWrapper>
             <Route exact path="/" component={LibraryBrowser} />
-            <Route path="/queue" component={NowPlayingPane} />
             <Route path="/library" component={LibraryBrowser} />
-            <Route path="/settings" component={SettingsPane} />
+            <Route path="/queue" component={NowPlaying} />
+            <Route path="/settings" component={Settings} />
           </MainPanelWrapper>
       )}
     </div>

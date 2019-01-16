@@ -6,13 +6,9 @@ import LibraryBrowserList from './LibraryBrowserList'
 import ArtistTeaser from './ArtistTeaser'
 import LibraryBrowserPane from './LibraryBrowserPane'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
-import {
-  libraryBrowserSelectArtist,
-  libraryBrowserSortArtists,
-} from '../actions'
 import ArtistContextMenu from './ArtistContextMenu'
-import { getArtistsList } from '../selectors'
 import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import { actions, selectors } from '../duck'
 import { addArtist, playArtist } from '../../player/actions'
 
 const ArtistsPaneWrapper = styled.div`
@@ -119,18 +115,18 @@ ArtistsPaneContainer.propTypes = {
   handleAddToQueue: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
-  artists: getArtistsList(state),
+const mapStateToProps = (state) => ({
+  artists: selectors.getArtistsList(state),
   orderBy: state.libraryBrowser.sortArtists,
   currentPosition: state.libraryBrowser.currentPositionArtists,
   currentArtist: state.libraryBrowser.selectedArtists,
 })
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onSortChange: (sortProperty) => {
-    dispatch(libraryBrowserSortArtists(sortProperty))
+    dispatch(actions.libraryBrowserSortArtists(sortProperty))
   },
   onItemClick: (itemId, index) => {
-    dispatch(libraryBrowserSelectArtist(itemId, index))
+    dispatch(actions.libraryBrowserSelectArtist(itemId, index))
   },
   handlePlayNow: (artistId) => {
     dispatch(playArtist(artistId))

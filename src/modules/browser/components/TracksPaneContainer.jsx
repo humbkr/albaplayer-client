@@ -5,11 +5,10 @@ import { connect } from 'react-redux'
 import LibraryBrowserList from './LibraryBrowserList'
 import TrackTeaser from './TrackTeaser'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
-import { libraryBrowserSelectTrack, libraryBrowserSortTracks } from '../actions'
 import TrackContextMenu from './TrackContextMenu'
 import LibraryBrowserPane from './LibraryBrowserPane'
-import { getTracksList } from '../selectors'
 import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import { actions, selectors } from '../duck'
 import { addTrack, playTrack } from '../../player/actions'
 
 const TracksPaneWrapper = styled.div`
@@ -27,7 +26,7 @@ const NoTracks = styled.div`
   flex-direction: column;
   text-align: center;
   font-style: italic;
-  color: ${props => props.theme.textSecondaryColor};
+  color: ${(props) => props.theme.textSecondaryColor};
 `
 
 class TracksPaneContainer extends Component {
@@ -136,18 +135,18 @@ TracksPaneContainer.propTypes = {
   handleAddToQueue: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
-  tracks: getTracksList(state),
+const mapStateToProps = (state) => ({
+  tracks: selectors.getTracksList(state),
   orderBy: state.libraryBrowser.sortTracks,
   currentPosition: state.libraryBrowser.currentPositionTracks,
   currentTrack: state.libraryBrowser.selectedTracks,
 })
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onSortChange: (sortProperty) => {
-    dispatch(libraryBrowserSortTracks(sortProperty))
+    dispatch(actions.libraryBrowserSortTracks(sortProperty))
   },
   onItemClick: (itemId, index) => {
-    dispatch(libraryBrowserSelectTrack(itemId, index))
+    dispatch(actions.libraryBrowserSelectTrack(itemId, index))
   },
   handlePlayNow: (trackId) => {
     dispatch(playTrack(trackId))

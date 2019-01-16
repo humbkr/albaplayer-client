@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import coverPlaceholder from '../../common/assets/cover_placeholder.png'
-import { formatDuration } from '../../common/utils/utils'
-import ActionButtonCircle from '../../common/components/ActionButtonCircle'
+import coverPlaceholder from '../../../common/assets/images/cover_placeholder.png'
+import { formatDuration } from '../../../common/utils/utils'
+import ActionButtonCircle from '../../../common/components/ActionButtonCircle'
 
 const NowPlayingWrapper = styled.div`
   width: 100%;
@@ -27,7 +27,7 @@ const Background = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    ${props => (props.cover ? `background-image: url(${props.cover})` : '')};
+    ${(props) => (props.cover ? `background-image: url(${props.cover})` : '')};
     background-size: cover;
     background-position: center;
     filter: blur(5px);
@@ -91,7 +91,7 @@ const SongActions = styled.div`
   }
 `
 
-class NowPlaying extends Component {
+class NowPlayingHeader extends Component {
   handleSearchForTabs = () => {
     const song = this.props.track
     const songTitle = song && song.title !== '' ? song.title : ''
@@ -177,7 +177,7 @@ class NowPlaying extends Component {
     )
   }
 }
-NowPlaying.propTypes = {
+NowPlayingHeader.propTypes = {
   track: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -185,12 +185,12 @@ NowPlaying.propTypes = {
     number: PropTypes.number,
   }),
 }
-NowPlaying.defaultProps = {
+NowPlayingHeader.defaultProps = {
   track: null,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   track: state.player.track,
 })
 
-export default connect(mapStateToProps)(NowPlaying)
+export default connect(mapStateToProps)(NowPlayingHeader)

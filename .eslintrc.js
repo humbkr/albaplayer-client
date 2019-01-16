@@ -13,7 +13,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: '16.5',
+      version: '16.5.2',
     },
   },
   extends: [
@@ -26,6 +26,7 @@ module.exports = {
   rules: {
     'linebreak-style': [2, 'unix'],
     'semi': [2, 'never'],
+    'global-require': 'off',
     'import/export': 'error',
     'import/first': ['error', 'absolute-first'],
     'import/newline-after-import': 'error',
@@ -57,6 +58,7 @@ module.exports = {
       'enforceForRenamedProperties': false
     }],
     'no-confusing-arrow': ['warn', { 'allowParens': false }],
+    'arrow-parens': ["error", "always"],
     'no-plusplus': ['off'],
     'comma-dangle': ['error', {
       'arrays': 'always-multiline',
@@ -65,7 +67,10 @@ module.exports = {
       'exports': 'always-multiline',
       'functions': 'ignore',
     }],
-    'react/destructuring-assignment': [1, 'never', { 'ignoreClassFields': true }],
+    'no-empty-pattern': ['error'],
+    'no-use-before-define': ['error', { 'functions': true, 'classes': true, 'variables': false }],
+    'react/destructuring-assignment': [0, 'never', { 'ignoreClassFields': true }],
     'react/jsx-one-expression-per-line': [0, {'allow': 'single-child'}],
+    'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx'] }],
   },
 };

@@ -3,20 +3,20 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { MenuProvider as ContextMenuProvider } from 'react-contexify'
 import { connect } from 'react-redux'
-import ActionButtonIcon from '../../common/components/ActionButtonIcon'
-import { setTrackFromQueue } from '../player/actions'
-import { playerTogglePlayPause } from '../player/actionsPlayer'
-import { queueRemoveTrack } from '../player/actionsQueue'
+import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
+import { setTrackFromQueue } from '../../player/actions'
+import { playerTogglePlayPause } from '../../player/actionsPlayer'
+import { queueRemoveTrack } from '../../player/actionsQueue'
 
 // Required to control the div independently.
 const QueueItemPosition = styled.div``
 
 const QueueActionButtonIcon = styled(ActionButtonIcon)`
   display: none;
-  color: ${props => props.theme.buttons.color};
+  color: ${(props) => props.theme.buttons.color};
 
   :hover {
-    color: ${props => props.theme.buttons.colorHover};
+    color: ${(props) => props.theme.buttons.colorHover};
   }
 `
 
@@ -24,22 +24,22 @@ const QueueItemActions = styled.div`
   display: none;
   vertical-align: middle;
   text-align: right;
-  color: ${props => props.theme.textSecondaryColor};
+  color: ${(props) => props.theme.textSecondaryColor};
 `
 
 const QueueItemWrapper = styled.div`
   display: grid;
   grid-template-columns: 60px 40% auto 44px;
-  height: ${props => props.theme.itemHeight};
-  border-bottom: 1px solid ${props => props.theme.separatorColor};
-  ${props => (props.isCurrent ? 'font-weight: bold' : '')};
+  height: ${(props) => props.theme.itemHeight};
+  border-bottom: 1px solid ${(props) => props.theme.separatorColor};
+  ${(props) => (props.isCurrent ? 'font-weight: bold' : '')};
 
   > * {
     align-self: center;
   }
 
   :hover {
-    background-color: ${props => props.theme.highlight};
+    background-color: ${(props) => props.theme.highlight};
 
     ${QueueItemPosition} {
       display: none;
@@ -53,12 +53,12 @@ const QueueItemWrapper = styled.div`
 
 const QueueItemFirstColumn = styled.div`
   justify-self: center;
-  color: ${props => props.theme.textSecondaryColor};
+  color: ${(props) => props.theme.textSecondaryColor};
 `
 
 const QueueItemInfo = styled.div`
   font-weight: normal;
-  color: ${props => props.selected
+  color: ${(props) => props.selected
     ? props.theme.textHighlightColor
     : props.theme.textSecondaryColor};
 `
@@ -134,12 +134,12 @@ NowPlayingQueueItem.propTypes = {
   isPlaying: PropTypes.bool.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   isPlaying: state.player.playing,
   library: state.library,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handleSetPlayback: (value) => {
     dispatch(playerTogglePlayPause(value))
   },

@@ -25,6 +25,22 @@ const GlobalStyle = createGlobalStyle`
        url(${MaterialIconsWoff}) format('woff'),
        url(${MaterialIconsTtf}) format('truetype');
        url(${MaterialIconsSvg}) format('svg');
+  }
+  
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+  
+  *:focus {
+    outline: none;
+  }
+  
+  body {
+    font-family: sans-serif;
+    overflow-x: hidden;
+  }
 `
 
 const AlbaAppWrapper = styled.div`
@@ -35,7 +51,7 @@ const AlbaAppWrapper = styled.div`
 
 class AlbaApp extends Component {
   componentDidMount() {
-    const dispatch = this.props.dispatch
+    const { dispatch } = this.props
     dispatch(initLibrary())
   }
 

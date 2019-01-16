@@ -1,56 +1,49 @@
-const LIBRARY_BROWSER_INIT_ARTISTS = 'LIBRARY_BROWSER_INIT_ARTISTS'
+import types from './types'
+
 const libraryBrowserInitArtists = () => ({
-  type: LIBRARY_BROWSER_INIT_ARTISTS,
+  type: types.LIBRARY_BROWSER_INIT_ARTISTS,
 })
 
-const LIBRARY_BROWSER_SELECT_ARTIST = 'LIBRARY_BROWSER_SELECT_ARTIST'
 const libraryBrowserSelectArtist = (artistId, index) => ({
-  type: LIBRARY_BROWSER_SELECT_ARTIST,
+  type: types.LIBRARY_BROWSER_SELECT_ARTIST,
   artistId,
   index,
 })
 
-const LIBRARY_BROWSER_SELECT_ALBUM = 'LIBRARY_BROWSER_SELECT_ALBUM'
 const libraryBrowserSelectAlbum = (albumId, index) => ({
-  type: LIBRARY_BROWSER_SELECT_ALBUM,
+  type: types.LIBRARY_BROWSER_SELECT_ALBUM,
   albumId,
   index,
 })
 
-const LIBRARY_BROWSER_SELECT_TRACK = 'LIBRARY_BROWSER_SELECT_TRACK'
 const libraryBrowserSelectTrack = (trackId, index) => ({
-  type: LIBRARY_BROWSER_SELECT_TRACK,
+  type: types.LIBRARY_BROWSER_SELECT_TRACK,
   trackId,
   index,
 })
 
-const LIBRARY_BROWSER_SORT_ARTISTS = 'LIBRARY_BROWSER_SORT_ARTISTS'
-const libraryBrowserSortArtists = sortProperty => ({
-  type: LIBRARY_BROWSER_SORT_ARTISTS,
+const libraryBrowserSortArtists = (sortProperty) => ({
+  type: types.LIBRARY_BROWSER_SORT_ARTISTS,
   sortProperty,
 })
 
-const LIBRARY_BROWSER_SORT_ALBUMS = 'LIBRARY_BROWSER_SORT_ALBUMS'
-const libraryBrowserSortAlbums = sortProperty => ({
-  type: LIBRARY_BROWSER_SORT_ALBUMS,
+const libraryBrowserSortAlbums = (sortProperty) => ({
+  type: types.LIBRARY_BROWSER_SORT_ALBUMS,
   sortProperty,
 })
 
-const LIBRARY_BROWSER_SORT_TRACKS = 'LIBRARY_BROWSER_SORT_TRACKS'
-const libraryBrowserSortTracks = sortProperty => ({
-  type: LIBRARY_BROWSER_SORT_TRACKS,
+const libraryBrowserSortTracks = (sortProperty) => ({
+  type: types.LIBRARY_BROWSER_SORT_TRACKS,
   sortProperty,
 })
 
-const LIBRARY_BROWSER_SEARCH_UPDATE_INPUT = 'LIBRARY_BROWSER_SEARCH_UPDATE_INPUT'
-const libraryBrowserSearchUpdateInput = searchTerm => ({
-  type: LIBRARY_BROWSER_SEARCH_UPDATE_INPUT,
+const libraryBrowserSearchUpdateInput = (searchTerm) => ({
+  type: types.LIBRARY_BROWSER_SEARCH_UPDATE_INPUT,
   searchTerm,
 })
 
-const LIBRARY_BROWSER_SEARCH_FILTER = 'LIBRARY_BROWSER_SEARCH_FILTER'
-const libraryBrowserSearchFilter = searchTerm => ({
-  type: LIBRARY_BROWSER_SEARCH_FILTER,
+const libraryBrowserSearchFilter = (searchTerm) => ({
+  type: types.LIBRARY_BROWSER_SEARCH_FILTER,
   searchTerm,
 })
 
@@ -102,16 +95,7 @@ const libraryBrowserSearch = (text) => {
   }
 }
 
-export {
-  LIBRARY_BROWSER_INIT_ARTISTS,
-  LIBRARY_BROWSER_SELECT_ARTIST,
-  LIBRARY_BROWSER_SELECT_ALBUM,
-  LIBRARY_BROWSER_SELECT_TRACK,
-  LIBRARY_BROWSER_SORT_ARTISTS,
-  LIBRARY_BROWSER_SORT_ALBUMS,
-  LIBRARY_BROWSER_SORT_TRACKS,
-  LIBRARY_BROWSER_SEARCH_FILTER,
-  LIBRARY_BROWSER_SEARCH_UPDATE_INPUT,
+export default {
   libraryBrowserInitArtists,
   libraryBrowserSelectArtist,
   libraryBrowserSelectAlbum,

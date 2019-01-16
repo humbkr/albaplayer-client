@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import coverPlaceholder from '../../../common/assets/cover_placeholder.png'
+import coverPlaceholder from '../../../common/assets/images/cover_placeholder.png'
 
 const TrackInfoWrapper = styled.div`
   position: relative;
-  width: ${props => props.theme.sidebar.width};
-  height: ${props => props.theme.sidebar.width};
+  width: ${(props) => props.theme.sidebar.width};
+  height: ${(props) => props.theme.sidebar.width};
   background: url(${coverPlaceholder}) no-repeat;
   background-size: 100% 100%;
 `

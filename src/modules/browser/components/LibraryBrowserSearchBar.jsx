@@ -3,23 +3,23 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { DebounceInput } from 'react-debounce-input'
-import { libraryBrowserSearch } from '../actions'
+import { actions } from '../duck'
 
 const LibraryBrowserSearchBarWrapper = styled.div`
   display: table;
-  height: ${props => props.theme.itemHeight};
+  height: ${(props) => props.theme.itemHeight};
   width: 100%;
-  border-bottom: 1px solid ${props => props.theme.separatorColor};
+  border-bottom: 1px solid ${(props) => props.theme.separatorColor};
 `
 
 const SearchBarInputWrapper = styled.div`
   display: table-cell;
   vertical-align: middle;
   padding: 8px;
-  background-color: ${props => props.theme.highlight};
+  background-color: ${(props) => props.theme.highlight};
 
   :focus-within {
-    background-color: ${props => props.theme.highlightFocus};
+    background-color: ${(props) => props.theme.highlightFocus};
   }
 `
 
@@ -39,7 +39,7 @@ const LibraryBrowserSearchBar = (props) => {
         <SearchBarInput
           ref={forwardedRef}
           debounceTimeout={300}
-          onChange={event => onChange(event.target.value)}
+          onChange={(event) => onChange(event.target.value)}
           type="text"
           id="search-input"
           value={searchTerm}
@@ -54,13 +54,13 @@ LibraryBrowserSearchBar.propTypes = {
   onChange: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   searchTerm: state.libraryBrowser.search.term,
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onChange: (text) => {
-    dispatch(libraryBrowserSearch(text))
+    dispatch(actions.libraryBrowserSearch(text))
   },
 })
 

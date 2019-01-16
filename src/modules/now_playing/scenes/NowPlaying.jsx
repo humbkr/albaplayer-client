@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import NowPlayingQueue from './NowPlayingQueue'
-import NowPlaying from './NowPlaying'
+import NowPlayingQueue from '../components/NowPlayingQueue'
+import NowPlayingHeader from '../components/NowPlayingHeader'
 
-const NowPlayingPaneWrapper = styled.div`
+const NowPlayingWrapper = styled.div`
   padding: 30px 50px;
 `
 
@@ -16,13 +16,13 @@ const NowPlayingQueueWrapper = styled.div`
   }
 `
 
-const NowPlayingPane = () => (
-  <NowPlayingPaneWrapper>
-    <NowPlaying />
+const NowPlaying = () => (
+  <NowPlayingWrapper>
+    <NowPlayingHeader />
     <NowPlayingQueueWrapper>
       <NowPlayingQueue />
     </NowPlayingQueueWrapper>
-  </NowPlayingPaneWrapper>
+  </NowPlayingWrapper>
 )
 
-export default NowPlayingPane
+export default NowPlaying

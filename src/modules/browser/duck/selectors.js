@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { immutableSortTracks } from '../../common/utils/utils'
+import { immutableSortTracks } from '../../../common/utils/utils'
 
 const immutableNestedSort = (items, prop) => {
   const property = prop.split('.')
@@ -42,8 +42,8 @@ const immutableNestedSort = (items, prop) => {
   })
 }
 
-const getArtists = state => state.libraryBrowser.artists
-const getArtistsSortOrder = state => state.libraryBrowser.sortArtists
+const getArtists = (state) => state.libraryBrowser.artists
+const getArtistsSortOrder = (state) => state.libraryBrowser.sortArtists
 const getArtistsList = createSelector(
   [getArtists, getArtistsSortOrder],
   (list, sortOrder) => {
@@ -63,8 +63,8 @@ const getArtistsList = createSelector(
   }
 )
 
-const getAlbums = state => state.libraryBrowser.albums
-const getAlbumsSortOrder = state => state.libraryBrowser.sortAlbums
+const getAlbums = (state) => state.libraryBrowser.albums
+const getAlbumsSortOrder = (state) => state.libraryBrowser.sortAlbums
 const getAlbumsList = createSelector(
   [getAlbums, getAlbumsSortOrder],
   (list, sortOrder) => {
@@ -84,8 +84,8 @@ const getAlbumsList = createSelector(
   }
 )
 
-const getTracks = state => state.libraryBrowser.tracks
-const getTracksSortOrder = state => state.libraryBrowser.sortTracks
+const getTracks = (state) => state.libraryBrowser.tracks
+const getTracksSortOrder = (state) => state.libraryBrowser.sortTracks
 const getTracksList = createSelector(
   [getTracks, getTracksSortOrder],
   (list, sortOrder) => {
@@ -105,4 +105,8 @@ const getTracksList = createSelector(
   }
 )
 
-export { getArtistsList, getAlbumsList, getTracksList }
+export default {
+  getArtistsList,
+  getAlbumsList,
+  getTracksList,
+}

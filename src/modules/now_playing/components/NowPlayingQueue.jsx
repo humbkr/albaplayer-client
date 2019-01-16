@@ -5,8 +5,8 @@ import styled, { withTheme } from 'styled-components'
 import NowPlayingQueueHeader from './NowPlayingQueueHeader'
 import NowPlayingQueueList from './NowPlayingQueueList'
 import NowPlayingQueueActions from './NowPlayingQueueActions'
-import QueueItemContextMenu from '../../common/components/QueueItemContextMenu'
-import { queueSetCurrent, queueUpdate } from '../player/actionsQueue'
+import QueueItemContextMenu from '../../../common/components/QueueItemContextMenu'
+import { queueSetCurrent, queueUpdate } from '../../player/actionsQueue'
 
 const QueueTitle = styled.h2`
   display: inline;
@@ -50,11 +50,11 @@ NowPlayingQueue.defaultProps = {
   current: 0,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   tracks: state.queue.tracks,
   current: state.queue.current,
 })
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handleUpdateQueue: (newQueue, newCurrent) => {
     dispatch(queueUpdate(newQueue))
     dispatch(queueSetCurrent(newCurrent))

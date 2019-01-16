@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import ArtistsPaneContainer from './ArtistsPaneContainer'
-import AlbumsPaneContainer from './AlbumsPaneContainer'
-import TracksPaneContainer from './TracksPaneContainer'
-import LibraryBrowserSearchBar from './LibraryBrowserSearchBar'
-import { libraryBrowserInit } from '../actions'
+import ArtistsPaneContainer from '../components/ArtistsPaneContainer'
+import AlbumsPaneContainer from '../components/AlbumsPaneContainer'
+import TracksPaneContainer from '../components/TracksPaneContainer'
+import LibraryBrowserSearchBar from '../components/LibraryBrowserSearchBar'
+import { actions } from '../duck'
 
 const LibraryBrowserWrapper = styled.div`
   display: flex;
@@ -39,8 +39,8 @@ class LibraryBrowser extends Component {
   }
 
   componentDidMount() {
-    const dispatch = this.props.dispatch
-    dispatch(libraryBrowserInit())
+    const { libraryBrowserInit } = this.props
+    libraryBrowserInit()
 
     // Give focus to the search bar.
     // eslint-disable-next-line react/no-find-dom-node
@@ -98,7 +98,16 @@ class LibraryBrowser extends Component {
   }
 }
 LibraryBrowser.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  libraryBrowserInit: PropTypes.func.isRequired,
 }
 
-export default connect()(LibraryBrowser)
+const mapDispatchToProps = (dispatch) => ({
+  libraryBrowserInit: () => {
+    dispatch(actions.libraryBrowserInit())
+  },
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(LibraryBrowser)
