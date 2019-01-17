@@ -7,9 +7,9 @@ const SidebarWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: ${props => props.theme.sidebar.width};
+  width: ${(props) => props.theme.sidebar.width};
   height: 100%;
-  background-color: ${props => props.theme.sidebar.background};
+  background-color: ${(props) => props.theme.sidebar.background};
 `
 
 const MainMenu = styled.div`

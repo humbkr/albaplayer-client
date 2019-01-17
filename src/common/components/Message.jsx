@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Icon from './Icon'
 
 const MessageWrapper = styled.div`
-  color: ${props => props.theme.messages[props.type].color};
+  color: ${(props) => props.theme.messages[props.type].color};
 
   > * {
     display: inline-block;
@@ -13,8 +13,8 @@ const MessageWrapper = styled.div`
   }
 
   > span {
-    height: ${props => props.theme.messages.height};
-    line-height: ${props => props.theme.messages.height};
+    height: ${(props) => props.theme.messages.height};
+    line-height: ${(props) => props.theme.messages.height};
   }
 `
 

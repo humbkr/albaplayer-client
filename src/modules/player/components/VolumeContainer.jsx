@@ -15,7 +15,7 @@ const VolumeContainerWrapper = styled.div`
 `
 
 const VolumeOverlay = styled.div`
-  background-color: ${props => props.theme.sidebar.background};
+  background-color: ${(props) => props.theme.sidebar.background};
   display: flex;
   align-items: center;
   top: 0;

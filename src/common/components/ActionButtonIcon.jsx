@@ -5,7 +5,7 @@ import Icon from './Icon'
 
 const ActionButtonWrapper = styled.button`
   padding: 10px;
-  font-size: ${props => props.theme.buttons.fontSize};
+  font-size: ${(props) => props.theme.buttons.fontSize};
   border: none;
   cursor: pointer;
   text-transform: uppercase;
@@ -17,7 +17,7 @@ const ActionButtonWrapper = styled.button`
 
   :disabled {
     cursor: default;
-    color: ${props => props.theme.buttons.colorDisabled};
+    color: ${(props) => props.theme.buttons.colorDisabled};
   }
 
   > * {
@@ -27,7 +27,7 @@ const ActionButtonWrapper = styled.button`
   }
 `
 
-const ActionButtonIcon = props => (
+const ActionButtonIcon = (props) => (
   <ActionButtonWrapper
     className={props.className}
     disabled={props.disabled}

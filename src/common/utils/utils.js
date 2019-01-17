@@ -22,7 +22,7 @@ const formatDuration = (amount) => {
   return `${minutes}:${seconds}`
 }
 
-const arrayToObject = (arr, keyField) => Object.assign({}, ...arr.map(item => ({ [item[keyField]]: item })))
+const arrayToObject = (arr, keyField) => Object.assign({}, ...arr.map((item) => ({ [item[keyField]]: item })))
 
 // Transform a disc number value to a string: 'D000'
 const sanitizeDiscNumber = (discNumber) => {

@@ -13,7 +13,7 @@ const ArtistTeaserName = styled.h2`
 const ArtistTeaserWrapper = styled.div`
   display: table;
   width: 100%;
-  height: ${props => props.theme.itemHeight};
+  height: ${(props) => props.theme.itemHeight};
   padding: 0 15px;
   cursor: pointer;
 `

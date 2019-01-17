@@ -4,17 +4,17 @@ import PropTypes from 'prop-types'
 import Icon from './Icon'
 
 const ActionButtonWrapper = styled.button`
-  padding: 0 ${props => props.theme.buttons.sidePadding};
-  font-size: ${props => props.theme.buttons.fontSize};
+  padding: 0 ${(props) => props.theme.buttons.sidePadding};
+  font-size: ${(props) => props.theme.buttons.fontSize};
   border: none;
   cursor: pointer;
   text-transform: uppercase;
   text-align: center;
   vertical-align: middle;
   transition: 0.2s ease-out;
-  color: ${props => props.theme.buttons.color};
+  color: ${(props) => props.theme.buttons.color};
 
-  ${props => props.raised
+  ${(props) => props.raised
     ? `
     border-radius: 2px;
     background-color: ${props.theme.buttons.color};
@@ -22,7 +22,7 @@ const ActionButtonWrapper = styled.button`
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12),0 3px 1px -2px rgba(0,0,0,0.2);
   `
     : ''} :hover {
-    ${props => props.raised
+    ${(props) => props.raised
     ? `
       background-color: ${props.theme.buttons.colorHover};
     `
@@ -31,9 +31,9 @@ const ActionButtonWrapper = styled.button`
 
   :disabled {
     cursor: default;
-    color: ${props => props.theme.buttons.colorDisabled};
+    color: ${(props) => props.theme.buttons.colorDisabled};
 
-    ${props => props.raised
+    ${(props) => props.raised
     ? `
       background-color: ${props.theme.buttons.colorDisabled};
       color: #fff;
@@ -47,12 +47,12 @@ const ActionButtonWrapper = styled.button`
   }
 
   > span {
-    height: ${props => props.theme.buttons.height};
-    line-height: ${props => props.theme.buttons.height};
+    height: ${(props) => props.theme.buttons.height};
+    line-height: ${(props) => props.theme.buttons.height};
   }
 `
 
-const ActionButton = props => (
+const ActionButton = (props) => (
   <ActionButtonWrapper
     raised={props.raised}
     disabled={props.disabled}

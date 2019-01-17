@@ -22,7 +22,7 @@ const SelectContainer = (props) => {
   const {
     value, onChangeHandler, options, tabIndex,
   } = props
-  const optionsHtml = options.map(option => (
+  const optionsHtml = options.map((option) => (
     <option key={option.value} value={option.value}>
       {option.label}
     </option>

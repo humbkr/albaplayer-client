@@ -11,10 +11,10 @@ const LibraryBrowserPane = styled.div`
     // Can't find a way to manage that directly in the
     // LibraryBrowserListItem component.
     ${LibraryBrowserListItem}.selected {
-      ${props => `background-color: ${props.theme.highlightFocus}`};
+      ${(props) => `background-color: ${props.theme.highlightFocus}`};
     }
     ${LibraryBrowserListItem} .selected {
-      ${props => `color: ${props.theme.textHighlightFocusColor}`};
+      ${(props) => `color: ${props.theme.textHighlightFocusColor}`};
     }
   }
 `

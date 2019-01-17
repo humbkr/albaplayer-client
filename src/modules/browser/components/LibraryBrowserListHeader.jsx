@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import SelectContainer from '../../../common/components/SelectContainer'
 
 const LibraryBrowserListHeaderWrapper = styled.div`
-  flex: 0 1 ${props => props.theme.itemHeight};
-  color: ${props => props.theme.textSecondaryColor};
+  flex: 0 1 ${(props) => props.theme.itemHeight};
+  color: ${(props) => props.theme.textSecondaryColor};
   padding: 0 15px;
 `
 

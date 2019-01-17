@@ -13,17 +13,17 @@ const ActionButtonCircleWrapper = styled.button`
 
     circle {
       transition: 0.2s ease-out;
-      stroke: ${props => props.color};
+      stroke: ${(props) => props.color};
     }
 
-    fill: ${props => props.color};
+    fill: ${(props) => props.color};
 
     :hover {
       circle {
-        stroke: ${props => props.theme.buttons.colorHover};
+        stroke: ${(props) => props.theme.buttons.colorHover};
       }
 
-      fill: ${props => props.theme.buttons.colorHover};
+      fill: ${(props) => props.theme.buttons.colorHover};
     }
   }
 

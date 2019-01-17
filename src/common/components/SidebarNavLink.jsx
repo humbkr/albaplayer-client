@@ -12,15 +12,15 @@ const SidebarNavLinkWrapper = styled(NavLink)`
 
   display: block;
   width: 100%;
-  height: ${props => props.theme.itemHeight};
-  color: ${props => props.secondary
+  height: ${(props) => props.theme.itemHeight};
+  color: ${(props) => props.secondary
     ? props.theme.sidebar.textSecondaryColor
     : props.theme.sidebar.textPrimaryColor};
 
   :hover,
   &.active {
-    color: ${props => props.theme.sidebar.textPrimaryColorHover};
-    background-color: ${props => props.secondary
+    color: ${(props) => props.theme.sidebar.textPrimaryColorHover};
+    background-color: ${(props) => props.secondary
     ? props.theme.sidebar.textSecondaryColor
     : props.theme.sidebar.textPrimaryColor};
   }
@@ -32,12 +32,12 @@ const SidebarNavLinkWrapper = styled(NavLink)`
   }
 
   > span {
-    height: ${props => props.theme.itemHeight};
-    line-height: ${props => props.theme.itemHeight};
+    height: ${(props) => props.theme.itemHeight};
+    line-height: ${(props) => props.theme.itemHeight};
   }
 `
 
-const SidebarNavLink = props => (
+const SidebarNavLink = (props) => (
   <SidebarNavLinkWrapper to={props.to}>
     {props.icon && <Icon>{props.icon}</Icon>}
     <span>{props.children}</span>
