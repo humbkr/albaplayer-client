@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ActionButton from '../../../common/components/ActionButton'
-import { queueClear } from '../../player/actionsQueue'
+import { actions } from '../../player/duck'
 
 const QueueActionsWrapper = styled.div`
   float: right;
@@ -22,7 +22,7 @@ NowPlayingQueueActions.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   clearQueue: () => {
-    dispatch(queueClear())
+    dispatch(actions.queueClear())
   },
 })
 

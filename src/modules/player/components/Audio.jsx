@@ -1,15 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
-import {
-  playerToggleRepeat,
-  playerToggleShuffle,
-  playerSetVolume,
-  playerSetProgress,
-  playerTogglePlayPause,
-} from '../actionsPlayer'
-import { setNextTrack, setPreviousTrack } from '../actions'
+import { actions, operations } from '../duck'
 
 const Audio = (Player) => {
   class HOCAudio extends React.Component {
@@ -165,7 +157,7 @@ const Audio = (Player) => {
     track: null,
   }
 
-  const mapStateToProps = state => ({
+  const mapStateToProps = (state) => ({
     track: state.player.track,
     playing: state.player.playing,
     shuffle: state.player.shuffle,
@@ -173,30 +165,30 @@ const Audio = (Player) => {
     volume: state.player.volume,
     progress: state.player.progress,
   })
-  const mapDispatchToProps = dispatch => ({
+  const mapDispatchToProps = (dispatch) => ({
     onPlayPausePress: (value) => {
-      dispatch(playerTogglePlayPause(value))
+      dispatch(actions.playerTogglePlayPause(value))
     },
     onTrackEnded: () => {
-      dispatch(setNextTrack(true))
+      dispatch(operations.setNextTrack(true))
     },
     onPrevPress: () => {
-      dispatch(setPreviousTrack())
+      dispatch(operations.setPreviousTrack())
     },
     onNextPress: () => {
-      dispatch(setNextTrack())
+      dispatch(operations.setNextTrack())
     },
     onShufflePress: () => {
-      dispatch(playerToggleShuffle())
+      dispatch(actions.playerToggleShuffle())
     },
     onRepeatPress: () => {
-      dispatch(playerToggleRepeat())
+      dispatch(actions.playerToggleRepeat())
     },
     onVolumeChange: (volume) => {
-      dispatch(playerSetVolume(volume))
+      dispatch(actions.playerSetVolume(volume))
     },
     onProgressChange: (currentTime) => {
-      dispatch(playerSetProgress(currentTime))
+      dispatch(actions.playerSetProgress(currentTime))
     },
   })
 

@@ -3,9 +3,7 @@ import { Menu as ContextMenu, Item } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { playerTogglePlayPause } from '../../modules/player/actionsPlayer'
-import { queueRemoveTrack } from '../../modules/player/actionsQueue'
-import { setTrackFromQueue } from '../../modules/player/actions'
+import { actions, operations } from '../../modules/player/duck'
 
 class QueueItemContextMenu extends Component {
   handlePlayTrack = ({ props }) => {
@@ -34,13 +32,13 @@ QueueItemContextMenu.propTypes = {
   handleRemoveTrack: PropTypes.func.isRequired,
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handlePlayTrack: (position) => {
-    dispatch(setTrackFromQueue(position))
-    dispatch(playerTogglePlayPause(true))
+    dispatch(operations.setTrackFromQueue(position))
+    dispatch(actions.playerTogglePlayPause(true))
   },
   handleRemoveTrack: (position) => {
-    dispatch(queueRemoveTrack(position))
+    dispatch(actions.queueRemoveTrack(position))
   },
 })
 

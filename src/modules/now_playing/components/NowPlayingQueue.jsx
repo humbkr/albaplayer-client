@@ -6,7 +6,7 @@ import NowPlayingQueueHeader from './NowPlayingQueueHeader'
 import NowPlayingQueueList from './NowPlayingQueueList'
 import NowPlayingQueueActions from './NowPlayingQueueActions'
 import QueueItemContextMenu from '../../../common/components/QueueItemContextMenu'
-import { queueSetCurrent, queueUpdate } from '../../player/actionsQueue'
+import { actions } from '../../player/duck'
 
 const QueueTitle = styled.h2`
   display: inline;
@@ -56,8 +56,8 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({
   handleUpdateQueue: (newQueue, newCurrent) => {
-    dispatch(queueUpdate(newQueue))
-    dispatch(queueSetCurrent(newCurrent))
+    dispatch(actions.queueUpdate(newQueue))
+    dispatch(actions.queueSetCurrent(newCurrent))
   },
 })
 

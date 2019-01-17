@@ -4,9 +4,7 @@ import PropTypes from 'prop-types'
 import { MenuProvider as ContextMenuProvider } from 'react-contexify'
 import { connect } from 'react-redux'
 import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
-import { setTrackFromQueue } from '../../player/actions'
-import { playerTogglePlayPause } from '../../player/actionsPlayer'
-import { queueRemoveTrack } from '../../player/actionsQueue'
+import { actions, operations } from '../../player/duck'
 
 // Required to control the div independently.
 const QueueItemPosition = styled.div``
@@ -141,14 +139,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   handleSetPlayback: (value) => {
-    dispatch(playerTogglePlayPause(value))
+    dispatch(actions.playerTogglePlayPause(value))
   },
   handlePlayNewTrack: (position) => {
-    dispatch(setTrackFromQueue(position))
-    dispatch(playerTogglePlayPause(true))
+    dispatch(operations.setTrackFromQueue(position))
+    dispatch(actions.playerTogglePlayPause(true))
   },
   handleRemoveTrack: (position) => {
-    dispatch(queueRemoveTrack(position))
+    dispatch(actions.queueRemoveTrack(position))
   },
 })
 

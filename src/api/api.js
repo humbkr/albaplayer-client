@@ -108,7 +108,7 @@ const processApiError = (response) => {
   return result
 }
 
-export {
+export default {
   getLibrary,
   getFullTrackInfo,
   scanLibrary,

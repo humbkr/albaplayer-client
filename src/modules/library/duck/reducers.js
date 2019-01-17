@@ -1,8 +1,4 @@
-import {
-  LIBRARY_INIT_FAILURE,
-  LIBRARY_INIT_START,
-  LIBRARY_INIT_SUCCESS,
-} from './actions'
+import types from './types'
 
 const initialState = {
   isFetching: false,
@@ -17,19 +13,19 @@ const initialState = {
 
 function library(state = initialState, action) {
   switch (action.type) {
-    case LIBRARY_INIT_START:
-      return Object.assign({}, state, {
+    case types.LIBRARY_INIT_START:
+      return {
         ...state,
         isFetching: true,
-      })
+      }
 
-    case LIBRARY_INIT_SUCCESS: {
+    case types.LIBRARY_INIT_SUCCESS: {
       // Here we have to make up for the fact that we cannot request albums with artist names
       // from the backend without severe performance penalty. We have to populate the information
       // client-side from the artists list we got from the backend.
       const hydratedAlbums = action.response.albums.map((album) => {
         const artists = action.response.artists.filter(
-          artist => album.artistId === artist.id
+          (artist) => album.artistId === artist.id
         )
         let artistName = ''
         if (artists.length > 0) {
@@ -55,23 +51,23 @@ function library(state = initialState, action) {
         tracks[item.id] = item
       })
 
-      return Object.assign({}, state, {
+      return {
         ...state,
         isFetching: false,
         isInitialized: true,
         artists,
         albums,
         tracks,
-      })
+      }
     }
 
-    case LIBRARY_INIT_FAILURE:
-      return Object.assign({}, state, {
+    case types.LIBRARY_INIT_FAILURE:
+      return {
         ...state,
         isFetching: false,
         isInitialized: false,
         initHasFailed: true,
-      })
+      }
 
     default:
       return state

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ActionButton from '../../../common/components/ActionButton'
-import { eraseLibrary, initSettings, updateLibrary } from '../actions'
+import { operations } from '../duck'
 import Loading from '../../../common/components/Loading'
 import Message from '../../../common/components/Message'
 
@@ -127,13 +127,13 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({
   initSettings: () => {
-    dispatch(initSettings())
+    dispatch(operations.initSettings())
   },
   scanLibrary: () => {
-    dispatch(updateLibrary())
+    dispatch(operations.updateLibrary())
   },
   emptyLibrary: () => {
-    dispatch(eraseLibrary())
+    dispatch(operations.eraseLibrary())
   },
 })
 

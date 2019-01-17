@@ -2,12 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import * as Buttons from './buttons/index'
-import {
-  PLAYER_REPEAT_LOOP_ALL,
-  PLAYER_REPEAT_LOOP_ONE,
-  PLAYER_REPEAT_NO_REPEAT,
-} from '../actionsPlayer'
 import VolumeContainer from './VolumeContainer'
+import { constants } from '../duck'
 
 const ControlsWrapper = styled.div`
   margin: 10px 0;
@@ -63,14 +59,14 @@ const Controls = ({
   let RepeatButton
   let repeatButtonEnabled = false
   switch (repeat) {
-    case PLAYER_REPEAT_NO_REPEAT:
+    case constants.PLAYER_REPEAT_NO_REPEAT:
       RepeatButton = Buttons.CycleBtn
       break
-    case PLAYER_REPEAT_LOOP_ALL:
+    case constants.PLAYER_REPEAT_LOOP_ALL:
       RepeatButton = Buttons.CycleBtn
       repeatButtonEnabled = true
       break
-    case PLAYER_REPEAT_LOOP_ONE:
+    case constants.PLAYER_REPEAT_LOOP_ONE:
       RepeatButton = Buttons.RepeatBtn
       repeatButtonEnabled = true
       break

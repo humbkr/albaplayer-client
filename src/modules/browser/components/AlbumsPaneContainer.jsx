@@ -9,7 +9,7 @@ import LibraryBrowserPane from './LibraryBrowserPane'
 import AlbumContextMenu from './AlbumContextMenu'
 import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
 import { actions, selectors } from '../duck'
-import { addAlbum, playAlbum } from '../../player/actions'
+import { operations as playerOperations } from '../../player/duck'
 
 const AlbumsPaneWrapper = styled.div`
   display: inline-block;
@@ -137,10 +137,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.libraryBrowserSelectAlbum(itemId, index))
   },
   handlePlayNow: (albumId) => {
-    dispatch(playAlbum(albumId))
+    dispatch(playerOperations.playAlbum(albumId))
   },
   handleAddToQueue: (albumId) => {
-    dispatch(addAlbum(albumId))
+    dispatch(playerOperations.addAlbum(albumId))
   },
 })
 

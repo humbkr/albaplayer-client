@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Sidebar from './common/components/Sidebar'
 import MainPanel from './common/components/MainPanel'
-import { initLibrary } from './actions'
+import { operations } from './modules/library/duck'
 import MaterialIconsEot from './common/assets/fonts/MaterialIcons-Regular.eot'
 import MaterialIconsWoff2 from './common/assets/fonts/MaterialIcons-Regular.woff2'
 import MaterialIconsWoff from './common/assets/fonts/MaterialIcons-Regular.woff'
@@ -51,8 +51,7 @@ const AlbaAppWrapper = styled.div`
 
 class AlbaApp extends Component {
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(initLibrary())
+    this.props.initLibrary()
   }
 
   render() {
@@ -66,9 +65,20 @@ class AlbaApp extends Component {
   }
 }
 AlbaApp.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  initLibrary: PropTypes.func.isRequired,
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  initLibrary: () => {
+    dispatch(operations.initLibrary())
+  },
+})
 
 // Need to use withRouter here or the views in MainPanel won't change.
 // https://github.com/ReactTraining/react-router/issues/4671
-export default withRouter(connect()(AlbaApp))
+export default withRouter(
+  connect(
+    null,
+    mapDispatchToProps
+  )(AlbaApp)
+)

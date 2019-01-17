@@ -9,7 +9,7 @@ import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import ArtistContextMenu from './ArtistContextMenu'
 import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
 import { actions, selectors } from '../duck'
-import { addArtist, playArtist } from '../../player/actions'
+import { operations as playerOperations } from '../../player/duck'
 
 const ArtistsPaneWrapper = styled.div`
   display: inline-block;
@@ -129,10 +129,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.libraryBrowserSelectArtist(itemId, index))
   },
   handlePlayNow: (artistId) => {
-    dispatch(playArtist(artistId))
+    dispatch(playerOperations.playArtist(artistId))
   },
   handleAddToQueue: (artistId) => {
-    dispatch(addArtist(artistId))
+    dispatch(playerOperations.addArtist(artistId))
   },
 })
 

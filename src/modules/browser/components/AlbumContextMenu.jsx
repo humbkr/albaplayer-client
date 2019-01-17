@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Menu as ContextMenu, Item } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
-import { addAlbum, playAlbum } from '../../player/actions'
+import { operations } from '../../player/duck'
 
 class AlbumContextMenu extends Component {
   handlePlayNow = ({ props }) => {
@@ -28,12 +28,12 @@ AlbumContextMenu.propTypes = {
   handleAddToQueue: PropTypes.func.isRequired,
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   handlePlayNow: (albumId) => {
-    dispatch(playAlbum(albumId))
+    dispatch(operations.playAlbum(albumId))
   },
   handleAddToQueue: (albumId) => {
-    dispatch(addAlbum(albumId))
+    dispatch(operations.addAlbum(albumId))
   },
 })
 

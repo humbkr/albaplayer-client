@@ -1,21 +1,9 @@
-import getBackendUrl from '../../api/config'
-import {
-  PLAYER_REPEAT_LOOP_ALL,
-  PLAYER_REPEAT_LOOP_ONE,
-  playerSetProgress,
-  playerSetTrack,
-  playerTogglePlayPause,
-} from './actionsPlayer'
-import {
-  queueAddAlbum,
-  queueAddArtist,
-  queueAddTrack,
-  queueClear,
-  queueSetCurrent,
-} from './actionsQueue'
-import { getFullTrackInfo } from '../../api/api'
+import getBackendUrl from '../../../api/config'
+import actions from './actions'
+import constants from './constants'
+import { api } from '../../../api'
 
-const setTrackFromQueue = trackPosition => (dispatch, getState) => {
+const setTrackFromQueue = (trackPosition) => (dispatch, getState) => {
   const state = getState()
 
   if (state.queue.tracks.length < trackPosition) {
@@ -23,25 +11,25 @@ const setTrackFromQueue = trackPosition => (dispatch, getState) => {
   }
 
   // Make API call to get the track full info.
-  return getFullTrackInfo(state.queue.tracks[trackPosition].id).then(
-    (response) => {
+  return api
+    .getFullTrackInfo(state.queue.tracks[trackPosition].id)
+    .then((response) => {
       // And dispatch appropriate actions.
       // Copy track to change it.
       const track = { ...response.data.track }
       track.cover = track.cover ? getBackendUrl() + track.cover : ''
       track.src = getBackendUrl() + track.src
 
-      dispatch(playerSetTrack(track))
-      dispatch(queueSetCurrent(trackPosition))
-    }
-  )
+      dispatch(actions.playerSetTrack(track))
+      dispatch(actions.queueSetCurrent(trackPosition))
+    })
 }
 
 /*
  * Select the next track to play from the queue, get its info,
  * and dispatch required actions.
  */
-const setNextTrack = endOfTrack => (dispatch, getState) => {
+const setNextTrack = (endOfTrack) => (dispatch, getState) => {
   const state = getState()
 
   let nextTrackId = 0
@@ -57,7 +45,7 @@ const setNextTrack = endOfTrack => (dispatch, getState) => {
       // No track to play, do nothing.
       return null
     }
-  } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ONE) {
+  } else if (state.player.repeat === constants.PLAYER_REPEAT_LOOP_ONE) {
     // Play the same track again.
     // TODO: Maybe create an action to reset the current track.
     newQueuePosition = state.queue.current
@@ -72,7 +60,7 @@ const setNextTrack = endOfTrack => (dispatch, getState) => {
     // Get next song in queue.
     newQueuePosition = state.queue.current + 1
     nextTrackId = state.queue.tracks[state.queue.current + 1].id
-  } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ALL) {
+  } else if (state.player.repeat === constants.PLAYER_REPEAT_LOOP_ALL) {
     // End of the queue.
     // Loop back to the first track of the queue.
     newQueuePosition = 0
@@ -81,23 +69,23 @@ const setNextTrack = endOfTrack => (dispatch, getState) => {
     // No further track to play.
     if (endOfTrack) {
       // If the last track of the queue finished playing reset the player
-      dispatch(playerSetProgress(0))
-      dispatch(playerTogglePlayPause(false))
+      dispatch(actions.playerSetProgress(0))
+      dispatch(actions.playerTogglePlayPause(false))
     }
     // Else setNextTrack call is the result of a user action so do nothing.
     return null
   }
 
   // Make API call to get the track full info.
-  return getFullTrackInfo(nextTrackId).then((response) => {
+  return api.getFullTrackInfo(nextTrackId).then((response) => {
     // And dispatch appropriate actions.
     // Copy track to change it.
     const track = { ...response.data.track }
     track.cover = track.cover ? getBackendUrl() + track.cover : ''
     track.src = getBackendUrl() + track.src
 
-    dispatch(playerSetTrack(track))
-    dispatch(queueSetCurrent(newQueuePosition))
+    dispatch(actions.playerSetTrack(track))
+    dispatch(actions.queueSetCurrent(newQueuePosition))
   })
 }
 
@@ -116,7 +104,7 @@ const setPreviousTrack = () => (dispatch, getState) => {
     // Do nothing.
     return null
   }
-  if (state.player.repeat === PLAYER_REPEAT_LOOP_ONE) {
+  if (state.player.repeat === constants.PLAYER_REPEAT_LOOP_ONE) {
     // Play the same track again.
     // TODO: Maybe create an action to reset the current track.
     newQueuePosition = state.queue.current
@@ -130,7 +118,7 @@ const setPreviousTrack = () => (dispatch, getState) => {
     // Get previous song in queue.
     newQueuePosition = state.queue.current - 1
     prevTrackId = state.queue.tracks[state.queue.current - 1].id
-  } else if (state.player.repeat === PLAYER_REPEAT_LOOP_ALL) {
+  } else if (state.player.repeat === constants.PLAYER_REPEAT_LOOP_ALL) {
     // Begining of the queue.
     // Loop back to the last track of the queue.
     newQueuePosition = state.queue.tracks.length - 1
@@ -141,67 +129,67 @@ const setPreviousTrack = () => (dispatch, getState) => {
   }
 
   // Make API call to get the track full info.
-  return getFullTrackInfo(prevTrackId).then((response) => {
+  return api.getFullTrackInfo(prevTrackId).then((response) => {
     // And dispatch appropriate actions.
     // Copy track to change it.
     const track = { ...response.data.track }
     track.cover = track.cover ? getBackendUrl() + track.cover : ''
     track.src = getBackendUrl() + track.src
 
-    dispatch(playerSetTrack(track))
-    dispatch(queueSetCurrent(newQueuePosition))
+    dispatch(actions.playerSetTrack(track))
+    dispatch(actions.queueSetCurrent(newQueuePosition))
   })
 }
 
-const playTrack = id => (dispatch) => {
-  dispatch(queueClear())
-  dispatch(queueAddTrack(id))
-  dispatch(setTrackFromQueue(0))
-  dispatch(playerTogglePlayPause(true))
+const playTrack = (id) => (dispatch) => {
+  dispatch(actions.queueClear())
+  dispatch(actions.queueAddTrack(id))
+  dispatch(actions.setTrackFromQueue(0))
+  dispatch(actions.playerTogglePlayPause(true))
 }
 
-const playAlbum = id => (dispatch) => {
-  dispatch(queueClear())
-  dispatch(queueAddAlbum(id))
-  dispatch(setTrackFromQueue(0))
-  dispatch(playerTogglePlayPause(true))
+const playAlbum = (id) => (dispatch) => {
+  dispatch(actions.queueClear())
+  dispatch(actions.queueAddAlbum(id))
+  dispatch(actions.setTrackFromQueue(0))
+  dispatch(actions.playerTogglePlayPause(true))
 }
 
-const playArtist = id => (dispatch) => {
-  dispatch(queueClear())
-  dispatch(queueAddArtist(id))
-  dispatch(setTrackFromQueue(0))
-  dispatch(playerTogglePlayPause(true))
+const playArtist = (id) => (dispatch) => {
+  dispatch(actions.queueClear())
+  dispatch(actions.queueAddArtist(id))
+  dispatch(actions.setTrackFromQueue(0))
+  dispatch(actions.playerTogglePlayPause(true))
 }
 
-const addTrack = id => (dispatch, getState) => {
-  dispatch(queueAddTrack(id))
+const addTrack = (id) => (dispatch, getState) => {
+  dispatch(actions.queueAddTrack(id))
 
   const state = getState()
   if (state.player.track === null) {
-    dispatch(setTrackFromQueue(0))
+    dispatch(actions.setTrackFromQueue(0))
   }
 }
 
-const addAlbum = id => (dispatch, getState) => {
-  dispatch(queueAddAlbum(id))
+const addAlbum = (id) => (dispatch, getState) => {
+  dispatch(actions.queueAddAlbum(id))
 
   const state = getState()
   if (state.player.track === null) {
-    dispatch(setTrackFromQueue(0))
+    dispatch(actions.setTrackFromQueue(0))
   }
 }
 
-const addArtist = id => (dispatch, getState) => {
-  dispatch(queueAddArtist(id))
+const addArtist = (id) => (dispatch, getState) => {
+  dispatch(actions.queueAddArtist(id))
 
   const state = getState()
   if (state.player.track === null) {
-    dispatch(setTrackFromQueue(0))
+    dispatch(actions.setTrackFromQueue(0))
   }
 }
 
-export {
+export default {
   setTrackFromQueue,
   setNextTrack,
   setPreviousTrack,

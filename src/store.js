@@ -1,17 +1,16 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-import library from './reducers'
-import libraryBrowser from './modules/browser/duck/reducers'
-import queue from './modules/player/reducersQueue'
-import player from './modules/player/reducersPlayer'
-import settings from './modules/settings/reducers'
+import library from './modules/library/duck/reducers'
+import libraryBrowser from './modules/browser/duck'
+import player from './modules/player/duck'
+import settings from './modules/settings/duck'
 
 const customReducer = (state = {}, action) => ({
   library: library(state.library, action),
   libraryBrowser: libraryBrowser(state.libraryBrowser, action, state.library),
-  queue: queue(state.queue, action, state.library),
-  player: player(state.player, action),
+  queue: player.queue(state.queue, action, state.library),
+  player: player.player(state.player, action),
   settings: settings(state.settings, action),
 })
 

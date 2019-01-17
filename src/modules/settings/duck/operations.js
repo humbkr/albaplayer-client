@@ -1,48 +1,42 @@
-import { emptyLibrary, getSettings, scanLibrary } from '../../api/api'
-import { initLibrary } from '../../actions'
-import apolloClient from '../../api/apollo'
+import { operations } from '../../library/duck'
+import types from './types'
+import { api, apolloClient } from '../../../api'
 
-const SETTINGS_INIT = 'SETTINGS_INIT'
-const settingsInit = response => ({
-  type: SETTINGS_INIT,
+const settingsInit = (response) => ({
+  type: types.SETTINGS_INIT,
   response: response.data,
 })
 
-const LIBRARY_UPDATE_START = 'LIBRARY_UPDATE_START'
 const libraryUpdateStart = () => ({
-  type: LIBRARY_UPDATE_START,
+  type: types.LIBRARY_UPDATE_START,
 })
 
-const LIBRARY_UPDATE_SUCCESS = 'LIBRARY_UPDATE_SUCCESS'
-const libraryUpdateSuccess = response => ({
-  type: LIBRARY_UPDATE_SUCCESS,
+const libraryUpdateSuccess = (response) => ({
+  type: types.LIBRARY_UPDATE_SUCCESS,
   response: response.data,
 })
 
-const LIBRARY_UPDATE_FAILURE = 'LIBRARY_UPDATE_FAILURE'
-const libraryUpdateFailure = response => ({
-  type: LIBRARY_UPDATE_FAILURE,
+const libraryUpdateFailure = (response) => ({
+  type: types.LIBRARY_UPDATE_FAILURE,
   response,
 })
 
-const LIBRARY_ERASE_START = 'LIBRARY_ERASE_START'
 const libraryEraseStart = () => ({
-  type: LIBRARY_ERASE_START,
+  type: types.LIBRARY_ERASE_START,
 })
 
-const LIBRARY_ERASE_SUCCESS = 'LIBRARY_ERASE_SUCCESS'
-const libraryEraseSuccess = response => ({
-  type: LIBRARY_ERASE_SUCCESS,
+const libraryEraseSuccess = (response) => ({
+  type: types.LIBRARY_ERASE_SUCCESS,
   response: response.data,
 })
 
-const LIBRARY_ERASE_FAILURE = 'LIBRARY_ERASE_FAILURE'
-const libraryEraseFailure = response => ({
-  type: LIBRARY_ERASE_FAILURE,
+const libraryEraseFailure = (response) => ({
+  type: types.LIBRARY_ERASE_FAILURE,
   response,
 })
 
-const initSettings = () => dispatch => getSettings()
+const initSettings = () => (dispatch) => api
+  .getSettings()
   .then((response) => {
     dispatch(settingsInit(response))
   })
@@ -55,12 +49,13 @@ const updateLibrary = () => (dispatch) => {
   dispatch(libraryUpdateStart())
 
   // Then we make the API call.
-  return scanLibrary()
+  return api
+    .scanLibrary()
     .then((response) => {
       // TODO: not fan of calling apolloClient here.
       apolloClient.resetStore().then(() => {
         dispatch(libraryUpdateSuccess(response))
-        dispatch(initLibrary(true))
+        dispatch(operations.initLibrary(true))
       })
     })
     .catch((response) => {
@@ -73,12 +68,13 @@ const eraseLibrary = () => (dispatch) => {
   dispatch(libraryEraseStart())
 
   // Then we make the API call.
-  return emptyLibrary()
+  return api
+    .emptyLibrary()
     .then((response) => {
       // TODO: not fan of calling apolloClient here.
       apolloClient.resetStore().then(() => {
         dispatch(libraryEraseSuccess(response))
-        dispatch(initLibrary(true))
+        dispatch(operations.initLibrary(true))
       })
     })
     .catch((response) => {
@@ -86,14 +82,7 @@ const eraseLibrary = () => (dispatch) => {
     })
 }
 
-export {
-  SETTINGS_INIT,
-  LIBRARY_UPDATE_START,
-  LIBRARY_UPDATE_SUCCESS,
-  LIBRARY_UPDATE_FAILURE,
-  LIBRARY_ERASE_START,
-  LIBRARY_ERASE_SUCCESS,
-  LIBRARY_ERASE_FAILURE,
+export default {
   updateLibrary,
   eraseLibrary,
   initSettings,

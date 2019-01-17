@@ -9,7 +9,7 @@ import TrackContextMenu from './TrackContextMenu'
 import LibraryBrowserPane from './LibraryBrowserPane'
 import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
 import { actions, selectors } from '../duck'
-import { addTrack, playTrack } from '../../player/actions'
+import { operations as playerOperations } from '../../player/duck'
 
 const TracksPaneWrapper = styled.div`
   display: inline-block;
@@ -149,10 +149,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.libraryBrowserSelectTrack(itemId, index))
   },
   handlePlayNow: (trackId) => {
-    dispatch(playTrack(trackId))
+    dispatch(playerOperations.playTrack(trackId))
   },
   handleAddToQueue: (trackId) => {
-    dispatch(addTrack(trackId))
+    dispatch(playerOperations.addTrack(trackId))
   },
 })
 
