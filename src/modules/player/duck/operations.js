@@ -144,21 +144,21 @@ const setPreviousTrack = () => (dispatch, getState) => {
 const playTrack = (id) => (dispatch) => {
   dispatch(actions.queueClear())
   dispatch(actions.queueAddTrack(id))
-  dispatch(actions.setTrackFromQueue(0))
+  dispatch(setTrackFromQueue(0))
   dispatch(actions.playerTogglePlayPause(true))
 }
 
 const playAlbum = (id) => (dispatch) => {
   dispatch(actions.queueClear())
   dispatch(actions.queueAddAlbum(id))
-  dispatch(actions.setTrackFromQueue(0))
+  dispatch(setTrackFromQueue(0))
   dispatch(actions.playerTogglePlayPause(true))
 }
 
 const playArtist = (id) => (dispatch) => {
   dispatch(actions.queueClear())
   dispatch(actions.queueAddArtist(id))
-  dispatch(actions.setTrackFromQueue(0))
+  dispatch(setTrackFromQueue(0))
   dispatch(actions.playerTogglePlayPause(true))
 }
 
@@ -167,7 +167,7 @@ const addTrack = (id) => (dispatch, getState) => {
 
   const state = getState()
   if (state.player.track === null) {
-    dispatch(actions.setTrackFromQueue(0))
+    dispatch(setTrackFromQueue(0))
   }
 }
 
@@ -176,7 +176,7 @@ const addAlbum = (id) => (dispatch, getState) => {
 
   const state = getState()
   if (state.player.track === null) {
-    dispatch(actions.setTrackFromQueue(0))
+    dispatch(setTrackFromQueue(0))
   }
 }
 
@@ -185,7 +185,7 @@ const addArtist = (id) => (dispatch, getState) => {
 
   const state = getState()
   if (state.player.track === null) {
-    dispatch(actions.setTrackFromQueue(0))
+    dispatch(setTrackFromQueue(0))
   }
 }
 
