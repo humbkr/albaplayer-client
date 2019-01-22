@@ -7,6 +7,7 @@ import LibraryBrowser from '../../modules/browser/scenes/LibraryBrowser'
 import NowPlaying from '../../modules/now_playing/scenes/NowPlaying'
 import LoadingScreen from './LoadingScreen'
 import Settings from '../../modules/settings/scenes/Settings'
+import Playlists from '../../modules/playlist/scenes/Playlists'
 
 const MainPanelWrapper = styled.div`
   margin-left: ${(props) => props.theme.sidebar.width};
@@ -29,6 +30,7 @@ const MainPanel = (props) => {
             <Route exact path="/" component={LibraryBrowser} />
             <Route path="/library" component={LibraryBrowser} />
             <Route path="/queue" component={NowPlaying} />
+            <Route path="/playlists" component={Playlists} />
             <Route path="/settings" component={Settings} />
           </MainPanelWrapper>
       )}

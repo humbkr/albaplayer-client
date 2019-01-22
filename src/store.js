@@ -4,6 +4,7 @@ import { createLogger } from 'redux-logger'
 import library from './modules/library/duck/reducers'
 import libraryBrowser from './modules/browser/duck'
 import player from './modules/player/duck'
+import playlist from './modules/playlist/duck'
 import settings from './modules/settings/duck'
 
 const customReducer = (state = {}, action) => ({
@@ -11,6 +12,7 @@ const customReducer = (state = {}, action) => ({
   libraryBrowser: libraryBrowser(state.libraryBrowser, action, state.library),
   queue: player.queue(state.queue, action, state.library),
   player: player.player(state.player, action),
+  playlist: playlist(state.playlist, action),
   settings: settings(state.settings, action),
 })
 

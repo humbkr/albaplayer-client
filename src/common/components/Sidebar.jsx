@@ -32,6 +32,9 @@ const Sidebar = () => (
       <SidebarNavLink to="/library" icon="library_music">
         Library browser
       </SidebarNavLink>
+      <SidebarNavLink to="/playlists" icon="view_list">
+        Playlists
+      </SidebarNavLink>
     </MainMenu>
     <SettingsMenu>
       <SidebarNavLink to="/settings" icon="settings">

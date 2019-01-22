@@ -33,6 +33,7 @@ const themeDefault = {
     height: '32px',
     sidePadding: '16px',
     fontSize: '14px',
+    iconSize: 24,
     color: '#009688',
     colorHover: '#00bdab',
     colorDisabled: '#b2b2b2',

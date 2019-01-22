@@ -1,11 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 import PropTypes from 'prop-types'
 import Icon from './Icon'
 
-const ActionButtonWrapper = styled.button`
+const Wrapper = styled.button`
   padding: 10px;
-  font-size: ${(props) => props.theme.buttons.fontSize};
   border: none;
   cursor: pointer;
   text-transform: uppercase;
@@ -28,23 +27,28 @@ const ActionButtonWrapper = styled.button`
 `
 
 const ActionButtonIcon = (props) => (
-  <ActionButtonWrapper
+  <Wrapper
     className={props.className}
     disabled={props.disabled}
     onClick={props.onClick}
   >
-    <Icon>{props.icon}</Icon>
-  </ActionButtonWrapper>
+    <Icon size={props.size ? props.size : props.theme.buttons.iconSize}>
+      {props.icon}
+    </Icon>
+  </Wrapper>
 )
 ActionButtonIcon.propTypes = {
   onClick: PropTypes.func.isRequired,
   icon: PropTypes.string.isRequired,
+  size: PropTypes.number,
   className: PropTypes.string,
   disabled: PropTypes.bool,
+  theme: PropTypes.objectOf(PropTypes.shape).isRequired,
 }
 ActionButtonIcon.defaultProps = {
   className: '',
   disabled: false,
+  size: null,
 }
 
-export default ActionButtonIcon
+export default withTheme(ActionButtonIcon)

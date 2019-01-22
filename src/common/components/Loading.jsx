@@ -19,12 +19,12 @@ const rotate360CounterClockwiseRule = css`
 
 const LoadingStyled = styled(Icon)`
   color: ${(props) => props.theme.highlight};
-  font-size: ${(props) => props.size};
+  font-size: ${(props) => props.fontSize};
   animation: ${rotate360CounterClockwiseRule};
 `
 
 const Loading = (props) => (
-  <LoadingStyled size={props.size}>camera</LoadingStyled>
+  <LoadingStyled fontSize={props.size}>camera</LoadingStyled>
 )
 Loading.propTypes = {
   size: PropTypes.string,
