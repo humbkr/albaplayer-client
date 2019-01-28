@@ -9,6 +9,7 @@ const TrackInfoWrapper = styled.div`
   height: ${(props) => props.theme.sidebar.width};
   background: url(${coverPlaceholder}) no-repeat;
   background-size: 100% 100%;
+  overflow: hidden;
 `
 
 const Cover = styled.img`
