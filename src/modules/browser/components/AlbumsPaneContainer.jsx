@@ -7,7 +7,7 @@ import AlbumTeaser from './AlbumTeaser'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import LibraryBrowserPane from './LibraryBrowserPane'
 import AlbumContextMenu from './AlbumContextMenu'
-import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopup'
 import { actions, selectors } from '../duck'
 import { operations as playerOperations } from '../../player/duck'
 

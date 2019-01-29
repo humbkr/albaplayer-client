@@ -3,6 +3,38 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Icon from './Icon'
 
+const ActionButton = (props) => (
+  <ActionButtonWrapper
+    raised={props.raised}
+    disabled={props.disabled}
+    onClick={props.onClick}
+    type={props.type}
+  >
+    {props.icon && <Icon>{props.icon}</Icon>}
+    <span>{props.children}</span>
+  </ActionButtonWrapper>
+)
+ActionButton.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.any,
+  ]),
+  onClick: PropTypes.func.isRequired,
+  icon: PropTypes.string,
+  raised: PropTypes.bool,
+  disabled: PropTypes.bool,
+  type: PropTypes.string.isRequired,
+}
+ActionButton.defaultProps = {
+  children: null,
+  icon: null,
+  raised: false,
+  disabled: false,
+}
+
+export default ActionButton
+
 const ActionButtonWrapper = styled.button`
   padding: 0 ${(props) => props.theme.buttons.sidePadding};
   font-size: ${(props) => props.theme.buttons.fontSize};
@@ -51,29 +83,3 @@ const ActionButtonWrapper = styled.button`
     line-height: ${(props) => props.theme.buttons.height};
   }
 `
-
-const ActionButton = (props) => (
-  <ActionButtonWrapper
-    raised={props.raised}
-    disabled={props.disabled}
-    onClick={props.onClick}
-  >
-    {props.icon && <Icon>{props.icon}</Icon>}
-    <span>{props.children}</span>
-  </ActionButtonWrapper>
-)
-ActionButton.propTypes = {
-  children: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-  icon: PropTypes.string,
-  raised: PropTypes.bool,
-  disabled: PropTypes.bool,
-}
-ActionButton.defaultProps = {
-  children: '',
-  icon: null,
-  raised: false,
-  disabled: false,
-}
-
-export default ActionButton

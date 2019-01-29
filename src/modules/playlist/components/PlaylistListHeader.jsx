@@ -3,6 +3,20 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
 
+const PlaylistListHeader = (props) => (
+  <Wrapper>
+    <h2>Playlists</h2>
+    <Actions>
+      <ActionButtonIcon icon="add" onClick={props.onAddClick} />
+    </Actions>
+  </Wrapper>
+)
+PlaylistListHeader.propTypes = {
+  onAddClick: PropTypes.func.isRequired,
+}
+
+export default PlaylistListHeader
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -23,18 +37,3 @@ const Actions = styled.div`
     color: ${(props) => props.theme.textHighlightFocusColor};
   }
 `
-
-const PlaylistListHeader = (props) => (
-  <Wrapper>
-    <h2>Playlists</h2>
-    <Actions>
-      <ActionButtonIcon icon="add" onClick={props.onAddClick} />
-    </Actions>
-  </Wrapper>
-)
-
-PlaylistListHeader.propTypes = {
-  onAddClick: PropTypes.func.isRequired,
-}
-
-export default PlaylistListHeader

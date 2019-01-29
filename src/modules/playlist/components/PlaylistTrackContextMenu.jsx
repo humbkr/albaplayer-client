@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import {
   Menu as ContextMenu, Item, Submenu, Separator,
 } from 'react-contexify'
@@ -9,14 +9,16 @@ import { operations } from '../../player/duck'
 import {
   actions as playlistActions,
   selectors as playlistSelectors,
-} from '../../playlist/duck'
+} from '../duck'
 
-const AlbumContextMenu = (props) => {
+const PlaylistTrackContextMenu = (props) => {
   const {
     handlePlayNow,
     handleAddToQueue,
     playlists,
     handleAddToPlaylist,
+    playlistRemoveTrack,
+    currentPlaylist,
   } = props
   const playlistsItems = playlists.map((item) => (
     <Item
@@ -28,7 +30,7 @@ const AlbumContextMenu = (props) => {
   ))
 
   return (
-    <ContextMenu id="album-context-menu">
+    <ContextMenu id="playlist-track-context-menu">
       <Item onClick={(menuItem) => handlePlayNow(menuItem.props.id)}>
         Play now
       </Item>
@@ -37,33 +39,45 @@ const AlbumContextMenu = (props) => {
       </Item>
       <Separator />
       <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
+      <Separator />
+      <Item
+        onClick={(menuItem) => playlistRemoveTrack(currentPlaylist.id, menuItem.props.position)
+        }
+      >
+        Remove from playlist
+      </Item>
     </ContextMenu>
   )
 }
-AlbumContextMenu.propTypes = {
+PlaylistTrackContextMenu.propTypes = {
   handlePlayNow: PropTypes.func.isRequired,
   handleAddToQueue: PropTypes.func.isRequired,
   playlists: PropTypes.arrayOf(PropTypes.shape).isRequired,
   handleAddToPlaylist: PropTypes.func.isRequired,
+  playlistRemoveTrack: PropTypes.func.isRequired,
+  currentPlaylist: PropTypes.objectOf(PropTypes.shape).isRequired,
 }
 
 const mapStateToProps = (state) => ({
   playlists: playlistSelectors.getPlaylists(state),
+  currentPlaylist: state.playlist.currentPlaylist.playlist,
 })
-
 const mapDispatchToProps = (dispatch) => ({
-  handlePlayNow: (albumId) => {
-    dispatch(operations.playAlbum(albumId))
+  handlePlayNow: (trackId) => {
+    dispatch(operations.playTrack(trackId))
   },
-  handleAddToQueue: (albumId) => {
-    dispatch(operations.addAlbum(albumId))
+  handleAddToQueue: (trackId) => {
+    dispatch(operations.addTrack(trackId))
   },
-  handleAddToPlaylist: (playlistId, albumId) => {
-    dispatch(playlistActions.playlistAddAlbum(playlistId, albumId))
+  handleAddToPlaylist: (playlistId, trackId) => {
+    dispatch(playlistActions.playlistAddTrack(playlistId, trackId))
+  },
+  playlistRemoveTrack: (playlistId, trackId) => {
+    dispatch(playlistActions.playlistRemoveTrack(playlistId, trackId))
   },
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AlbumContextMenu)
+)(PlaylistTrackContextMenu)

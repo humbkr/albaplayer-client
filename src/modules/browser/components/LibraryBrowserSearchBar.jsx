@@ -52,6 +52,7 @@ const LibraryBrowserSearchBar = (props) => {
 LibraryBrowserSearchBar.propTypes = {
   searchTerm: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  forwardedRef: PropTypes.shape.isRequired,
 }
 
 const mapStateToProps = (state) => ({

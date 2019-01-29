@@ -2,28 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Modal from 'react-modal'
+import {
+  Formik, Form, Field, ErrorMessage,
+} from 'formik'
+import moment from 'moment'
+import { getRandomInt } from '../../../common/utils/utils'
 import ActionButton from '../../../common/components/ActionButton'
 
 // http://reactcommunity.org/react-modal/accessibility/
 Modal.setAppElement('#root')
-
-const ModalContent = styled.div`
-  > div:first-child {
-    margin-bottom: 10px;
-  }
-`
-
-const Title = styled.h3``
-
-const Input = styled.input`
-  font-size: 1em;
-  padding: 5px 10px;
-`
-
-const Actions = styled.div`
-  margin-top: 30px;
-  text-align: right;
-`
 
 const modalStyles = {
   content: {
@@ -34,8 +21,8 @@ const modalStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
-    padding: '20px 10px 20px 20px',
-    width: '300px',
+    padding: '20px',
+    width: '350px',
   },
   overlay: {
     backgroundColor: '',
@@ -46,34 +33,46 @@ class PlaylistAddPopup extends React.Component {
   constructor(props) {
     super(props)
 
-    this.modal = React.createRef()
+    this.titleField = React.createRef()
   }
 
   afterOpenModal = () => {
-    this.modal.current.focus()
+    this.titleField.current.focus()
   }
 
-  handleAddPlaylist = (title) => {
-    this.props.handleAddPlaylist(title)
-  }
-
-  handleKeyDown = (e) => {
-    const { itemId, onClose } = this.props
-
-    e.preventDefault()
-    if (e.keyCode === 13) {
-      // If Enter adds element to the end of the playlist.
-      this.handleAddPlaylist(itemId)
-    } else if (e.keyCode === 32) {
-      // If Space plays the element directly.
-      this.handlePlayNow(itemId)
+  handleCreatePlaylist = (title) => {
+    // Create a playlist object.
+    const playlist = {
+      id: `temp_${getRandomInt(1, 100000)}`,
+      title,
+      date: moment().format('YYYY-MM-DD'),
+      tracks: [],
     }
-    // Else just close the popup and do nothing else.
-    onClose()
+
+    this.props.handleCreatePlaylist(playlist)
+  }
+
+  handleEditPlaylist = (title) => {
+    const playlist = {
+      ...this.props.playlist,
+      title,
+    }
+
+    this.props.handleEditPlaylist(playlist)
+  }
+
+  // Prevent weird bug when user is pressing enter to validate the form:
+  // without this the modal doesn't close even if state is correct.
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault()
+    }
   }
 
   render() {
-    const { id, isOpen, onClose } = this.props
+    const {
+      id, isOpen, onClose, mode, playlist,
+    } = this.props
 
     return (
       <Modal
@@ -85,21 +84,65 @@ class PlaylistAddPopup extends React.Component {
       >
         <ModalContent
           role="button"
-          ref={this.modal}
+          onKeyDown={(e) => this.handleKeyDown(e)}
           tabIndex="0"
-          onKeyDown={this.handleKeyDown}
         >
-          <Title>Create a new playlist</Title>
-          <form>
-            <label htmlFor="add-playlist-title">Title: </label>
-            <Input id="add-playlist-title" type="text" />
-            <Actions>
-              <ActionButton raised onClick={() => console.log('TODO')}>
-                Create
-              </ActionButton>
-              <ActionButton onClick={onClose}>Cancel</ActionButton>
-            </Actions>
-          </form>
+          <Title>
+            {mode === 'edit' && 'Edit playlist'}
+            {mode !== 'edit' && 'Create a new playlist'}
+          </Title>
+          <Formik
+            initialValues={{
+              title: mode === 'edit' && playlist ? playlist.title : '',
+            }}
+            validate={(values) => {
+              const errors = {}
+              if (!values.title) {
+                errors.title = 'This field is required.'
+              }
+              return errors
+            }}
+            onSubmit={(values, { setSubmitting }) => {
+              if (mode === 'edit') {
+                this.handleEditPlaylist(values.title)
+              } else {
+                this.handleCreatePlaylist(values.title)
+              }
+              setSubmitting(false)
+              onClose()
+            }}
+          >
+            {({ isSubmitting, handleSubmit }) => (
+              <Form>
+                <Label htmlFor="title">Title: </Label>
+                <FormField
+                  autoComplete="off"
+                  type="text"
+                  name="title"
+                  innerRef={this.titleField}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) {
+                      handleSubmit()
+                    }
+                  }}
+                />
+                <FormError name="title" component="span" />
+
+                <Actions>
+                  <ActionButton
+                    raised
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    type="submit"
+                  >
+                    {mode === 'edit' && 'Edit'}
+                    {mode !== 'edit' && 'Create'}
+                  </ActionButton>
+                  <ActionButton onClick={onClose}>Cancel</ActionButton>
+                </Actions>
+              </Form>
+            )}
+          </Formik>
         </ModalContent>
       </Modal>
     )
@@ -109,7 +152,40 @@ PlaylistAddPopup.propTypes = {
   id: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  handleAddPlaylist: PropTypes.func.isRequired,
+  mode: PropTypes.string,
+  playlist: PropTypes.objectOf(PropTypes.shape),
+  handleCreatePlaylist: PropTypes.func.isRequired,
+  handleEditPlaylist: PropTypes.func.isRequired,
+}
+PlaylistAddPopup.defaultProps = {
+  playlist: null,
+  mode: 'add',
 }
 
 export default PlaylistAddPopup
+
+const ModalContent = styled.div`
+  > div:first-child {
+    margin-bottom: 10px;
+  }
+`
+const Title = styled.h3`
+  margin-bottom: 20px;
+`
+const Label = styled.label`
+  display: block;
+  color: ${(props) => props.theme.textSecondaryColor};
+`
+const FormField = styled(Field)`
+  font-size: 1em;
+  padding: 5px 10px;
+  width: 100%;
+`
+const FormError = styled(ErrorMessage)`
+  color: ${(props) => props.theme.messages.error.color};
+  font-size: 0.9em;
+`
+const Actions = styled.div`
+  margin-top: 30px;
+  text-align: right;
+`

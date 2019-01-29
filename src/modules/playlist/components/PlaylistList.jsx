@@ -2,51 +2,35 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { withTheme } from 'styled-components'
 import { ArrowKeyStepper, AutoSizer, List } from 'react-virtualized'
-import LibraryBrowserListItem from './LibraryBrowserListItem'
+import ListItem from './ListItem'
+import PlaylistTeaser from './PlaylistTeaser'
 
-const LibraryBrowserListWrapper = styled.div`
-  display: flex;
-  flex: 1;
-
-  // Needed for the autosizer to work correctly.
-  .autosizer-wrapper {
-    flex: 1;
-    overflow: auto;
-  }
-`
-
-class LibraryBrowserList extends React.Component {
-  selectRow = ({ scrollToRow, itemId }) => {
-    let itemID = itemId
-    if (itemID === undefined) {
-      // Get the item id from the list.
-      const { items } = this.props
-      itemID = items[scrollToRow].id
-    }
-    this.props.onItemClick(itemID, scrollToRow)
+class PlaylistList extends React.Component {
+  selectRow = ({ scrollToRow }) => {
+    const { items } = this.props
+    this.props.onItemClick(items[scrollToRow], scrollToRow)
   }
 
   // Magic function used by react-virtualized.
   rowRenderer = ({
     items, scrollToRow, key, index, style,
   }) => {
-    const Display = this.props.itemDisplay
-    const selected = { selected: index === scrollToRow }
+    const selected = index === scrollToRow
 
     return (
-      <LibraryBrowserListItem
-        className={selected.selected ? 'selected' : ''}
+      <ListItem
+        className={selected ? 'selected' : ''}
+        selected={selected}
         border
         key={key}
         style={style}
-        {...selected}
-        onClick={() => this.selectRow({ scrollToRow: index, itemId: items[index].id })
+        onClick={() => this.selectRow({ scrollToRow: index, item: items[index] })
         }
-        onContextMenu={() => this.selectRow({ scrollToRow: index, itemId: items[index].id })
+        onContextMenu={() => this.selectRow({ scrollToRow: index, item: items[index] })
         }
       >
-        <Display item={items[index]} index={index} {...selected} />
-      </LibraryBrowserListItem>
+        <PlaylistTeaser item={items[index]} />
+      </ListItem>
     )
   }
 
@@ -55,9 +39,9 @@ class LibraryBrowserList extends React.Component {
     const scrollToRow = this.props.currentPosition
 
     return (
-      <LibraryBrowserListWrapper onKeyDown={onKeyDown}>
+      <Wrapper onKeyDown={onKeyDown}>
         <ArrowKeyStepper
-          // This class is used to manage the focused style in LibraryBrowserPane.
+          // This class is used to manage the focused style in Playlists.jsx.
           className="autosizer-wrapper"
           columnCount={1}
           rowCount={items.length}
@@ -99,23 +83,31 @@ class LibraryBrowserList extends React.Component {
             </AutoSizer>
           )}
         </ArrowKeyStepper>
-      </LibraryBrowserListWrapper>
+      </Wrapper>
     )
   }
 }
-LibraryBrowserList.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  theme: PropTypes.object.isRequired,
-  items: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  itemDisplay: PropTypes.func.isRequired,
+PlaylistList.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape).isRequired,
+  theme: PropTypes.objectOf(PropTypes.shape).isRequired,
   currentPosition: PropTypes.number.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
   forwardedRef: PropTypes.shape().isRequired,
 }
 
-const ThemedLibraryBrowserList = withTheme(LibraryBrowserList)
+const ThemedPlaylistList = withTheme(PlaylistList)
 
 export default React.forwardRef((props, ref) => (
-  <ThemedLibraryBrowserList {...props} forwardedRef={ref} />
+  <ThemedPlaylistList {...props} forwardedRef={ref} />
 ))
+
+const Wrapper = styled.div`
+  flex: 1;
+
+  // Needed for the autosizer to work correctly.
+  .autosizer-wrapper {
+    overflow: auto;
+    height: 100%;
+  }
+`

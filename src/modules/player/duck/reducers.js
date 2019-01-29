@@ -104,7 +104,7 @@ const queueReducerInitialState = {
   current: undefined,
 }
 
-function queue(state = queueReducerInitialState, action, library) {
+function queue(state = queueReducerInitialState, action, library, playlists) {
   switch (action.type) {
     case types.QUEUE_ADD_TRACK: {
       const track = library.tracks[action.trackId]
@@ -145,12 +145,28 @@ function queue(state = queueReducerInitialState, action, library) {
         // eslint-disable-next-line no-param-reassign
         track.artist = library.artists[track.artistId]
         // eslint-disable-next-line no-param-reassign
-        track.albums = library.albums[track.albumId]
+        track.album = library.albums[track.albumId]
       })
 
       return {
         ...state,
         tracks: [...state.tracks, ...filteredTracks],
+      }
+    }
+    case types.QUEUE_ADD_PLAYLIST: {
+      // Get tracks from playlist.
+      const playlist = playlists.playlists[action.playlistId]
+
+      playlist.tracks.forEach((track) => {
+        // eslint-disable-next-line no-param-reassign
+        track.artist = library.artists[track.artistId]
+        // eslint-disable-next-line no-param-reassign
+        track.album = library.albums[track.albumId]
+      })
+
+      return {
+        ...state,
+        tracks: [...state.tracks, ...playlist.tracks],
       }
     }
     case types.QUEUE_REMOVE_TRACK:

@@ -3,27 +3,8 @@ import styled from 'styled-components'
 import SidebarNavLink from './SidebarNavLink'
 import Player from '../../modules/player/components/Player'
 
-const SidebarWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: ${(props) => props.theme.sidebar.width};
-  height: 100%;
-  background-color: ${(props) => props.theme.sidebar.background};
-`
-
-const MainMenu = styled.div`
-  padding-top: 100px;
-`
-
-const SettingsMenu = styled.div`
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-`
-
 const Sidebar = () => (
-  <SidebarWrapper>
+  <Wrapper>
     <Player />
     <MainMenu>
       <SidebarNavLink to="/queue" icon="play_circle_outline">
@@ -41,7 +22,26 @@ const Sidebar = () => (
         Settings
       </SidebarNavLink>
     </SettingsMenu>
-  </SidebarWrapper>
+  </Wrapper>
 )
 
 export default Sidebar
+
+const Wrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: ${(props) => props.theme.sidebar.width};
+  height: 100%;
+  background-color: ${(props) => props.theme.sidebar.background};
+`
+
+const MainMenu = styled.div`
+  padding-top: 50px;
+`
+
+const SettingsMenu = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+`

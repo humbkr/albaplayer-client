@@ -7,7 +7,7 @@ import ArtistTeaser from './ArtistTeaser'
 import LibraryBrowserPane from './LibraryBrowserPane'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import ArtistContextMenu from './ArtistContextMenu'
-import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopup'
 import { actions, selectors } from '../duck'
 import { operations as playerOperations } from '../../player/duck'
 

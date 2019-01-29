@@ -1,58 +1,56 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import PlaylistDetailPane from '../components/PlaylistDetailsPane'
 import PlaylistListPane from '../components/PlaylistListPane'
-import { actions } from '../duck'
 
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`
 class Playlists extends React.Component {
-  render() {
-    const {
-      selected, items, selectPlaylist, addPlaylist,
-    } = this.props
+  constructor(props) {
+    super(props)
 
+    this.playlistListPane = React.createRef()
+    this.playlistDetailPane = React.createRef()
+  }
+
+  componentDidMount() {
+    // Give focus to the search bar.
+    // eslint-disable-next-line react/no-find-dom-node
+    ReactDOM.findDOMNode(this.playlistListPane.current).focus()
+  }
+
+  handleSwitchPaneList = (e) => {
+    if (e.keyCode === 39) {
+      // eslint-disable-next-line react/no-find-dom-node
+      ReactDOM.findDOMNode(this.playlistDetailPane.current).focus()
+    }
+  }
+
+  handleSwitchPaneDetails = (e) => {
+    if (e.keyCode === 37) {
+      // eslint-disable-next-line react/no-find-dom-node
+      ReactDOM.findDOMNode(this.playlistListPane.current).focus()
+    }
+  }
+
+  render() {
     return (
       <Wrapper>
         <PlaylistListPane
-          items={items}
-          selected={selected}
-          onClick={selectPlaylist}
-          onAddPlaylist={addPlaylist}
+          ref={this.playlistListPane}
+          switchPaneHandler={this.handleSwitchPaneList}
         />
-        <PlaylistDetailPane item={selected} />
+        <PlaylistDetailPane
+          ref={this.playlistDetailPane}
+          switchPaneHandler={this.handleSwitchPaneDetails}
+        />
       </Wrapper>
     )
   }
 }
-Playlists.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape).isRequired,
-  selected: PropTypes.objectOf(PropTypes.shape),
-  selectPlaylist: PropTypes.func.isRequired,
-  addPlaylist: PropTypes.func.isRequired,
-}
-Playlists.defaultProps = {
-  selected: null,
-}
 
-const mapStateToProps = (state) => ({
-  selected: state.playlist.selected,
-  items: state.playlist.list,
-})
-const mapDispatchToProps = (dispatch) => ({
-  selectPlaylist: (playlist) => {
-    dispatch(actions.playlistSelectPlaylist(playlist))
-  },
-  addPlaylist: (title) => {
-    dispatch(actions.playlistAddPlaylist(title))
-  },
-})
+export default Playlists
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Playlists)
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+`

@@ -1,32 +1,55 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Menu as ContextMenu, Item } from 'react-contexify'
+import {
+  Menu as ContextMenu, Item, Submenu, Separator,
+} from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
 import { operations } from '../../player/duck'
+import {
+  actions as playlistActions,
+  selectors as playlistSelectors,
+} from '../../playlist/duck'
 
-class ArtistContextMenu extends Component {
-  handlePlayNow = ({ props }) => {
-    this.props.handlePlayNow(props.id)
-  }
+const ArtistContextMenu = (props) => {
+  const {
+    handlePlayNow,
+    handleAddToQueue,
+    playlists,
+    handleAddToPlaylist,
+  } = props
+  const playlistsItems = playlists.map((item) => (
+    <Item
+      key={item.id}
+      onClick={(menuItem) => handleAddToPlaylist(item.id, menuItem.props.id)}
+    >
+      {item.title}
+    </Item>
+  ))
 
-  handleAddToQueue = ({ props }) => {
-    this.props.handleAddToQueue(props.id)
-  }
-
-  render() {
-    return (
-      <ContextMenu id="artist-context-menu">
-        <Item onClick={this.handlePlayNow}>Play now</Item>
-        <Item onClick={this.handleAddToQueue}>Add to queue</Item>
-      </ContextMenu>
-    )
-  }
+  return (
+    <ContextMenu id="artist-context-menu">
+      <Item onClick={(menuItem) => handlePlayNow(menuItem.props.id)}>
+        Play now
+      </Item>
+      <Item onClick={(menuItem) => handleAddToQueue(menuItem.props.id)}>
+        Add to queue
+      </Item>
+      <Separator />
+      <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
+    </ContextMenu>
+  )
 }
 ArtistContextMenu.propTypes = {
   handlePlayNow: PropTypes.func.isRequired,
   handleAddToQueue: PropTypes.func.isRequired,
+  playlists: PropTypes.arrayOf(PropTypes.shape).isRequired,
+  handleAddToPlaylist: PropTypes.func.isRequired,
 }
+
+const mapStateToProps = (state) => ({
+  playlists: playlistSelectors.getPlaylists(state),
+})
 
 const mapDispatchToProps = (dispatch) => ({
   handlePlayNow: (artistId) => {
@@ -35,9 +58,12 @@ const mapDispatchToProps = (dispatch) => ({
   handleAddToQueue: (artistId) => {
     dispatch(operations.addArtist(artistId))
   },
+  handleAddToPlaylist: (playlistId, artistId) => {
+    dispatch(playlistActions.playlistAddArtist(playlistId, artistId))
+  },
 })
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ArtistContextMenu)

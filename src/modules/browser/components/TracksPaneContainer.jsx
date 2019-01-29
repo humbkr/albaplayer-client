@@ -7,7 +7,7 @@ import TrackTeaser from './TrackTeaser'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import TrackContextMenu from './TrackContextMenu'
 import LibraryBrowserPane from './LibraryBrowserPane'
-import KeyboardNavPlayPopup from './KeyboardNavPlayPopup'
+import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopup'
 import { actions, selectors } from '../duck'
 import { operations as playerOperations } from '../../player/duck'
 

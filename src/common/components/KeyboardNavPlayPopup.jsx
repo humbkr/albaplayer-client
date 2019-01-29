@@ -101,9 +101,12 @@ KeyboardNavPlayPopup.propTypes = {
   id: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  itemId: PropTypes.string.isRequired,
+  itemId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   handlePlayNow: PropTypes.func.isRequired,
   handleAddToQueue: PropTypes.func.isRequired,
+}
+KeyboardNavPlayPopup.defaultProps = {
+  itemId: null,
 }
 
 export default KeyboardNavPlayPopup

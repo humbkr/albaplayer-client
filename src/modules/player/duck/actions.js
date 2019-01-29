@@ -48,6 +48,11 @@ const queueAddArtist = (artistId) => ({
   artistId,
 })
 
+const queueAddPlaylist = (playlistId) => ({
+  type: types.QUEUE_ADD_PLAYLIST,
+  playlistId,
+})
+
 const queueRemoveTrack = (trackIndex) => ({
   type: types.QUEUE_REMOVE_TRACK,
   trackIndex,
@@ -78,6 +83,7 @@ export default {
   queueAddTrack,
   queueAddAlbum,
   queueAddArtist,
+  queueAddPlaylist,
   queueRemoveTrack,
   queueClear,
   queueUpdate,

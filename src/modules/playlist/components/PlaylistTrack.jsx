@@ -1,7 +1,52 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import { MenuProvider as ContextMenuProvider } from 'react-contexify'
 import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
+
+const PlaylistTrack = (props) => {
+  const { item, selected, handleRemoveTrack } = props
+
+  return (
+    <ContextMenuProvider id="playlist-track-context-menu" data={item}>
+      <TrackWrapper>
+        <TrackFirstColumn className={selected ? 'selected' : ''}>
+          <TrackPosition>{item.position}</TrackPosition>
+        </TrackFirstColumn>
+        <TrackSecondColumn>
+          <div>{item.title}</div>
+          <TrackInfo className={selected ? 'selected' : ''}>
+            {item.artist.name} -
+            <AlbumInfo>
+              {` ${item.album.title}`}
+              {item.album.year && ` (${item.album.year})`}
+            </AlbumInfo>
+          </TrackInfo>
+        </TrackSecondColumn>
+        <TrackActions>
+          <ActionButtonIcon
+            icon="delete"
+            onClick={() => handleRemoveTrack(item.position)}
+          />
+        </TrackActions>
+      </TrackWrapper>
+    </ContextMenuProvider>
+  )
+}
+PlaylistTrack.propTypes = {
+  item: PropTypes.shape({
+    position: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    duration: PropTypes.number,
+  }).isRequired,
+  selected: PropTypes.bool,
+  handleRemoveTrack: PropTypes.func.isRequired,
+}
+PlaylistTrack.defaultProps = {
+  selected: false,
+}
+
+export default PlaylistTrack
 
 // Required to control the div independently.
 const TrackPosition = styled.div``
@@ -24,8 +69,6 @@ const TrackWrapper = styled.div`
   }
 
   :hover {
-    background-color: ${(props) => props.theme.highlight};
-
     ${TrackActions} {
       display: block;
     }
@@ -42,43 +85,6 @@ const TrackInfo = styled.div`
     ? props.theme.textHighlightColor
     : props.theme.textSecondaryColor};
 `
-
-class PlaylistTrack extends React.Component {
-  handleRemoveTrack = () => {
-    this.props.handleRemoveTrack(this.props.item.position - 1)
-  }
-
-  render() {
-    const { item } = this.props
-
-    return (
-      <TrackWrapper>
-        <TrackFirstColumn>
-          <TrackPosition>{item.position}</TrackPosition>
-        </TrackFirstColumn>
-        <TrackSecondColumn>
-          <div>{item.title}</div>
-          <TrackInfo>
-            {item.artist.name} - {item.album.title} ({item.album.date})
-          </TrackInfo>
-        </TrackSecondColumn>
-        <TrackActions>
-          <ActionButtonIcon icon="delete" onClick={this.handleRemoveTrack} />
-        </TrackActions>
-      </TrackWrapper>
-    )
-  }
-}
-PlaylistTrack.propTypes = {
-  item: PropTypes.shape({
-    position: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    duration: PropTypes.number,
-  }).isRequired,
-  handleSetPlayback: PropTypes.func.isRequired,
-  handlePlayNewTrack: PropTypes.func.isRequired,
-  handleRemoveTrack: PropTypes.func.isRequired,
-  isPlaying: PropTypes.bool.isRequired,
-}
-
-export default PlaylistTrack
+const AlbumInfo = styled.span`
+  font-style: italic;
+`

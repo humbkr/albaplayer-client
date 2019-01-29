@@ -162,6 +162,13 @@ const playArtist = (id) => (dispatch) => {
   dispatch(actions.playerTogglePlayPause(true))
 }
 
+const playPlaylist = (id) => (dispatch) => {
+  dispatch(actions.queueClear())
+  dispatch(actions.queueAddPlaylist(id))
+  dispatch(setTrackFromQueue(0))
+  dispatch(actions.playerTogglePlayPause(true))
+}
+
 const addTrack = (id) => (dispatch, getState) => {
   dispatch(actions.queueAddTrack(id))
 
@@ -189,6 +196,15 @@ const addArtist = (id) => (dispatch, getState) => {
   }
 }
 
+const addPlaylist = (id) => (dispatch, getState) => {
+  dispatch(actions.queueAddPlaylist(id))
+
+  const state = getState()
+  if (state.player.track === null) {
+    dispatch(setTrackFromQueue(0))
+  }
+}
+
 export default {
   setTrackFromQueue,
   setNextTrack,
@@ -196,7 +212,9 @@ export default {
   playTrack,
   playAlbum,
   playArtist,
+  playPlaylist,
   addTrack,
   addAlbum,
   addArtist,
+  addPlaylist,
 }
