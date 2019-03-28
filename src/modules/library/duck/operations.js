@@ -17,13 +17,32 @@ const fetchLibrary = () => (dispatch) => {
     })
 }
 
-const shouldFetchLibrary = (state) => {
-  const libraryData = state.library
+const shouldFetchLibrary = async (dispatch, libraryState) => {
+  // We should fetch if library is not initialized.
+  if (!libraryState.isInitialized) {
+    if (libraryState.tracks && Object.values(libraryState.tracks).length < 1) {
+      return true
+    }
 
-  if (!libraryData.isInitialized) {
-    return true
+    // Get last scan date from backend. If backend last scan > local version, we
+    // have to fetch, else we can reuse the local data.
+    api
+      .getVariable('library_last_updated')
+      .then((response) => {
+        const remoteLastScan = response.data.variable.value
+        if (remoteLastScan > libraryState.lastScan) {
+          dispatch(actions.librarySetLastScan(remoteLastScan))
+          return true
+        }
+        return false
+      })
+      .catch(() => {
+        // TODO log failure.
+      })
   }
-  if (libraryData.isFetching) {
+
+  // If the library is currently fetching, nothing to do.
+  if (libraryState.isFetching) {
     return false
   }
 
@@ -31,7 +50,7 @@ const shouldFetchLibrary = (state) => {
 }
 
 const initLibrary = (force) => (dispatch, getState) => {
-  if (force || shouldFetchLibrary(getState())) {
+  if (force || shouldFetchLibrary(dispatch, getState().library)) {
     return dispatch(fetchLibrary())
   }
   return null

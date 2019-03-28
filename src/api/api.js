@@ -97,6 +97,18 @@ const getSettings = () => {
   return apolloClient.query({ query: getSettingsQuery })
 }
 
+const getVariable = (key) => {
+  const getVariableQuery = gql`
+    query {
+      variable(key: "${key}") {
+        value
+      }
+    }
+  `
+
+  return apolloClient.query({ query: getVariableQuery })
+}
+
 const processApiError = (response) => {
   let result = 'Unknown error'
   if (response.graphQLErrors.length > 0 && response.graphQLErrors[0].message) {
@@ -114,5 +126,6 @@ export default {
   scanLibrary,
   emptyLibrary,
   getSettings,
+  getVariable,
   processApiError,
 }

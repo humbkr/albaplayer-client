@@ -5,6 +5,50 @@ import styled from 'styled-components'
 import { DebounceInput } from 'react-debounce-input'
 import { actions } from '../duck'
 
+const LibraryBrowserSearchBar = (props) => {
+  const { searchTerm, onChange, forwardedRef } = props
+
+  return (
+    <LibraryBrowserSearchBarWrapper>
+      <SearchBarInputWrapper>
+        <SearchBarInput
+          ref={forwardedRef}
+          debounceTimeout={300}
+          onChange={(event) => onChange(event.target.value)}
+          type="text"
+          id="search-input"
+          value={searchTerm}
+          placeholder="Search"
+        />
+      </SearchBarInputWrapper>
+    </LibraryBrowserSearchBarWrapper>
+  )
+}
+LibraryBrowserSearchBar.propTypes = {
+  searchTerm: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  forwardedRef: PropTypes.shape().isRequired,
+}
+
+const mapStateToProps = (state) => ({
+  searchTerm: state.libraryBrowser.search.term,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  onChange: (text) => {
+    dispatch(actions.libraryBrowserSearch(text))
+  },
+})
+
+const ConnectedLibraryBrowserSearchBar = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LibraryBrowserSearchBar)
+
+export default React.forwardRef((props, ref) => (
+  <ConnectedLibraryBrowserSearchBar {...props} forwardedRef={ref} />
+))
+
 const LibraryBrowserSearchBarWrapper = styled.div`
   display: table;
   height: ${(props) => props.theme.itemHeight};
@@ -29,47 +73,3 @@ const SearchBarInput = styled(DebounceInput)`
   font-size: 1em;
   padding-left: 10px;
 `
-
-const LibraryBrowserSearchBar = (props) => {
-  const { searchTerm, onChange, forwardedRef } = props
-
-  return (
-    <LibraryBrowserSearchBarWrapper>
-      <SearchBarInputWrapper>
-        <SearchBarInput
-          ref={forwardedRef}
-          debounceTimeout={300}
-          onChange={(event) => onChange(event.target.value)}
-          type="text"
-          id="search-input"
-          value={searchTerm}
-          placeholder="Search"
-        />
-      </SearchBarInputWrapper>
-    </LibraryBrowserSearchBarWrapper>
-  )
-}
-LibraryBrowserSearchBar.propTypes = {
-  searchTerm: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  forwardedRef: PropTypes.shape.isRequired,
-}
-
-const mapStateToProps = (state) => ({
-  searchTerm: state.libraryBrowser.search.term,
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  onChange: (text) => {
-    dispatch(actions.libraryBrowserSearch(text))
-  },
-})
-
-const ConnectedLibraryBrowserSearchBar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LibraryBrowserSearchBar)
-
-export default React.forwardRef((props, ref) => (
-  <ConnectedLibraryBrowserSearchBar {...props} forwardedRef={ref} />
-))

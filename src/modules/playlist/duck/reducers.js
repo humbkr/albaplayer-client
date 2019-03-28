@@ -247,8 +247,6 @@ function playlists(state = initialState, action, library) {
       const newPlaylists = { ...state.playlists }
       newPlaylists[action.playlist.id] = action.playlist
 
-      console.log(action.playlist)
-
       return {
         ...state,
         playlists: newPlaylists,

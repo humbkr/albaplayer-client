@@ -1,3 +1,5 @@
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/es/storage'
 import types from './types'
 
 const initialState = {
@@ -6,6 +8,7 @@ const initialState = {
   error: '',
   isInitialized: false,
   initHasFailed: false,
+  lastScan: '',
   artists: {},
   albums: {},
   tracks: {},
@@ -69,9 +72,21 @@ function library(state = initialState, action) {
         initHasFailed: true,
       }
 
+    case types.LIBRARY_SET_LAST_SCAN:
+      return {
+        ...state,
+        lastScan: action.lastScanDate,
+      }
+
     default:
       return state
   }
 }
 
-export default library
+const libraryPersistConfig = {
+  key: 'library',
+  storage,
+  whitelist: ['lastScan', 'artists', 'albums', 'tracks'],
+}
+
+export default persistReducer(libraryPersistConfig, library)

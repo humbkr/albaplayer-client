@@ -14,8 +14,14 @@ const libraryInitFailure = (response) => ({
   response,
 })
 
+const librarySetLastScan = (lastScanDate) => ({
+  type: types.LIBRARY_SET_LAST_SCAN,
+  lastScanDate,
+})
+
 export default {
   libraryInitStart,
   libraryInitSuccess,
   libraryInitFailure,
+  librarySetLastScan,
 }

@@ -8,7 +8,6 @@ const ActionButton = (props) => (
     raised={props.raised}
     disabled={props.disabled}
     onClick={props.onClick}
-    type={props.type}
   >
     {props.icon && <Icon>{props.icon}</Icon>}
     <span>{props.children}</span>
@@ -24,7 +23,6 @@ ActionButton.propTypes = {
   icon: PropTypes.string,
   raised: PropTypes.bool,
   disabled: PropTypes.bool,
-  type: PropTypes.string.isRequired,
 }
 ActionButton.defaultProps = {
   children: null,

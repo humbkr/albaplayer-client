@@ -3,26 +3,35 @@ import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import library from './modules/library/duck/reducers'
-import libraryBrowser from './modules/browser/duck'
-import player from './modules/player/duck'
-import playlist from './modules/playlist/duck'
-import settings from './modules/settings/duck'
-
-const rootReducer = (state = {}, action) => ({
-  library: library(state.library, action),
-  libraryBrowser: libraryBrowser(state.libraryBrowser, action, state.library),
-  queue: player.queue(state.queue, action, state.library, state.playlist),
-  player: player.player(state.player, action),
-  playlist: playlist(state.playlist, action, state.library),
-  settings: settings(state.settings, action),
-})
+import libraryReducer from './modules/library/duck'
+import libraryBrowserReducer from './modules/browser/duck'
+import playerReducer from './modules/player/duck'
+import playlistReducer from './modules/playlist/duck'
+import settingsReducer from './modules/settings/duck'
 
 const rootPersistConfig = {
   key: 'root',
   storage,
   whitelist: ['playlist'],
 }
+
+const rootReducer = (state = {}, action) => ({
+  library: libraryReducer(state.library, action),
+  libraryBrowser: libraryBrowserReducer(
+    state.libraryBrowser,
+    action,
+    state.library
+  ),
+  queue: playerReducer.queue(
+    state.queue,
+    action,
+    state.library,
+    state.playlist
+  ),
+  player: playerReducer.player(state.player, action),
+  playlist: playlistReducer(state.playlist, action, state.library),
+  settings: settingsReducer(state.settings, action),
+})
 
 const persistanceReducer = persistReducer(rootPersistConfig, rootReducer)
 
