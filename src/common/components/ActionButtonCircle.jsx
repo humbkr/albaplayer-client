@@ -2,56 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-const ActionButtonCircleWrapper = styled.button`
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-
-  svg {
-    transition: 0.2s ease-out;
-
-    circle {
-      transition: 0.2s ease-out;
-      stroke: ${(props) => props.color};
-    }
-
-    fill: ${(props) => props.color};
-
-    :hover {
-      circle {
-        stroke: ${(props) => props.theme.buttons.colorHover};
-      }
-
-      fill: ${(props) => props.theme.buttons.colorHover};
-    }
-  }
-
-  // For icon.
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 28px;
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-
-  /* Support for all WebKit browsers. */
-  -webkit-font-smoothing: antialiased;
-  /* Support for Safari and Chrome. */
-  text-rendering: optimizeLegibility;
-
-  /* Support for Firefox. */
-  -moz-osx-font-smoothing: grayscale;
-
-  /* Support for IE. */
-  font-feature-settings: 'liga';
-`
-
 const ActionButtonCircle = (props) => {
   const {
     size, borderWidth, color, icon, onClick,
@@ -102,3 +52,53 @@ ActionButtonCircle.defaultProps = {
 }
 
 export default ActionButtonCircle
+
+const ActionButtonCircleWrapper = styled.button`
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+
+  svg {
+    transition: 0.2s ease-out;
+
+    circle {
+      transition: 0.2s ease-out;
+      stroke: ${(props) => props.color};
+    }
+
+    fill: ${(props) => props.color};
+
+    :hover {
+      circle {
+        stroke: ${(props) => props.theme.buttons.colorHover};
+      }
+
+      fill: ${(props) => props.theme.buttons.colorHover};
+    }
+  }
+
+  // For icon.
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 28px;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+`

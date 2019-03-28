@@ -12,6 +12,40 @@ import MaterialIconsWoff from './common/assets/fonts/MaterialIcons-Regular.woff'
 import MaterialIconsTtf from './common/assets/fonts/MaterialIcons-Regular.ttf'
 import MaterialIconsSvg from './common/assets/fonts/MaterialIcons-Regular.svg'
 
+class AlbaApp extends Component {
+  componentDidMount() {
+    this.props.initLibrary()
+  }
+
+  render() {
+    return (
+      <AlbaAppWrapper>
+        <GlobalStyle />
+        <Sidebar />
+        <MainPanel />
+      </AlbaAppWrapper>
+    )
+  }
+}
+AlbaApp.propTypes = {
+  initLibrary: PropTypes.func.isRequired,
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  initLibrary: () => {
+    dispatch(operations.initLibrary())
+  },
+})
+
+// Need to use withRouter here or the views in MainPanel won't change.
+// https://github.com/ReactTraining/react-router/issues/4671
+export default withRouter(
+  connect(
+    null,
+    mapDispatchToProps
+  )(AlbaApp)
+)
+
 // Global styles used by the styled components.
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -48,37 +82,3 @@ const AlbaAppWrapper = styled.div`
   width: 100%;
   height: 100vh;
 `
-
-class AlbaApp extends Component {
-  componentDidMount() {
-    this.props.initLibrary()
-  }
-
-  render() {
-    return (
-      <AlbaAppWrapper>
-        <GlobalStyle />
-        <Sidebar />
-        <MainPanel />
-      </AlbaAppWrapper>
-    )
-  }
-}
-AlbaApp.propTypes = {
-  initLibrary: PropTypes.func.isRequired,
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  initLibrary: () => {
-    dispatch(operations.initLibrary())
-  },
-})
-
-// Need to use withRouter here or the views in MainPanel won't change.
-// https://github.com/ReactTraining/react-router/issues/4671
-export default withRouter(
-  connect(
-    null,
-    mapDispatchToProps
-  )(AlbaApp)
-)

@@ -2,22 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-const Select = styled.select`
-  border: none;
-  background-color: transparent;
-  font-weight: bold;
-  font-size: 1em;
-  text-align-last: center;
-
-  :hover {
-    cursor: pointer;
-  }
-`
-
-const SelectWrapper = styled.div`
-  text-align: right;
-`
-
 const SelectContainer = (props) => {
   const {
     value, onChangeHandler, options, tabIndex,
@@ -57,3 +41,19 @@ SelectContainer.defaultProps = {
 }
 
 export default SelectContainer
+
+const Select = styled.select`
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 1em;
+  text-align-last: center;
+
+  :hover {
+    cursor: pointer;
+  }
+`
+
+const SelectWrapper = styled.div`
+  text-align: right;
+`

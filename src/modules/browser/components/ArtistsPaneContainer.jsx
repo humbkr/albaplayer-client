@@ -11,14 +11,6 @@ import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopu
 import { actions, selectors } from '../duck'
 import { operations as playerOperations } from '../../player/duck'
 
-const ArtistsPaneWrapper = styled.div`
-  display: inline-block;
-  vertical-align: top;
-  overflow: hidden;
-  width: 33%;
-  height: 100%;
-`
-
 class ArtistsPaneContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -144,3 +136,11 @@ const ConnectedArtistsPaneContainer = connect(
 export default React.forwardRef((props, ref) => (
   <ConnectedArtistsPaneContainer {...props} forwardedRef={ref} />
 ))
+
+const ArtistsPaneWrapper = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  width: 33%;
+  height: 100%;
+`

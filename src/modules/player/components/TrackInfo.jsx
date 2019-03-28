@@ -3,6 +3,44 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import coverPlaceholder from '../../../common/assets/images/cover_placeholder.png'
 
+class TrackInfo extends React.PureComponent {
+  render() {
+    const track = this.props.track
+    const trackTitle = track && track.title !== '' ? track.title : 'Unknown title'
+    const trackArtist = track && track.artist && track.artist.name
+      ? track.artist.name
+      : 'Unknown artist'
+    const trackCover = track && track.cover ? track.cover : false
+
+    return (
+      <TrackInfoWrapper>
+        <Overlay />
+        {trackCover && <Cover src={trackCover} />}
+        {track && (
+          <OverlayText>
+            <TrackTitle>{trackTitle}</TrackTitle>
+            <ArtistName>by {trackArtist}</ArtistName>
+          </OverlayText>
+        )}
+      </TrackInfoWrapper>
+    )
+  }
+}
+TrackInfo.propTypes = {
+  track: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    cover: PropTypes.string,
+    artist: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  }),
+}
+TrackInfo.defaultProps = {
+  track: null,
+}
+
+export default TrackInfo
+
 const TrackInfoWrapper = styled.div`
   position: relative;
   width: ${(props) => props.theme.sidebar.width};
@@ -45,41 +83,3 @@ const ArtistName = styled.h2`
   font-weight: normal;
   color: #fff;
 `
-
-class TrackInfo extends React.PureComponent {
-  render() {
-    const track = this.props.track
-    const trackTitle = track && track.title !== '' ? track.title : 'Unknown title'
-    const trackArtist = track && track.artist && track.artist.name
-      ? track.artist.name
-      : 'Unknown artist'
-    const trackCover = track && track.cover ? track.cover : false
-
-    return (
-      <TrackInfoWrapper>
-        <Overlay />
-        {trackCover && <Cover src={trackCover} />}
-        {track && (
-          <OverlayText>
-            <TrackTitle>{trackTitle}</TrackTitle>
-            <ArtistName>by {trackArtist}</ArtistName>
-          </OverlayText>
-        )}
-      </TrackInfoWrapper>
-    )
-  }
-}
-TrackInfo.propTypes = {
-  track: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    cover: PropTypes.string,
-    artist: PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  }),
-}
-TrackInfo.defaultProps = {
-  track: null,
-}
-
-export default TrackInfo

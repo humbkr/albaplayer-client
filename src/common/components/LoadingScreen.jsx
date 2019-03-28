@@ -4,28 +4,6 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Loading from './Loading'
 
-const LoadingScreenWrapper = styled.div`
-  display: table;
-  width: 100%;
-  height: 100vh;
-`
-
-const LoadingScreenInitProgress = styled.div`
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-
-  > h2 {
-    // So the text appears verticaly centered.
-    margin-bottom: 75px;
-  }
-`
-
-const LoadingScreenInitFailed = styled.div`
-  display: table-cell;
-  padding: 20px;
-`
-
 const LoadingScreen = (props) => {
   const { isFetching, initHasFailed } = props
 
@@ -61,3 +39,25 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps)(LoadingScreen)
+
+const LoadingScreenWrapper = styled.div`
+  display: table;
+  width: 100%;
+  height: 100vh;
+`
+
+const LoadingScreenInitProgress = styled.div`
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+
+  > h2 {
+    // So the text appears verticaly centered.
+    margin-bottom: 75px;
+  }
+`
+
+const LoadingScreenInitFailed = styled.div`
+  display: table-cell;
+  padding: 20px;
+`

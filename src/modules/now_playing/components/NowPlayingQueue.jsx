@@ -8,10 +8,6 @@ import NowPlayingQueueActions from './NowPlayingQueueActions'
 import QueueItemContextMenu from './QueueItemContextMenu'
 import { actions } from '../../player/duck'
 
-const QueueTitle = styled.h2`
-  display: inline;
-`
-
 const NowPlayingQueue = (props) => {
   const { tracks, current, handleUpdateQueue } = props
 
@@ -67,3 +63,7 @@ export default withTheme(
     mapDispatchToProps
   )(NowPlayingQueue)
 )
+
+const QueueTitle = styled.h2`
+  display: inline;
+`

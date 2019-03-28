@@ -7,41 +7,6 @@ import { operations } from '../duck'
 import Loading from '../../../common/components/Loading'
 import Message from '../../../common/components/Message'
 
-const SettingsScreenWrapper = styled.div`
-  padding: 40px 30px;
-
-  > h1 {
-    margin-bottom: 30px;
-  }
-
-  > h2 {
-    margin-bottom: 15px;
-  }
-
-  > p {
-    margin-bottom: 10px;
-  }
-`
-
-const ActionButtons = styled.div`
-  > * {
-    margin: 3px 3px 3px 0;
-  }
-`
-
-const ActionWaiting = styled.div`
-  color: ${(props) => props.theme.textSecondaryColor};
-  font-style: italic;
-
-  > * {
-    display: inline-block;
-    vertical-align: top;
-    height: 30px;
-    line-height: 30px;
-    margin-right: 5px;
-  }
-`
-
 class Settings extends Component {
   componentDidMount() {
     this.props.initSettings()
@@ -141,3 +106,38 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Settings)
+
+const SettingsScreenWrapper = styled.div`
+  padding: 40px 30px;
+
+  > h1 {
+    margin-bottom: 30px;
+  }
+
+  > h2 {
+    margin-bottom: 15px;
+  }
+
+  > p {
+    margin-bottom: 10px;
+  }
+`
+
+const ActionButtons = styled.div`
+  > * {
+    margin: 3px 3px 3px 0;
+  }
+`
+
+const ActionWaiting = styled.div`
+  color: ${(props) => props.theme.textSecondaryColor};
+  font-style: italic;
+
+  > * {
+    display: inline-block;
+    vertical-align: top;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 5px;
+  }
+`

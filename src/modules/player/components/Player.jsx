@@ -6,10 +6,6 @@ import Controls from './Controls'
 import Audio from './Audio'
 import Timeline from './Timeline'
 
-const PlayerWrapper = styled.div`
-  width: 100%;
-`
-
 class Player extends React.Component {
   getChildContext() {
     return {
@@ -86,3 +82,7 @@ Player.childContextTypes = {
 }
 
 export default Audio(withTheme(Player))
+
+const PlayerWrapper = styled.div`
+  width: 100%;
+`

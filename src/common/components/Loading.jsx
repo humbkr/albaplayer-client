@@ -3,6 +3,18 @@ import styled, { css, keyframes } from 'styled-components'
 import PropTypes from 'prop-types'
 import Icon from './Icon'
 
+const Loading = (props) => (
+  <LoadingStyled fontSize={props.size}>camera</LoadingStyled>
+)
+Loading.propTypes = {
+  size: PropTypes.string,
+}
+Loading.defaultProps = {
+  size: '1.8em',
+}
+
+export default Loading
+
 const rotate360CounterClockwise = keyframes`
   from {
     transform: rotate(360deg);
@@ -22,15 +34,3 @@ const LoadingStyled = styled(Icon)`
   font-size: ${(props) => props.fontSize};
   animation: ${rotate360CounterClockwiseRule};
 `
-
-const Loading = (props) => (
-  <LoadingStyled fontSize={props.size}>camera</LoadingStyled>
-)
-Loading.propTypes = {
-  size: PropTypes.string,
-}
-Loading.defaultProps = {
-  size: '1.8em',
-}
-
-export default Loading

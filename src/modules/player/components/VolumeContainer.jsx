@@ -6,55 +6,6 @@ import ProgressBarHandler from './ProgressBarHandler'
 import VolumeBar from './VolumeBar'
 import * as Buttons from './buttons/index'
 
-const VolumeContainerWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  position: relative;
-  height: 40px;
-`
-
-const VolumeOverlay = styled.div`
-  background-color: ${(props) => props.theme.sidebar.background};
-  display: flex;
-  align-items: center;
-  top: 0;
-  left: 0;
-  position: absolute;
-  transform: translate3d(58px, 0, 0);
-  z-index: 20;
-  height: 40px;
-  // width is controlled by the component.
-  width: 0;
-  overflow: hidden;
-`
-
-const VolumeBarWrapper = styled.div`
-  flex: 1 1 auto;
-  height: 40px;
-  align-items: center;
-
-  > * {
-    display: block;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-`
-
-const VolumeOverlayEnd = styled.div`
-  flex: 0 0 auto;
-  height: 40px;
-  width: 45px;
-
-  > * {
-    display: block;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-`
-
 function audioPlayerVolumeToVisualVolume(audioPlayerVolume) {
   // So, why the fuck 1.48? Because that's the magic number that makes
   // the far left coordinate of the volume bar the 0 volume level, and the
@@ -248,3 +199,52 @@ VolumeContainer.propTypes = {
 }
 
 export default VolumeContainer
+
+const VolumeContainerWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: relative;
+  height: 40px;
+`
+
+const VolumeOverlay = styled.div`
+  background-color: ${(props) => props.theme.sidebar.background};
+  display: flex;
+  align-items: center;
+  top: 0;
+  left: 0;
+  position: absolute;
+  transform: translate3d(58px, 0, 0);
+  z-index: 20;
+  height: 40px;
+  // width is controlled by the component.
+  width: 0;
+  overflow: hidden;
+`
+
+const VolumeBarWrapper = styled.div`
+  flex: 1 1 auto;
+  height: 40px;
+  align-items: center;
+
+  > * {
+    display: block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+`
+
+const VolumeOverlayEnd = styled.div`
+  flex: 0 0 auto;
+  height: 40px;
+  width: 45px;
+
+  > * {
+    display: block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+`

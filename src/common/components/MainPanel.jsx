@@ -9,11 +9,6 @@ import LoadingScreen from './LoadingScreen'
 import Settings from '../../modules/settings/scenes/Settings'
 import Playlists from '../../modules/playlist/scenes/Playlists'
 
-const MainPanelWrapper = styled.div`
-  margin-left: ${(props) => props.theme.sidebar.width};
-  height: 100vh;
-`
-
 const MainPanel = (props) => {
   const { isFetching, isInitialized } = props
 
@@ -53,3 +48,8 @@ function mapStateToProps(state) {
 
 // Need to use withRouter here or the views won't change.
 export default withRouter(connect(mapStateToProps)(MainPanel))
+
+const MainPanelWrapper = styled.div`
+  margin-left: ${(props) => props.theme.sidebar.width};
+  height: 100vh;
+`

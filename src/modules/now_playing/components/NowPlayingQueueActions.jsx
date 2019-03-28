@@ -5,10 +5,6 @@ import { connect } from 'react-redux'
 import ActionButton from '../../../common/components/ActionButton'
 import { actions } from '../../player/duck'
 
-const QueueActionsWrapper = styled.div`
-  float: right;
-`
-
 const NowPlayingQueueActions = (props) => (
   <QueueActionsWrapper>
     <ActionButton onClick={props.clearQueue} icon="close">
@@ -30,3 +26,7 @@ export default connect(
   null,
   mapDispatchToProps
 )(NowPlayingQueueActions)
+
+const QueueActionsWrapper = styled.div`
+  float: right;
+`

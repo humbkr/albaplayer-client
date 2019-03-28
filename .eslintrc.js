@@ -26,6 +26,7 @@ module.exports = {
   rules: {
     'linebreak-style': [2, 'unix'],
     'semi': [2, 'never'],
+    'no-multiple-empty-lines': ["error", { "max": 2, "maxEOF": 1 }],
     'global-require': 'off',
     'import/export': 'error',
     'import/first': ['error', 'absolute-first'],

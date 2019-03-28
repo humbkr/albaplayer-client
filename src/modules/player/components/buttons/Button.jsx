@@ -2,16 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-const ControlButton = styled.button`
-  border: none;
-  background-color: transparent;
-  padding: 0 10px;
-
-  :hover {
-    cursor: pointer;
-  }
-`
-
 class Button extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -45,3 +35,13 @@ Button.defaultProps = {
 }
 
 export default Button
+
+const ControlButton = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 0 10px;
+
+  :hover {
+    cursor: pointer;
+  }
+`

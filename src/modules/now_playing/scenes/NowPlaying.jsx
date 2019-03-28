@@ -3,6 +3,17 @@ import styled from 'styled-components'
 import NowPlayingQueue from '../components/NowPlayingQueue'
 import NowPlayingHeader from '../components/NowPlayingHeader'
 
+const NowPlaying = () => (
+  <NowPlayingWrapper>
+    <NowPlayingHeader />
+    <NowPlayingQueueWrapper>
+      <NowPlayingQueue />
+    </NowPlayingQueueWrapper>
+  </NowPlayingWrapper>
+)
+
+export default NowPlaying
+
 const NowPlayingWrapper = styled.div`
   padding: 30px 50px;
 `
@@ -15,14 +26,3 @@ const NowPlayingQueueWrapper = styled.div`
     margin-bottom: 20px;
   }
 `
-
-const NowPlaying = () => (
-  <NowPlayingWrapper>
-    <NowPlayingHeader />
-    <NowPlayingQueueWrapper>
-      <NowPlayingQueue />
-    </NowPlayingQueueWrapper>
-  </NowPlayingWrapper>
-)
-
-export default NowPlaying

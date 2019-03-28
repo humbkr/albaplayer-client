@@ -5,33 +5,6 @@ import * as Buttons from './buttons/index'
 import VolumeContainer from './VolumeContainer'
 import { constants } from '../duck'
 
-const ControlsWrapper = styled.div`
-  margin: 10px 0;
-`
-
-const ControlsPrimary = styled.div`
-  display: table;
-  margin: 0 auto 15px;
-
-  > * {
-    display: table-cell;
-    vertical-align: middle;
-  }
-`
-
-const ControlsSecondary = styled.div`
-  display: table;
-  margin: 0 auto;
-  width: 100%;
-
-  > * {
-    display: table-cell;
-    vertical-align: middle;
-    width: 25%;
-    text-align: center;
-  }
-`
-
 const Controls = ({
   playing,
   togglePlayPause,
@@ -110,3 +83,30 @@ Controls.propTypes = {
 }
 
 export default Controls
+
+const ControlsWrapper = styled.div`
+  margin: 10px 0;
+`
+
+const ControlsPrimary = styled.div`
+  display: table;
+  margin: 0 auto 15px;
+
+  > * {
+    display: table-cell;
+    vertical-align: middle;
+  }
+`
+
+const ControlsSecondary = styled.div`
+  display: table;
+  margin: 0 auto;
+  width: 100%;
+
+  > * {
+    display: table-cell;
+    vertical-align: middle;
+    width: 25%;
+    text-align: center;
+  }
+`

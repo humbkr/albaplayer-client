@@ -9,58 +9,6 @@ import { actions, operations } from '../../player/duck'
 // Required to control the div independently.
 const QueueItemPosition = styled.div``
 
-const QueueActionButtonIcon = styled(ActionButtonIcon)`
-  display: none;
-  color: ${(props) => props.theme.buttons.color};
-
-  :hover {
-    color: ${(props) => props.theme.buttons.colorHover};
-  }
-`
-
-const QueueItemActions = styled.div`
-  display: none;
-  vertical-align: middle;
-  text-align: right;
-  color: ${(props) => props.theme.textSecondaryColor};
-`
-
-const QueueItemWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 60px 40% auto 44px;
-  height: ${(props) => props.theme.itemHeight};
-  border-bottom: 1px solid ${(props) => props.theme.separatorColor};
-  ${(props) => (props.isCurrent ? 'font-weight: bold' : '')};
-
-  > * {
-    align-self: center;
-  }
-
-  :hover {
-    background-color: ${(props) => props.theme.highlight};
-
-    ${QueueItemPosition} {
-      display: none;
-    }
-
-    ${QueueActionButtonIcon}, ${QueueItemActions} {
-      display: block;
-    }
-  }
-`
-
-const QueueItemFirstColumn = styled.div`
-  justify-self: center;
-  color: ${(props) => props.theme.textSecondaryColor};
-`
-
-const QueueItemInfo = styled.div`
-  font-weight: normal;
-  color: ${(props) => props.selected
-    ? props.theme.textHighlightColor
-    : props.theme.textSecondaryColor};
-`
-
 class NowPlayingQueueItem extends React.Component {
   handlePlayBackButton = () => {
     const {
@@ -154,3 +102,55 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(NowPlayingQueueItem)
+
+const QueueActionButtonIcon = styled(ActionButtonIcon)`
+  display: none;
+  color: ${(props) => props.theme.buttons.color};
+
+  :hover {
+    color: ${(props) => props.theme.buttons.colorHover};
+  }
+`
+
+const QueueItemActions = styled.div`
+  display: none;
+  vertical-align: middle;
+  text-align: right;
+  color: ${(props) => props.theme.textSecondaryColor};
+`
+
+const QueueItemWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 60px 40% auto 44px;
+  height: ${(props) => props.theme.itemHeight};
+  border-bottom: 1px solid ${(props) => props.theme.separatorColor};
+  ${(props) => (props.isCurrent ? 'font-weight: bold' : '')};
+
+  > * {
+    align-self: center;
+  }
+
+  :hover {
+    background-color: ${(props) => props.theme.highlight};
+
+    ${QueueItemPosition} {
+      display: none;
+    }
+
+    ${QueueActionButtonIcon}, ${QueueItemActions} {
+      display: block;
+    }
+  }
+`
+
+const QueueItemFirstColumn = styled.div`
+  justify-self: center;
+  color: ${(props) => props.theme.textSecondaryColor};
+`
+
+const QueueItemInfo = styled.div`
+  font-weight: normal;
+  color: ${(props) => props.selected
+    ? props.theme.textHighlightColor
+    : props.theme.textSecondaryColor};
+`

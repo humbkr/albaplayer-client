@@ -11,16 +11,6 @@ import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopu
 import { actions, selectors } from '../duck'
 import { operations as playerOperations } from '../../player/duck'
 
-const AlbumsPaneWrapper = styled.div`
-  display: inline-block;
-  vertical-align: top;
-  overflow: hidden;
-  width: 33%;
-  height: 100%;
-  border-left: 1px solid ${(props) => props.theme.separatorColor};
-  border-right: 1px solid ${(props) => props.theme.separatorColor};
-`
-
 class AlbumsPaneContainer extends Component {
   constructor(props) {
     super(props)
@@ -152,3 +142,13 @@ const ConnectedAlbumsPaneContainer = connect(
 export default React.forwardRef((props, ref) => (
   <ConnectedAlbumsPaneContainer {...props} forwardedRef={ref} />
 ))
+
+const AlbumsPaneWrapper = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  width: 33%;
+  height: 100%;
+  border-left: 1px solid ${(props) => props.theme.separatorColor};
+  border-right: 1px solid ${(props) => props.theme.separatorColor};
+`

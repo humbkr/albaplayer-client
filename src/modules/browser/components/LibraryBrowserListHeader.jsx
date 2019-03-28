@@ -3,29 +3,6 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import SelectContainer from '../../../common/components/SelectContainer'
 
-const LibraryBrowserListHeaderWrapper = styled.div`
-  flex: 0 1 ${(props) => props.theme.itemHeight};
-  color: ${(props) => props.theme.textSecondaryColor};
-  padding: 0 15px;
-`
-
-const ContentWrapper = styled.div`
-  display: table;
-  width: 100%;
-  height: 100%;
-
-  > h2 {
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 1.2em;
-  }
-
-  > div {
-    display: table-cell;
-    vertical-align: middle;
-  }
-`
-
 const LibraryBrowserListHeader = (props) => {
   const {
     orderByOptions, orderBy, title, onChange,
@@ -61,3 +38,26 @@ LibraryBrowserListHeader.defaultProps = {
 }
 
 export default LibraryBrowserListHeader
+
+const LibraryBrowserListHeaderWrapper = styled.div`
+  flex: 0 1 ${(props) => props.theme.itemHeight};
+  color: ${(props) => props.theme.textSecondaryColor};
+  padding: 0 15px;
+`
+
+const ContentWrapper = styled.div`
+  display: table;
+  width: 100%;
+  height: 100%;
+
+  > h2 {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 1.2em;
+  }
+
+  > div {
+    display: table-cell;
+    vertical-align: middle;
+  }
+`

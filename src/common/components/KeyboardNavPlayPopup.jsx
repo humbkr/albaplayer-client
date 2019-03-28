@@ -6,19 +6,6 @@ import Modal from 'react-modal'
 // http://reactcommunity.org/react-modal/accessibility/
 Modal.setAppElement('#root')
 
-const ModalContent = styled.div`
-  > div:first-child {
-    margin-bottom: 10px;
-  }
-`
-
-const Action = styled.div`
-  display: inline-block;
-  border: 1px solid #000000;
-  border-radius: 3px;
-  padding: 5px;
-`
-
 const modalStyles = {
   content: {
     top: '50%',
@@ -110,3 +97,16 @@ KeyboardNavPlayPopup.defaultProps = {
 }
 
 export default KeyboardNavPlayPopup
+
+const ModalContent = styled.div`
+  > div:first-child {
+    margin-bottom: 10px;
+  }
+`
+
+const Action = styled.div`
+  display: inline-block;
+  border: 1px solid #000000;
+  border-radius: 3px;
+  padding: 5px;
+`

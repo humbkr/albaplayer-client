@@ -11,24 +11,6 @@ import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopu
 import { actions, selectors } from '../duck'
 import { operations as playerOperations } from '../../player/duck'
 
-const TracksPaneWrapper = styled.div`
-  display: inline-block;
-  vertical-align: top;
-  overflow: hidden;
-  width: 34%;
-  height: 100%;
-`
-
-const NoTracks = styled.div`
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  font-style: italic;
-  color: ${(props) => props.theme.textSecondaryColor};
-`
-
 class TracksPaneContainer extends Component {
   constructor(props) {
     super(props)
@@ -164,3 +146,21 @@ const ConnectedTracksPaneContainer = connect(
 export default React.forwardRef((props, ref) => (
   <ConnectedTracksPaneContainer {...props} forwardedRef={ref} />
 ))
+
+const TracksPaneWrapper = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  width: 34%;
+  height: 100%;
+`
+
+const NoTracks = styled.div`
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-style: italic;
+  color: ${(props) => props.theme.textSecondaryColor};
+`

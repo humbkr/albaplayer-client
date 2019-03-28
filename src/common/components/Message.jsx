@@ -3,21 +3,6 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Icon from './Icon'
 
-const MessageWrapper = styled.div`
-  color: ${(props) => props.theme.messages[props.type].color};
-
-  > * {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 5px;
-  }
-
-  > span {
-    height: ${(props) => props.theme.messages.height};
-    line-height: ${(props) => props.theme.messages.height};
-  }
-`
-
 const Message = (props) => {
   let Picto = ''
   switch (props.type) {
@@ -46,3 +31,18 @@ Message.propTypes = {
 }
 
 export default Message
+
+const MessageWrapper = styled.div`
+  color: ${(props) => props.theme.messages[props.type].color};
+
+  > * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+
+  > span {
+    height: ${(props) => props.theme.messages.height};
+    line-height: ${(props) => props.theme.messages.height};
+  }
+`

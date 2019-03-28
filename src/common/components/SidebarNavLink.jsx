@@ -4,6 +4,23 @@ import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Icon from './Icon'
 
+const SidebarNavLink = (props) => (
+  <SidebarNavLinkWrapper to={props.to}>
+    {props.icon && <Icon>{props.icon}</Icon>}
+    <span>{props.children}</span>
+  </SidebarNavLinkWrapper>
+)
+SidebarNavLink.propTypes = {
+  to: PropTypes.string.isRequired,
+  children: PropTypes.string.isRequired,
+  icon: PropTypes.string,
+}
+SidebarNavLink.defaultProps = {
+  icon: null,
+}
+
+export default SidebarNavLink
+
 const SidebarNavLinkWrapper = styled(NavLink)`
   text-align: left;
   padding-left: 15px;
@@ -36,20 +53,3 @@ const SidebarNavLinkWrapper = styled(NavLink)`
     line-height: ${(props) => props.theme.itemHeight};
   }
 `
-
-const SidebarNavLink = (props) => (
-  <SidebarNavLinkWrapper to={props.to}>
-    {props.icon && <Icon>{props.icon}</Icon>}
-    <span>{props.children}</span>
-  </SidebarNavLinkWrapper>
-)
-SidebarNavLink.propTypes = {
-  to: PropTypes.string.isRequired,
-  children: PropTypes.string.isRequired,
-  icon: PropTypes.string,
-}
-SidebarNavLink.defaultProps = {
-  icon: null,
-}
-
-export default SidebarNavLink

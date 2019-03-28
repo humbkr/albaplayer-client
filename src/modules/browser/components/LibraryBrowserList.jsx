@@ -4,17 +4,6 @@ import styled, { withTheme } from 'styled-components'
 import { ArrowKeyStepper, AutoSizer, List } from 'react-virtualized'
 import LibraryBrowserListItem from './LibraryBrowserListItem'
 
-const LibraryBrowserListWrapper = styled.div`
-  display: flex;
-  flex: 1;
-
-  // Needed for the autosizer to work correctly.
-  .autosizer-wrapper {
-    flex: 1;
-    overflow: auto;
-  }
-`
-
 class LibraryBrowserList extends React.Component {
   selectRow = ({ scrollToRow, itemId }) => {
     let itemID = itemId
@@ -119,3 +108,14 @@ const ThemedLibraryBrowserList = withTheme(LibraryBrowserList)
 export default React.forwardRef((props, ref) => (
   <ThemedLibraryBrowserList {...props} forwardedRef={ref} />
 ))
+
+const LibraryBrowserListWrapper = styled.div`
+  display: flex;
+  flex: 1;
+
+  // Needed for the autosizer to work correctly.
+  .autosizer-wrapper {
+    flex: 1;
+    overflow: auto;
+  }
+`

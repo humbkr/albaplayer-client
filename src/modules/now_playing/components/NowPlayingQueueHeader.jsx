@@ -1,6 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
+const NowPlayingQueueHeader = () => (
+  <QueueHeaderRow>
+    <TrackPosition>#</TrackPosition>
+    <div>track</div>
+    <div>artist</div>
+  </QueueHeaderRow>
+)
+
+export default NowPlayingQueueHeader
+
 const QueueHeaderRow = styled.div`
   display: grid;
   grid-template-columns: 60px 40% auto;
@@ -18,13 +28,3 @@ const QueueHeaderRow = styled.div`
 const TrackPosition = styled.div`
   justify-self: center;
 `
-
-const NowPlayingQueueHeader = () => (
-  <QueueHeaderRow>
-    <TrackPosition>#</TrackPosition>
-    <div>track</div>
-    <div>artist</div>
-  </QueueHeaderRow>
-)
-
-export default NowPlayingQueueHeader

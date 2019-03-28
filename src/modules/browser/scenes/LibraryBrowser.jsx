@@ -9,16 +9,6 @@ import TracksPaneContainer from '../components/TracksPaneContainer'
 import LibraryBrowserSearchBar from '../components/LibraryBrowserSearchBar'
 import { actions } from '../duck'
 
-const LibraryBrowserWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`
-
-const LibraryBrowserListsWrapper = styled.div`
-  flex: 1;
-`
-
 /**
  * Library browser screen.
  *
@@ -111,3 +101,13 @@ export default connect(
   null,
   mapDispatchToProps
 )(LibraryBrowser)
+
+const LibraryBrowserWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`
+
+const LibraryBrowserListsWrapper = styled.div`
+  flex: 1;
+`
