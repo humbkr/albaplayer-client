@@ -1,12 +1,25 @@
 const themeDefault = {
+  // Used for all list items.
   itemHeight: '50px',
-  highlight: '#efeff2',
-  highlightFocus: '#00bdab',
-  separatorColor: '#efeff2',
+
   backgroundColor: '#ffffff',
+  separatorColor: '#efeff2',
   textPrimaryColor: '#000000',
   textSecondaryColor: '#92929d',
+
+  highlight: '#efeff2',
+  highlightFocus: '#00bdab',
   textHighlightFocusColor: '#007166',
+
+  buttons: {
+    height: '32px',
+    sidePadding: '16px',
+    fontSize: '14px',
+    iconSize: 24,
+    color: '#009688',
+    colorHover: '#00bdab',
+    colorDisabled: '#b2b2b2',
+  },
 
   messages: {
     info: {
@@ -26,17 +39,25 @@ const themeDefault = {
     background: '#2a2a2a',
     textPrimaryColor: '#d9d9d9',
     textPrimaryColorHover: '#333333',
-    textSecondaryColor: '#9a9a9a',
   },
 
-  buttons: {
-    height: '32px',
-    sidePadding: '16px',
-    fontSize: '14px',
-    iconSize: 24,
-    color: '#009688',
-    colorHover: '#00bdab',
-    colorDisabled: '#b2b2b2',
+  player: {
+    buttons: {
+      color: '#ffffff',
+      colorEnabled: '#f97c4b',
+    },
+    // TODO use this
+    timeline: {
+      color: '#ffffff',
+      colorElapsed: '#ffffff',
+      colorHandle: '#ffffff',
+    },
+  },
+
+  nowPlaying: {
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    textPrimaryColor: '#ffffff',
+    textSecondaryColor: '#92929d',
   },
 }
 

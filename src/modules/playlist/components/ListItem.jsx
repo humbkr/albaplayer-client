@@ -9,6 +9,7 @@ export default styled.div`
   // The items MUST ALWAYS have a fixed height for the list to work.
   height: ${(props) => props.theme.itemHeight};
   overflow: hidden;
+  background-color: ${(props) => props.theme.backgroundColor};
 
   :hover {
     background-color: ${(props) => props.theme.highlight};

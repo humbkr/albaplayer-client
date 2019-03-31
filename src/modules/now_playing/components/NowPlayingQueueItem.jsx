@@ -125,6 +125,7 @@ const QueueItemWrapper = styled.div`
   height: ${(props) => props.theme.itemHeight};
   border-bottom: 1px solid ${(props) => props.theme.separatorColor};
   ${(props) => (props.isCurrent ? 'font-weight: bold' : '')};
+  background-color: ${(props) => props.theme.backgroundColor};
 
   > * {
     align-self: center;

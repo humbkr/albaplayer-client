@@ -102,11 +102,12 @@ const ModalContent = styled.div`
   > div:first-child {
     margin-bottom: 10px;
   }
+  color: ${(props) => props.theme.textPrimaryColor};
 `
 
 const Action = styled.div`
   display: inline-block;
-  border: 1px solid #000000;
+  border: 1px solid ${(props) => props.theme.textPrimaryColor};
   border-radius: 3px;
   padding: 5px;
 `

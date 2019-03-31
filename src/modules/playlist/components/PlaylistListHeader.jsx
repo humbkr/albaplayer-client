@@ -34,6 +34,6 @@ const Wrapper = styled.div`
 
 const Actions = styled.div`
   :hover {
-    color: ${(props) => props.theme.textHighlightFocusColor};
+    color: ${(props) => props.theme.buttons.colorHover};
   }
 `

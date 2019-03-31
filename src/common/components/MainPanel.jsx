@@ -52,4 +52,5 @@ export default withRouter(connect(mapStateToProps)(MainPanel))
 const MainPanelWrapper = styled.div`
   margin-left: ${(props) => props.theme.sidebar.width};
   height: 100vh;
+  background-color: ${(props) => props.theme.backgroundColor};
 `

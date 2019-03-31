@@ -48,6 +48,7 @@ const Select = styled.select`
   font-weight: bold;
   font-size: 1em;
   text-align-last: center;
+  color: ${(props) => props.theme.textPrimaryColor};
 
   :hover {
     cursor: pointer;

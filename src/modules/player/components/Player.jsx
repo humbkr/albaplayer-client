@@ -10,9 +10,8 @@ class Player extends React.Component {
   getChildContext() {
     return {
       // For controls buttons.
-      // TODO theme.
-      color: '#fff',
-      colorEnabled: '#f97c4b',
+      color: this.props.theme.player.buttons.color,
+      colorEnabled: this.props.theme.player.buttons.colorEnabled,
     }
   }
 

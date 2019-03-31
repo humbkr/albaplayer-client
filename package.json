@@ -1,6 +1,6 @@
 {
-  "name": "alba",
-  "version": "0.1.0",
+  "name": "albaplayer-client",
+  "version": "1.2.0",
   "private": true,
   "dependencies": {
     "apollo-cache-inmemory": "^1.1.4",

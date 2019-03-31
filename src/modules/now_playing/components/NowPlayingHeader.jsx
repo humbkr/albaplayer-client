@@ -114,7 +114,7 @@ const NowPlayingWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 20px 40px;
-  background-color: rgba(0, 0, 0, 0.65);
+  background-color: ${(props) => props.theme.nowPlaying.backgroundColor};
 `
 
 const Background = styled.div`
@@ -159,7 +159,7 @@ const SongInfo = styled.div`
   height: 250px;
   min-width: 200px;
   padding: 20px;
-  color: #fff;
+  color: ${(props) => props.theme.nowPlaying.textPrimaryColor};
 `
 
 const Title = styled.h2`

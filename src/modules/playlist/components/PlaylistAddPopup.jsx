@@ -168,6 +168,7 @@ const ModalContent = styled.div`
   > div:first-child {
     margin-bottom: 10px;
   }
+  color: ${(props) => props.theme.textPrimaryColor};
 `
 const Title = styled.h3`
   margin-bottom: 20px;

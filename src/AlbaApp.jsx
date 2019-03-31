@@ -81,4 +81,5 @@ const AlbaAppWrapper = styled.div`
   display: table;
   width: 100%;
   height: 100vh;
+  color: ${(props) => props.theme.textPrimaryColor};
 `
