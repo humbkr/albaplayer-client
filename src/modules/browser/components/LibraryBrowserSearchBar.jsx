@@ -19,6 +19,7 @@ const LibraryBrowserSearchBar = (props) => {
           id="search-input"
           value={searchTerm}
           placeholder="Search"
+          autoComplete="off"
         />
       </SearchBarInputWrapper>
     </LibraryBrowserSearchBarWrapper>
