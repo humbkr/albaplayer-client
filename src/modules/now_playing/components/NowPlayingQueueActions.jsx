@@ -4,12 +4,14 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ActionButton from '../../../common/components/ActionButton'
 import { actions } from '../../player/duck'
+import MoreButton from '../../../common/components/MoreButton'
 
 const NowPlayingQueueActions = (props) => (
   <QueueActionsWrapper>
     <ActionButton onClick={props.clearQueue} icon="close">
       Clear
     </ActionButton>
+    <MoreButton onClick={() => console.log('moar')} />
   </QueueActionsWrapper>
 )
 NowPlayingQueueActions.propTypes = {
