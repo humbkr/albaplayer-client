@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -11,6 +11,7 @@ import MaterialIconsWoff2 from './common/assets/fonts/MaterialIcons-Regular.woff
 import MaterialIconsWoff from './common/assets/fonts/MaterialIcons-Regular.woff'
 import MaterialIconsTtf from './common/assets/fonts/MaterialIcons-Regular.ttf'
 import MaterialIconsSvg from './common/assets/fonts/MaterialIcons-Regular.svg'
+import themes from './themes'
 
 class AlbaApp extends Component {
   componentDidMount() {
@@ -18,19 +19,27 @@ class AlbaApp extends Component {
   }
 
   render() {
+    const { theme } = this.props
+
     return (
-      <AlbaAppWrapper>
-        <GlobalStyle />
-        <Sidebar />
-        <MainPanel />
-      </AlbaAppWrapper>
+      <ThemeProvider theme={themes[theme].config}>
+        <AlbaAppWrapper>
+          <GlobalStyle />
+          <Sidebar />
+          <MainPanel />
+        </AlbaAppWrapper>
+      </ThemeProvider>
     )
   }
 }
 AlbaApp.propTypes = {
   initLibrary: PropTypes.func.isRequired,
+  theme: PropTypes.string.isRequired,
 }
 
+const mapStateToProps = (state) => ({
+  theme: state.settings.theme,
+})
 const mapDispatchToProps = (dispatch) => ({
   initLibrary: () => {
     dispatch(operations.initLibrary())
@@ -41,7 +50,7 @@ const mapDispatchToProps = (dispatch) => ({
 // https://github.com/ReactTraining/react-router/issues/4671
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   )(AlbaApp)
 )
@@ -74,6 +83,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: sans-serif;
     overflow-x: hidden;
+    background-color: ${(props) => props.theme.backgroundColor};
   }
 `
 

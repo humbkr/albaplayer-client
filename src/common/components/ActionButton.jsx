@@ -43,6 +43,7 @@ const ActionButtonWrapper = styled.button`
   vertical-align: middle;
   transition: 0.2s ease-out;
   color: ${(props) => props.theme.buttons.color};
+  background-color: transparent;
 
   ${(props) => props.raised
     ? `

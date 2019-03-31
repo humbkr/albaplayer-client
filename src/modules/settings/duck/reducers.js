@@ -1,3 +1,5 @@
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/es/storage'
 import types from './types'
 import { api } from '../../../api'
 
@@ -7,6 +9,7 @@ const initialState = {
     error: '',
     config: {},
   },
+  theme: 'default',
 }
 
 function settings(state = initialState, action) {
@@ -55,9 +58,21 @@ function settings(state = initialState, action) {
         },
       }
 
+    case types.SET_THEME:
+      return {
+        ...state,
+        theme: action.theme,
+      }
+
     default:
       return state
   }
 }
 
-export default settings
+const settingsPersistConfig = {
+  key: 'settings',
+  storage,
+  whitelist: ['theme'],
+}
+
+export default persistReducer(settingsPersistConfig, settings)

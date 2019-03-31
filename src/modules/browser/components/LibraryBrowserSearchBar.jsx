@@ -72,4 +72,5 @@ const SearchBarInput = styled(DebounceInput)`
   width: 100%;
   font-size: 1em;
   padding-left: 10px;
+  background-color: ${(props) => props.theme.inputs.backgroundColor};
 `

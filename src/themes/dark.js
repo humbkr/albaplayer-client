@@ -1,28 +1,28 @@
-const themeDefault = {
+const themeDark = {
   // Used for all list items.
   itemHeight: '50px',
 
-  backgroundColor: '#ffffff',
-  separatorColor: '#efeff2',
-  textPrimaryColor: '#000000',
+  backgroundColor: '#323638',
+  separatorColor: '#292c2f',
+  textPrimaryColor: '#eeeeee',
   textSecondaryColor: '#92929d',
 
-  highlight: '#efeff2',
-  highlightFocus: '#00bdab',
-  textHighlightFocusColor: '#007166',
+  highlight: '#202124',
+  highlightFocus: '#019a8b',
+  textHighlightFocusColor: '#00665c',
 
   buttons: {
     height: '32px',
     sidePadding: '16px',
     fontSize: '14px',
     iconSize: 24,
-    color: '#009688',
+    color: '#019a8b',
     colorHover: '#00bdab',
     colorDisabled: '#b2b2b2',
   },
 
   inputs: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#eeeeee',
   },
 
   messages: {
@@ -47,7 +47,7 @@ const themeDefault = {
 
   player: {
     buttons: {
-      color: '#ffffff',
+      color: '#eeeeee',
       colorEnabled: '#f97c4b',
     },
     // TODO use this
@@ -60,9 +60,9 @@ const themeDefault = {
 
   nowPlaying: {
     backgroundColor: 'rgba(0, 0, 0, 0.65)',
-    textPrimaryColor: '#ffffff',
+    textPrimaryColor: '#eeeeee',
     textSecondaryColor: '#92929d',
   },
 }
 
-export default themeDefault
+export default themeDark
