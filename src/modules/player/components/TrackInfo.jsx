@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Ripple from '../../../common/components/Ripple'
 import coverPlaceholder from '../../../common/assets/images/cover_placeholder.png'
 
 class TrackInfo extends React.PureComponent {
   render() {
-    const track = this.props.track
+    const { track, onClick } = this.props
     const trackTitle = track && track.title !== '' ? track.title : 'Unknown title'
     const trackArtist = track && track.artist && track.artist.name
       ? track.artist.name
@@ -13,16 +14,18 @@ class TrackInfo extends React.PureComponent {
     const trackCover = track && track.cover ? track.cover : false
 
     return (
-      <TrackInfoWrapper>
-        <Overlay />
-        {trackCover && <Cover src={trackCover} />}
-        {track && (
-          <OverlayText>
-            <TrackTitle>{trackTitle}</TrackTitle>
-            <ArtistName>by {trackArtist}</ArtistName>
-          </OverlayText>
-        )}
-      </TrackInfoWrapper>
+      <Ripple>
+        <TrackInfoWrapper onClick={() => onClick()}>
+          <Overlay />
+          {trackCover && <Cover src={trackCover} />}
+          {track && (
+            <OverlayText>
+              <TrackTitle>{trackTitle}</TrackTitle>
+              <ArtistName>by {trackArtist}</ArtistName>
+            </OverlayText>
+          )}
+        </TrackInfoWrapper>
+      </Ripple>
     )
   }
 }
@@ -34,9 +37,11 @@ TrackInfo.propTypes = {
       name: PropTypes.string,
     }),
   }),
+  onClick: PropTypes.func,
 }
 TrackInfo.defaultProps = {
   track: null,
+  onClick: null,
 }
 
 export default TrackInfo
@@ -48,6 +53,7 @@ const TrackInfoWrapper = styled.div`
   background: url(${coverPlaceholder}) no-repeat;
   background-size: 100% 100%;
   overflow: hidden;
+  user-select: none;
 `
 
 const Cover = styled.img`

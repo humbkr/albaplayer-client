@@ -27,7 +27,7 @@ class Player extends React.Component {
 
     return (
       <PlayerWrapper>
-        <TrackInfo track={track} />
+        <TrackInfo track={track} onClick={controlCallbacks.togglePlayPause} />
         <Timeline
           appWidth={parseInt(this.props.theme.sidebar.width, 0)}
           updateProgressTime={this.updateProgressTime}

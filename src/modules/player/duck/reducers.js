@@ -45,13 +45,17 @@ const initialState = {
 function player(state = initialState, action) {
   switch (action.type) {
     case types.PLAYER_TOGGLE_PLAY_PAUSE:
-      return {
-        ...state,
-        playing:
-          action.forcedValue === undefined
-            ? !state.playing
-            : action.forcedValue,
+      if (state.track || action.forcedValue !== undefined) {
+        return {
+          ...state,
+          playing:
+            action.forcedValue === undefined
+              ? !state.playing
+              : action.forcedValue,
+        }
       }
+
+      return state
     case types.PLAYER_TOGGLE_SHUFFLE:
       return {
         ...state,
