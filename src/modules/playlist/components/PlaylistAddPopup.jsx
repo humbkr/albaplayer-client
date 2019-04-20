@@ -1,33 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 import Modal from 'react-modal'
-import {
-  Formik, Form, Field, ErrorMessage,
-} from 'formik'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import moment from 'moment'
 import { getRandomInt } from '../../../common/utils/utils'
 import ActionButton from '../../../common/components/ActionButton'
 
 // http://reactcommunity.org/react-modal/accessibility/
 Modal.setAppElement('#root')
-
-const modalStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
-    padding: '20px',
-    width: '350px',
-  },
-  overlay: {
-    backgroundColor: '',
-  },
-}
 
 class PlaylistAddPopup extends React.Component {
   constructor(props) {
@@ -70,9 +51,25 @@ class PlaylistAddPopup extends React.Component {
   }
 
   render() {
-    const {
-      id, isOpen, onClose, mode, playlist,
-    } = this.props
+    const { id, isOpen, onClose, mode, playlist, theme } = this.props
+
+    const modalStyles = {
+      content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
+        padding: '20px',
+        width: '350px',
+        backgroundColor: theme.backgroundColor,
+      },
+      overlay: {
+        backgroundColor: '',
+      },
+    }
 
     return (
       <Modal
@@ -162,7 +159,7 @@ PlaylistAddPopup.defaultProps = {
   mode: 'add',
 }
 
-export default PlaylistAddPopup
+export default withTheme(PlaylistAddPopup)
 
 const ModalContent = styled.div`
   > div:first-child {
@@ -181,6 +178,7 @@ const FormField = styled(Field)`
   font-size: 1em;
   padding: 5px 10px;
   width: 100%;
+  background-color: ${(props) => props.theme.inputs.backgroundColor};
 `
 const FormError = styled(ErrorMessage)`
   color: ${(props) => props.theme.messages.error.color};

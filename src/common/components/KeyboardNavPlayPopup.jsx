@@ -1,25 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 import Modal from 'react-modal'
 
 // http://reactcommunity.org/react-modal/accessibility/
 Modal.setAppElement('#root')
-
-const modalStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
-  },
-  overlay: {
-    backgroundColor: '',
-  },
-}
 
 class KeyboardNavPlayPopup extends React.Component {
   constructor(props) {
@@ -56,7 +41,23 @@ class KeyboardNavPlayPopup extends React.Component {
   }
 
   render() {
-    const { id, isOpen, onClose } = this.props
+    const { id, isOpen, onClose, theme } = this.props
+
+    const modalStyles = {
+      content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
+        backgroundColor: theme.backgroundColor,
+      },
+      overlay: {
+        backgroundColor: '',
+      },
+    }
 
     return (
       <Modal
@@ -96,7 +97,7 @@ KeyboardNavPlayPopup.defaultProps = {
   itemId: null,
 }
 
-export default KeyboardNavPlayPopup
+export default withTheme(KeyboardNavPlayPopup)
 
 const ModalContent = styled.div`
   > div:first-child {
