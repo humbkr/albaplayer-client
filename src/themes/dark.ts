@@ -11,6 +11,10 @@ const themeDark = {
   highlightFocus: '#019a8b',
   textHighlightFocusColor: '#00665c',
 
+  cards: {
+    backgroundColor: '#4c5052',
+  },
+
   buttons: {
     height: '32px',
     sidePadding: '16px',
@@ -40,6 +44,7 @@ const themeDark = {
 
   sidebar: {
     width: '280px',
+    menuItemHeight: '40px',
     background: '#2a2a2a',
     textPrimaryColor: '#d9d9d9',
     textPrimaryColorHover: '#333333',

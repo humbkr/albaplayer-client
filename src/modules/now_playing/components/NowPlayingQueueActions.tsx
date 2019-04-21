@@ -29,7 +29,7 @@ const NowPlayingQueueActions = () => {
         Clear
       </ActionButton>
       <QueueActionButton
-        icon="more_vert"
+        icon="more_horiz"
         size={25}
         onClick={handleQueueActionsMore}
         testId="queue-actions-more"

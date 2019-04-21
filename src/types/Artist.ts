@@ -5,4 +5,5 @@ export default interface Artist {
   id: string
   name: string
   albums?: Array<Album>
+  dateAdded?: number
 }

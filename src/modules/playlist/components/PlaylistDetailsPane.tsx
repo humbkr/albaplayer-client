@@ -131,7 +131,7 @@ const PlaylistDetailsPane: FunctionComponent<InternalProps> = ({
               onClick={() => handlePlaylistAddToQueue(playlist)}
             />
             <PlaylistActionButton
-              icon="more_vert"
+              icon="more_horiz"
               size={25}
               onClick={handlePlaylistActionsMore}
             />

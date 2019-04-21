@@ -8,12 +8,15 @@ const getLibrary = () => {
       artists {
         id
         name
+        dateAdded
       }
       albums {
         id
         title
         year
         artistId
+        cover
+        dateAdded
       }
       tracks {
         id
@@ -24,6 +27,7 @@ const getLibrary = () => {
         artistId
         albumId
         cover
+        dateAdded
       }
       variable(key: "library_last_updated") {
         value
@@ -45,14 +49,17 @@ const getFullTrackInfo = (trackId: string) => {
         duration
         src
         cover
+        dateAdded
         album {
           id
           title
           year
+          dateAdded
         }
         artist {
           id
           name
+          dateAdded
         }
       }
     }

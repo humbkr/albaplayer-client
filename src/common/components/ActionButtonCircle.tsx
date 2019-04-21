@@ -6,9 +6,15 @@ const ActionButtonCircle: FunctionComponent<{
   borderWidth?: number
   color?: string
   icon?: string
+  backgroundColor?: string
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }> = ({
-  size = 50, borderWidth = 1, color = '#fff', icon = '', onClick,
+  size = 50,
+  borderWidth = 1,
+  color = '#fff',
+  icon = '',
+  backgroundColor = 'transparent',
+  onClick,
 }) => (
   <ActionButtonCircleWrapper onClick={onClick} color={color}>
     <svg
@@ -22,7 +28,7 @@ const ActionButtonCircle: FunctionComponent<{
           cy="50%"
           r={size / 2}
           strokeWidth={borderWidth}
-          fill="transparent"
+          fill={backgroundColor}
         />
         <text
           x="50%"

@@ -6,6 +6,7 @@ import libraryBrowserReducer from '../modules/browser/redux'
 import playerReducer from '../modules/player/redux'
 import playlistReducer from '../modules/playlist/redux'
 import settingsReducer from '../modules/settings/redux'
+import dashboardReducer from '../modules/dashboard/redux'
 
 const settingsPersistConfig = {
   key: 'settings',
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   queue: playerReducer.queue,
   player: persistReducer(playerPersistConfig, playerReducer.player),
   playlist: playlistReducer,
+  dashboard: dashboardReducer,
   settings: persistReducer(settingsPersistConfig, settingsReducer),
 })
 

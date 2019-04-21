@@ -16,6 +16,9 @@ const Sidebar = () => (
       <SidebarNavLink to="/playlists" icon="view_list">
         Playlists
       </SidebarNavLink>
+      <SidebarNavLink to="/inspiration" icon="lightbulb_outline">
+        Inspiration
+      </SidebarNavLink>
     </MainMenu>
     <SettingsMenu>
       <SidebarNavLink to="/settings" icon="settings">
@@ -36,11 +39,13 @@ const Wrapper = styled.div`
   background-color: ${(props) => props.theme.sidebar.background};
 `
 const MainMenu = styled.div`
-  padding-top: 50px;
+  padding-top: 15px;
 `
 
 const SettingsMenu = styled.div`
   position: absolute;
   width: 100%;
   bottom: 0;
+  display: flex;
+  justify-content: flex-end;
 `

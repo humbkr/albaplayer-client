@@ -17,4 +17,5 @@ export default interface Track {
   artist?: Artist
   album?: Album
   src?: string
+  dateAdded?: number
 }

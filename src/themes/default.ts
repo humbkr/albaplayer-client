@@ -11,6 +11,10 @@ const themeDefault = {
   highlightFocus: '#00bdab',
   textHighlightFocusColor: '#007166',
 
+  cards: {
+    backgroundColor: '#eeeeee',
+  },
+
   buttons: {
     height: '32px',
     sidePadding: '16px',
@@ -40,6 +44,7 @@ const themeDefault = {
 
   sidebar: {
     width: '280px',
+    menuItemHeight: '40px',
     background: '#2a2a2a',
     textPrimaryColor: '#d9d9d9',
     textPrimaryColorHover: '#333333',
@@ -59,6 +64,12 @@ const themeDefault = {
   },
 
   nowPlaying: {
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    textPrimaryColor: '#ffffff',
+    textSecondaryColor: '#92929d',
+  },
+
+  dashboard: {
     backgroundColor: 'rgba(0, 0, 0, 0.65)',
     textPrimaryColor: '#ffffff',
     textSecondaryColor: '#92929d',

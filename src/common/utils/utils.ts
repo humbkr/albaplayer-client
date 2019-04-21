@@ -1,3 +1,5 @@
+import { SortOrder } from '../../types/SortOrder'
+
 function immutableRemove(arr: Array<any>, index: number): Array<any> {
   return arr.slice(0, index).concat(arr.slice(index + 1))
 }
@@ -35,7 +37,11 @@ const sanitizeTrackNumber = (trackNumber: number | string): string => {
   return `T${split[0].padStart(3, '0')}`
 }
 
-const immutableNestedSort = (items: Array<any>, prop: string): Array<any> => {
+const immutableNestedSort = (
+  items: Array<any>,
+  prop: string,
+  order: SortOrder = SortOrder.ASC
+): Array<any> => {
   const property = prop.split('.')
   // Get depth.
   const len = property.length
@@ -56,20 +62,17 @@ const immutableNestedSort = (items: Array<any>, prop: string): Array<any> => {
 
     // Sort if value type is string.
     if (typeof a === 'string' || a instanceof String) {
-      if (a.toLowerCase() > b.toLowerCase()) {
-        result = 1
-      } else if (b.toLowerCase() > a.toLowerCase()) {
-        result = -1
+      if (order === SortOrder.ASC) {
+        return a.toLowerCase() > b.toLowerCase() ? 1 : -1
       }
-
-      return result
+      return a.toLowerCase() < b.toLowerCase() ? 1 : -1
     }
 
     // Sort if value type is number.
-    if (a > b) {
-      result = 1
-    } else if (b > a) {
-      result = -1
+    if (order === SortOrder.ASC) {
+      result = a > b ? 1 : -1
+    } else {
+      result = a < b ? 1 : -1
     }
 
     return result
@@ -103,21 +106,11 @@ const immutableSortTracks = (items: Array<any>, prop: string): Array<any> => {
 
     // Sort if value type is string.
     if (typeof a === 'string' || a instanceof String) {
-      if (a.toLowerCase() > b.toLowerCase()) {
-        result = 1
-      } else if (b.toLowerCase() > a.toLowerCase()) {
-        result = -1
-      }
-
-      return result
+      return a.toLowerCase() > b.toLowerCase() ? 1 : -1
     }
 
     // Sort if value type is number.
-    if (a > b) {
-      result = 1
-    } else if (b > a) {
-      result = -1
-    }
+    result = a > b ? 1 : -1
 
     return result
   })

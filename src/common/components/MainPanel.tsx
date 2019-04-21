@@ -8,6 +8,7 @@ import LoadingScreen from 'common/components/LoadingScreen'
 import Settings from 'modules/settings/scenes/Settings'
 import Playlists from 'modules/playlist/scenes/Playlists'
 import { RootState } from 'store/types'
+import Dashboard from '../../modules/dashboard/scenes/Dashboard'
 
 const MainPanel = () => {
   const isFetching = useSelector((state: RootState) => state.library.isFetching)
@@ -25,8 +26,9 @@ const MainPanel = () => {
       {!isFetching && isInitialized && (
         <MainPanelWrapper>
           <Route exact path="/" component={LibraryBrowser} />
-          <Route path="/library" component={LibraryBrowser} />
           <Route path="/queue" component={NowPlaying} />
+          <Route path="/inspiration" component={Dashboard} />
+          <Route path="/library" component={LibraryBrowser} />
           <Route path="/playlists" component={Playlists} />
           <Route path="/settings" component={Settings} />
         </MainPanelWrapper>

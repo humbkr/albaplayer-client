@@ -69,6 +69,10 @@ const GlobalStyle = createGlobalStyle<{ theme: AppTheme }>`
     overflow-x: hidden;
     background-color: ${(props) => props.theme.backgroundColor};
   }
+  
+  .react-contexify {
+    z-index: 50;
+  }
 `
 const AlbaAppWrapper = styled.div`
   display: table;
