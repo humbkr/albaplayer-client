@@ -15,7 +15,7 @@ const NowPlayingQueue = (props) => {
   const items = tracks.map((item, index) => ({ ...item, position: index + 1 }))
 
   return (
-    <React.Fragment>
+    <>
       <QueueTitle>Queue</QueueTitle>
       <NowPlayingQueueActions />
       <NowPlayingQueueHeader />
@@ -28,7 +28,7 @@ const NowPlayingQueue = (props) => {
         />
       )}
       <QueueItemContextMenu />
-    </React.Fragment>
+    </>
   )
 }
 NowPlayingQueue.propTypes = {

@@ -10,7 +10,8 @@ class NowPlayingHeader extends Component {
   handleSearchForTabs = () => {
     const song = this.props.track
     const songTitle = song && song.title !== '' ? song.title : ''
-    const songArtist = song && song.artist && song.artist.name ? song.artist.name : ''
+    const songArtist =
+      song && song.artist && song.artist.name ? song.artist.name : ''
     const searchQuery = `${songArtist}+${songTitle}+tab`.replace(/ /g, '+')
 
     window.open(`https://www.google.fr/search?q=${searchQuery}`, '_blank')
@@ -19,7 +20,8 @@ class NowPlayingHeader extends Component {
   handleSearchForLyrics = () => {
     const song = this.props.track
     const songTitle = song && song.title !== '' ? song.title : ''
-    const songArtist = song && song.artist && song.artist.name ? song.artist.name : ''
+    const songArtist =
+      song && song.artist && song.artist.name ? song.artist.name : ''
     const searchQuery = `${songArtist}+${songTitle}+lyrics`.replace(/ /g, '+')
 
     window.open(`https://www.google.fr/search?q=${searchQuery}`, '_blank')
@@ -29,15 +31,18 @@ class NowPlayingHeader extends Component {
     const song = this.props.track
 
     const songTitle = song && song.title !== '' ? song.title : 'Unknown title'
-    const songArtist = song && song.artist && song.artist.name
-      ? song.artist.name
-      : 'Unknown artist'
-    const songAlbum = song && song.album && song.album.title
-      ? song.album.title
-      : 'Unknown album'
+    const songArtist =
+      song && song.artist && song.artist.name
+        ? song.artist.name
+        : 'Unknown artist'
+    const songAlbum =
+      song && song.album && song.album.title
+        ? song.album.title
+        : 'Unknown album'
     const songNumber = song && song.number ? song.number : ''
     const songDisc = song && song.disc ? song.disc : ''
-    const songDuration = song && song.duration ? formatDuration(song.duration) : ''
+    const songDuration =
+      song && song.duration ? formatDuration(song.duration) : ''
     const songCover = song && song.cover ? song.cover : ''
 
     let trackAlbumInfo = ''
@@ -65,11 +70,14 @@ class NowPlayingHeader extends Component {
           <CoverInfo>{songCover && <SongCover src={songCover} />}</CoverInfo>
           {song && (
             <SongInfo>
-              <Title>{songTitle}</Title>
-              <Artist>by {songArtist}</Artist>
-              <Album>{songAlbum}</Album>
-              <Position>{trackAlbumInfo}</Position>
-
+              <SongInfoPart1>
+                <Title>{songTitle}</Title>
+                <Artist>by {songArtist}</Artist>
+              </SongInfoPart1>
+              <SongInfoPart2>
+                <Album>{songAlbum}</Album>
+                <Position>{trackAlbumInfo}</Position>
+              </SongInfoPart2>
               <SongActions>
                 <ActionButtonCircle
                   icon="queue_music"
@@ -115,6 +123,7 @@ const NowPlayingWrapper = styled.div`
   margin: 0 auto;
   padding: 20px 40px;
   background-color: ${(props) => props.theme.nowPlaying.backgroundColor};
+  display: flex;
 `
 
 const Background = styled.div`
@@ -145,6 +154,7 @@ const CoverInfo = styled.div`
   height: 250px;
   background: url(${coverPlaceholder}) no-repeat;
   background-size: 100% 100%;
+  flex-shrink: 0;
 `
 
 const SongCover = styled.img`
@@ -157,28 +167,29 @@ const SongInfo = styled.div`
   position: relative;
   vertical-align: top;
   height: 250px;
-  min-width: 200px;
-  padding: 20px;
   color: ${(props) => props.theme.nowPlaying.textPrimaryColor};
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 `
-
+const SongInfoPart1 = styled.div``
+const SongInfoPart2 = styled.div`
+  padding: 15px 0 5px;
+`
 const Title = styled.h2`
   margin-bottom: 5px;
 `
-
 const Artist = styled.h3`
   font-weight: normal;
   font-size: 1.2em;
-  margin-bottom: 20px;
 `
-
 const Album = styled.h4`
   font-weight: normal;
   font-style: italic;
   font-size: 1.1em;
   margin-bottom: 3px;
 `
-
 const Position = styled.h4`
   font-weight: normal;
   font-style: italic;
@@ -187,8 +198,9 @@ const Position = styled.h4`
 `
 
 const SongActions = styled.div`
-  position: absolute;
-  bottom: 18px;
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-end;
 
   > * {
     margin-right: 20px;

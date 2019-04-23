@@ -16,6 +16,9 @@ export default NowPlaying
 
 const NowPlayingWrapper = styled.div`
   padding: 30px 50px;
+  max-width: 1160px;
+  min-width: 800px;
+  margin: 0 auto;
 `
 
 const NowPlayingQueueWrapper = styled.div`
