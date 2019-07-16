@@ -9,7 +9,9 @@ const fetchLibrary = () => (dispatch) => {
   return api
     .getLibrary()
     .then((response) => {
+      console.log('response', response)
       dispatch(actions.libraryInitSuccess(response))
+      dispatch(actions.librarySetLastScan(response.data.variable.value))
     })
     .catch((response) => {
       // TODO log failure.
@@ -21,6 +23,7 @@ const shouldFetchLibrary = async (dispatch, libraryState) => {
   // We should fetch if library is not initialized.
   if (!libraryState.isInitialized) {
     if (libraryState.tracks && Object.values(libraryState.tracks).length < 1) {
+      console.log('empty library, fetch')
       return true
     }
 
@@ -30,10 +33,13 @@ const shouldFetchLibrary = async (dispatch, libraryState) => {
       .getVariable('library_last_updated')
       .then((response) => {
         const remoteLastScan = response.data.variable.value
+        console.log('last local scan: ', libraryState.lastScan)
+        console.log('last remote scan: ', remoteLastScan)
         if (remoteLastScan > libraryState.lastScan) {
-          dispatch(actions.librarySetLastScan(remoteLastScan))
+          console.log('library should be fetched')
           return true
         }
+        console.log('get cached library')
         return false
       })
       .catch(() => {

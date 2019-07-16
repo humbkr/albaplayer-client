@@ -25,6 +25,9 @@ const getLibrary = () => {
         albumId
         cover
       }
+      variable(key: "library_last_updated") {
+        value
+      }
     }
   `
 
