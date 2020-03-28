@@ -9,12 +9,12 @@ const fetchLibrary = () => (dispatch) => {
   return api
     .getLibrary()
     .then((response) => {
-      console.log('response', response)
       dispatch(actions.libraryInitSuccess(response))
-      dispatch(actions.librarySetLastScan(response.data.variable.value))
+      if (response.data.variable) {
+        dispatch(actions.librarySetLastScan(response.data.variable.value))
+      }
     })
     .catch((response) => {
-      // TODO log failure.
       dispatch(actions.libraryInitFailure(response))
     })
 }
