@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import LibraryBrowserList from './LibraryBrowserList'
 import TrackTeaser from './TrackTeaser'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
@@ -11,140 +11,91 @@ import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopu
 import { actions, selectors } from '../duck'
 import { operations as playerOperations } from '../../player/duck'
 
-class TracksPaneContainer extends Component {
-  constructor(props) {
-    super(props)
+function TracksPaneContainer({ switchPaneHandler, forwardedRef }) {
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
-    this.state = {
-      modalIsOpen: false,
-    }
-  }
+  const tracks = useSelector((state) => selectors.getTracksList(state))
+  const orderBy = useSelector((state) => state.libraryBrowser.sortTracks)
+  const currentPosition = useSelector(
+    (state) => state.libraryBrowser.currentPositionTracks
+  )
+  const currentTrack = useSelector(
+    (state) => state.libraryBrowser.selectedTracks
+  )
+  const dispatch = useDispatch()
+
+  const orderByOptions = [
+    { value: 'title', label: 'title' },
+    { value: 'number', label: 'track number' },
+    { value: 'albumId', label: 'album' },
+    { value: 'artistId', label: 'artist' },
+  ]
 
   // Change event handler for LibraryBrowserListHeader.
-  onSortChangeHandler = (event) => {
-    // Pass the new selected sort option to the dispatcher.
-    this.props.onSortChange(event.target.value)
+  const onSortChangeHandler = (event) => {
+    dispatch(actions.libraryBrowserSortTracks(event.target.value))
   }
 
-  onKeyDown = (e) => {
-    const { switchPaneHandler } = this.props
+  const onItemClick = (itemId, index) => {
+    dispatch(actions.libraryBrowserSelectTrack(itemId, index))
+  }
 
+  const handlePlayNow = (trackId) => {
+    dispatch(playerOperations.playTrack(trackId))
+  }
+
+  const handleAddToQueue = (trackId) => {
+    dispatch(playerOperations.addTrack(trackId))
+  }
+
+  const onKeyDown = (e) => {
     if (e.keyCode === 13) {
-      this.openModal()
+      setModalIsOpen(true)
     } else {
       switchPaneHandler(e)
     }
   }
 
-  openModal = () => {
-    this.setState({ modalIsOpen: true })
-  }
-
-  closeModal = () => {
-    this.setState({ modalIsOpen: false })
-  }
-
-  render() {
-    const {
-      tracks,
-      orderBy,
-      currentPosition,
-      currentTrack,
-      onItemClick,
-      forwardedRef,
-      handlePlayNow,
-      handleAddToQueue,
-    } = this.props
-
-    const orderByOptions = [
-      { value: 'title', label: 'title' },
-      { value: 'number', label: 'track number' },
-      { value: 'albumId', label: 'album' },
-      { value: 'artistId', label: 'artist' },
-    ]
-
-    return (
-      <TracksPaneWrapper>
-        <LibraryBrowserPane>
-          <LibraryBrowserListHeader
-            title="Tracks"
-            orderBy={orderBy}
-            orderByOptions={orderByOptions}
-            onChange={this.onSortChangeHandler}
+  return (
+    <TracksPaneWrapper>
+      <LibraryBrowserPane>
+        <LibraryBrowserListHeader
+          title="Tracks"
+          orderBy={orderBy}
+          orderByOptions={orderByOptions}
+          onChange={onSortChangeHandler}
+        />
+        {tracks.length > 1 && (
+          <LibraryBrowserList
+            ref={forwardedRef}
+            items={tracks}
+            itemDisplay={TrackTeaser}
+            currentPosition={currentPosition}
+            onItemClick={onItemClick}
+            onKeyDown={onKeyDown}
           />
-          {tracks.length > 1 && (
-            <LibraryBrowserList
-              ref={forwardedRef}
-              items={tracks}
-              itemDisplay={TrackTeaser}
-              currentPosition={currentPosition}
-              onItemClick={onItemClick}
-              onKeyDown={this.onKeyDown}
-            />
-          )}
-          {tracks.length === 1 && (
-            <NoTracks>Select an artist or album</NoTracks>
-          )}
-          <TrackContextMenu />
-          <KeyboardNavPlayPopup
-            id="tracks-nav-modal"
-            onClose={this.closeModal}
-            isOpen={this.state.modalIsOpen}
-            itemId={currentTrack}
-            handlePlayNow={handlePlayNow}
-            handleAddToQueue={handleAddToQueue}
-          />
-        </LibraryBrowserPane>
-      </TracksPaneWrapper>
-    )
-  }
+        )}
+        {tracks.length === 1 && <NoTracks>Select an artist or album</NoTracks>}
+        <TrackContextMenu />
+        <KeyboardNavPlayPopup
+          id="tracks-nav-modal"
+          onClose={() => setModalIsOpen(false)}
+          isOpen={modalIsOpen}
+          itemId={currentTrack}
+          handlePlayNow={handlePlayNow}
+          handleAddToQueue={handleAddToQueue}
+        />
+      </LibraryBrowserPane>
+    </TracksPaneWrapper>
+  )
 }
 TracksPaneContainer.propTypes = {
-  tracks: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  currentPosition: PropTypes.number.isRequired,
-  currentTrack: PropTypes.string.isRequired,
-  onSortChange: PropTypes.func.isRequired,
-  onItemClick: PropTypes.func.isRequired,
   switchPaneHandler: PropTypes.func.isRequired,
   forwardedRef: PropTypes.shape().isRequired,
-  handlePlayNow: PropTypes.func.isRequired,
-  handleAddToQueue: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = (state) => ({
-  tracks: selectors.getTracksList(state),
-  orderBy: state.libraryBrowser.sortTracks,
-  currentPosition: state.libraryBrowser.currentPositionTracks,
-  currentTrack: state.libraryBrowser.selectedTracks,
-})
-const mapDispatchToProps = (dispatch) => ({
-  onSortChange: (sortProperty) => {
-    dispatch(actions.libraryBrowserSortTracks(sortProperty))
-  },
-  onItemClick: (itemId, index) => {
-    dispatch(actions.libraryBrowserSelectTrack(itemId, index))
-  },
-  handlePlayNow: (trackId) => {
-    dispatch(playerOperations.playTrack(trackId))
-  },
-  handleAddToQueue: (trackId) => {
-    dispatch(playerOperations.addTrack(trackId))
-  },
-})
-
-const ConnectedTracksPaneContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TracksPaneContainer)
-
 export default React.forwardRef((props, ref) => (
-  <ConnectedTracksPaneContainer {...props} forwardedRef={ref} />
+  <TracksPaneContainer {...props} forwardedRef={ref} />
 ))
 
 const TracksPaneWrapper = styled.div`
@@ -154,7 +105,6 @@ const TracksPaneWrapper = styled.div`
   width: 34%;
   height: 100%;
 `
-
 const NoTracks = styled.div`
   flex: 1 1 auto;
   display: flex;

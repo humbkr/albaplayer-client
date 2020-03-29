@@ -1,20 +1,22 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { forwardRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { DebounceInput } from 'react-debounce-input'
 import { actions } from '../duck'
 
-const LibraryBrowserSearchBar = (props) => {
-  const { searchTerm, onChange, forwardedRef } = props
+const LibraryBrowserSearchBar = ({ forwardedRef }) => {
+  const searchTerm = useSelector((state) => state.libraryBrowser.search.term)
+  const dispatch = useDispatch()
 
   return (
     <LibraryBrowserSearchBarWrapper>
       <SearchBarInputWrapper>
         <SearchBarInput
-          ref={forwardedRef}
+          inputRef={forwardedRef}
           debounceTimeout={300}
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event) => dispatch(actions.libraryBrowserSearch(event.target.value))
+          }
           type="text"
           id="search-input"
           value={searchTerm}
@@ -26,28 +28,11 @@ const LibraryBrowserSearchBar = (props) => {
   )
 }
 LibraryBrowserSearchBar.propTypes = {
-  searchTerm: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
   forwardedRef: PropTypes.shape().isRequired,
 }
 
-const mapStateToProps = (state) => ({
-  searchTerm: state.libraryBrowser.search.term,
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  onChange: (text) => {
-    dispatch(actions.libraryBrowserSearch(text))
-  },
-})
-
-const ConnectedLibraryBrowserSearchBar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LibraryBrowserSearchBar)
-
-export default React.forwardRef((props, ref) => (
-  <ConnectedLibraryBrowserSearchBar {...props} forwardedRef={ref} />
+export default forwardRef((props, ref) => (
+  <LibraryBrowserSearchBar {...props} forwardedRef={ref} />
 ))
 
 const LibraryBrowserSearchBarWrapper = styled.div`
@@ -56,7 +41,6 @@ const LibraryBrowserSearchBarWrapper = styled.div`
   width: 100%;
   border-bottom: 1px solid ${(props) => props.theme.separatorColor};
 `
-
 const SearchBarInputWrapper = styled.div`
   display: table-cell;
   vertical-align: middle;
@@ -67,7 +51,6 @@ const SearchBarInputWrapper = styled.div`
     background-color: ${(props) => props.theme.highlightFocus};
   }
 `
-
 const SearchBarInput = styled(DebounceInput)`
   height: 100%;
   width: 100%;

@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import { createLogger } from 'redux-logger'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import libraryReducer from './modules/library/duck'
@@ -36,12 +35,7 @@ const rootReducer = (state = {}, action) => ({
 const persistanceReducer = persistReducer(rootPersistConfig, rootReducer)
 
 // Common middleware
-let middleware = [thunkMiddleware]
-
-if (process.env.REACT_APP_DEBUG_MODE === 'true') {
-  const loggerMiddleware = createLogger()
-  middleware = [...middleware, loggerMiddleware]
-}
+const middleware = [thunkMiddleware]
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

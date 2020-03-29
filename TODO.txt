@@ -1,0 +1,10 @@
+- what to do with state of library when erasing search? currently having weird behaviour
+DONE - implements redux-persist + new loading process
+- implement add after current
+DONE - add playlists
+- add dashboard using hooks
+- i18n
+DONE - add app version to the settings page
+- add backend version to the settings page
+DONE - add more themes
+- replace moment.js
