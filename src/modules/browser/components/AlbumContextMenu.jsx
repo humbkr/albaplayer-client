@@ -35,8 +35,12 @@ const AlbumContextMenu = (props) => {
       <Item onClick={(menuItem) => handleAddToQueue(menuItem.props.id)}>
         Add to queue
       </Item>
-      <Separator />
-      <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
+      {playlists.length > 0 && (
+        <>
+          <Separator />
+          <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
+        </>
+      )}
     </ContextMenu>
   )
 }
@@ -63,7 +67,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AlbumContextMenu)
+export default connect(mapStateToProps, mapDispatchToProps)(AlbumContextMenu)
