@@ -85,6 +85,7 @@ const libraryBrowserSearch = (text) => {
     // Reinitialise library browser.
     return (dispatch) => {
       dispatch(libraryBrowserSearchUpdateInput(text))
+      dispatch(libraryBrowserSelectArtist('0', 0))
       dispatch(libraryBrowserInit())
     }
   }

@@ -15,8 +15,7 @@ const LibraryBrowserSearchBar = ({ forwardedRef }) => {
         <SearchBarInput
           inputRef={forwardedRef}
           debounceTimeout={300}
-          onChange={(event) => dispatch(actions.libraryBrowserSearch(event.target.value))
-          }
+          onChange={(event) => dispatch(actions.libraryBrowserSearch(event.target.value))}
           type="text"
           id="search-input"
           value={searchTerm}
