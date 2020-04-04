@@ -1,5 +1,4 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import thunkMiddleware from 'redux-thunk'
+import { configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import libraryReducer from './modules/library/duck'
@@ -34,16 +33,9 @@ const rootReducer = (state = {}, action) => ({
 
 const persistanceReducer = persistReducer(rootPersistConfig, rootReducer)
 
-// Common middleware
-const middleware = [thunkMiddleware]
-
-// eslint-disable-next-line no-underscore-dangle
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-
-const store = createStore(
-  persistanceReducer,
-  composeEnhancers(applyMiddleware(...middleware))
-)
+const store = configureStore({
+  reducer: persistanceReducer,
+})
 
 const persistor = persistStore(store)
 

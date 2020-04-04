@@ -2,40 +2,57 @@ module.exports = {
   root: true,
   env: {
     browser: true,
+    es6: true,
+    jest: true,
   },
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2020,
     ecmaFeatures: {
       'jsx': true,
     },
     sourceType: 'module',
   },
-  settings: {
-    react: {
-      version: '16.5.2',
-    },
-  },
+  plugins: [
+    '@typescript-eslint',
+    'react',
+    'react-hooks',
+  ],
   extends: [
     'airbnb',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
   ],
-  plugins: [
-    'react',
-  ],
-  // Custom rules.
+  settings: {
+    react: {
+      version: '16.13.1',
+    },
+  },
   rules: {
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        'js': 'never',
+        'jsx': 'never',
+        'ts': 'never',
+        'tsx': 'never',
+      }
+    ],
+
     'linebreak-style': [2, 'unix'],
     'semi': [2, 'never'],
-    'no-multiple-empty-lines': ["error", { "max": 2, "maxEOF": 1 }],
+    'no-multiple-empty-lines': ['error', { 'max': 2, 'maxEOF': 1 }],
     'global-require': 'off',
     'import/export': 'error',
     'import/first': ['error', 'absolute-first'],
-    'import/newline-after-import': 'error',
     'import/no-unresolved': ['error', { commonjs: true, caseSensitive: true }],
     'import/no-duplicates': 'error',
+    'import/no-extraneous-dependencies': ['error', { 'devDependencies': true}],
     'eqeqeq': ['error', 'always', { null: 'ignore' }],
     'no-debugger': 'error',
-    'no-console': ['error', { allow: ['warn', 'error'] }],
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-multi-assign': ['error'],
     'no-negated-condition': 'off',
     'no-nested-ternary': 'error',
@@ -52,14 +69,9 @@ module.exports = {
       { ignoreConsecutiveComments: true },
     ],
     'no-inline-comments': 'warn',
-    'prefer-destructuring': ['warn', {
-      'array': true,
-      'object': true
-    }, {
-      'enforceForRenamedProperties': false
-    }],
-    'no-confusing-arrow': ['warn', { 'allowParens': false }],
-    'arrow-parens': ["error", "always"],
+    'no-confusing-arrow': ['error', { 'allowParens': true }],
+    'max-len': ['warn', { code: 120 }],
+    'arrow-parens': ['warn', 'always'],
     'no-plusplus': ['off'],
     'comma-dangle': ['error', {
       'arrays': 'always-multiline',
@@ -71,7 +83,10 @@ module.exports = {
     'no-empty-pattern': ['error'],
     'no-use-before-define': ['error', { 'functions': true, 'classes': true, 'variables': false }],
     'react/destructuring-assignment': [0, 'never', { 'ignoreClassFields': true }],
-    'react/jsx-one-expression-per-line': [0, {'allow': 'single-child'}],
-    'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx'] }],
+    'react/jsx-one-expression-per-line': [0, { 'allow': 'single-child' }],
+    'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],
+    'react/prefer-stateless-function': ['error'],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
   },
-};
+}

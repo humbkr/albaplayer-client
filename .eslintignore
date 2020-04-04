@@ -1,2 +1,4 @@
+node_modules
+
 # create-react files.
-registerServiceWorker.js
+/src/serviceWorker.ts
