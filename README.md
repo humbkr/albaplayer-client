@@ -55,6 +55,11 @@ Jetbrains IDE setup: [https://www.themarketingtechnologist.co/eslint-with-airbnb
 
 ## Development
 
+#### Jetbrains IDEs setup
+This project uses absolute imports. To avoid Jetbrains IDEs to complain:
+- Right click on the /src folder > Mark directory as > Resources root
+- Menu > Settings > Editor > Code style > Javascript > Check "Use paths relative to the project, resource, or sources root"
+
 #### Docker
 
 A docker image is provided for developement purposes, if you don't want to install the dev stack on your machine.   

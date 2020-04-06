@@ -6,7 +6,7 @@ import ArtistsPaneContainer from '../components/ArtistsPaneContainer'
 import AlbumsPaneContainer from '../components/AlbumsPaneContainer'
 import TracksPaneContainer from '../components/TracksPaneContainer'
 import LibraryBrowserSearchBar from '../components/LibraryBrowserSearchBar'
-import { actions } from '../duck'
+import { libraryBrowserInit } from '../redux'
 
 /**
  * Library browser screen.
@@ -26,7 +26,7 @@ function LibraryBrowser() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(actions.libraryBrowserInit())
+    dispatch(libraryBrowserInit())
 
     // Give focus to the search bar.
     searchBar.current.focus()

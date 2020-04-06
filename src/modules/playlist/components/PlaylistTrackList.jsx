@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { withTheme } from 'styled-components'
@@ -92,8 +93,7 @@ class VirtualList extends React.Component {
           key,
           index,
           style,
-        })
-        }
+        })}
         onRowsRendered={onRowsRendered}
         scrollToIndex={scrollToRow}
       />
@@ -208,6 +208,7 @@ PlaylistTrackList.propTypes = {
 const ThemedPlaylistTrackList = withTheme(PlaylistTrackList)
 
 export default React.forwardRef((props, ref) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
   <ThemedPlaylistTrackList {...props} forwardedRef={ref} />
 ))
 

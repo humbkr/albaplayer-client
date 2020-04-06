@@ -2,19 +2,19 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
+import { addAlbum, playAlbum } from 'modules/player/redux'
 import LibraryBrowserList from './LibraryBrowserList'
 import AlbumTeaser from './AlbumTeaser'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import LibraryBrowserPane from './LibraryBrowserPane'
 import AlbumContextMenu from './AlbumContextMenu'
-import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopup'
-import { actions, selectors } from '../duck'
-import { operations as playerOperations } from '../../player/duck'
+import { getAlbumsList, libraryBrowserSortAlbums, selectAlbum } from '../redux'
 
 function AlbumsPaneContainer({ switchPaneHandler, forwardedRef }) {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const albums = useSelector((state) => selectors.getAlbumsList(state))
+  const albums = useSelector((state) => getAlbumsList(state))
   const orderBy = useSelector((state) => state.libraryBrowser.sortAlbums)
   const currentPosition = useSelector(
     (state) => state.libraryBrowser.currentPositionAlbums
@@ -32,19 +32,19 @@ function AlbumsPaneContainer({ switchPaneHandler, forwardedRef }) {
 
   // Change event handler for LibraryBrowserListHeader.
   const onSortChangeHandler = (event) => {
-    dispatch(actions.libraryBrowserSortAlbums(event.target.value))
+    dispatch(libraryBrowserSortAlbums(event.target.value))
   }
 
   const onItemClick = (itemId, index) => {
-    dispatch(actions.libraryBrowserSelectAlbum(itemId, index))
+    dispatch(selectAlbum({ albumId: itemId, index }))
   }
 
   const handlePlayNow = (albumId) => {
-    dispatch(playerOperations.playAlbum(albumId))
+    dispatch(playAlbum(albumId))
   }
 
   const handleAddToQueue = (albumId) => {
-    dispatch(playerOperations.addAlbum(albumId))
+    dispatch(addAlbum(albumId))
   }
 
   const onKeyDown = (e) => {
@@ -91,6 +91,7 @@ AlbumsPaneContainer.propTypes = {
 }
 
 export default React.forwardRef((props, ref) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
   <AlbumsPaneContainer {...props} forwardedRef={ref} />
 ))
 

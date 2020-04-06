@@ -1,11 +1,10 @@
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Sidebar from './common/components/Sidebar'
 import MainPanel from './common/components/MainPanel'
-import { operations } from './modules/library/duck'
+import { initLibrary } from './modules/library/redux'
 import MaterialIconsEot from './common/assets/fonts/MaterialIcons-Regular.eot'
 import MaterialIconsWoff2 from './common/assets/fonts/MaterialIcons-Regular.woff2'
 import MaterialIconsWoff from './common/assets/fonts/MaterialIcons-Regular.woff'
@@ -13,47 +12,28 @@ import MaterialIconsTtf from './common/assets/fonts/MaterialIcons-Regular.ttf'
 import MaterialIconsSvg from './common/assets/fonts/MaterialIcons-Regular.svg'
 import themes from './themes'
 
-class AlbaApp extends Component {
-  componentDidMount() {
-    this.props.initLibrary()
-  }
+function AlbaApp() {
+  const theme = useSelector((state) => state.settings.theme)
+  const dispatch = useDispatch()
 
-  render() {
-    const { theme } = this.props
+  useEffect(() => {
+    dispatch(initLibrary())
+  }, [dispatch])
 
-    return (
-      <ThemeProvider theme={themes[theme].config}>
-        <AlbaAppWrapper>
-          <GlobalStyle />
-          <Sidebar />
-          <MainPanel />
-        </AlbaAppWrapper>
-      </ThemeProvider>
-    )
-  }
+  return (
+    <ThemeProvider theme={themes[theme].config}>
+      <AlbaAppWrapper>
+        <GlobalStyle />
+        <Sidebar />
+        <MainPanel />
+      </AlbaAppWrapper>
+    </ThemeProvider>
+  )
 }
-AlbaApp.propTypes = {
-  initLibrary: PropTypes.func.isRequired,
-  theme: PropTypes.string.isRequired,
-}
-
-const mapStateToProps = (state) => ({
-  theme: state.settings.theme,
-})
-const mapDispatchToProps = (dispatch) => ({
-  initLibrary: () => {
-    dispatch(operations.initLibrary())
-  },
-})
 
 // Need to use withRouter here or the views in MainPanel won't change.
 // https://github.com/ReactTraining/react-router/issues/4671
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(AlbaApp)
-)
+export default withRouter(AlbaApp)
 
 // Global styles used by the styled components.
 const GlobalStyle = createGlobalStyle`
@@ -86,7 +66,6 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${(props) => props.theme.backgroundColor};
   }
 `
-
 const AlbaAppWrapper = styled.div`
   display: table;
   width: 100%;

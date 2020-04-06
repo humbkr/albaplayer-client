@@ -1,187 +1,150 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import connect from 'react-redux/es/connect/connect'
+import { useDispatch, useSelector } from 'react-redux'
+import ActionButtonIcon from 'common/components/ActionButtonIcon'
+import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
+import {
+  addTrack,
+  playTrack,
+  playPlaylist,
+  addPlaylist,
+} from 'modules/player/redux'
 import PlaylistTrackList from './PlaylistTrackList'
 import ListItem from './ListItem'
-import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
-import { actions } from '../duck'
-import { operations as playerOperations } from '../../player/duck'
+import {
+  playlistRemoveTrack,
+  playlistSelectTrack,
+  playlistUpdateTracks,
+  playlistDeletePlaylist,
+} from '../redux'
 import PlaylistTrackContextMenu from './PlaylistTrackContextMenu'
-import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopup'
 
-class PlaylistDetailsPane extends React.Component {
-  constructor(props) {
-    super(props)
+/**
+ * @return {null}
+ */
+function PlaylistDetailsPane({ switchPaneHandler, forwardedRef }) {
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
-    this.state = {
-      modalIsOpen: false,
-    }
-  }
+  const item = useSelector((state) => state.playlist.currentPlaylist.playlist)
+  const currentPosition = useSelector(
+    (state) => state.playlist.currentTrack.position
+  )
+  const currentTrackId = useSelector((state) => state.playlist.currentTrack.id)
 
-  removeTrack = (trackId) => {
-    const { item, playlistRemoveTrack } = this.props
+  const dispatch = useDispatch()
 
-    playlistRemoveTrack(item.id, trackId)
-  }
-
-  onKeyDown = (e) => {
-    const { switchPaneHandler } = this.props
-
+  const onKeyDown = (e) => {
     if (e.keyCode === 13) {
-      this.openModal()
+      setModalIsOpen(true)
     } else {
       switchPaneHandler(e)
     }
   }
 
-  openModal = () => {
-    this.setState({ modalIsOpen: true })
+  const handleRemoveTrack = (trackPosition) => {
+    dispatch(playlistRemoveTrack({ playlistId: item.id, trackPosition }))
   }
 
-  closeModal = () => {
-    this.setState({ modalIsOpen: false })
+  const handlePlaylistSelectTrack = (trackId, trackIndex) => {
+    dispatch(playlistSelectTrack({ trackId, trackIndex }))
   }
 
-  render() {
-    const {
-      item,
-      currentPosition,
-      currentTrackId,
-      deletePlaylist,
-      playlistPlay,
-      playlistAddToQueue,
-      playlistSelectTrack,
-      playlistUpdateTracklist,
-      forwardedRef,
-      handleTrackPlayNow,
-      handleTrackAddToQueue,
-    } = this.props
+  const handlePlaylistUpdateTracklist = (playlistId, newTrackList) => {
+    dispatch(playlistUpdateTracks({ playlistId, newTrackList }))
+  }
 
-    // If no playlist is selected, display nothing.
-    if (!item) {
-      return null
+  const handleTrackPlayNow = (trackId) => {
+    dispatch(playTrack(trackId))
+  }
+  const handleTrackAddToQueue = (trackId) => {
+    dispatch(addTrack(trackId))
+  }
+
+  const handlePlaylistPlayNow = (playlist) => {
+    if (playlist.tracks.length > 0) {
+      dispatch(playPlaylist(playlist.id))
     }
-
-    return (
-      <Wrapper>
-        <List>
-          <Header>
-            <Info>
-              <Title>{item.title}</Title>
-              <Subtitle>
-                {item.date} - {item.tracks.length} track(s)
-              </Subtitle>
-            </Info>
-            <Actions>
-              <PlaylistActionButtons
-                icon="play_arrow"
-                size={30}
-                onClick={() => playlistPlay(item.id)}
-              />
-              <PlaylistActionButtons
-                icon="playlist_add"
-                size={30}
-                onClick={() => playlistAddToQueue(item.id)}
-              />
-              <PlaylistActionButtons
-                icon="delete"
-                size={25}
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      'Are you sure you wish to delete this playlist?'
-                    )
-                  ) {
-                    deletePlaylist(item)
-                  }
-                }}
-              />
-            </Actions>
-          </Header>
-          <PlaylistTrackList
-            playlistId={item.id}
-            items={item.tracks}
-            currentPosition={currentPosition}
-            onItemClick={playlistSelectTrack}
-            handleRemoveTrack={this.removeTrack}
-            onTrackListUpdate={playlistUpdateTracklist}
-            onKeyDown={this.onKeyDown}
-            ref={forwardedRef}
-          />
-          <KeyboardNavPlayPopup
-            id="playlist-tracks-nav-modal"
-            isOpen={this.state.modalIsOpen}
-            onClose={this.closeModal}
-            itemId={currentTrackId}
-            handlePlayNow={handleTrackPlayNow}
-            handleAddToQueue={handleTrackAddToQueue}
-          />
-        </List>
-        <PlaylistTrackContextMenu />
-      </Wrapper>
-    )
   }
+  const handlePlaylistAddToQueue = (playlist) => {
+    if (playlist.tracks.length > 0) {
+      dispatch(addPlaylist(playlist.id))
+    }
+  }
+
+  // If no playlist is selected, display nothing.
+  if (!item) {
+    return null
+  }
+
+  return (
+    <Wrapper>
+      <List>
+        <Header>
+          <Info>
+            <Title>{item.title}</Title>
+            <Subtitle>
+              {item.date} - {item.tracks.length} track(s)
+            </Subtitle>
+          </Info>
+          <Actions>
+            <PlaylistActionButtons
+              icon="play_arrow"
+              size={30}
+              onClick={() => handlePlaylistPlayNow(item)}
+            />
+            <PlaylistActionButtons
+              icon="playlist_add"
+              size={30}
+              onClick={() => handlePlaylistAddToQueue(item)}
+            />
+            <PlaylistActionButtons
+              icon="delete"
+              size={25}
+              onClick={() => {
+                if (
+                  // eslint-disable-next-line no-alert
+                  window.confirm(
+                    'Are you sure you wish to delete this playlist?'
+                  )
+                ) {
+                  dispatch(playlistDeletePlaylist(item))
+                }
+              }}
+            />
+          </Actions>
+        </Header>
+        <PlaylistTrackList
+          playlistId={item.id}
+          items={item.tracks}
+          currentPosition={currentPosition}
+          onItemClick={handlePlaylistSelectTrack}
+          handleRemoveTrack={handleRemoveTrack}
+          onTrackListUpdate={handlePlaylistUpdateTracklist}
+          onKeyDown={onKeyDown}
+          ref={forwardedRef}
+        />
+        <KeyboardNavPlayPopup
+          id="playlist-tracks-nav-modal"
+          isOpen={modalIsOpen}
+          onClose={() => setModalIsOpen(false)}
+          itemId={currentTrackId}
+          handlePlayNow={handleTrackPlayNow}
+          handleAddToQueue={handleTrackAddToQueue}
+        />
+      </List>
+      <PlaylistTrackContextMenu />
+    </Wrapper>
+  )
 }
 PlaylistDetailsPane.propTypes = {
-  item: PropTypes.objectOf(PropTypes.shape),
-  currentPosition: PropTypes.number.isRequired,
-  currentTrackId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
-  deletePlaylist: PropTypes.func.isRequired,
-  playlistPlay: PropTypes.func.isRequired,
-  playlistAddToQueue: PropTypes.func.isRequired,
-  playlistSelectTrack: PropTypes.func.isRequired,
-  playlistRemoveTrack: PropTypes.func.isRequired,
-  playlistUpdateTracklist: PropTypes.func.isRequired,
-  handleTrackAddToQueue: PropTypes.func.isRequired,
-  handleTrackPlayNow: PropTypes.func.isRequired,
   switchPaneHandler: PropTypes.func.isRequired,
   forwardedRef: PropTypes.shape().isRequired,
 }
-PlaylistDetailsPane.defaultProps = {
-  item: null,
-}
-
-const mapStateToProps = (state) => ({
-  item: state.playlist.currentPlaylist.playlist,
-  currentPosition: state.playlist.currentTrack.position,
-  currentTrackId: state.playlist.currentTrack.id,
-})
-const mapDispatchToProps = (dispatch) => ({
-  deletePlaylist: (playlist) => {
-    dispatch(actions.playlistDeletePlaylist(playlist))
-  },
-  playlistAddToQueue: (playlistId) => {
-    dispatch(playerOperations.addPlaylist(playlistId))
-  },
-  playlistPlay: (playlistId) => {
-    dispatch(playerOperations.playPlaylist(playlistId))
-  },
-  playlistSelectTrack: (trackId, index) => {
-    dispatch(actions.playlistSelectTrack(trackId, index))
-  },
-  playlistRemoveTrack: (playlistId, trackPosition) => {
-    dispatch(actions.playlistRemoveTrack(playlistId, trackPosition))
-  },
-  playlistUpdateTracklist: (playlistId, newTrackList) => {
-    dispatch(actions.playlistUpdateTracks(playlistId, newTrackList))
-  },
-  handleTrackPlayNow: (trackId) => {
-    dispatch(playerOperations.playTrack(trackId))
-  },
-  handleTrackAddToQueue: (trackId) => {
-    dispatch(playerOperations.addTrack(trackId))
-  },
-})
-
-const ConnectedPlaylistDetailsPane = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PlaylistDetailsPane)
 
 export default React.forwardRef((props, ref) => (
-  <ConnectedPlaylistDetailsPane {...props} forwardedRef={ref} />
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <PlaylistDetailsPane {...props} forwardedRef={ref} />
 ))
 
 const Wrapper = styled.div`

@@ -2,19 +2,23 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
+import { addTrack, playTrack } from 'modules/player/redux'
 import LibraryBrowserList from './LibraryBrowserList'
 import TrackTeaser from './TrackTeaser'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import TrackContextMenu from './TrackContextMenu'
 import LibraryBrowserPane from './LibraryBrowserPane'
-import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopup'
-import { actions, selectors } from '../duck'
-import { operations as playerOperations } from '../../player/duck'
+import {
+  getTracksList,
+  libraryBrowserSortTracks,
+  libraryBrowserSelectTrack,
+} from '../redux'
 
 function TracksPaneContainer({ switchPaneHandler, forwardedRef }) {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const tracks = useSelector((state) => selectors.getTracksList(state))
+  const tracks = useSelector((state) => getTracksList(state))
   const orderBy = useSelector((state) => state.libraryBrowser.sortTracks)
   const currentPosition = useSelector(
     (state) => state.libraryBrowser.currentPositionTracks
@@ -33,19 +37,19 @@ function TracksPaneContainer({ switchPaneHandler, forwardedRef }) {
 
   // Change event handler for LibraryBrowserListHeader.
   const onSortChangeHandler = (event) => {
-    dispatch(actions.libraryBrowserSortTracks(event.target.value))
+    dispatch(libraryBrowserSortTracks(event.target.value))
   }
 
   const onItemClick = (itemId, index) => {
-    dispatch(actions.libraryBrowserSelectTrack(itemId, index))
+    dispatch(libraryBrowserSelectTrack(itemId, index))
   }
 
   const handlePlayNow = (trackId) => {
-    dispatch(playerOperations.playTrack(trackId))
+    dispatch(playTrack(trackId))
   }
 
   const handleAddToQueue = (trackId) => {
-    dispatch(playerOperations.addTrack(trackId))
+    dispatch(addTrack(trackId))
   }
 
   const onKeyDown = (e) => {
@@ -95,6 +99,7 @@ TracksPaneContainer.propTypes = {
 }
 
 export default React.forwardRef((props, ref) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
   <TracksPaneContainer {...props} forwardedRef={ref} />
 ))
 

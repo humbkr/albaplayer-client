@@ -28,6 +28,11 @@ module.exports = {
     react: {
       version: '16.13.1',
     },
+    'import/resolver': {
+      'node': {
+        'paths': ['src'],
+      }
+    }
   },
   rules: {
     'import/extensions': [
@@ -56,6 +61,7 @@ module.exports = {
     'no-multi-assign': ['error'],
     'no-negated-condition': 'off',
     'no-nested-ternary': 'error',
+    'no-param-reassign': ['off'],
     'no-unused-vars': [
       'error',
       { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
@@ -63,13 +69,24 @@ module.exports = {
     'no-useless-constructor': 'error',
     'no-var': 'error',
     'no-empty': 'error',
+    'object-curly-newline': ['warn'],
+    'prefer-destructuring': [
+      'warn',
+      {
+        array: true,
+        object: true,
+      },
+      {
+        enforceForRenamedProperties: false,
+      },
+    ],
     'capitalized-comments': [
       'warn',
       'always',
       { ignoreConsecutiveComments: true },
     ],
     'no-inline-comments': 'warn',
-    'no-confusing-arrow': ['error', { 'allowParens': true }],
+    'no-confusing-arrow': ['warn', { 'allowParens': true }],
     'max-len': ['warn', { code: 120 }],
     'arrow-parens': ['warn', 'always'],
     'no-plusplus': ['off'],

@@ -34,7 +34,7 @@ const getLibrary = () => {
   return apolloClient.query({ query: libraryInit })
 }
 
-const getFullTrackInfo = (trackId) => {
+const getFullTrackInfo = (trackId: string) => {
   const fullTrackInfoQuery = gql`
     query fullTrackInfoQuery {
       track(id: ${trackId}) {
@@ -100,7 +100,7 @@ const getSettings = () => {
   return apolloClient.query({ query: getSettingsQuery })
 }
 
-const getVariable = (key) => {
+const getVariable = (key: string) => {
   const getVariableQuery = gql`
     query {
       variable(key: "${key}") {
@@ -112,7 +112,7 @@ const getVariable = (key) => {
   return apolloClient.query({ query: getVariableQuery })
 }
 
-const processApiError = (response) => {
+const processApiError = (response: any) => {
   let result = 'Unknown error'
   if (response.graphQLErrors.length > 0 && response.graphQLErrors[0].message) {
     result = response.graphQLErrors[0].message

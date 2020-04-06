@@ -1,7 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { actions, operations } from '../duck'
+import {
+  playerTogglePlayPause,
+  setNextTrack,
+  setPreviousTrack,
+  playerToggleShuffle,
+  playerToggleRepeat,
+  playerSetVolume,
+  playerSetProgress,
+} from '../redux'
 
 const Audio = (Player) => {
   class HOCAudio extends React.Component {
@@ -71,7 +79,7 @@ const Audio = (Player) => {
 
     handleSetProgress = (newProgress) => {
       let progress = newProgress
-      const duration = this.audioElement.duration
+      const { duration } = this.audioElement
       if (progress > duration) {
         progress = duration
       }
@@ -131,6 +139,7 @@ const Audio = (Player) => {
         controlCallbacks,
       }
 
+      // eslint-disable-next-line react/jsx-props-no-spreading
       return <Player {...newProps} />
     }
   }
@@ -167,35 +176,32 @@ const Audio = (Player) => {
   })
   const mapDispatchToProps = (dispatch) => ({
     onPlayPausePress: (value) => {
-      dispatch(actions.playerTogglePlayPause(value))
+      dispatch(playerTogglePlayPause(value))
     },
     onTrackEnded: () => {
-      dispatch(operations.setNextTrack(true))
+      dispatch(setNextTrack(true))
     },
     onPrevPress: () => {
-      dispatch(operations.setPreviousTrack())
+      dispatch(setPreviousTrack())
     },
     onNextPress: () => {
-      dispatch(operations.setNextTrack())
+      dispatch(setNextTrack())
     },
     onShufflePress: () => {
-      dispatch(actions.playerToggleShuffle())
+      dispatch(playerToggleShuffle())
     },
     onRepeatPress: () => {
-      dispatch(actions.playerToggleRepeat())
+      dispatch(playerToggleRepeat())
     },
     onVolumeChange: (volume) => {
-      dispatch(actions.playerSetVolume(volume))
+      dispatch(playerSetVolume(volume))
     },
     onProgressChange: (currentTime) => {
-      dispatch(actions.playerSetProgress(currentTime))
+      dispatch(playerSetProgress(currentTime))
     },
   })
 
-  return connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(HOCAudio)
+  return connect(mapStateToProps, mapDispatchToProps)(HOCAudio)
 }
 
 export default Audio

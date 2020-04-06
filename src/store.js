@@ -1,11 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-import libraryReducer from './modules/library/duck'
-import libraryBrowserReducer from './modules/browser/duck'
-import playerReducer from './modules/player/duck'
-import playlistReducer from './modules/playlist/duck'
-import settingsReducer from './modules/settings/duck'
+import libraryReducer from './modules/library/redux'
+import libraryBrowserReducer from './modules/browser/redux'
+import playerReducer from './modules/player/redux'
+import playlistReducer from './modules/playlist/redux'
+import settingsReducer from './modules/settings/redux'
 
 const rootPersistConfig = {
   key: 'root',
@@ -15,19 +24,10 @@ const rootPersistConfig = {
 
 const rootReducer = (state = {}, action) => ({
   library: libraryReducer(state.library, action),
-  libraryBrowser: libraryBrowserReducer(
-    state.libraryBrowser,
-    action,
-    state.library
-  ),
-  queue: playerReducer.queue(
-    state.queue,
-    action,
-    state.library,
-    state.playlist
-  ),
+  libraryBrowser: libraryBrowserReducer(state.libraryBrowser, action),
+  queue: playerReducer.queue(state.queue, action),
   player: playerReducer.player(state.player, action),
-  playlist: playlistReducer(state.playlist, action, state.library),
+  playlist: playlistReducer(state.playlist, action),
   settings: settingsReducer(state.settings, action),
 })
 
@@ -35,6 +35,12 @@ const persistanceReducer = persistReducer(rootPersistConfig, rootReducer)
 
 const store = configureStore({
   reducer: persistanceReducer,
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      // Ignore non serializable data for redux-persist actions.
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
 })
 
 const persistor = persistStore(store)

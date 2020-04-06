@@ -3,24 +3,30 @@ import {
   Menu as ContextMenu, Item, Separator, Submenu,
 } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import { actions, operations } from '../../player/duck/index'
+import { useDispatch, useSelector } from 'react-redux'
 import {
-  actions as playlistActions,
-  selectors as playlistSelectors,
-} from '../../playlist/duck'
+  setTrackFromQueue,
+  playerTogglePlayPause,
+  queueRemoveTrack,
+} from 'modules/player/redux'
+import {
+  playlistsSelector,
+  addTrack as addTrackToPlaylist,
+} from 'modules/playlist/redux'
 
-const QueueItemContextMenu = ({
-  handlePlayTrack,
-  handleRemoveTrack,
-  handleAddToPlaylist,
-  playlists,
-}) => {
+const QueueItemContextMenu = () => {
+  const playlists = useSelector((state) => playlistsSelector(state))
+  const dispatch = useDispatch()
+
+  const handlePlayTrack = (position) => {
+    dispatch(setTrackFromQueue(position))
+    dispatch(playerTogglePlayPause(true))
+  }
+
   const playlistsItems = playlists.map((item) => (
     <Item
       key={item.id}
-      onClick={(menuItem) => handleAddToPlaylist(item.id, menuItem.props.id)}
+      onClick={(menuItem) => dispatch(addTrackToPlaylist(item.id, menuItem.props.id))}
     >
       {item.title}
     </Item>
@@ -34,7 +40,7 @@ const QueueItemContextMenu = ({
         Play track
       </Item>
       <Item
-        onClick={(menuItem) => handleRemoveTrack(menuItem.props.position - 1)}
+        onClick={(menuItem) => dispatch(queueRemoveTrack(menuItem.props.position - 1))}
       >
         Remove track from queue
       </Item>
@@ -43,30 +49,5 @@ const QueueItemContextMenu = ({
     </ContextMenu>
   )
 }
-QueueItemContextMenu.propTypes = {
-  handlePlayTrack: PropTypes.func.isRequired,
-  handleRemoveTrack: PropTypes.func.isRequired,
-  handleAddToPlaylist: PropTypes.func.isRequired,
-  playlists: PropTypes.arrayOf(PropTypes.shape).isRequired,
-}
 
-const mapStateToProps = (state) => ({
-  playlists: playlistSelectors.getPlaylists(state),
-})
-const mapDispatchToProps = (dispatch) => ({
-  handlePlayTrack: (position) => {
-    dispatch(operations.setTrackFromQueue(position))
-    dispatch(actions.playerTogglePlayPause(true))
-  },
-  handleRemoveTrack: (position) => {
-    dispatch(actions.queueRemoveTrack(position))
-  },
-  handleAddToPlaylist: (playlistId, trackId) => {
-    dispatch(playlistActions.playlistAddTrack(playlistId, trackId))
-  },
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QueueItemContextMenu)
+export default QueueItemContextMenu

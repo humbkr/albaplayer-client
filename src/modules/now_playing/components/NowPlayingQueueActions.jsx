@@ -1,31 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import ActionButton from '../../../common/components/ActionButton'
-import { actions } from '../../player/duck'
+import { useDispatch } from 'react-redux'
+import ActionButton from 'common/components/ActionButton'
+import { queueClear } from 'modules/player/redux'
 
-const NowPlayingQueueActions = (props) => (
-  <QueueActionsWrapper>
-    <ActionButton onClick={props.clearQueue} icon="close">
-      Clear
-    </ActionButton>
-  </QueueActionsWrapper>
-)
-NowPlayingQueueActions.propTypes = {
-  clearQueue: PropTypes.func.isRequired,
+const NowPlayingQueueActions = () => {
+  const dispatch = useDispatch()
+
+  return (
+    <QueueActionsWrapper>
+      <ActionButton onClick={() => dispatch(queueClear())} icon="close">
+        Clear
+      </ActionButton>
+    </QueueActionsWrapper>
+  )
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  clearQueue: () => {
-    dispatch(actions.queueClear())
-  },
-})
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(NowPlayingQueueActions)
+export default NowPlayingQueueActions
 
 const QueueActionsWrapper = styled.div`
   float: right;

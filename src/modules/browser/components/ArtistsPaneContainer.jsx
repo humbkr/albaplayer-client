@@ -2,19 +2,23 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
+import { playArtist, addArtist } from 'modules/player/redux'
 import LibraryBrowserList from './LibraryBrowserList'
 import ArtistTeaser from './ArtistTeaser'
 import LibraryBrowserPane from './LibraryBrowserPane'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import ArtistContextMenu from './ArtistContextMenu'
-import KeyboardNavPlayPopup from '../../../common/components/KeyboardNavPlayPopup'
-import { actions, selectors } from '../duck'
-import { operations as playerOperations } from '../../player/duck'
+import {
+  getArtistsList,
+  libraryBrowserSortArtists,
+  selectArtist,
+} from '../redux'
 
 function ArtistsPaneContainer({ switchPaneHandler, forwardedRef }) {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const artists = useSelector((state) => selectors.getArtistsList(state))
+  const artists = useSelector((state) => getArtistsList(state))
   const orderBy = useSelector((state) => state.libraryBrowser.sortArtists)
   const currentPosition = useSelector(
     (state) => state.libraryBrowser.currentPositionArtists
@@ -28,19 +32,19 @@ function ArtistsPaneContainer({ switchPaneHandler, forwardedRef }) {
 
   // Change event handler for LibraryBrowserListHeader.
   const onSortChangeHandler = (event) => {
-    dispatch(actions.libraryBrowserSortArtists(event.target.value))
+    dispatch(libraryBrowserSortArtists(event.target.value))
   }
 
   const onItemClick = (itemId, index) => {
-    dispatch(actions.libraryBrowserSelectArtist(itemId, index))
+    dispatch(selectArtist({ artistId: itemId, index }))
   }
 
   const handlePlayNow = (artistId) => {
-    dispatch(playerOperations.playArtist(artistId))
+    dispatch(playArtist(artistId))
   }
 
   const handleAddToQueue = (artistId) => {
-    dispatch(playerOperations.addArtist(artistId))
+    dispatch(addArtist(artistId))
   }
 
   const onKeyDown = (e) => {
@@ -87,6 +91,7 @@ ArtistsPaneContainer.propTypes = {
 }
 
 export default React.forwardRef((props, ref) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
   <ArtistsPaneContainer {...props} forwardedRef={ref} />
 ))
 

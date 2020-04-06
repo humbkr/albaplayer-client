@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { DebounceInput } from 'react-debounce-input'
-import { actions } from '../duck'
+import { search } from '../redux'
 
 const LibraryBrowserSearchBar = ({ forwardedRef }) => {
   const searchTerm = useSelector((state) => state.libraryBrowser.search.term)
@@ -15,7 +15,7 @@ const LibraryBrowserSearchBar = ({ forwardedRef }) => {
         <SearchBarInput
           inputRef={forwardedRef}
           debounceTimeout={300}
-          onChange={(event) => dispatch(actions.libraryBrowserSearch(event.target.value))}
+          onChange={(event) => dispatch(search(event.target.value))}
           type="text"
           id="search-input"
           value={searchTerm}
@@ -31,6 +31,7 @@ LibraryBrowserSearchBar.propTypes = {
 }
 
 export default forwardRef((props, ref) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
   <LibraryBrowserSearchBar {...props} forwardedRef={ref} />
 ))
 

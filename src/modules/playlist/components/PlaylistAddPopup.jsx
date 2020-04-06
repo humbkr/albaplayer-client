@@ -2,7 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { withTheme } from 'styled-components'
 import Modal from 'react-modal'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import {
+  Formik, Form, Field, ErrorMessage,
+} from 'formik'
 import moment from 'moment'
 import { getRandomInt } from '../../../common/utils/utils'
 import ActionButton from '../../../common/components/ActionButton'
@@ -51,7 +53,9 @@ class PlaylistAddPopup extends React.Component {
   }
 
   render() {
-    const { id, isOpen, onClose, mode, playlist, theme } = this.props
+    const {
+      id, isOpen, onClose, mode, playlist, theme,
+    } = this.props
 
     const modalStyles = {
       content: {
@@ -149,10 +153,11 @@ PlaylistAddPopup.propTypes = {
   id: PropTypes.string.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  mode: PropTypes.string,
-  playlist: PropTypes.objectOf(PropTypes.shape),
   handleCreatePlaylist: PropTypes.func.isRequired,
   handleEditPlaylist: PropTypes.func.isRequired,
+  theme: PropTypes.objectOf(PropTypes.shape).isRequired,
+  mode: PropTypes.string,
+  playlist: PropTypes.objectOf(PropTypes.shape),
 }
 PlaylistAddPopup.defaultProps = {
   playlist: null,

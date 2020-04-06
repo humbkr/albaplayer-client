@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import * as Buttons from './buttons/index'
 import VolumeContainer from './VolumeContainer'
-import { constants } from '../duck'
+import constants from '../constants'
 
 const Controls = ({
   playing,

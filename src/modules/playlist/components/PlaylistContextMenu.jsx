@@ -1,25 +1,28 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   Menu as ContextMenu, Item, Submenu, Separator,
 } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
-import { operations } from '../../player/duck'
-import { actions as playlistActions } from '../duck'
+import { addPlaylist, playPlaylist } from 'modules/player/redux'
+import { addPlaylist as addPlaylistToPlaylist } from '../redux'
+// eslint-disable-next-line import/no-cycle
 import { EditPlaylistContext } from './PlaylistListPane'
 
-const PlaylistContextMenu = (props) => {
-  const {
-    handlePlayNow,
-    handleAddToQueue,
-    playlists,
-    handleAddToPlaylist,
-  } = props
+const PlaylistContextMenu = () => {
+  const playlists = useSelector((state) => Object.values(state.playlist.playlists))
+
+  const dispatch = useDispatch()
+
   const playlistsItems = playlists.map((item) => (
     <Item
       key={item.id}
-      onClick={(menuItem) => handleAddToPlaylist(item.id, menuItem.props.id)}
+      onClick={(menuItem) => dispatch(
+        addPlaylistToPlaylist({
+          playlistId: item.id,
+          playlistToAddId: menuItem.props.id,
+        })
+      )}
     >
       {item.title}
     </Item>
@@ -29,10 +32,14 @@ const PlaylistContextMenu = (props) => {
     <EditPlaylistContext.Consumer>
       {(value) => (
         <ContextMenu id="playlist-context-menu">
-          <Item onClick={(menuItem) => handlePlayNow(menuItem.props.id)}>
+          <Item
+            onClick={(menuItem) => dispatch(playPlaylist(menuItem.props.id))}
+          >
             Play now
           </Item>
-          <Item onClick={(menuItem) => handleAddToQueue(menuItem.props.id)}>
+          <Item
+            onClick={(menuItem) => dispatch(addPlaylist(menuItem.props.id))}
+          >
             Add to queue
           </Item>
           <Separator />
@@ -44,30 +51,5 @@ const PlaylistContextMenu = (props) => {
     </EditPlaylistContext.Consumer>
   )
 }
-PlaylistContextMenu.propTypes = {
-  handlePlayNow: PropTypes.func.isRequired,
-  handleAddToQueue: PropTypes.func.isRequired,
-  playlists: PropTypes.arrayOf(PropTypes.shape).isRequired,
-  handleAddToPlaylist: PropTypes.func.isRequired,
-}
 
-const mapStateToProps = (state) => ({
-  playlists: Object.values(state.playlist.playlists),
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  handlePlayNow: (playlistId) => {
-    dispatch(operations.playPlaylist(playlistId))
-  },
-  handleAddToQueue: (playlistId) => {
-    dispatch(operations.addPlaylist(playlistId))
-  },
-  handleAddToPlaylist: (toAddId, toAddToId) => {
-    dispatch(playlistActions.playlistAddPlaylist(toAddId, toAddToId))
-  },
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PlaylistContextMenu)
+export default PlaylistContextMenu

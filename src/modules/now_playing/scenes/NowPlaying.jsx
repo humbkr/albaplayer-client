@@ -37,12 +37,12 @@ const NowPlayingWrapper = styled.div`
   margin: 0 auto;
   position: relative;
 `
-
 const NowPlayingQueueWrapper = styled.div`
   width: 100%;
   padding: 30px 50px;
-  
-  ${({ headerIsPinned }) => headerIsPinned && `
+
+  ${({ headerIsPinned }) => headerIsPinned
+    && `
     padding: 320px 50px 30px;
   `}
 
