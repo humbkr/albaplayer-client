@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { MenuProvider as ContextMenuProvider } from 'react-contexify'
-import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
+import ActionButtonIcon from 'common/components/ActionButtonIcon'
 
 const PlaylistTrack = (props) => {
   const { item, selected, handleRemoveTrack } = props
@@ -81,9 +81,9 @@ const TrackFirstColumn = styled.div`
 const TrackSecondColumn = styled.div``
 const TrackInfo = styled.div`
   font-size: 0.8em;
-  color: ${(props) => props.selected
+  color: ${(props) => (props.selected
     ? props.theme.textHighlightColor
-    : props.theme.textSecondaryColor};
+    : props.theme.textSecondaryColor)};
 `
 const AlbumInfo = styled.span`
   font-style: italic;

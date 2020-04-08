@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Ripple from '../../../common/components/Ripple'
+import Ripple from 'common/components/Ripple'
 import coverPlaceholder from '../../../common/assets/images/cover_placeholder.png'
 
 class TrackInfo extends React.PureComponent {

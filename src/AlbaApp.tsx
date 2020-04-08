@@ -2,26 +2,32 @@ import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import Sidebar from './common/components/Sidebar'
-import MainPanel from './common/components/MainPanel'
+import Sidebar from 'common/components/Sidebar'
+import MainPanel from 'common/components/MainPanel'
 import { initLibrary } from './modules/library/redux'
 import MaterialIconsEot from './common/assets/fonts/MaterialIcons-Regular.eot'
 import MaterialIconsWoff2 from './common/assets/fonts/MaterialIcons-Regular.woff2'
 import MaterialIconsWoff from './common/assets/fonts/MaterialIcons-Regular.woff'
 import MaterialIconsTtf from './common/assets/fonts/MaterialIcons-Regular.ttf'
 import MaterialIconsSvg from './common/assets/fonts/MaterialIcons-Regular.svg'
-import themes from './themes'
+import getTheme from './themes'
+import { RootState } from './store/types'
+import { AppTheme } from './themes/types'
 
 function AlbaApp() {
-  const theme = useSelector((state) => state.settings.theme)
+  const currentThemeName = useSelector(
+    (state: RootState) => state.settings.theme
+  )
   const dispatch = useDispatch()
+
+  const theme = getTheme(currentThemeName)
 
   useEffect(() => {
     dispatch(initLibrary())
   }, [dispatch])
 
   return (
-    <ThemeProvider theme={themes[theme].config}>
+    <ThemeProvider theme={theme?.config || null}>
       <AlbaAppWrapper>
         <GlobalStyle />
         <Sidebar />
@@ -36,7 +42,7 @@ function AlbaApp() {
 export default withRouter(AlbaApp)
 
 // Global styles used by the styled components.
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle<{ theme: AppTheme }>`
   @font-face {
   font-family: 'Material Icons';
   font-style: normal;

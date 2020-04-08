@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import SelectContainer from '../../../common/components/SelectContainer'
+import SelectContainer from 'common/components/SelectContainer'
 
 const LibraryBrowserListHeader = (props) => {
   const {

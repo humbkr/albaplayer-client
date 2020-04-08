@@ -1,42 +1,41 @@
-function immutableRemove(arr, index) {
+function immutableRemove(arr: Array<any>, index: number): Array<any> {
   return arr.slice(0, index).concat(arr.slice(index + 1))
 }
 
-const formatDuration = (amount) => {
-  if (amount === undefined) {
-    return 0
+/**
+ * @param duration Duration to format in seconds.
+ */
+const formatDuration = (duration: number): string => {
+  if (duration === undefined) {
+    return ''
   }
 
-  const secNum = parseInt(amount, 10)
-  const hours = Math.floor(secNum / 3600)
-  let minutes = Math.floor((secNum - hours * 3600) / 60)
-  let seconds = secNum - hours * 3600 - minutes * 60
+  const hours = Math.floor(duration / 3600)
+  const minutes = Math.floor((duration - hours * 3600) / 60)
+  const seconds = duration - hours * 3600 - minutes * 60
 
-  if (minutes < 10) {
-    minutes = `0${minutes}`
-  }
-  if (seconds < 10) {
-    seconds = `0${seconds}`
-  }
+  const minutesToDisplay = minutes < 10 ? `0${minutes}` : minutes.toString(10)
+  const secondsToDisplay = seconds < 10 ? `0${seconds}` : seconds.toString(10)
 
-  return `${minutes}:${seconds}`
+  return `${minutesToDisplay}:${secondsToDisplay}`
 }
 
 // Transform a disc number value to a string: 'D000'
-const sanitizeDiscNumber = (discNumber) => {
+const sanitizeDiscNumber = (discNumber: number | string): string => {
   const asString = `${discNumber}`
   const split = asString.split('/')
 
   return `D${split[0]}`
 }
-const sanitizeTrackNumber = (trackNumber) => {
+
+const sanitizeTrackNumber = (trackNumber: number | string): string => {
   const asString = `${trackNumber}`
   const split = asString.split('/')
 
   return `T${split[0].padStart(3, '0')}`
 }
 
-const immutableNestedSort = (items, prop) => {
+const immutableNestedSort = (items: Array<any>, prop: string): Array<any> => {
   const property = prop.split('.')
   // Get depth.
   const len = property.length
@@ -80,7 +79,7 @@ const immutableNestedSort = (items, prop) => {
 /*
 Sort function specifically designed for tracks list.
  */
-const immutableSortTracks = (items, prop) => {
+const immutableSortTracks = (items: Array<any>, prop: string): Array<any> => {
   let result = 0
 
   return [...items].sort((propA, propB) => {
@@ -131,7 +130,7 @@ const immutableSortTracks = (items, prop) => {
  * lower than max if max isn't an integer).
  * Using Math.round() will give you a non-uniform distribution!
  */
-const getRandomInt = (min, max) => {
+const getRandomInt = (min: number, max: number): number => {
   const minVal = Math.ceil(min)
   const maxVal = Math.floor(max)
   return Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal

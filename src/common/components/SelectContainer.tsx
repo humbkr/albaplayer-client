@@ -1,12 +1,20 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 
-const SelectContainer = (props) => {
-  const {
-    value, onChangeHandler, options, tabIndex,
-  } = props
-  const optionsHtml = options.map((option) => (
+interface Option {
+  value: string
+  label: string
+}
+
+const SelectContainer: FunctionComponent<{
+  value: string
+  onChangeHandler: (event: React.MouseEvent<HTMLSelectElement>) => void
+  options: Array<Option>
+  tabIndex?: string
+}> = ({
+  value, onChangeHandler, options, tabIndex,
+}) => {
+  const optionsHtml = options.map((option: Option) => (
     <option key={option.value} value={option.value}>
       {option.label}
     </option>
@@ -25,24 +33,10 @@ const SelectContainer = (props) => {
     </SelectWrapper>
   )
 }
-SelectContainer.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    })
-  ).isRequired,
-  value: PropTypes.string.isRequired,
-  onChangeHandler: PropTypes.func.isRequired,
-  tabIndex: PropTypes.string,
-}
-SelectContainer.defaultProps = {
-  tabIndex: null,
-}
 
 export default SelectContainer
 
-const Select = styled.select`
+const Select = styled.select<any>`
   border: none;
   background-color: transparent;
   font-weight: bold;
@@ -54,7 +48,6 @@ const Select = styled.select`
     cursor: pointer;
   }
 `
-
 const SelectWrapper = styled.div`
   text-align: right;
 `

@@ -1,8 +1,14 @@
 import themeDefault from './default'
 import themeDark from './dark'
 import themeDarkOrange from './darkOrange'
+import { AppTheme } from './types'
 
-export default {
+interface ThemeDefinition {
+  name: string
+  config: AppTheme
+}
+
+const themes = {
   default: {
     name: 'Default',
     config: themeDefault,
@@ -16,3 +22,10 @@ export default {
     config: themeDarkOrange,
   },
 }
+
+export default function getTheme(theme: string): ThemeDefinition | null {
+  // @ts-ignore
+  return themes[theme]
+}
+
+export { themes }

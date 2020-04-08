@@ -1,12 +1,20 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import selectArrow from '../../../common/assets/images/select_arrow.png'
+import selectArrow from 'common/assets/images/select_arrow.png'
 
-const SelectList = (props) => {
-  const {
-    value, onChangeHandler, options, tabIndex,
-  } = props
+interface Option {
+  value: string
+  label: string
+}
+
+const SelectList: FunctionComponent<{
+  value: string
+  onChangeHandler: (event: React.MouseEvent<HTMLSelectElement>) => void
+  options: Array<Option>
+  tabIndex?: string
+}> = ({
+  value, onChangeHandler, options, tabIndex = null,
+}) => {
   const optionsHtml = options.map((option) => (
     <option key={option.value} value={option.value}>
       {option.label}
@@ -24,24 +32,10 @@ const SelectList = (props) => {
     </Select>
   )
 }
-SelectList.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    })
-  ).isRequired,
-  value: PropTypes.string.isRequired,
-  onChangeHandler: PropTypes.func.isRequired,
-  tabIndex: PropTypes.string,
-}
-SelectList.defaultProps = {
-  tabIndex: null,
-}
 
 export default SelectList
 
-const Select = styled.select`
+const Select = styled.select<any>`
   appearance: none;
   background-color: transparent;
   font-size: 1em;

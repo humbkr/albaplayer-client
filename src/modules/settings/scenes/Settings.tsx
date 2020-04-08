@@ -3,30 +3,38 @@ import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import ActionButton from 'common/components/ActionButton'
 import Loading from 'common/components/Loading'
-import Message from 'common/components/Message'
-import themes from 'themes'
-import info from '../../../../package.json'
-import SelectList from '../components/SelectList'
+import Message, { MessageType } from 'common/components/Message'
+import { themes } from 'themes'
 import {
-  initSettings, updateLibrary, eraseLibrary, setTheme,
-} from '../redux'
+  initSettings,
+  updateLibrary,
+  eraseLibrary,
+  setTheme,
+} from 'modules/settings/redux'
+import { RootState } from 'store/types'
+import SelectList from 'modules/settings/components/SelectList'
+import info from '../../../../package.json'
 
 function Settings() {
   const artistsNumber = useSelector(
-    (state) => Object.keys(state.library.artists).length
+    (state: RootState) => Object.keys(state.library.artists).length
   )
   const albumsNumber = useSelector(
-    (state) => Object.keys(state.library.albums).length
+    (state: RootState) => Object.keys(state.library.albums).length
   )
   const tracksNumber = useSelector(
-    (state) => Object.keys(state.library.tracks).length
+    (state: RootState) => Object.keys(state.library.tracks).length
   )
   const libraryIsUpdating = useSelector(
-    (state) => state.settings.library.isUpdating
+    (state: RootState) => state.settings.library.isUpdating
   )
-  const libraryError = useSelector((state) => state.settings.library.error)
-  const librarySettings = useSelector((state) => state.settings.library.config)
-  const theme = useSelector((state) => state.settings.theme)
+  const libraryError = useSelector(
+    (state: RootState) => state.settings.library.error
+  )
+  const librarySettings = useSelector(
+    (state: RootState) => state.settings.library.config
+  )
+  const theme = useSelector((state: RootState) => state.settings.theme)
 
   const dispatch = useDispatch()
 
@@ -39,6 +47,7 @@ function Settings() {
     dispatch(initSettings())
   }, [dispatch])
 
+  // @ts-ignore
   return (
     <SettingsScreenWrapper>
       <h1>Settings</h1>
@@ -79,7 +88,7 @@ function Settings() {
         )}
         {libraryError && (
           <div>
-            <Message type="error">{libraryError}</Message>
+            <Message type={MessageType.error}>{libraryError}</Message>
           </div>
         )}
       </Paragraph>
@@ -88,7 +97,7 @@ function Settings() {
         <SelectList
           options={themeOptions}
           value={theme}
-          onChangeHandler={(event) => dispatch(setTheme(event.target.value))}
+          onChangeHandler={(event) => dispatch(setTheme(event.currentTarget.value))}
         />
       </Paragraph>
       <VersionNumber>version {info.version}</VersionNumber>

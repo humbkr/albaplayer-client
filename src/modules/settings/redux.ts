@@ -1,8 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import storage from 'redux-persist/es/storage'
 import { persistReducer } from 'redux-persist'
 import { api, apolloClient } from 'api'
 import { initLibrary } from 'modules/library/redux'
+// eslint-disable-next-line import/named
+import { AppThunk } from 'store/types'
+
+interface SettingsPayload {
+  libraryPath: string
+  coversPreferredSource: string
+  disableLibrarySettings: boolean
+}
 
 const initialState = {
   library: {
@@ -17,10 +25,18 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    init(state, action) {
-      const data = action.payload
+    init(state, action: PayloadAction<SettingsPayload>) {
+      const {
+        libraryPath,
+        coversPreferredSource,
+        disableLibrarySettings,
+      } = action.payload
       state.library.error = ''
-      state.library.config = data.settings
+      state.library.config = {
+        libraryPath,
+        coversPreferredSource,
+        disableLibrarySettings,
+      }
     },
     libraryUpdateStart(state) {
       state.library.error = ''
@@ -30,7 +46,7 @@ const settingsSlice = createSlice({
       state.library.error = ''
       state.library.isUpdating = false
     },
-    libraryUpdateFailure(state, action) {
+    libraryUpdateFailure(state, action: PayloadAction<any>) {
       state.library.error = api.processApiError(action.payload)
       state.library.isUpdating = false
     },
@@ -42,11 +58,11 @@ const settingsSlice = createSlice({
       state.library.error = ''
       state.library.isUpdating = false
     },
-    libraryEraseFailure(state, action) {
+    libraryEraseFailure(state, action: PayloadAction<any>) {
       state.library.error = api.processApiError(action.payload)
       state.library.isUpdating = false
     },
-    setTheme(state, action) {
+    setTheme(state, action: PayloadAction<string>) {
       state.theme = action.payload
     },
   },
@@ -70,16 +86,16 @@ export const {
 } = settingsSlice.actions
 export default persistReducer(settingsPersistConfig, settingsSlice.reducer)
 
-export const initSettings = () => (dispatch) => api
+export const initSettings = (): AppThunk => (dispatch) => api
   .getSettings()
   .then((response) => {
-    dispatch(init(response.data))
+    dispatch(init(response.data.settings))
   })
   .catch((response) => {
     dispatch(libraryUpdateFailure(response))
   })
 
-export const updateLibrary = () => (dispatch) => {
+export const updateLibrary = (): AppThunk => (dispatch) => {
   // First the app state is updated to inform that the API call is starting.
   dispatch(libraryUpdateStart())
 
@@ -98,7 +114,7 @@ export const updateLibrary = () => (dispatch) => {
     })
 }
 
-export const eraseLibrary = () => (dispatch) => {
+export const eraseLibrary = (): AppThunk => (dispatch) => {
   // First the app state is updated to inform that the API call is starting.
   dispatch(libraryEraseStart())
 

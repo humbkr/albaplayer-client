@@ -112,7 +112,7 @@ const getVariable = (key: string) => {
   return apolloClient.query({ query: getVariableQuery })
 }
 
-const processApiError = (response: any) => {
+const processApiError = (response: any): string => {
   let result = 'Unknown error'
   if (response.graphQLErrors.length > 0 && response.graphQLErrors[0].message) {
     result = response.graphQLErrors[0].message

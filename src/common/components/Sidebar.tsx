@@ -35,7 +35,6 @@ const Wrapper = styled.div`
   height: 100%;
   background-color: ${(props) => props.theme.sidebar.background};
 `
-
 const MainMenu = styled.div`
   padding-top: 50px;
 `

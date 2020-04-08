@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import coverPlaceholder from '../../../common/assets/images/cover_placeholder.png'
-import { formatDuration } from '../../../common/utils/utils'
-import ActionButtonCircle from '../../../common/components/ActionButtonCircle'
+import coverPlaceholder from 'common/assets/images/cover_placeholder.png'
+import { formatDuration } from 'common/utils/utils'
+import ActionButtonCircle from 'common/components/ActionButtonCircle'
 
 const SEARCH_ENGINE_URL = 'https://www.google.fr/search?q='
 

@@ -62,14 +62,11 @@ module.exports = {
     'no-negated-condition': 'off',
     'no-nested-ternary': 'error',
     'no-param-reassign': ['off'],
-    'no-unused-vars': [
-      'error',
-      { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
-    ],
     'no-useless-constructor': 'error',
     'no-var': 'error',
     'no-empty': 'error',
     'object-curly-newline': ['warn'],
+    'object-curly-spacing': ['warn'],
     'prefer-destructuring': [
       'warn',
       {
@@ -99,6 +96,9 @@ module.exports = {
     }],
     'no-empty-pattern': ['error'],
     'no-use-before-define': ['error', { 'functions': true, 'classes': true, 'variables': false }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: true }],
+    'react/prop-types': ['off'],
     'react/destructuring-assignment': [0, 'never', { 'ignoreClassFields': true }],
     'react/jsx-one-expression-per-line': [0, { 'allow': 'single-child' }],
     'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx', '.ts', '.tsx'] }],

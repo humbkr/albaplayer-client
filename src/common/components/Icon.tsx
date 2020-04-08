@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 
-const Icon = styled.i`
+const Icon = styled.i<{ size?: number }>`
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
@@ -25,9 +24,6 @@ const Icon = styled.i`
   /* Support for IE. */
   font-feature-settings: 'liga';
 `
-Icon.propTypes = {
-  size: PropTypes.number,
-}
 Icon.defaultProps = {
   size: 24,
 }

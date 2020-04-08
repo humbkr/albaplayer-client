@@ -6,8 +6,8 @@ import {
   Formik, Form, Field, ErrorMessage,
 } from 'formik'
 import moment from 'moment'
-import { getRandomInt } from '../../../common/utils/utils'
-import ActionButton from '../../../common/components/ActionButton'
+import { getRandomInt } from 'common/utils/utils'
+import ActionButton from 'common/components/ActionButton'
 
 // http://reactcommunity.org/react-modal/accessibility/
 Modal.setAppElement('#root')

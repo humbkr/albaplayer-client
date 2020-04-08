@@ -1,38 +1,43 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import Icon from './Icon'
+import Icon from 'common/components/Icon'
 
-const Message = (props) => {
-  let Picto = ''
-  switch (props.type) {
-    case 'info':
+enum MessageType {
+  'info',
+  'warning',
+  'error',
+}
+
+const Message: FunctionComponent<{ type: MessageType }> = ({
+  type,
+  children,
+}) => {
+  let Picto
+  switch (type) {
+    case MessageType.info:
       Picto = <Icon>info</Icon>
       break
-    case 'warning':
+    case MessageType.warning:
       Picto = <Icon>warning</Icon>
       break
-    case 'error':
+    case MessageType.error:
       Picto = <Icon>error</Icon>
       break
     default:
   }
 
   return (
-    <MessageWrapper type={props.type}>
+    <MessageWrapper type={type}>
       {Picto}
-      <span>{props.children}</span>
+      <span>{children}</span>
     </MessageWrapper>
   )
 }
-Message.propTypes = {
-  children: PropTypes.node.isRequired,
-  type: PropTypes.oneOf(['info', 'warning', 'error']).isRequired,
-}
 
 export default Message
+export { MessageType }
 
-const MessageWrapper = styled.div`
+const MessageWrapper = styled.div<{ type: MessageType }>`
   color: ${(props) => props.theme.messages[props.type].color};
 
   > * {

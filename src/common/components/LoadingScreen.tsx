@@ -1,11 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import Loading from './Loading'
+import { useSelector } from 'react-redux'
+import Loading from 'common/components/Loading'
+import { RootState } from 'store/types'
 
-const LoadingScreen = (props) => {
-  const { isFetching, initHasFailed } = props
+const LoadingScreen = () => {
+  const isFetching = useSelector((state: RootState) => state.library.isFetching)
+  const initHasFailed = useSelector(
+    (state: RootState) => state.library.isFetching
+  )
 
   return (
     <LoadingScreenWrapper>
@@ -23,40 +26,24 @@ const LoadingScreen = (props) => {
     </LoadingScreenWrapper>
   )
 }
-LoadingScreen.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
-  initHasFailed: PropTypes.bool.isRequired,
-}
 
-const mapStateToProps = (state) => {
-  const { isFetching, isInitialized, initHasFailed } = state.library
-
-  return {
-    isFetching,
-    isInitialized,
-    initHasFailed,
-  }
-}
-
-export default connect(mapStateToProps)(LoadingScreen)
+export default LoadingScreen
 
 const LoadingScreenWrapper = styled.div`
   display: table;
   width: 100%;
   height: 100vh;
 `
-
 const LoadingScreenInitProgress = styled.div`
   display: table-cell;
   text-align: center;
   vertical-align: middle;
 
   > h2 {
-    // So the text appears verticaly centered.
+    // So the text appears vertically centered.
     margin-bottom: 75px;
   }
 `
-
 const LoadingScreenInitFailed = styled.div`
   display: table-cell;
   padding: 20px;

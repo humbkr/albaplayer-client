@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
+import ActionButtonIcon from 'common/components/ActionButtonIcon'
 
 const PlaylistListHeader = (props) => (
   <Wrapper>
