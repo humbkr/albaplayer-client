@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import Icon from 'common/components/Icon'
 
 enum MessageType {
-  'info',
-  'warning',
-  'error',
+  'info' = 'info',
+  'warning' = 'warning',
+  'error' = 'error',
 }
 
 const Message: FunctionComponent<{ type: MessageType }> = ({

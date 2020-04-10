@@ -7,10 +7,21 @@ const ActionButton: FunctionComponent<{
   icon?: string
   raised?: boolean
   disabled?: boolean
+  testId?: string
 }> = ({
-  onClick, icon = '', raised = false, disabled = false, children,
+  onClick,
+  icon = '',
+  raised = false,
+  disabled = false,
+  testId,
+  children,
 }) => (
-  <ActionButtonWrapper raised={raised} disabled={disabled} onClick={onClick}>
+  <ActionButtonWrapper
+    raised={raised}
+    disabled={disabled}
+    onClick={onClick}
+    data-testid={testId}
+  >
     {icon && <Icon>{icon}</Icon>}
     <span>{children}</span>
   </ActionButtonWrapper>
