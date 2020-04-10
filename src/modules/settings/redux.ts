@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import storage from 'redux-persist/es/storage'
-import { persistReducer } from 'redux-persist'
 import { api, apolloClient } from 'api'
 import { initLibrary } from 'modules/library/redux'
 // eslint-disable-next-line import/named
@@ -12,7 +10,7 @@ interface SettingsPayload {
   disableLibrarySettings: boolean
 }
 
-const initialState = {
+export const initialState = {
   library: {
     isUpdating: false,
     error: '',
@@ -46,8 +44,8 @@ const settingsSlice = createSlice({
       state.library.error = ''
       state.library.isUpdating = false
     },
-    libraryUpdateFailure(state, action: PayloadAction<any>) {
-      state.library.error = api.processApiError(action.payload)
+    libraryUpdateFailure(state, action: PayloadAction<string>) {
+      state.library.error = action.payload
       state.library.isUpdating = false
     },
     libraryEraseStart(state) {
@@ -58,8 +56,8 @@ const settingsSlice = createSlice({
       state.library.error = ''
       state.library.isUpdating = false
     },
-    libraryEraseFailure(state, action: PayloadAction<any>) {
-      state.library.error = api.processApiError(action.payload)
+    libraryEraseFailure(state, action: PayloadAction<string>) {
+      state.library.error = action.payload
       state.library.isUpdating = false
     },
     setTheme(state, action: PayloadAction<string>) {
@@ -67,12 +65,6 @@ const settingsSlice = createSlice({
     },
   },
 })
-
-const settingsPersistConfig = {
-  key: 'settings',
-  storage,
-  whitelist: ['theme'],
-}
 
 export const {
   init,
@@ -84,7 +76,7 @@ export const {
   libraryEraseFailure,
   setTheme,
 } = settingsSlice.actions
-export default persistReducer(settingsPersistConfig, settingsSlice.reducer)
+export default settingsSlice.reducer
 
 export const initSettings = (): AppThunk => (dispatch) => api
   .getSettings()
@@ -92,7 +84,7 @@ export const initSettings = (): AppThunk => (dispatch) => api
     dispatch(init(response.data.settings))
   })
   .catch((response) => {
-    dispatch(libraryUpdateFailure(response))
+    dispatch(libraryUpdateFailure(api.processApiError(response)))
   })
 
 export const updateLibrary = (): AppThunk => (dispatch) => {
@@ -110,7 +102,7 @@ export const updateLibrary = (): AppThunk => (dispatch) => {
       })
     })
     .catch((response) => {
-      dispatch(libraryUpdateFailure(response))
+      dispatch(libraryUpdateFailure(api.processApiError(response)))
     })
 }
 
@@ -129,6 +121,6 @@ export const eraseLibrary = (): AppThunk => (dispatch) => {
       })
     })
     .catch((response) => {
-      dispatch(libraryEraseFailure(response))
+      dispatch(libraryEraseFailure(api.processApiError(response)))
     })
 }

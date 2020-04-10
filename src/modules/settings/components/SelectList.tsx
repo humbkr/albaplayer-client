@@ -12,8 +12,9 @@ const SelectList: FunctionComponent<{
   onChangeHandler: (event: React.MouseEvent<HTMLSelectElement>) => void
   options: Array<Option>
   tabIndex?: string
+  testId?: string
 }> = ({
-  value, onChangeHandler, options, tabIndex = null,
+  value, onChangeHandler, options, testId, tabIndex = null,
 }) => {
   const optionsHtml = options.map((option) => (
     <option key={option.value} value={option.value}>
@@ -27,6 +28,7 @@ const SelectList: FunctionComponent<{
       id="select"
       value={value}
       onChange={onChangeHandler}
+      data-testid={testId || 'select-list'}
     >
       {optionsHtml}
     </Select>

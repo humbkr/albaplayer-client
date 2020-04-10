@@ -51,7 +51,7 @@ function Settings() {
   return (
     <SettingsScreenWrapper>
       <h1>Settings</h1>
-      <Paragraph>
+      <Paragraph data-testid="settings-library">
         <h2>Library</h2>
         <p>
           There are currently {artistsNumber} artists, {albumsNumber} albums and{' '}
@@ -60,6 +60,7 @@ function Settings() {
         {!libraryIsUpdating && (
           <ActionButtons>
             <ActionButton
+              testId="settings-library-update"
               raised
               disabled={librarySettings.disableLibrarySettings}
               onClick={() => dispatch(updateLibrary())}
@@ -67,6 +68,7 @@ function Settings() {
               Update library
             </ActionButton>
             <ActionButton
+              testId="settings-library-erase"
               disabled={librarySettings.disableLibrarySettings}
               onClick={() => {
                 if (
@@ -81,7 +83,7 @@ function Settings() {
           </ActionButtons>
         )}
         {libraryIsUpdating && (
-          <ActionWaiting>
+          <ActionWaiting data-testid="settings-library-updating">
             <Loading />
             <p>Library is updating. This could take several minutes.</p>
           </ActionWaiting>
@@ -92,15 +94,18 @@ function Settings() {
           </div>
         )}
       </Paragraph>
-      <Paragraph>
+      <Paragraph data-testid="settings-theme">
         <h2>Theme</h2>
         <SelectList
+          testId="settings-theme-select"
           options={themeOptions}
           value={theme}
           onChangeHandler={(event) => dispatch(setTheme(event.currentTarget.value))}
         />
       </Paragraph>
-      <VersionNumber>version {info.version}</VersionNumber>
+      <VersionNumber data-testid="settings-version">
+        version {info.version}
+      </VersionNumber>
     </SettingsScreenWrapper>
   )
 }
