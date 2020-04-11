@@ -7,7 +7,7 @@ import { RootState } from 'store/types'
 const LoadingScreen = () => {
   const isFetching = useSelector((state: RootState) => state.library.isFetching)
   const initHasFailed = useSelector(
-    (state: RootState) => state.library.isFetching
+    (state: RootState) => state.library.initHasFailed
   )
 
   return (

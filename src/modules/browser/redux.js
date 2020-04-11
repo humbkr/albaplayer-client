@@ -1,5 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
 import { immutableNestedSort, immutableSortTracks } from 'common/utils/utils'
+import { constants as APIConstants } from 'api'
 
 const initialState = {
   artists: [],
@@ -72,9 +73,9 @@ const browserSlice = createSlice({
       state.currentPositionArtists = 0
       state.currentPositionAlbums = 0
       state.currentPositionTracks = 0
-      // Set search filtered lists and term.
+      // Set search filtered lists and term in memory.
       state.search = {
-        term: action.searchTerm,
+        term: action.payload.searchTerm,
         filteredArtists: action.payload.filteredArtists,
         filteredAlbums: action.payload.filteredAlbums,
         filteredTracks: action.payload.filteredTracks,
@@ -167,24 +168,26 @@ export const selectArtist = ({ artistId, index }) => (dispatch, getState) => {
   let filteredAlbums = []
   let filteredTracks = []
 
+  const userHasSearched = libraryBrowser.search.term !== ''
+
   // If the user has searched for something, the filtering is done only on the results already
   // filtered from the search term. Else we filter on the original library.
   let albumsToFilter
-  if (libraryBrowser.search.term === '') {
-    albumsToFilter = Object.values(library.albums)
-  } else {
+  if (userHasSearched) {
     albumsToFilter = [...libraryBrowser.search.filteredAlbums]
+  } else {
+    albumsToFilter = Object.values(library.albums)
   }
 
   let tracksToFilter
-  if (libraryBrowser.search.term === '') {
-    tracksToFilter = Object.values(library.tracks)
-  } else {
+  if (userHasSearched) {
     tracksToFilter = [...libraryBrowser.search.filteredTracks]
+  } else {
+    tracksToFilter = Object.values(library.tracks)
   }
 
   if (artistId !== '0') {
-    if (artistId === '1') {
+    if (artistId === APIConstants.COMPILATION_ALBUM_ID) {
       // Special case for compilations which are grouped under the "Various artists" artist.
       filteredAlbums = albumsToFilter.filter(
         (item) => item.artistId === artistId
@@ -206,6 +209,10 @@ export const selectArtist = ({ artistId, index }) => (dispatch, getState) => {
   } else {
     // Display all albums.
     filteredAlbums = albumsToFilter
+    // If user searched for something display all already filtered tracks.
+    if (userHasSearched) {
+      filteredTracks = tracksToFilter
+    }
   }
 
   dispatch(
@@ -224,14 +231,16 @@ export const selectAlbum = ({ albumId, index }) => (dispatch, getState) => {
   let filteredTracks = []
   let compilationsIds = []
 
+  const userHasSearched = libraryBrowser.search.term !== ''
+
   let tracksToFilter
-  if (libraryBrowser.search.term === '') {
-    tracksToFilter = Object.values(library.tracks)
-  } else {
+  if (userHasSearched) {
     tracksToFilter = [...libraryBrowser.search.filteredTracks]
+  } else {
+    tracksToFilter = Object.values(library.tracks)
   }
 
-  if (libraryBrowser.selectedArtists === '1') {
+  if (libraryBrowser.selectedArtists === APIConstants.COMPILATION_ALBUM_ID) {
     // We want to display all tracks for all the compilations, keep track (hoho) of the albums
     // being compilations.
     compilationsIds = libraryBrowser.albums.map((item) => item.id)
@@ -239,12 +248,17 @@ export const selectAlbum = ({ albumId, index }) => (dispatch, getState) => {
 
   if (libraryBrowser.selectedArtists !== '0' || albumId !== '0') {
     filteredTracks = tracksToFilter.filter((item) => {
-      if (libraryBrowser.selectedArtists === '1' && albumId === '0') {
+      if (
+        libraryBrowser.selectedArtists === APIConstants.COMPILATION_ALBUM_ID
+        && albumId === '0'
+      ) {
         // If "various artists" artist selected and no specific album selected,
         // Display all tracks for all the compilations.
         return compilationsIds.includes(item.albumId)
       }
-      if (libraryBrowser.selectedArtists === '1') {
+      if (
+        libraryBrowser.selectedArtists === APIConstants.COMPILATION_ALBUM_ID
+      ) {
         // If "various artists" artist selected and specific album selected,
         // Display all tracks for this album.
         return item.albumId === albumId
@@ -266,6 +280,9 @@ export const selectAlbum = ({ albumId, index }) => (dispatch, getState) => {
         && item.artistId === libraryBrowser.selectedArtists
       )
     })
+  } else if (userHasSearched) {
+    // If user searched for something display all already filtered tracks.
+    filteredTracks = tracksToFilter
   }
 
   dispatch(libraryBrowserSelectAlbum({ albumId, index, filteredTracks }))

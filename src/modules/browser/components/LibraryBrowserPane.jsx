@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import LibraryBrowserListItem from './LibraryBrowserListItem'
+import LibraryBrowserListItem from 'modules/browser/components/LibraryBrowserListItem'
 
 const LibraryBrowserPane = styled.div`
   display: flex;

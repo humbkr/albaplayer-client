@@ -51,7 +51,8 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { 'max': 2, 'maxEOF': 1 }],
     'global-require': 'off',
     'import/export': 'error',
-    'import/first': ['error', 'absolute-first'],
+    'import/order': ['warn'],
+    'import/first': ['off'],
     'import/no-unresolved': ['error', { commonjs: true, caseSensitive: true }],
     'import/no-duplicates': 'error',
     'import/no-extraneous-dependencies': ['error', { 'devDependencies': true}],
@@ -87,7 +88,7 @@ module.exports = {
     'max-len': ['warn', { code: 120 }],
     'arrow-parens': ['warn', 'always'],
     'no-plusplus': ['off'],
-    'comma-dangle': ['error', {
+    'comma-dangle': ['warn', {
       'arrays': 'always-multiline',
       'objects': 'always-multiline',
       'imports': 'always-multiline',

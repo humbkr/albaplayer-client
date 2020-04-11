@@ -10,9 +10,9 @@ interface Props {
   id: string
   isOpen: boolean
   onClose: () => void
-  itemId: string | number
-  handlePlayNow: (id: string | number) => void
-  handleAddToQueue: (id: string | number) => void
+  itemId: string
+  handlePlayNow: (id: string) => void
+  handleAddToQueue: (id: string) => void
   theme: AppTheme
 }
 

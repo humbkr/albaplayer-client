@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { FunctionComponent, Ref, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
@@ -14,17 +13,28 @@ import {
   libraryBrowserSortTracks,
   libraryBrowserSelectTrack,
 } from '../redux'
+import { RootState } from '../../../store/types'
 
-function TracksPaneContainer({ switchPaneHandler, forwardedRef }) {
+interface Props {
+  switchPaneHandler: (e: React.KeyboardEvent) => void
+  forwardedRef: Ref<HTMLDivElement>
+}
+
+const TracksPaneContainer: FunctionComponent<Props> = ({
+  switchPaneHandler,
+  forwardedRef,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const tracks = useSelector((state) => getTracksList(state))
-  const orderBy = useSelector((state) => state.libraryBrowser.sortTracks)
+  const tracks = useSelector((state: RootState) => getTracksList(state))
+  const orderBy = useSelector(
+    (state: RootState) => state.libraryBrowser.sortTracks
+  )
   const currentPosition = useSelector(
-    (state) => state.libraryBrowser.currentPositionTracks
+    (state: RootState) => state.libraryBrowser.currentPositionTracks
   )
   const currentTrack = useSelector(
-    (state) => state.libraryBrowser.selectedTracks
+    (state: RootState) => state.libraryBrowser.selectedTracks
   )
   const dispatch = useDispatch()
 
@@ -36,23 +46,23 @@ function TracksPaneContainer({ switchPaneHandler, forwardedRef }) {
   ]
 
   // Change event handler for LibraryBrowserListHeader.
-  const onSortChangeHandler = (event) => {
-    dispatch(libraryBrowserSortTracks(event.target.value))
+  const onSortChangeHandler = (event: React.MouseEvent<HTMLSelectElement>) => {
+    dispatch(libraryBrowserSortTracks(event.currentTarget.value))
   }
 
-  const onItemClick = (itemId, index) => {
-    dispatch(libraryBrowserSelectTrack(itemId, index))
+  const onItemClick = (itemId: string, index: number) => {
+    dispatch(libraryBrowserSelectTrack({ trackId: itemId, index }))
   }
 
-  const handlePlayNow = (trackId) => {
+  const handlePlayNow = (trackId: string) => {
     dispatch(playTrack(trackId))
   }
 
-  const handleAddToQueue = (trackId) => {
+  const handleAddToQueue = (trackId: string) => {
     dispatch(addTrack(trackId))
   }
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13) {
       setModalIsOpen(true)
     } else {
@@ -93,12 +103,8 @@ function TracksPaneContainer({ switchPaneHandler, forwardedRef }) {
     </TracksPaneWrapper>
   )
 }
-TracksPaneContainer.propTypes = {
-  switchPaneHandler: PropTypes.func.isRequired,
-  forwardedRef: PropTypes.shape().isRequired,
-}
 
-export default React.forwardRef((props, ref) => (
+export default React.forwardRef<HTMLDivElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <TracksPaneContainer {...props} forwardedRef={ref} />
 ))
