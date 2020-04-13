@@ -13,11 +13,17 @@ const settingsPersistConfig = {
   whitelist: ['theme'],
 }
 
+const playerPersistConfig = {
+  key: 'player',
+  storage,
+  whitelist: ['repeat', 'shuffle', 'volume'],
+}
+
 const rootReducer = combineReducers({
   library: libraryReducer,
   libraryBrowser: libraryBrowserReducer,
   queue: playerReducer.queue,
-  player: playerReducer.player,
+  player: persistReducer(playerPersistConfig, playerReducer.player),
   playlist: playlistReducer,
   settings: persistReducer(settingsPersistConfig, settingsReducer),
 })
