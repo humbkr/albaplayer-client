@@ -54,8 +54,11 @@ const PlaylistTrackContextMenu = () => {
       <Separator />
       <Item
         onClick={(menuItem) => dispatch(
-          // @ts-ignore
-          playlistRemoveTrack(currentPlaylist.id, menuItem.props.position)
+          playlistRemoveTrack(
+            currentPlaylist.id,
+            // @ts-ignore
+            menuItem.props.data.position
+          )
         )}
       >
         Remove from playlist

@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import * as Buttons from 'modules/player/components/buttons'
-import constants from 'modules/player/constants'
+import * as Buttons from './buttons'
+import constants from '../constants'
 import VolumeContainer from './VolumeContainer'
 
 const Controls = ({

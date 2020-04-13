@@ -47,6 +47,7 @@ const playerSlice = createSlice({
   initialState,
   reducers: {
     playerTogglePlayPause(state, action: PayloadAction<boolean>) {
+      console.log('PAYLOAD:', action.payload)
       if (state.track || action.payload !== undefined) {
         state.playing = action.payload === undefined ? !state.playing : action.payload
       }

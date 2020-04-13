@@ -1,8 +1,35 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { immutableNestedSort, immutableSortTracks } from 'common/utils/utils'
 import { constants as APIConstants } from 'api'
+import Artist from 'types/Artist'
+import Album from 'types/Album'
+import Track from 'types/Track'
+import { AppThunk, RootState } from '../../store/types'
 
-const initialState = {
+interface BrowserStateType {
+  artists: Artist[]
+  albums: Album[]
+  tracks: Track[]
+  sortArtists: string
+  sortAlbums: string
+  sortTracks: string
+  selectedArtists: string
+  selectedAlbums: string
+  selectedTracks: string
+  currentPositionArtists: number
+  currentPositionAlbums: number
+  currentPositionTracks: number
+  search: {
+    term: string
+    // I don't like that but I don't want to rerun the search each time the user selects
+    // something after a search.
+    filteredArtists: Artist[]
+    filteredAlbums: Album[]
+    filteredTracks: Track[]
+  }
+}
+
+const initialState: BrowserStateType = {
   artists: [],
   albums: [],
   tracks: [],
@@ -17,8 +44,6 @@ const initialState = {
   currentPositionTracks: 0,
   search: {
     term: '',
-    // I don't like that but I don't want to rerun the search each time the user selects
-    // something after a search.
     filteredArtists: [],
     filteredAlbums: [],
     filteredTracks: [],
@@ -29,10 +54,18 @@ const browserSlice = createSlice({
   name: 'libraryBrowser',
   initialState,
   reducers: {
-    libraryBrowserInitArtists(state, action) {
+    libraryBrowserInitArtists(state, action: PayloadAction<Artist[]>) {
       state.artists = action.payload
     },
-    libraryBrowserSelectArtist(state, action) {
+    libraryBrowserSelectArtist(
+      state,
+      action: PayloadAction<{
+        artistId: string
+        index: number
+        filteredAlbums: Album[]
+        filteredTracks: Track[]
+      }>
+    ) {
       state.selectedAlbums = '0'
       state.selectedTracks = '0'
       state.selectedArtists = action.payload.artistId
@@ -42,30 +75,51 @@ const browserSlice = createSlice({
       state.albums = action.payload.filteredAlbums
       state.tracks = action.payload.filteredTracks
     },
-    libraryBrowserSelectAlbum(state, action) {
+    libraryBrowserSelectAlbum(
+      state,
+      action: PayloadAction<{
+        albumId: string
+        index: number
+        filteredTracks: Track[]
+      }>
+    ) {
       state.selectedTracks = '0'
       state.selectedAlbums = action.payload.albumId
       state.currentPositionAlbums = action.payload.index
       state.currentPositionTracks = 0
       state.tracks = action.payload.filteredTracks
     },
-    libraryBrowserSelectTrack(state, action) {
+    libraryBrowserSelectTrack(
+      state,
+      action: PayloadAction<{
+        trackId: string
+        index: number
+      }>
+    ) {
       state.selectedTracks = action.payload.trackId
       state.currentPositionTracks = action.payload.index
     },
-    libraryBrowserSortArtists(state, action) {
+    libraryBrowserSortArtists(state, action: PayloadAction<string>) {
       state.sortArtists = action.payload
     },
-    libraryBrowserSortAlbums(state, action) {
+    libraryBrowserSortAlbums(state, action: PayloadAction<string>) {
       state.sortAlbums = action.payload
     },
-    libraryBrowserSortTracks(state, action) {
+    libraryBrowserSortTracks(state, action: PayloadAction<string>) {
       state.sortTracks = action.payload
     },
-    libraryBrowserSearchUpdateInput(state, action) {
+    libraryBrowserSearchUpdateInput(state, action: PayloadAction<string>) {
       state.search.term = action.payload
     },
-    libraryBrowserSearchFilter(state, action) {
+    libraryBrowserSearchFilter(
+      state,
+      action: PayloadAction<{
+        searchTerm: string
+        filteredArtists: Artist[]
+        filteredAlbums: Album[]
+        filteredTracks: Track[]
+      }>
+    ) {
       // Reset previously selected stuff.
       state.selectedArtists = '0'
       state.selectedAlbums = '0'
@@ -106,7 +160,7 @@ export default browserSlice.reducer
 /*
  * Called when loading the browser pane.
  */
-export const libraryBrowserInit = () => (dispatch, getState) => {
+export const libraryBrowserInit = (): AppThunk => (dispatch, getState) => {
   const state = getState()
   dispatch(initArtists())
   dispatch(
@@ -129,7 +183,7 @@ export const libraryBrowserInit = () => (dispatch, getState) => {
   )
 }
 
-export const initArtists = () => (dispatch, getState) => {
+export const initArtists = (): AppThunk => (dispatch, getState) => {
   const state = getState()
   const artists = state.libraryBrowser.search.term === ''
     ? Object.values(state.library.artists)
@@ -138,35 +192,34 @@ export const initArtists = () => (dispatch, getState) => {
   dispatch(libraryBrowserInitArtists(artists))
 }
 
-export const search = (text) => {
+export const search = (text: string): AppThunk => (dispatch) => {
   // Launch the search only if user has typed 3 or more characters.
   if (text.length > 2) {
-    return (dispatch) => {
-      dispatch(libraryBrowserSearchUpdateInput(text))
-      dispatch(searchFilter(text))
-    }
-  }
-  if (text.length === 0) {
+    dispatch(libraryBrowserSearchUpdateInput(text))
+    dispatch(searchFilter(text))
+  } else if (text.length === 0) {
     // Reinitialise library browser.
-    return (dispatch) => {
-      dispatch(libraryBrowserSearchUpdateInput(text))
-      dispatch(selectArtist({ artistId: '0', index: 0 }))
-      // Others tabs will be reinitialised automatically.
-      dispatch(libraryBrowserInit())
-    }
-  }
-
-  // In any case, update the search field.
-  return (dispatch) => {
+    dispatch(libraryBrowserSearchUpdateInput(text))
+    dispatch(selectArtist({ artistId: '0', index: 0 }))
+    // Others tabs will be reinitialised automatically.
+    dispatch(libraryBrowserInit())
+  } else {
+    // In other cases, update the search field.
     dispatch(libraryBrowserSearchUpdateInput(text))
   }
 }
 
-export const selectArtist = ({ artistId, index }) => (dispatch, getState) => {
+export const selectArtist = ({
+  artistId,
+  index,
+}: {
+  artistId: string
+  index: number
+}): AppThunk => (dispatch, getState) => {
   const { libraryBrowser, library } = getState()
 
-  let filteredAlbums = []
-  let filteredTracks = []
+  let filteredAlbums: Album[] = []
+  let filteredTracks: Track[] = []
 
   const userHasSearched = libraryBrowser.search.term !== ''
 
@@ -176,14 +229,14 @@ export const selectArtist = ({ artistId, index }) => (dispatch, getState) => {
   if (userHasSearched) {
     albumsToFilter = [...libraryBrowser.search.filteredAlbums]
   } else {
-    albumsToFilter = Object.values(library.albums)
+    albumsToFilter = Object.values<Album>(library.albums)
   }
 
   let tracksToFilter
   if (userHasSearched) {
     tracksToFilter = [...libraryBrowser.search.filteredTracks]
   } else {
-    tracksToFilter = Object.values(library.tracks)
+    tracksToFilter = Object.values<Track>(library.tracks)
   }
 
   if (artistId !== '0') {
@@ -225,11 +278,17 @@ export const selectArtist = ({ artistId, index }) => (dispatch, getState) => {
   )
 }
 
-export const selectAlbum = ({ albumId, index }) => (dispatch, getState) => {
+export const selectAlbum = ({
+  albumId,
+  index,
+}: {
+  albumId: string
+  index: number
+}): AppThunk => (dispatch, getState) => {
   const { libraryBrowser, library } = getState()
 
-  let filteredTracks = []
-  let compilationsIds = []
+  let filteredTracks: Track[] = []
+  let compilationsIds: string[] = []
 
   const userHasSearched = libraryBrowser.search.term !== ''
 
@@ -237,13 +296,13 @@ export const selectAlbum = ({ albumId, index }) => (dispatch, getState) => {
   if (userHasSearched) {
     tracksToFilter = [...libraryBrowser.search.filteredTracks]
   } else {
-    tracksToFilter = Object.values(library.tracks)
+    tracksToFilter = Object.values<Track>(library.tracks)
   }
 
   if (libraryBrowser.selectedArtists === APIConstants.COMPILATION_ALBUM_ID) {
     // We want to display all tracks for all the compilations, keep track (hoho) of the albums
     // being compilations.
-    compilationsIds = libraryBrowser.albums.map((item) => item.id)
+    compilationsIds = libraryBrowser.albums.map((item: Album) => item.id)
   }
 
   if (libraryBrowser.selectedArtists !== '0' || albumId !== '0') {
@@ -303,21 +362,21 @@ export const selectAlbum = ({ albumId, index }) => (dispatch, getState) => {
  *   included in the results.
  *
  */
-const searchFilter = (searchTerm) => (dispatch, getState) => {
+const searchFilter = (searchTerm: string): AppThunk => (dispatch, getState) => {
   const state = getState()
 
   // Get library lists as arrays.
-  const libraryArtists = Object.values(state.library.artists)
-  const libraryAlbums = Object.values(state.library.albums)
-  const libraryTracks = Object.values(state.library.tracks)
+  const libraryArtists = Object.values<Artist>(state.library.artists)
+  const libraryAlbums = Object.values<Album>(state.library.albums)
+  const libraryTracks = Object.values<Track>(state.library.tracks)
 
   // Artists and albums are updated with search results from respectively albums + tracks and
   // tracks so we can't directly filter the original lists.
-  const artistsIds = []
-  const albumsIds = []
+  const artistsIds: string[] = []
+  const albumsIds: string[] = []
   // Tracks list can be filtered directly though because we already have all the artists and
   // albums info we need at the moment of filtering the tracks list.
-  const filteredTracks = []
+  const filteredTracks: Track[] = []
 
   // Get ids of all artists whose name is matching the search term.
   libraryArtists.forEach((item) => {
@@ -327,8 +386,8 @@ const searchFilter = (searchTerm) => (dispatch, getState) => {
   })
 
   // Store artists and album ids that are not found with a direct match in separate variables.
-  const undirectAlbumsIds = []
-  const undirectArtistsIds = []
+  const undirectAlbumsIds: string[] = []
+  const undirectArtistsIds: string[] = []
 
   libraryAlbums.forEach((item) => {
     // Get ids of all albums whose title is matching the search term.
@@ -336,13 +395,13 @@ const searchFilter = (searchTerm) => (dispatch, getState) => {
       albumsIds.push(item.id)
 
       // Add album's artist id to the list of artists.
-      if (!artistsIds.includes(item.artistId)) {
+      if (item.artistId && !artistsIds.includes(item.artistId)) {
         undirectArtistsIds.push(item.artistId)
       }
     }
 
     // Also get all albums of artists that have previously been found.
-    if (artistsIds.includes(item.artistId)) {
+    if (item.artistId && artistsIds.includes(item.artistId)) {
       if (!albumsIds.includes(item.id)) {
         undirectAlbumsIds.push(item.id)
       }
@@ -351,12 +410,12 @@ const searchFilter = (searchTerm) => (dispatch, getState) => {
 
   libraryTracks.forEach((item) => {
     // Also get all tracks of artists and albums that have previously been found.
-    if (artistsIds.includes(item.artistId)) {
+    if (item.artistId && artistsIds.includes(item.artistId)) {
       if (!filteredTracks.includes(item)) {
         filteredTracks.push(item)
       }
     }
-    if (albumsIds.includes(item.albumId)) {
+    if (item.albumId && albumsIds.includes(item.albumId)) {
       if (!filteredTracks.includes(item)) {
         filteredTracks.push(item)
       }
@@ -369,12 +428,12 @@ const searchFilter = (searchTerm) => (dispatch, getState) => {
       }
 
       // Add track's artist id to the list of artists.
-      if (!undirectArtistsIds.includes(item.artistId)) {
+      if (item.artistId && !undirectArtistsIds.includes(item.artistId)) {
         undirectArtistsIds.push(item.artistId)
       }
 
       // Add track's album id to the list of albums.
-      if (!undirectAlbumsIds.includes(item.albumId)) {
+      if (item.albumId && !undirectAlbumsIds.includes(item.albumId)) {
         undirectAlbumsIds.push(item.albumId)
       }
     }
@@ -408,8 +467,8 @@ const searchFilter = (searchTerm) => (dispatch, getState) => {
   )
 }
 
-const getArtists = (state) => state.libraryBrowser.artists
-const getArtistsSortOrder = (state) => state.libraryBrowser.sortArtists
+const getArtists = (state: RootState) => state.libraryBrowser.artists
+const getArtistsSortOrder = (state: RootState) => state.libraryBrowser.sortArtists
 export const getArtistsList = createSelector(
   [getArtists, getArtistsSortOrder],
   (list, sortOrder) => {
@@ -429,8 +488,8 @@ export const getArtistsList = createSelector(
   }
 )
 
-const getAlbums = (state) => state.libraryBrowser.albums
-const getAlbumsSortOrder = (state) => state.libraryBrowser.sortAlbums
+const getAlbums = (state: RootState) => state.libraryBrowser.albums
+const getAlbumsSortOrder = (state: RootState) => state.libraryBrowser.sortAlbums
 export const getAlbumsList = createSelector(
   [getAlbums, getAlbumsSortOrder],
   (list, sortOrder) => {
@@ -450,8 +509,8 @@ export const getAlbumsList = createSelector(
   }
 )
 
-const getTracks = (state) => state.libraryBrowser.tracks
-const getTracksSortOrder = (state) => state.libraryBrowser.sortTracks
+const getTracks = (state: RootState) => state.libraryBrowser.tracks
+const getTracksSortOrder = (state: RootState) => state.libraryBrowser.sortTracks
 export const getTracksList = createSelector(
   [getTracks, getTracksSortOrder],
   (list, sortOrder) => {
