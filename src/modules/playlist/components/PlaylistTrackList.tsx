@@ -33,12 +33,12 @@ const SortableItem = SortableElement(
       selected={selected}
       border
       style={style}
-      onContextMenu={() => onSelectRow({ scrollToRow: item.position - 1 })}
       onClick={() => onSelectRow({ scrollToRow: item.position - 1 })}
     >
       <PlaylistItem
         item={item}
         selected={selected}
+        onContextMenu={onSelectRow}
         handleRemoveTrack={handleRemoveTrack}
       />
     </ListItem>
@@ -72,6 +72,7 @@ const VirtualList = ({
   const rowRenderer = ({
     // eslint-disable-next-line no-shadow
     items,
+    // eslint-disable-next-line no-shadow
     scrollToRow,
     index,
     style,
