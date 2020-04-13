@@ -1,27 +1,52 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { api } from 'api'
 import getBackendUrl from 'api/config'
 import { immutableRemove, immutableSortTracks } from 'common/utils/utils'
+import Track from 'types/Track'
+import { AppThunk } from 'store/types'
+import QueueItem from './types/QueueItem'
 import constants from './constants'
 
-const initialState = {
+enum PlayerPlaybackMode {
+  PLAYER_REPEAT_NO_REPEAT = constants.PLAYER_REPEAT_NO_REPEAT,
+  PLAYER_REPEAT_LOOP_ALL = constants.PLAYER_REPEAT_LOOP_ALL,
+  PLAYER_REPEAT_LOOP_ONE = constants.PLAYER_REPEAT_LOOP_ONE,
+}
+
+interface playerStateType {
   // Controls and audio state.
+  playing: boolean
+  repeat: PlayerPlaybackMode
+  shuffle: boolean
+  volume: number
+  volumeMuted: number
+  duration: number
+  progress: number
+  // Track currently loaded in audio.
+  track?: Track
+}
+
+interface queueStateType {
+  items: QueueItem[]
+  current?: number
+}
+
+const initialState: playerStateType = {
   playing: false,
-  repeat: constants.PLAYER_REPEAT_NO_REPEAT,
+  repeat: PlayerPlaybackMode.PLAYER_REPEAT_NO_REPEAT,
   shuffle: false,
   volume: 1,
   volumeMuted: 1,
   duration: 0,
   progress: 0,
-  // Track currently loaded in audio.
-  track: null,
+  track: undefined,
 }
 
 const playerSlice = createSlice({
   name: 'player',
   initialState,
   reducers: {
-    playerTogglePlayPause(state, action) {
+    playerTogglePlayPause(state, action: PayloadAction<boolean>) {
       if (state.track || action.payload !== undefined) {
         state.playing = action.payload === undefined ? !state.playing : action.payload
       }
@@ -32,23 +57,23 @@ const playerSlice = createSlice({
     playerToggleRepeat(state) {
       state.repeat = setCycleNumPos(state.repeat, 1, 3)
     },
-    playerSetVolume(state, action) {
+    playerSetVolume(state, action: PayloadAction<number>) {
       state.volume = action.payload
     },
-    playerSetTrack(state, action) {
+    playerSetTrack(state, action: PayloadAction<Track>) {
       state.track = action.payload
     },
-    playerSetDuration(state, action) {
+    playerSetDuration(state, action: PayloadAction<number>) {
       state.duration = action.payload
     },
-    playerSetProgress(state, action) {
+    playerSetProgress(state, action: PayloadAction<number>) {
       state.progress = action.payload
     },
   },
 })
 
-const queueInitialState = {
-  tracks: [],
+const queueInitialState: queueStateType = {
+  items: [],
   current: undefined,
 }
 
@@ -56,27 +81,29 @@ const queueSlice = createSlice({
   name: 'queue',
   initialState: queueInitialState,
   reducers: {
-    queueAddTracks(state, action) {
-      state.tracks.push(...action.payload)
+    queueAddTracks(state, action: PayloadAction<Track[]>) {
+      const queueItems = action.payload.map((track) => ({ track }))
+      // @ts-ignore
+      state.items.push(...queueItems)
     },
-    queueRemoveTrack(state, action) {
-      const trackIndex = action.payload
+    queueRemoveTrack(state, action: PayloadAction<number>) {
+      const itemIndex = action.payload
 
       let nextCurrent = state.current
-      if (trackIndex <= state.current) {
+      if (nextCurrent && itemIndex <= nextCurrent) {
         nextCurrent -= 1
       }
 
-      state.tracks = immutableRemove(state.tracks, trackIndex)
+      state.items = immutableRemove(state.items, itemIndex)
       state.current = nextCurrent
     },
     queueClear() {
       return queueInitialState
     },
-    queueReplace(state, action) {
-      state.tracks = action.payload
+    queueReplace(state, action: PayloadAction<QueueItem[]>) {
+      state.items = action.payload
     },
-    queueSetCurrent(state, action) {
+    queueSetCurrent(state, action: PayloadAction<number>) {
       state.current = action.payload
     },
   },
@@ -100,16 +127,19 @@ export const {
 } = queueSlice.actions
 export default { player: playerSlice.reducer, queue: queueSlice.reducer }
 
-export const setTrackFromQueue = (trackPosition) => (dispatch, getState) => {
+export const setItemFromQueue = (itemPosition: number): AppThunk => (
+  dispatch,
+  getState
+) => {
   const state = getState()
 
-  if (state.queue.tracks.length < trackPosition) {
+  if (state.queue.items.length < itemPosition) {
     return null
   }
 
   // Make API call to get the track full info.
   return api
-    .getFullTrackInfo(state.queue.tracks[trackPosition].id)
+    .getFullTrackInfo(state.queue.items[itemPosition].track.id)
     .then((response) => {
       // And dispatch appropriate actions.
       // Copy track to change it.
@@ -118,11 +148,11 @@ export const setTrackFromQueue = (trackPosition) => (dispatch, getState) => {
       track.src = getBackendUrl() + track.src
 
       dispatch(playerSetTrack(track))
-      dispatch(queueSetCurrent(trackPosition))
+      dispatch(queueSetCurrent(itemPosition))
     })
 }
 
-export const playTrack = (id) => (dispatch, getState) => {
+export const playTrack = (id: string): AppThunk => (dispatch, getState) => {
   const { library } = getState()
 
   const track = { ...library.tracks[id] }
@@ -131,11 +161,11 @@ export const playTrack = (id) => (dispatch, getState) => {
 
   dispatch(queueClear())
   dispatch(queueAddTracks([track]))
-  dispatch(setTrackFromQueue(0))
+  dispatch(setItemFromQueue(0))
   dispatch(playerTogglePlayPause(true))
 }
 
-export const playAlbum = (id) => (dispatch, getState) => {
+export const playAlbum = (id: string): AppThunk => (dispatch, getState) => {
   const { library } = getState()
 
   dispatch(queueClear())
@@ -144,29 +174,29 @@ export const playAlbum = (id) => (dispatch, getState) => {
       immutableSortTracks(getTracksFromAlbum(id, library), 'number')
     )
   )
-  dispatch(setTrackFromQueue(0))
+  dispatch(setItemFromQueue(0))
   dispatch(playerTogglePlayPause(true))
 }
 
-export const playArtist = (id) => (dispatch, getState) => {
+export const playArtist = (id: string): AppThunk => (dispatch, getState) => {
   const { library } = getState()
 
   dispatch(queueClear())
   dispatch(queueAddTracks(getTracksFromArtist(id, library)))
-  dispatch(setTrackFromQueue(0))
+  dispatch(setItemFromQueue(0))
   dispatch(playerTogglePlayPause(true))
 }
 
-export const playPlaylist = (id) => (dispatch, getState) => {
+export const playPlaylist = (id: string): AppThunk => (dispatch, getState) => {
   const { library, playlist } = getState()
 
   dispatch(queueClear())
   dispatch(queueAddTracks(getTracksFromPlaylist(id, library, playlist)))
-  dispatch(setTrackFromQueue(0))
+  dispatch(setItemFromQueue(0))
   dispatch(playerTogglePlayPause(true))
 }
 
-export const addTrack = (id) => (dispatch, getState) => {
+export const addTrack = (id: string): AppThunk => (dispatch, getState) => {
   const { library, player } = getState()
 
   const track = { ...library.tracks[id] }
@@ -176,38 +206,38 @@ export const addTrack = (id) => (dispatch, getState) => {
   dispatch(queueAddTracks([track]))
 
   if (player.track === null) {
-    dispatch(setTrackFromQueue(0))
+    dispatch(setItemFromQueue(0))
   }
 }
 
-export const addAlbum = (id) => (dispatch, getState) => {
+export const addAlbum = (id: string): AppThunk => (dispatch, getState) => {
   const { library, player } = getState()
 
   dispatch(queueAddTracks(getTracksFromAlbum(id, library)))
 
   if (player.track === null) {
-    dispatch(setTrackFromQueue(0))
+    dispatch(setItemFromQueue(0))
   }
 }
 
-export const addArtist = (id) => (dispatch, getState) => {
+export const addArtist = (id: string): AppThunk => (dispatch, getState) => {
   const { library, player } = getState()
 
   dispatch(queueAddTracks(getTracksFromArtist(id, library)))
 
   if (player.track === null) {
-    dispatch(setTrackFromQueue(0))
+    dispatch(setItemFromQueue(0))
   }
 }
 
-export const addPlaylist = (id) => (dispatch, getState) => {
+export const addPlaylist = (id: string): AppThunk => (dispatch, getState) => {
   const { library, playlist } = getState()
 
   dispatch(queueAddTracks(getTracksFromPlaylist(id, library, playlist)))
 
   const state = getState()
   if (state.player.track === null) {
-    dispatch(setTrackFromQueue(0))
+    dispatch(setItemFromQueue(0))
   }
 }
 
@@ -215,42 +245,49 @@ export const addPlaylist = (id) => (dispatch, getState) => {
  * Selects the next track to play from the queue, get its info,
  * and dispatch required actions.
  */
-export const setNextTrack = (endOfTrack) => (dispatch, getState) => {
+export const setNextTrack = (endOfTrack: boolean): AppThunk => (
+  dispatch,
+  getState
+) => {
   const state = getState()
 
-  let nextTrackId = 0
+  let nextTrackId = '0'
   let newQueuePosition = 0
 
   if (state.player.track === null) {
     // First play after launch.
-    if (state.queue.tracks.length > 0) {
+    if (state.queue.items.length > 0) {
       // Get first track of the queue.
       newQueuePosition = 0
-      nextTrackId = state.queue.tracks[0].id
+      nextTrackId = state.queue.items[0].track.id
     } else {
       // No track to play, do nothing.
       return null
     }
-  } else if (state.player.repeat === constants.PLAYER_REPEAT_LOOP_ONE) {
+  } else if (
+    state.player.repeat === PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ONE
+  ) {
     // Play the same track again.
     // TODO: Maybe create an action to reset the current track.
     newQueuePosition = state.queue.current
-    nextTrackId = state.queue.tracks[state.queue.current].id
+    nextTrackId = state.queue.items[state.queue.current].track.id
   } else if (state.player.shuffle) {
     // Get the next track to play.
     // TODO: shuffle functionality is currently shit.
-    const randomIndex = Math.floor(Math.random() * state.queue.tracks.length)
+    const randomIndex = Math.floor(Math.random() * state.queue.items.length)
     newQueuePosition = randomIndex
-    nextTrackId = state.queue.tracks[randomIndex].id
-  } else if (state.queue.current + 1 < state.queue.tracks.length) {
+    nextTrackId = state.queue.items[randomIndex].track.id
+  } else if (state.queue.current + 1 < state.queue.items.length) {
     // Get next song in queue.
     newQueuePosition = state.queue.current + 1
-    nextTrackId = state.queue.tracks[state.queue.current + 1].id
-  } else if (state.player.repeat === constants.PLAYER_REPEAT_LOOP_ALL) {
+    nextTrackId = state.queue.items[state.queue.current + 1].track.id
+  } else if (
+    state.player.repeat === PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ALL
+  ) {
     // End of the queue.
     // Loop back to the first track of the queue.
     newQueuePosition = 0
-    nextTrackId = state.queue.tracks[0].id
+    nextTrackId = state.queue.items[0].track.id
   } else {
     // No further track to play.
     if (endOfTrack) {
@@ -279,10 +316,10 @@ export const setNextTrack = (endOfTrack) => (dispatch, getState) => {
  * Selects the previous track to play from the queue, get its info,
  * and dispatch required actions.
  */
-export const setPreviousTrack = () => (dispatch, getState) => {
+export const setPreviousTrack = (): AppThunk => (dispatch, getState) => {
   const state = getState()
 
-  let prevTrackId = 0
+  let prevTrackId = '0'
   let newQueuePosition = 0
 
   // Get trackId of the previous track in playlist.
@@ -290,25 +327,27 @@ export const setPreviousTrack = () => (dispatch, getState) => {
     // Do nothing.
     return null
   }
-  if (state.player.repeat === constants.PLAYER_REPEAT_LOOP_ONE) {
+  if (state.player.repeat === PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ONE) {
     // Play the same track again.
     // TODO: Maybe create an action to reset the current track.
     newQueuePosition = state.queue.current
-    prevTrackId = state.queue.tracks[state.queue.current].id
+    prevTrackId = state.queue.items[state.queue.current].track.id
   } else if (state.player.shuffle) {
     // TODO: shuffle functionality is currently shit.
-    const randomIndex = Math.floor(Math.random() * state.queue.tracks.length)
+    const randomIndex = Math.floor(Math.random() * state.queue.items.length)
     newQueuePosition = randomIndex
-    prevTrackId = state.queue.tracks[randomIndex].id
+    prevTrackId = state.queue.items[randomIndex].track.id
   } else if (state.queue.current - 1 >= 0) {
     // Get previous song in queue.
     newQueuePosition = state.queue.current - 1
-    prevTrackId = state.queue.tracks[state.queue.current - 1].id
-  } else if (state.player.repeat === constants.PLAYER_REPEAT_LOOP_ALL) {
-    // Begining of the queue.
+    prevTrackId = state.queue.items[state.queue.current - 1].id
+  } else if (
+    state.player.repeat === PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ALL
+  ) {
+    // Beginning of the queue.
     // Loop back to the last track of the queue.
-    newQueuePosition = state.queue.tracks.length - 1
-    prevTrackId = state.queue.tracks[state.queue.tracks.length - 1].id
+    newQueuePosition = state.queue.items.length - 1
+    prevTrackId = state.queue.items[state.queue.items.length - 1].track.id
   } else {
     // No further track to play, do nothing.
     return null
@@ -340,7 +379,11 @@ export const setPreviousTrack = () => (dispatch, getState) => {
  *   The length of the list of integers.
  *
  */
-const setCycleNumPos = (currentValue, change, length) => {
+const setCycleNumPos = (
+  currentValue: number,
+  change: number,
+  length: number
+) => {
   let newPos = currentValue + change
   if (newPos >= length) {
     newPos -= length
@@ -351,12 +394,14 @@ const setCycleNumPos = (currentValue, change, length) => {
   return newPos
 }
 
-const getTracksFromAlbum = (id, library) => {
+const getTracksFromAlbum = (id: string, library: any) => {
   const filteredTracks = Object.values(library.tracks).filter(
+    // @ts-ignore
     (item) => id === item.albumId
   )
 
   return filteredTracks.map((track) => ({
+    // @ts-ignore
     ...track,
     artist: library.artists[track.artistId],
     album: library.albums[track.albumId],
@@ -364,20 +409,23 @@ const getTracksFromAlbum = (id, library) => {
 }
 
 // TODO tracks should be ordered per album then track number.
-const getTracksFromArtist = (id, library) => {
+const getTracksFromArtist = (id: string, library: any) => {
   const filteredTracks = Object.values(library.tracks).filter(
+    // @ts-ignore
     (item) => id === item.artistId
   )
 
   return filteredTracks.map((track) => ({
+    // @ts-ignore
     ...track,
     artist: library.artists[track.artistId],
     album: library.albums[track.albumId],
   }))
 }
 
-const getTracksFromPlaylist = (id, library, playlists) => {
+const getTracksFromPlaylist = (id: string, library: any, playlists: any) => {
   const playlist = { ...playlists.playlists[id] }
+  // @ts-ignore
   return playlist.tracks.map((track) => ({
     ...track,
     artist: library.artists[track.artistId],

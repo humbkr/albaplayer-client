@@ -8,15 +8,21 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
+  createMigrate,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import rootReducer from './rootReducer'
+import migrations from './migrations'
 
 const persistanceReducer = persistReducer(
   {
     key: 'root',
     storage,
     whitelist: ['playlist'],
+    version: 0,
+    migrate: createMigrate(migrations.rootMigrations, {
+      debug: process.env.REACT_APP_DEBUG_MODE === 'true',
+    }),
   },
   rootReducer
 )

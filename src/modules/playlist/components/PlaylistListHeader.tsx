@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import ActionButtonIcon from 'common/components/ActionButtonIcon'
 
-const PlaylistListHeader = (props) => (
+const PlaylistListHeader = ({ onAddClick }: { onAddClick: () => void }) => (
   <Wrapper>
     <h2>Playlists</h2>
     <Actions>
-      <ActionButtonIcon icon="add" onClick={props.onAddClick} />
+      <ActionButtonIcon icon="add" onClick={onAddClick} />
     </Actions>
   </Wrapper>
 )
@@ -31,7 +31,6 @@ const Wrapper = styled.div`
     font-size: 1.2em;
   }
 `
-
 const Actions = styled.div`
   :hover {
     color: ${(props) => props.theme.buttons.colorHover};

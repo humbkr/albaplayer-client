@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React, { FunctionComponent, Ref, useState } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import ActionButtonIcon from 'common/components/ActionButtonIcon'
 import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
@@ -10,31 +9,49 @@ import {
   playPlaylist,
   addPlaylist,
 } from 'modules/player/redux'
-import PlaylistTrackList from './PlaylistTrackList'
-import ListItem from './ListItem'
+import ListItem from 'modules/playlist/components/ListItem'
 import {
   playlistRemoveTrack,
   playlistSelectTrack,
   playlistUpdateTracks,
   playlistDeletePlaylist,
-} from '../redux'
+} from 'modules/playlist/redux'
+import { RootState } from 'store/types'
+import PlaylistTrackList from './PlaylistTrackList'
 import PlaylistTrackContextMenu from './PlaylistTrackContextMenu'
+import PlaylistItem from '../types/PlaylistItem'
+import Playlist from '../types/Playlist'
+
+interface Props {
+  switchPaneHandler: (e: React.KeyboardEvent) => void
+}
+
+interface InternalProps extends Props {
+  forwardedRef: Ref<HTMLElement>
+}
 
 /**
  * @return {null}
  */
-function PlaylistDetailsPane({ switchPaneHandler, forwardedRef }) {
+const PlaylistDetailsPane: FunctionComponent<InternalProps> = ({
+  switchPaneHandler,
+  forwardedRef,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const item = useSelector((state) => state.playlist.currentPlaylist.playlist)
-  const currentPosition = useSelector(
-    (state) => state.playlist.currentTrack.position
+  const playlist = useSelector(
+    (state: RootState) => state.playlist.currentPlaylist.playlist
   )
-  const currentTrackId = useSelector((state) => state.playlist.currentTrack.id)
+  const currentPosition = useSelector(
+    (state: RootState) => state.playlist.currentTrack.position
+  )
+  const currentTrackId = useSelector(
+    (state: RootState) => state.playlist.currentTrack.id
+  )
 
   const dispatch = useDispatch()
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13) {
       setModalIsOpen(true)
     } else {
@@ -42,38 +59,41 @@ function PlaylistDetailsPane({ switchPaneHandler, forwardedRef }) {
     }
   }
 
-  const handleRemoveTrack = (trackPosition) => {
-    dispatch(playlistRemoveTrack({ playlistId: item.id, trackPosition }))
+  const handleRemoveTrack = (trackIndex: number) => {
+    dispatch(playlistRemoveTrack({ playlistId: playlist.id, trackIndex }))
   }
 
-  const handlePlaylistSelectTrack = (trackId, trackIndex) => {
+  const handlePlaylistSelectTrack = (trackId: string, trackIndex: number) => {
     dispatch(playlistSelectTrack({ trackId, trackIndex }))
   }
 
-  const handlePlaylistUpdateTracklist = (playlistId, newTrackList) => {
+  const handlePlaylistUpdateTracklist = (
+    playlistId: string,
+    newTrackList: PlaylistItem[]
+  ) => {
     dispatch(playlistUpdateTracks({ playlistId, newTrackList }))
   }
 
-  const handleTrackPlayNow = (trackId) => {
+  const handleTrackPlayNow = (trackId: string) => {
     dispatch(playTrack(trackId))
   }
-  const handleTrackAddToQueue = (trackId) => {
+  const handleTrackAddToQueue = (trackId: string) => {
     dispatch(addTrack(trackId))
   }
 
-  const handlePlaylistPlayNow = (playlist) => {
-    if (playlist.tracks.length > 0) {
-      dispatch(playPlaylist(playlist.id))
+  const handlePlaylistPlayNow = (playlistToPlay: Playlist) => {
+    if (playlistToPlay.items.length > 0) {
+      dispatch(playPlaylist(playlistToPlay.id))
     }
   }
-  const handlePlaylistAddToQueue = (playlist) => {
-    if (playlist.tracks.length > 0) {
-      dispatch(addPlaylist(playlist.id))
+  const handlePlaylistAddToQueue = (playlistToAdd: Playlist) => {
+    if (playlistToAdd.items.length > 0) {
+      dispatch(addPlaylist(playlistToAdd.id))
     }
   }
 
   // If no playlist is selected, display nothing.
-  if (!item) {
+  if (!playlist) {
     return null
   }
 
@@ -82,21 +102,21 @@ function PlaylistDetailsPane({ switchPaneHandler, forwardedRef }) {
       <List>
         <Header>
           <Info>
-            <Title>{item.title}</Title>
+            <Title>{playlist.title}</Title>
             <Subtitle>
-              {item.date} - {item.tracks.length} track(s)
+              {playlist.date} - {playlist.items.length} track(s)
             </Subtitle>
           </Info>
           <Actions>
             <PlaylistActionButtons
               icon="play_arrow"
               size={30}
-              onClick={() => handlePlaylistPlayNow(item)}
+              onClick={() => handlePlaylistPlayNow(playlist)}
             />
             <PlaylistActionButtons
               icon="playlist_add"
               size={30}
-              onClick={() => handlePlaylistAddToQueue(item)}
+              onClick={() => handlePlaylistAddToQueue(playlist)}
             />
             <PlaylistActionButtons
               icon="delete"
@@ -108,15 +128,15 @@ function PlaylistDetailsPane({ switchPaneHandler, forwardedRef }) {
                     'Are you sure you wish to delete this playlist?'
                   )
                 ) {
-                  dispatch(playlistDeletePlaylist(item))
+                  dispatch(playlistDeletePlaylist(playlist))
                 }
               }}
             />
           </Actions>
         </Header>
         <PlaylistTrackList
-          playlistId={item.id}
-          items={item.tracks}
+          playlistId={playlist.id}
+          items={playlist.items}
           currentPosition={currentPosition}
           onItemClick={handlePlaylistSelectTrack}
           handleRemoveTrack={handleRemoveTrack}
@@ -137,12 +157,8 @@ function PlaylistDetailsPane({ switchPaneHandler, forwardedRef }) {
     </Wrapper>
   )
 }
-PlaylistDetailsPane.propTypes = {
-  switchPaneHandler: PropTypes.func.isRequired,
-  forwardedRef: PropTypes.shape().isRequired,
-}
 
-export default React.forwardRef((props, ref) => (
+export default React.forwardRef<HTMLElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <PlaylistDetailsPane {...props} forwardedRef={ref} />
 ))

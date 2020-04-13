@@ -1,22 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { MenuProvider as ContextMenuProvider } from 'react-contexify'
+import Playlist from '../types/Playlist'
 
-const PlaylistTeaser = (props) => {
-  const { item } = props
-
-  return (
-    <ContextMenuProvider id="playlist-context-menu" data={item}>
-      <Wrapper>
-        <div>{item.title}</div>
-      </Wrapper>
-    </ContextMenuProvider>
-  )
-}
-PlaylistTeaser.propTypes = {
-  item: PropTypes.objectOf(PropTypes.shape).isRequired,
-}
+const PlaylistTeaser = ({ playlist }: { playlist: Playlist }) => (
+  <ContextMenuProvider id="playlist-context-menu" data={playlist}>
+    <Wrapper>
+      <div>{playlist.title}</div>
+    </Wrapper>
+  </ContextMenuProvider>
+)
 
 export default PlaylistTeaser
 

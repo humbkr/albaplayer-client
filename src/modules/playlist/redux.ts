@@ -1,14 +1,30 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { immutableNestedSort } from 'common/utils/utils'
+import Playlist from './types/Playlist'
+import Track from '../../types/Track'
+import PlaylistItem from './types/PlaylistItem'
+import { AppThunk, RootState } from '../../store/types'
 
-const initialState = {
+interface stateType {
+  playlists: { [id: string]: Playlist }
+  currentPlaylist: {
+    playlist: Playlist | null
+    position: number
+  }
+  currentTrack: {
+    id: string
+    position: number
+  }
+}
+
+export const initialState: stateType = {
   playlists: {},
   currentPlaylist: {
     playlist: null,
     position: 0,
   },
   currentTrack: {
-    id: 0,
+    id: '0',
     position: 0,
   },
 }
@@ -23,11 +39,11 @@ const playlistSlice = createSlice({
         position: action.payload.playlistIndex,
       }
       state.currentTrack = {
-        id: 0,
+        id: '0',
         position: 0,
       }
     },
-    playlistCreatePlaylist(state, action) {
+    playlistCreatePlaylist(state, action: PayloadAction<Playlist>) {
       const newList = { ...state.playlists }
       newList[action.payload.id] = action.payload
 
@@ -37,19 +53,19 @@ const playlistSlice = createSlice({
         position: Object.values(newList).length - 1,
       }
     },
-    playlistDeletePlaylist(state, action) {
+    playlistDeletePlaylist(state, action: PayloadAction<Playlist>) {
       const newList = { ...state.playlists }
       delete newList[action.payload.id]
 
       let newCurrentPlaylist = { ...state.currentPlaylist }
-      if (
-        state.currentPlaylist.playlist
-        && state.currentPlaylist.playlist.id === action.payload.id
-      ) {
+      if (state.currentPlaylist.playlist?.id === action.payload.id) {
         // We deleted the current playlist, set current to the first  of
         // the list if there is one.
         if (Object.values(newList).length > 0) {
-          newCurrentPlaylist = { playlist: { ...newList[0] }, position: 0 }
+          newCurrentPlaylist = {
+            playlist: Object.values(newList)[0],
+            position: 0,
+          }
         } else {
           newCurrentPlaylist = { playlist: null, position: 0 }
         }
@@ -58,17 +74,23 @@ const playlistSlice = createSlice({
       state.playlists = newList
       state.currentPlaylist = newCurrentPlaylist
     },
-    playlistSelectTrack(state, action) {
+    playlistSelectTrack(
+      state,
+      action: PayloadAction<{ trackId: string; trackIndex: number }>
+    ) {
       state.currentTrack = {
         id: action.payload.trackId,
         position: action.payload.trackIndex,
       }
     },
-    playlistRemoveTrack(state, action) {
+    playlistRemoveTrack(
+      state,
+      action: PayloadAction<{ playlistId: string; trackIndex: number }>
+    ) {
       // Remove selected track.
       let newTracklist = state.playlists[
         action.payload.playlistId
-      ].tracks.filter((item) => item.position !== action.payload.trackIndex)
+      ].items.filter((item) => item.position !== action.payload.trackIndex)
 
       // Reorder all tracks.
       let position = 0
@@ -78,30 +100,36 @@ const playlistSlice = createSlice({
       })
 
       const newPlaylists = { ...state.playlists }
-      newPlaylists[action.payload.playlistId].tracks = newTracklist
+      newPlaylists[action.payload.playlistId].items = newTracklist
 
       state.playlists = newPlaylists
-      state.currentPlaylist = {
-        ...state.currentPlaylist,
-        playlist: { ...newPlaylists[state.currentPlaylist.playlist.id] },
+
+      if (state.currentPlaylist.playlist) {
+        state.currentPlaylist = {
+          ...state.currentPlaylist,
+          playlist: { ...newPlaylists[state.currentPlaylist.playlist.id] },
+        }
       }
     },
-    playlistAddTracks(state, action) {
+    playlistAddTracks(
+      state,
+      action: PayloadAction<{ playlistId: string; tracks: Track[] }>
+    ) {
       const { playlistId, tracks } = action.payload
       const newPlaylists = { ...state.playlists }
 
       // Add position in playlist to tracks.
-      let position = newPlaylists[playlistId].tracks.length
+      let position = newPlaylists[playlistId].items.length
       const augmentedTracks = tracks.map((track) => {
         position++
         return {
-          ...track,
+          track,
           position,
         }
       })
 
       // Add tracks to selected playlist.
-      newPlaylists[playlistId].tracks.push(...augmentedTracks)
+      newPlaylists[playlistId].items.push(...augmentedTracks)
 
       state.playlists = newPlaylists
 
@@ -109,11 +137,18 @@ const playlistSlice = createSlice({
       if (state.currentPlaylist.playlist?.id === playlistId) {
         state.currentPlaylist = {
           ...state.currentPlaylist,
+          // @ts-ignore
           playlist: { ...newPlaylists[state.currentPlaylist.playlist.id] },
         }
       }
     },
-    playlistUpdateTracks(state, action) {
+    playlistUpdateTracks(
+      state,
+      action: PayloadAction<{
+        playlistId: string
+        newTrackList: PlaylistItem[]
+      }>
+    ) {
       let position = 0
       const reorderedTracks = action.payload.newTrackList.map((item) => {
         position++
@@ -121,17 +156,20 @@ const playlistSlice = createSlice({
       })
 
       const newPlaylists = { ...state.playlists }
-      newPlaylists[action.payload.playlistId].tracks = reorderedTracks
-
-      const newPlaylist = { ...state.currentPlaylist.playlist }
-      if (action.payload.playlistId === state.currentPlaylist.playlist.id) {
-        newPlaylist.tracks = reorderedTracks
-      }
+      newPlaylists[action.payload.playlistId].items = reorderedTracks
 
       state.playlists = newPlaylists
-      state.currentPlaylist = {
-        ...state.currentPlaylist,
-        playlist: newPlaylist,
+
+      if (state.currentPlaylist.playlist) {
+        const newPlaylist = { ...state.currentPlaylist.playlist }
+        if (action.payload.playlistId === state.currentPlaylist.playlist.id) {
+          newPlaylist.items = reorderedTracks
+
+          state.currentPlaylist = {
+            ...state.currentPlaylist,
+            playlist: newPlaylist,
+          }
+        }
       }
     },
     playlistUpdateInfo(state, action) {
@@ -139,12 +177,15 @@ const playlistSlice = createSlice({
       newPlaylists[action.payload.id] = action.payload
 
       state.playlists = newPlaylists
-      state.currentPlaylist = {
-        ...state.currentPlaylist,
-        playlist:
-          action.payload.id === state.currentPlaylist.playlist.id
-            ? action.payload
-            : state.currentPlaylist.playlist,
+
+      if (state.currentPlaylist.playlist) {
+        state.currentPlaylist = {
+          ...state.currentPlaylist,
+          playlist:
+            action.payload.id === state.currentPlaylist.playlist.id
+              ? action.payload
+              : state.currentPlaylist.playlist,
+        }
       }
     },
   },
@@ -157,13 +198,18 @@ export const {
   playlistSelectTrack,
   playlistRemoveTrack,
   playlistAddTracks,
-  playlistAddPlaylist,
   playlistUpdateTracks,
   playlistUpdateInfo,
 } = playlistSlice.actions
 export default playlistSlice.reducer
 
-export const addTrack = (playlistId, trackId) => (dispatch, getState) => {
+export const addTrack = ({
+  playlistId,
+  trackId,
+}: {
+  playlistId: string
+  trackId: number
+}): AppThunk => (dispatch, getState) => {
   const { library } = getState()
 
   // Get track info from the library.
@@ -175,13 +221,19 @@ export const addTrack = (playlistId, trackId) => (dispatch, getState) => {
   dispatch(playlistAddTracks({ playlistId, tracks: [track] }))
 }
 
-export const addAlbum = (playlistId, albumId) => (dispatch, getState) => {
+export const addAlbum = ({
+  playlistId,
+  albumId,
+}: {
+  playlistId: string
+  albumId: string
+}): AppThunk => (dispatch, getState) => {
   const { library } = getState()
 
   // Get tracks from album.
-  const filteredTracks = Object.values(library.tracks).filter(
-    (item) => albumId === item.albumId
-  )
+  const filteredTracks = Object.values(library.tracks)
+    .flat()
+    .filter((track) => albumId === track.albumId)
 
   // Hydrate tracks with album and artist info.
   const augmentedTracks = filteredTracks.map((track) => ({
@@ -193,13 +245,19 @@ export const addAlbum = (playlistId, albumId) => (dispatch, getState) => {
   dispatch(playlistAddTracks({ playlistId, tracks: augmentedTracks }))
 }
 
-export const addArtist = (playlistId, artistId) => (dispatch, getState) => {
+export const addArtist = ({
+  playlistId,
+  artistId,
+}: {
+  playlistId: string
+  artistId: string
+}): AppThunk => (dispatch, getState) => {
   const { library } = getState()
 
   // Get tracks from artist.
-  const filteredTracks = Object.values(library.tracks).filter(
-    (item) => artistId === item.artistId
-  )
+  const filteredTracks = Object.values(library.tracks)
+    .flat()
+    .filter((track) => artistId === track.artistId)
 
   // Hydrate tracks with album and artist info.
   const augmentedTracks = filteredTracks.map((track) => ({
@@ -210,10 +268,13 @@ export const addArtist = (playlistId, artistId) => (dispatch, getState) => {
 
   dispatch(playlistAddTracks({ playlistId, tracks: augmentedTracks }))
 }
-export const addPlaylist = ({ playlistId, playlistToAddId }) => (
-  dispatch,
-  getState
-) => {
+export const addPlaylist = ({
+  playlistId,
+  playlistToAddId,
+}: {
+  playlistId: string
+  playlistToAddId: string
+}): AppThunk => (dispatch, getState) => {
   const { playlist } = getState()
   dispatch(
     playlistAddTracks({
@@ -224,6 +285,6 @@ export const addPlaylist = ({ playlistId, playlistToAddId }) => (
 }
 
 export const playlistsSelector = createSelector(
-  [(state) => state.playlist.playlists],
+  [(state: RootState) => state.playlist.playlists],
   (list) => immutableNestedSort(Object.values(list), 'title')
 )

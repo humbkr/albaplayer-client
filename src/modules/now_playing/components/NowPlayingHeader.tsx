@@ -5,27 +5,44 @@ import { useSelector } from 'react-redux'
 import coverPlaceholder from 'common/assets/images/cover_placeholder.png'
 import { formatDuration } from 'common/utils/utils'
 import ActionButtonCircle from 'common/components/ActionButtonCircle'
+import Track from 'types/Track'
+import { RootState } from 'store/types'
 
 const SEARCH_ENGINE_URL = 'https://www.google.fr/search?q='
 
-function getTrackInfoForDisplay(track) {
+interface TrackInfo {
+  title: string
+  artist: string
+  album: string
+  number: string
+  disc: string
+  duration: string
+  cover: string
+}
+
+enum WebSearchType {
+  tab = 'tab',
+  lyrics = 'lyrics',
+}
+
+function getTrackInfoForDisplay(track: Track): TrackInfo | null {
   return track
     ? {
       title: track?.title ?? 'Unknown title',
       artist: track?.artist?.name ?? 'Unknown artist',
       album: track?.album?.title ?? 'Unknown album',
-      number: track?.number ?? '',
+      number: track?.number ? track.number.toString() : '',
       disc: track?.disc ?? '',
       duration: track?.duration ? formatDuration(track.duration) : '',
       cover: track?.cover ?? '',
     }
-    : {}
+    : null
 }
 
-function NowPlayingHeader({ pinned }) {
-  const track = useSelector((state) => state.player.track)
+function NowPlayingHeader({ pinned }: { pinned: boolean }) {
+  const track = useSelector((state: RootState) => state.player.track)
 
-  const handleWebSearch = (what) => {
+  const handleWebSearch = (what: WebSearchType) => {
     if (track) {
       const songTitle = track?.title ?? ''
       const songArtist = track?.artist?.name ?? ''
@@ -41,49 +58,51 @@ function NowPlayingHeader({ pinned }) {
   const trackInfo = getTrackInfoForDisplay(track)
 
   let trackAlbumInfo = ''
-  if (trackInfo.number) {
-    trackAlbumInfo += `track ${trackInfo.number}`
-
-    if (trackInfo.disc) {
-      trackAlbumInfo += ` on disc ${trackInfo.disc}`
-    }
-  }
-  if (trackInfo.duration) {
+  if (trackInfo) {
     if (trackInfo.number) {
-      trackAlbumInfo += ' - '
-    }
-    trackAlbumInfo += trackInfo.duration
-  }
+      trackAlbumInfo += `track ${trackInfo.number}`
 
-  if (trackAlbumInfo !== '') {
-    trackAlbumInfo = `(${trackAlbumInfo})`
+      if (trackInfo.disc) {
+        trackAlbumInfo += ` on disc ${trackInfo.disc}`
+      }
+    }
+    if (trackInfo.duration) {
+      if (trackInfo.number) {
+        trackAlbumInfo += ' - '
+      }
+      trackAlbumInfo += trackInfo.duration
+    }
+
+    if (trackAlbumInfo !== '') {
+      trackAlbumInfo = `(${trackAlbumInfo})`
+    }
   }
 
   return (
     <Wrapper pinned={pinned}>
-      <Background cover={trackInfo.cover}>
+      <Background cover={trackInfo?.cover}>
         <NowPlaying pinned={pinned}>
           <CoverInfo pinned={pinned}>
-            {trackInfo.cover && <SongCover src={trackInfo.cover} />}
+            {trackInfo?.cover && <SongCover src={trackInfo.cover} />}
           </CoverInfo>
           {track && (
             <SongInfo pinned={pinned}>
-              <SongInfoPart1>
-                <Title pinned={pinned}>{trackInfo.title}</Title>
-                <Artist pinned={pinned}>by {trackInfo.artist}</Artist>
-              </SongInfoPart1>
+              <div>
+                <Title pinned={pinned}>{trackInfo?.title}</Title>
+                <Artist pinned={pinned}>by {trackInfo?.artist}</Artist>
+              </div>
               <SongInfoPart2 pinned={pinned}>
-                <Album>{trackInfo.album}</Album>
+                <Album>{trackInfo?.album}</Album>
                 <Position>{trackAlbumInfo}</Position>
               </SongInfoPart2>
               <SongActions pinned={pinned}>
                 <ActionButtonCircle
                   icon="queue_music"
-                  onClick={() => handleWebSearch('tab')}
+                  onClick={() => handleWebSearch(WebSearchType.tab)}
                 />
                 <ActionButtonCircle
                   icon="mic"
-                  onClick={() => handleWebSearch('lyrics')}
+                  onClick={() => handleWebSearch(WebSearchType.lyrics)}
                 />
               </SongActions>
             </SongInfo>
@@ -107,7 +126,7 @@ NowPlayingHeader.defaultProps = {
 
 export default NowPlayingHeader
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ pinned: boolean }>`
   padding: 0 50px;
 
   ${({ pinned, theme }) => pinned
@@ -122,7 +141,7 @@ const Wrapper = styled.div`
     width: calc(100vw - ${theme.sidebar.width});
   `}
 `
-const NowPlaying = styled.div`
+const NowPlaying = styled.div<{ pinned: boolean }>`
   transition: padding-left 0.2s ease, padding-right 0.2s ease;
   width: 100%;
   margin: 0 auto;
@@ -135,7 +154,7 @@ const NowPlaying = styled.div`
     padding: 0;
   `}
 `
-const Background = styled.div`
+const Background = styled.div<{ cover?: string }>`
   position: relative;
   display: block;
   overflow: hidden;
@@ -156,7 +175,7 @@ const Background = styled.div`
     transform: scale(1.1);
   }
 `
-const CoverInfo = styled.div`
+const CoverInfo = styled.div<{ pinned: boolean }>`
   display: inline-block;
   width: 250px;
   height: 250px;
@@ -177,7 +196,7 @@ const SongCover = styled.img`
   width: 100%;
   height: 100%;
 `
-const SongInfo = styled.div`
+const SongInfo = styled.div<{ pinned?: boolean }>`
   position: relative;
   vertical-align: top;
   height: 250px;
@@ -205,8 +224,7 @@ const SongInfo = styled.div`
     }
   `}
 `
-const SongInfoPart1 = styled.div``
-const SongInfoPart2 = styled.div`
+const SongInfoPart2 = styled.div<{ pinned: boolean }>`
   padding: 15px 0 5px;
 
   ${({ pinned }) => pinned
@@ -218,7 +236,7 @@ const SongInfoPart2 = styled.div`
     }
   `}
 `
-const Title = styled.h2`
+const Title = styled.h2<{ pinned: boolean }>`
   margin-bottom: 5px;
 
   ${({ pinned }) => pinned
@@ -226,7 +244,7 @@ const Title = styled.h2`
     font-size: 1.1em;
   `}
 `
-const Artist = styled.h3`
+const Artist = styled.h3<{ pinned: boolean }>`
   font-weight: normal;
   font-size: 1.2em;
 
@@ -247,7 +265,7 @@ const Position = styled.h4`
   font-size: 0.9em;
   opacity: 0.7;
 `
-const SongActions = styled.div`
+const SongActions = styled.div<{ pinned: boolean }>`
   flex-grow: 1;
   display: flex;
   align-items: flex-end;

@@ -5,21 +5,25 @@ import {
 } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
 import { addPlaylist, playPlaylist } from 'modules/player/redux'
-import { addPlaylist as addPlaylistToPlaylist } from '../redux'
+import { addPlaylist as addPlaylistToPlaylist } from 'modules/playlist/redux'
 // eslint-disable-next-line import/no-cycle
+import { RootState } from 'store/types'
 import { EditPlaylistContext } from './PlaylistListPane'
+import Playlist from '../types/Playlist'
 
 const PlaylistContextMenu = () => {
-  const playlists = useSelector((state) => Object.values(state.playlist.playlists))
+  const playlists = useSelector((state: RootState) => Object.values(state.playlist.playlists))
 
   const dispatch = useDispatch()
 
-  const playlistsItems = playlists.map((item) => (
+  // @ts-ignore
+  const playlistsItems = playlists.map((item: Playlist) => (
     <Item
       key={item.id}
       onClick={(menuItem) => dispatch(
         addPlaylistToPlaylist({
           playlistId: item.id,
+          // @ts-ignore
           playlistToAddId: menuItem.props.id,
         })
       )}
@@ -30,14 +34,16 @@ const PlaylistContextMenu = () => {
 
   return (
     <EditPlaylistContext.Consumer>
-      {(value) => (
+      {(value: any) => (
         <ContextMenu id="playlist-context-menu">
           <Item
+            // @ts-ignore
             onClick={(menuItem) => dispatch(playPlaylist(menuItem.props.id))}
           >
             Play now
           </Item>
           <Item
+            // @ts-ignore
             onClick={(menuItem) => dispatch(addPlaylist(menuItem.props.id))}
           >
             Add to queue

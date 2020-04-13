@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Motion, spring } from 'react-motion'
+import * as Buttons from 'modules/player/components/buttons'
 import ProgressBarHandler from './ProgressBarHandler'
 import VolumeBar from './VolumeBar'
-import * as Buttons from './buttons/index'
 
 function audioPlayerVolumeToVisualVolume(audioPlayerVolume) {
   // So, why the fuck 1.48? Because that's the magic number that makes
@@ -49,7 +49,8 @@ class VolumeContainer extends React.PureComponent {
     this.onDraggingFunctionRef = null
   }
 
-  componentWillReceiveProps(nextProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.holding) {
       this.setState({
         translate: audioPlayerVolumeToVisualVolume(nextProps.volume),
@@ -116,7 +117,7 @@ class VolumeContainer extends React.PureComponent {
   onClickMute() {
     if (this.state.volume > 0) {
       // Save current volume level.
-      this.setState({ mutedVolume: this.state.volume })
+      this.setState((prevState) => ({ mutedVolume: prevState.volume }))
       // Mute player.
       this.props.setVolume(0)
     } else {
@@ -207,7 +208,6 @@ const VolumeContainerWrapper = styled.div`
   position: relative;
   height: 40px;
 `
-
 const VolumeOverlay = styled.div`
   background-color: ${(props) => props.theme.sidebar.background};
   display: flex;
@@ -222,7 +222,6 @@ const VolumeOverlay = styled.div`
   width: 0;
   overflow: hidden;
 `
-
 const VolumeBarWrapper = styled.div`
   flex: 1 1 auto;
   height: 40px;
@@ -235,7 +234,6 @@ const VolumeBarWrapper = styled.div`
     transform: translateY(-50%);
   }
 `
-
 const VolumeOverlayEnd = styled.div`
   flex: 0 0 auto;
   height: 40px;

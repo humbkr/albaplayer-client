@@ -17,7 +17,12 @@ const AlbumContextMenu = () => {
   const playlistsItems = playlists.map((item) => (
     <Item
       key={item.id}
-      onClick={(menuItem) => dispatch(addAlbumToPlaylist(item.id, menuItem.props.id))}
+      onClick={(menuItem) => dispatch(
+        addAlbumToPlaylist({
+          playlistId: item.id,
+          albumId: menuItem.props.id,
+        })
+      )}
     >
       {item.title}
     </Item>

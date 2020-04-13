@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import * as Buttons from './buttons/index'
+import * as Buttons from 'modules/player/components/buttons'
+import constants from 'modules/player/constants'
 import VolumeContainer from './VolumeContainer'
-import constants from '../constants'
 
 const Controls = ({
   playing,

@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Button from './Button'
+import Button from 'modules/player/components/buttons/Button'
 
 const SkipNextBtn = (props, context) => {
   const size = `${props.size}px`
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <Button {...props}>
       <svg
         width={size}
         height={size}
         viewBox="98 23 17 14"
-        version="1.1"
         xmlns="http://www.w3.org/2000/svg"
       >
         <g

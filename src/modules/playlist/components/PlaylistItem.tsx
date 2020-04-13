@@ -1,55 +1,44 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { MenuProvider as ContextMenuProvider } from 'react-contexify'
 import ActionButtonIcon from 'common/components/ActionButtonIcon'
+import PlaylistItemType from '../types/PlaylistItem'
 
-const PlaylistTrack = (props) => {
-  const { item, selected, handleRemoveTrack } = props
+const PlaylistItem: FunctionComponent<{
+  item: PlaylistItemType
+  selected: boolean
+  handleRemoveTrack: (index: number) => void
+}> = ({ item, handleRemoveTrack, selected = false }) => {
+  const { track, position } = item
 
   return (
     <ContextMenuProvider id="playlist-track-context-menu" data={item}>
       <TrackWrapper>
         <TrackFirstColumn className={selected ? 'selected' : ''}>
-          <TrackPosition>{item.position}</TrackPosition>
+          <div>{position}</div>
         </TrackFirstColumn>
         <TrackSecondColumn>
-          <div>{item.title}</div>
+          <div>{track.title}</div>
           <TrackInfo className={selected ? 'selected' : ''}>
-            {item.artist.name} -
+            {track.artist?.name} -
             <AlbumInfo>
-              {` ${item.album.title}`}
-              {item.album.year && ` (${item.album.year})`}
+              {` ${track.album?.title}`}
+              {track.album?.year && ` (${track.album?.year})`}
             </AlbumInfo>
           </TrackInfo>
         </TrackSecondColumn>
         <TrackActions>
           <ActionButtonIcon
             icon="delete"
-            onClick={() => handleRemoveTrack(item.position)}
+            onClick={() => handleRemoveTrack(position)}
           />
         </TrackActions>
       </TrackWrapper>
     </ContextMenuProvider>
   )
 }
-PlaylistTrack.propTypes = {
-  item: PropTypes.shape({
-    position: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    duration: PropTypes.number,
-  }).isRequired,
-  selected: PropTypes.bool,
-  handleRemoveTrack: PropTypes.func.isRequired,
-}
-PlaylistTrack.defaultProps = {
-  selected: false,
-}
 
-export default PlaylistTrack
-
-// Required to control the div independently.
-const TrackPosition = styled.div``
+export default PlaylistItem
 
 const TrackActions = styled.div`
   display: none;
@@ -62,7 +51,6 @@ const TrackWrapper = styled.div`
   grid-template-columns: 60px auto 44px;
   height: ${(props) => props.theme.itemHeight};
   border-bottom: 1px solid ${(props) => props.theme.separatorColor};
-  ${(props) => (props.isCurrent ? 'font-weight: bold' : '')};
 
   > * {
     align-self: center;
@@ -81,9 +69,6 @@ const TrackFirstColumn = styled.div`
 const TrackSecondColumn = styled.div``
 const TrackInfo = styled.div`
   font-size: 0.8em;
-  color: ${(props) => (props.selected
-    ? props.theme.textHighlightColor
-    : props.theme.textSecondaryColor)};
 `
 const AlbumInfo = styled.span`
   font-style: italic;

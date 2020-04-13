@@ -1,7 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { api } from 'api'
+import Artist from '../../types/Artist'
+import Album from '../../types/Album'
+import Track from '../../types/Track'
+import { AppThunk } from '../../store/types'
 
-const initialState = {
+interface StateType {
+  isFetching: boolean
+  isUpdating: boolean
+  error: string
+  isInitialized: boolean
+  initHasFailed: boolean
+  lastScan: string
+  artists: { [id: string]: Artist }
+  albums: { [id: string]: Album }
+  tracks: { [id: string]: Track }
+}
+
+const initialState: StateType = {
   isFetching: false,
   isUpdating: false,
   error: '',
@@ -20,7 +36,14 @@ const librarySlice = createSlice({
     initStart(state) {
       state.isFetching = true
     },
-    initSuccess(state, action) {
+    initSuccess(
+      state,
+      action: PayloadAction<{
+        artists: Artist[]
+        albums: Album[]
+        tracks: Track[]
+      }>
+    ) {
       const data = action.payload
 
       // Here we have to make up for the fact that we cannot request albums with artist names
@@ -39,9 +62,9 @@ const librarySlice = createSlice({
       })
 
       // Transform the lists into objects.
-      const artists = {}
-      const albums = {}
-      const tracks = {}
+      const artists: { [id: string]: Artist } = {}
+      const albums: { [id: string]: Album } = {}
+      const tracks: { [id: string]: Track } = {}
       data.artists.forEach((item) => {
         artists[item.id] = item
       })
@@ -77,14 +100,17 @@ export const {
 } = librarySlice.actions
 export default librarySlice.reducer
 
-export const initLibrary = (force) => (dispatch, getState) => {
+export const initLibrary = (force: boolean = false): AppThunk => (
+  dispatch,
+  getState
+) => {
   if (force || shouldFetchLibrary(dispatch, getState().library)) {
     return dispatch(fetchLibrary())
   }
   return null
 }
 
-const fetchLibrary = () => (dispatch) => {
+const fetchLibrary = (): AppThunk => (dispatch) => {
   // First the app state is updated to inform that the API call is starting.
   dispatch(initStart())
 
@@ -97,12 +123,15 @@ const fetchLibrary = () => (dispatch) => {
         dispatch(setLastScan(response.data.variable.value))
       }
     })
-    .catch((response) => {
-      dispatch(initFailure(response))
+    .catch(() => {
+      dispatch(initFailure())
     })
 }
 
-const shouldFetchLibrary = async (dispatch, libraryState) => {
+const shouldFetchLibrary = async (
+  dispatch: unknown,
+  libraryState: StateType
+) => {
   // We should fetch if library is not initialized.
   if (!libraryState.isInitialized) {
     if (libraryState.tracks && Object.values(libraryState.tracks).length < 1) {

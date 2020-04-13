@@ -17,7 +17,12 @@ const TrackContextMenu = () => {
   const playlistsItems = playlists.map((item) => (
     <Item
       key={item.id}
-      onClick={(menuItem) => dispatch(addTrackToPlaylist(item.id, menuItem.props.id))}
+      onClick={(menuItem) => dispatch(
+        addTrackToPlaylist({
+          playlistId: item.id,
+          trackId: menuItem.props.id,
+        })
+      )}
     >
       {item.title}
     </Item>

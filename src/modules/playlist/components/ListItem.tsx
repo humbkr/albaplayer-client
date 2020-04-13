@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export default styled.div`
+export default styled.div<{ border: boolean; selected: boolean }>`
   width: 100%;
   ${(props) => (props.border
     ? `border-bottom: 1px solid ${props.theme.separatorColor}`

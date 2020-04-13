@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Button from './Button'
+import Button from 'modules/player/components/buttons/Button'
 
 const RepeatBtn = (props, context) => {
   const size = `${props.size}px`
   const color = props.enabled ? context.colorEnabled : context.color
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <Button {...props}>
       <svg
         width={size}
         height={size}
         viewBox="138 22 18 17"
-        version="1.1"
         xmlns="http://www.w3.org/2000/svg"
       >
         <g

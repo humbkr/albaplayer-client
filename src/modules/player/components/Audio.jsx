@@ -9,7 +9,7 @@ import {
   playerToggleRepeat,
   playerSetVolume,
   playerSetProgress,
-} from '../redux'
+} from 'modules/player/redux'
 
 const Audio = (Player) => {
   class HOCAudio extends React.Component {

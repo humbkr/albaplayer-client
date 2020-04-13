@@ -9,12 +9,13 @@ import {
   playlistsSelector,
   playlistRemoveTrack,
   addTrack as addTrackToPlaylist,
-} from '../redux'
+} from 'modules/playlist/redux'
+import { RootState } from 'store/types'
 
 const PlaylistTrackContextMenu = () => {
-  const playlists = useSelector((state) => playlistsSelector(state))
+  const playlists = useSelector((state: RootState) => playlistsSelector(state))
   const currentPlaylist = useSelector(
-    (state) => state.playlist.currentPlaylist.playlist
+    (state: RootState) => state.playlist.currentPlaylist.playlist
   )
 
   const dispatch = useDispatch()
@@ -25,6 +26,7 @@ const PlaylistTrackContextMenu = () => {
       onClick={(menuItem) => dispatch(
         addTrackToPlaylist({
           playlistId: item.id,
+          // @ts-ignore
           trackId: menuItem.props.id,
         })
       )}
@@ -35,10 +37,16 @@ const PlaylistTrackContextMenu = () => {
 
   return (
     <ContextMenu id="playlist-track-context-menu">
-      <Item onClick={(menuItem) => dispatch(playTrack(menuItem.props.id))}>
+      <Item
+        // @ts-ignore
+        onClick={(menuItem) => dispatch(playTrack(menuItem.props.id))}
+      >
         Play now
       </Item>
-      <Item onClick={(menuItem) => dispatch(addTrack(menuItem.props.id))}>
+      <Item
+        // @ts-ignore
+        onClick={(menuItem) => dispatch(addTrack(menuItem.props.id))}
+      >
         Add to queue
       </Item>
       <Separator />
@@ -46,6 +54,7 @@ const PlaylistTrackContextMenu = () => {
       <Separator />
       <Item
         onClick={(menuItem) => dispatch(
+          // @ts-ignore
           playlistRemoveTrack(currentPlaylist.id, menuItem.props.position)
         )}
       >

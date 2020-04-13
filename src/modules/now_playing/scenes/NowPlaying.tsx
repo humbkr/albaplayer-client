@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import NowPlayingQueue from '../components/NowPlayingQueue'
-import NowPlayingHeader from '../components/NowPlayingHeader'
+import NowPlayingQueue from 'modules/now_playing/components/NowPlayingQueue'
+import NowPlayingHeader from 'modules/now_playing/components/NowPlayingHeader'
 
 const NowPlaying = () => {
   const [headerIsPinned, setHeaderIsPinned] = useState(false)
@@ -37,7 +37,7 @@ const NowPlayingWrapper = styled.div`
   margin: 0 auto;
   position: relative;
 `
-const NowPlayingQueueWrapper = styled.div`
+const NowPlayingQueueWrapper = styled.div<{ headerIsPinned: boolean }>`
   width: 100%;
   padding: 30px 50px;
 

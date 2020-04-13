@@ -5,7 +5,7 @@ import {
 import 'react-contexify/dist/ReactContexify.min.css'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  setTrackFromQueue,
+  setItemFromQueue,
   playerTogglePlayPause,
   queueRemoveTrack,
 } from 'modules/player/redux'
@@ -18,14 +18,15 @@ const QueueItemContextMenu = () => {
   const playlists = useSelector((state) => playlistsSelector(state))
   const dispatch = useDispatch()
 
-  const handlePlayTrack = (position) => {
-    dispatch(setTrackFromQueue(position))
+  const handlePlayTrack = (position: number) => {
+    dispatch(setItemFromQueue(position))
     dispatch(playerTogglePlayPause(true))
   }
 
   const playlistsItems = playlists.map((item) => (
     <Item
       key={item.id}
+      // @ts-ignore
       onClick={(menuItem) => dispatch(addTrackToPlaylist(item.id, menuItem.props.id))}
     >
       {item.title}
@@ -35,11 +36,13 @@ const QueueItemContextMenu = () => {
   return (
     <ContextMenu id="queue-item-context-menu">
       <Item
+        // @ts-ignore
         onClick={(menuItem) => handlePlayTrack(menuItem.props.position - 1)}
       >
         Play track
       </Item>
       <Item
+        // @ts-ignore
         onClick={(menuItem) => dispatch(queueRemoveTrack(menuItem.props.position - 1))}
       >
         Remove track from queue

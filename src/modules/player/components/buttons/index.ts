@@ -8,7 +8,6 @@ import SkipPrevBtn from './SkipPrevBtn'
 import VolumeHighBtn from './VolumeHighBtn'
 import VolumeLowBtn from './VolumeLowBtn'
 import VolumeMutedBtn from './VolumeMutedBtn'
-import CloseBtn from './CloseBtn'
 
 export {
   CycleBtn,
@@ -21,5 +20,4 @@ export {
   VolumeHighBtn,
   VolumeLowBtn,
   VolumeMutedBtn,
-  CloseBtn,
 }

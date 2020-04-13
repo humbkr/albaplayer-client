@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { withTheme } from 'styled-components'
-import TrackInfo from './TrackInfo'
-import Controls from './Controls'
+import TrackInfo from 'modules/player/components/TrackInfo'
+import Controls from 'modules/player/components/Controls'
 import Audio from './Audio'
 import Timeline from './Timeline'
 
@@ -31,10 +31,17 @@ class Player extends React.Component {
         <Timeline
           appWidth={parseInt(this.props.theme.sidebar.width, 0)}
           updateProgressTime={this.updateProgressTime}
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...timelineState}
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...timelineCallbacks}
         />
-        <Controls {...controlState} {...controlCallbacks} />
+        <Controls
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...controlState}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...controlCallbacks}
+        />
       </PlayerWrapper>
     )
   }
