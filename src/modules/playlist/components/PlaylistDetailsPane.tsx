@@ -13,7 +13,7 @@ import ListItem from 'modules/playlist/components/ListItem'
 import {
   playlistRemoveTrack,
   playlistSelectTrack,
-  playlistUpdateTracks,
+  playlistUpdateItems,
   playlistDeletePlaylist,
 } from 'modules/playlist/redux'
 import { RootState } from 'store/types'
@@ -59,8 +59,8 @@ const PlaylistDetailsPane: FunctionComponent<InternalProps> = ({
     }
   }
 
-  const handleRemoveTrack = (trackIndex: number) => {
-    dispatch(playlistRemoveTrack({ playlistId: playlist.id, trackIndex }))
+  const handleRemoveTrack = (trackPosition: number) => {
+    dispatch(playlistRemoveTrack({ playlistId: playlist.id, trackPosition }))
   }
 
   const handlePlaylistSelectTrack = (trackId: string, trackIndex: number) => {
@@ -69,9 +69,9 @@ const PlaylistDetailsPane: FunctionComponent<InternalProps> = ({
 
   const handlePlaylistUpdateTracklist = (
     playlistId: string,
-    newTrackList: PlaylistItem[]
+    newItems: PlaylistItem[]
   ) => {
-    dispatch(playlistUpdateTracks({ playlistId, newTrackList }))
+    dispatch(playlistUpdateItems({ playlistId, newItems }))
   }
 
   const handleTrackPlayNow = (trackId: string) => {

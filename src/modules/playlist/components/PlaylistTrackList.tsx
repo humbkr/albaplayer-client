@@ -15,7 +15,7 @@ interface SortableElementProps {
   item: PlaylistItemType
   selected: boolean
   onSelectRow: (p: {}) => void
-  handleRemoveTrack: (trackIndex: number) => void
+  handleRemoveTrack: (position: number) => void
   style: {}
 }
 
@@ -47,7 +47,7 @@ const SortableItem = SortableElement(
 
 interface VirtualListProps {
   items: PlaylistItemType[]
-  handleRemoveTrack: () => void
+  handleRemoveTrack: (position: number) => void
   forwardedRef: Ref<HTMLElement>
   height: number
   width: number
@@ -72,6 +72,7 @@ const VirtualList = ({
   const rowRenderer = ({
     // eslint-disable-next-line no-shadow
     items,
+    // eslint-disable-next-line no-shadow
     scrollToRow,
     index,
     style,
