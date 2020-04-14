@@ -17,10 +17,13 @@ import { RootState } from '../../../store/types'
 
 interface Props {
   switchPaneHandler: (e: React.KeyboardEvent) => void
-  forwardedRef: Ref<HTMLDivElement>
 }
 
-const TracksPaneContainer: FunctionComponent<Props> = ({
+interface InternalProps extends Props {
+  forwardedRef: Ref<HTMLElement>
+}
+
+const TracksPaneContainer: FunctionComponent<InternalProps> = ({
   switchPaneHandler,
   forwardedRef,
 }) => {
@@ -104,7 +107,7 @@ const TracksPaneContainer: FunctionComponent<Props> = ({
   )
 }
 
-export default React.forwardRef<HTMLDivElement, Props>((props, ref) => (
+export default React.forwardRef<HTMLElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <TracksPaneContainer {...props} forwardedRef={ref} />
 ))

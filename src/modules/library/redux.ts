@@ -5,7 +5,7 @@ import Album from '../../types/Album'
 import Track from '../../types/Track'
 import { AppThunk } from '../../store/types'
 
-interface StateType {
+export interface LibraryStateType {
   isFetching: boolean
   isUpdating: boolean
   error: string
@@ -17,7 +17,7 @@ interface StateType {
   tracks: { [id: string]: Track }
 }
 
-const initialState: StateType = {
+export const libraryInitialState: LibraryStateType = {
   isFetching: false,
   isUpdating: false,
   error: '',
@@ -31,7 +31,7 @@ const initialState: StateType = {
 
 const librarySlice = createSlice({
   name: 'library',
-  initialState,
+  initialState: libraryInitialState,
   reducers: {
     initStart(state) {
       state.isFetching = true
@@ -130,7 +130,7 @@ const fetchLibrary = (): AppThunk => (dispatch) => {
 
 const shouldFetchLibrary = async (
   dispatch: unknown,
-  libraryState: StateType
+  libraryState: LibraryStateType
 ) => {
   // We should fetch if library is not initialized.
   if (!libraryState.isInitialized) {

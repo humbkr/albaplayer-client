@@ -1,12 +1,16 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, FunctionComponent, Ref } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { DebounceInput } from 'react-debounce-input'
-import { search } from '../redux'
+import { search } from 'modules/browser/redux'
+import { RootState } from 'store/types'
 
-const LibraryBrowserSearchBar = ({ forwardedRef }) => {
-  const searchTerm = useSelector((state) => state.libraryBrowser.search.term)
+const LibraryBrowserSearchBar: FunctionComponent<{
+  forwardedRef: Ref<HTMLElement>
+}> = ({ forwardedRef }) => {
+  const searchTerm = useSelector(
+    (state: RootState) => state.libraryBrowser.search.term
+  )
   const dispatch = useDispatch()
 
   return (
@@ -15,7 +19,7 @@ const LibraryBrowserSearchBar = ({ forwardedRef }) => {
         <SearchBarInput
           inputRef={forwardedRef}
           debounceTimeout={300}
-          onChange={(event) => dispatch(search(event.target.value))}
+          onChange={(event) => dispatch(search((event.target as HTMLInputElement).value))}
           type="text"
           id="search-input"
           value={searchTerm}
@@ -26,11 +30,8 @@ const LibraryBrowserSearchBar = ({ forwardedRef }) => {
     </LibraryBrowserSearchBarWrapper>
   )
 }
-LibraryBrowserSearchBar.propTypes = {
-  forwardedRef: PropTypes.shape().isRequired,
-}
 
-export default forwardRef((props, ref) => (
+export default forwardRef<HTMLElement>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <LibraryBrowserSearchBar {...props} forwardedRef={ref} />
 ))
@@ -51,7 +52,10 @@ const SearchBarInputWrapper = styled.div`
     background-color: ${(props) => props.theme.highlightFocus};
   }
 `
-const SearchBarInput = styled(DebounceInput)`
+const SearchBarInput = styled(DebounceInput)<{
+  id: string
+  autoComplete: string
+}>`
   height: 100%;
   width: 100%;
   font-size: 1em;

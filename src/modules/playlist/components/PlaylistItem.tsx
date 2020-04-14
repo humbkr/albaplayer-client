@@ -7,7 +7,7 @@ import PlaylistItemType from '../types/PlaylistItem'
 const PlaylistItem: FunctionComponent<{
   item: PlaylistItemType
   selected: boolean
-  handleRemoveTrack: (index: number) => void
+  handleRemoveTrack: (position: number) => void
   onContextMenu: (p: { scrollToRow: number }) => void
 }> = ({
   item, handleRemoveTrack, onContextMenu, selected = false,

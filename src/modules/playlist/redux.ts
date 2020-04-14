@@ -5,7 +5,7 @@ import Track from '../../types/Track'
 import PlaylistItem from './types/PlaylistItem'
 import { AppThunk, RootState } from '../../store/types'
 
-interface stateType {
+export interface PlaylistsStateType {
   playlists: { [id: string]: Playlist }
   currentPlaylist: {
     playlist: Playlist | null
@@ -17,7 +17,7 @@ interface stateType {
   }
 }
 
-export const initialState: stateType = {
+export const playlistsInitialState: PlaylistsStateType = {
   playlists: {},
   currentPlaylist: {
     playlist: null,
@@ -31,7 +31,7 @@ export const initialState: stateType = {
 
 const playlistSlice = createSlice({
   name: 'playlist',
-  initialState,
+  initialState: playlistsInitialState,
   reducers: {
     playlistSelectPlaylist(state, action) {
       state.currentPlaylist = {
@@ -85,12 +85,12 @@ const playlistSlice = createSlice({
     },
     playlistRemoveTrack(
       state,
-      action: PayloadAction<{ playlistId: string; trackIndex: number }>
+      action: PayloadAction<{ playlistId: string; trackPosition: number }>
     ) {
       // Remove selected track.
       let newTracklist = state.playlists[
         action.payload.playlistId
-      ].items.filter((item) => item.position !== action.payload.trackIndex)
+      ].items.filter((item) => item.position !== action.payload.trackPosition)
 
       // Reorder all tracks.
       let position = 0
@@ -142,15 +142,15 @@ const playlistSlice = createSlice({
         }
       }
     },
-    playlistUpdateTracks(
+    playlistUpdateItems(
       state,
       action: PayloadAction<{
         playlistId: string
-        newTrackList: PlaylistItem[]
+        newItems: PlaylistItem[]
       }>
     ) {
       let position = 0
-      const reorderedTracks = action.payload.newTrackList.map((item) => {
+      const reorderedTracks = action.payload.newItems.map((item) => {
         position++
         return { ...item, position }
       })
@@ -172,7 +172,7 @@ const playlistSlice = createSlice({
         }
       }
     },
-    playlistUpdateInfo(state, action) {
+    playlistUpdateInfo(state, action: PayloadAction<Playlist>) {
       const newPlaylists = { ...state.playlists }
       newPlaylists[action.payload.id] = action.payload
 
@@ -198,7 +198,7 @@ export const {
   playlistSelectTrack,
   playlistRemoveTrack,
   playlistAddTracks,
-  playlistUpdateTracks,
+  playlistUpdateItems,
   playlistUpdateInfo,
 } = playlistSlice.actions
 export default playlistSlice.reducer
@@ -268,6 +268,7 @@ export const addArtist = ({
 
   dispatch(playlistAddTracks({ playlistId, tracks: augmentedTracks }))
 }
+
 export const addPlaylist = ({
   playlistId,
   playlistToAddId,
@@ -279,7 +280,9 @@ export const addPlaylist = ({
   dispatch(
     playlistAddTracks({
       playlistId,
-      tracks: playlist.playlists[playlistToAddId].tracks,
+      tracks: playlist.playlists[playlistToAddId].items.map(
+        (item: PlaylistItem) => item.track
+      ),
     })
   )
 }
