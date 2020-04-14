@@ -20,6 +20,7 @@ const ArtistContextMenu = () => {
       onClick={(menuItem) => dispatch(
         addArtistToPlaylist({
           playlistId: item.id,
+          // @ts-ignore
           artistId: menuItem.props.id,
         })
       )}
@@ -30,10 +31,16 @@ const ArtistContextMenu = () => {
 
   return (
     <ContextMenu id="artist-context-menu">
-      <Item onClick={(menuItem) => dispatch(playArtist(menuItem.props.id))}>
+      <Item
+        // @ts-ignore
+        onClick={(menuItem) => dispatch(playArtist(menuItem.props.id))}
+      >
         Play now
       </Item>
-      <Item onClick={(menuItem) => dispatch(addArtist(menuItem.props.id))}>
+      <Item
+        // @ts-ignore
+        onClick={(menuItem) => dispatch(addArtist(menuItem.props.id))}
+      >
         Add to queue
       </Item>
       {playlists.length > 0 && <Separator />}

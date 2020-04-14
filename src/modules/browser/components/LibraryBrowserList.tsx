@@ -6,8 +6,7 @@ import { AppTheme } from '../../../themes/types'
 
 interface ItemDisplayProps {
   item: any
-  index: number
-  selected: boolean
+  selected?: boolean
 }
 
 interface Props {
@@ -20,7 +19,7 @@ interface Props {
 
 interface InternalProps extends Props {
   theme: AppTheme
-  forwardedRef: Ref<HTMLDivElement>
+  forwardedRef: Ref<HTMLElement>
 }
 
 const LibraryBrowserList: FunctionComponent<InternalProps> = ({
@@ -75,11 +74,7 @@ const LibraryBrowserList: FunctionComponent<InternalProps> = ({
         onClick={() => selectRow({ scrollToRow: index, itemId: items[index].id })}
         onContextMenu={() => selectRow({ scrollToRow: index, itemId: items[index].id })}
       >
-        <Display
-          item={items[index]}
-          index={index}
-          selected={selected.selected}
-        />
+        <Display item={items[index]} selected={selected.selected} />
       </LibraryBrowserListItem>
     )
   }
@@ -137,7 +132,7 @@ const LibraryBrowserList: FunctionComponent<InternalProps> = ({
 
 const ThemedLibraryBrowserList = withTheme(LibraryBrowserList)
 
-export default React.forwardRef<HTMLDivElement, Props>((props, ref) => (
+export default React.forwardRef<HTMLElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <ThemedLibraryBrowserList {...props} forwardedRef={ref} />
 ))

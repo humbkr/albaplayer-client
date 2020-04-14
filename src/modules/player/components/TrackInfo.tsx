@@ -16,7 +16,7 @@ const TrackInfo: FunctionComponent<{
 
   return (
     <Ripple>
-      <TrackInfoWrapper onClick={onClick}>
+      <TrackInfoWrapper onClick={() => onClick()}>
         <Overlay />
         {trackCover && <Cover src={trackCover} />}
         {track && (
