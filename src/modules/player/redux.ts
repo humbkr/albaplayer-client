@@ -6,6 +6,8 @@ import Track from 'types/Track'
 import { AppThunk } from 'store/types'
 import QueueItem from './types/QueueItem'
 import constants from './constants'
+import { LibraryStateType } from '../library/redux'
+import { PlaylistsStateType } from '../playlist/redux'
 
 enum PlayerPlaybackMode {
   PLAYER_REPEAT_NO_REPEAT = constants.PLAYER_REPEAT_NO_REPEAT,
@@ -31,7 +33,7 @@ interface queueStateType {
   current?: number
 }
 
-const initialState: playerStateType = {
+export const playerInitialState: playerStateType = {
   playing: false,
   repeat: PlayerPlaybackMode.PLAYER_REPEAT_NO_REPEAT,
   shuffle: false,
@@ -44,7 +46,7 @@ const initialState: playerStateType = {
 
 const playerSlice = createSlice({
   name: 'player',
-  initialState,
+  initialState: playerInitialState,
   reducers: {
     playerTogglePlayPause(state, action: PayloadAction<boolean>) {
       if (state.track || action.payload !== undefined) {
@@ -72,7 +74,7 @@ const playerSlice = createSlice({
   },
 })
 
-const queueInitialState: queueStateType = {
+export const queueInitialState: queueStateType = {
   items: [],
   current: undefined,
 }
@@ -133,7 +135,10 @@ export const setItemFromQueue = (itemPosition: number): AppThunk => (
 ) => {
   const state = getState()
 
-  if (state.queue.items.length < itemPosition) {
+  if (
+    state.queue.items.length === 0
+    || state.queue.items.length < itemPosition
+  ) {
     return null
   }
 
@@ -205,7 +210,7 @@ export const addTrack = (id: string): AppThunk => (dispatch, getState) => {
 
   dispatch(queueAddTracks([track]))
 
-  if (player.track === null) {
+  if (!player.track) {
     dispatch(setItemFromQueue(0))
   }
 }
@@ -215,7 +220,7 @@ export const addAlbum = (id: string): AppThunk => (dispatch, getState) => {
 
   dispatch(queueAddTracks(getTracksFromAlbum(id, library)))
 
-  if (player.track === null) {
+  if (!player.track) {
     dispatch(setItemFromQueue(0))
   }
 }
@@ -225,18 +230,17 @@ export const addArtist = (id: string): AppThunk => (dispatch, getState) => {
 
   dispatch(queueAddTracks(getTracksFromArtist(id, library)))
 
-  if (player.track === null) {
+  if (!player.track) {
     dispatch(setItemFromQueue(0))
   }
 }
 
 export const addPlaylist = (id: string): AppThunk => (dispatch, getState) => {
-  const { library, playlist } = getState()
+  const { library, playlist, player } = getState()
 
   dispatch(queueAddTracks(getTracksFromPlaylist(id, library, playlist)))
 
-  const state = getState()
-  if (state.player.track === null) {
+  if (!player.track) {
     dispatch(setItemFromQueue(0))
   }
 }
@@ -259,7 +263,7 @@ export const setNextTrack = (endOfTrack: boolean): AppThunk => (
     if (state.queue.items.length > 0) {
       // Get first track of the queue.
       newQueuePosition = 0
-      nextTrackId = state.queue.items[0].track.id
+      nextTrackId = state.queue.items[newQueuePosition].track.id
     } else {
       // No track to play, do nothing.
       return null
@@ -270,24 +274,23 @@ export const setNextTrack = (endOfTrack: boolean): AppThunk => (
     // Play the same track again.
     // TODO: Maybe create an action to reset the current track.
     newQueuePosition = state.queue.current
-    nextTrackId = state.queue.items[state.queue.current].track.id
+    nextTrackId = state.queue.items[newQueuePosition].track.id
   } else if (state.player.shuffle) {
     // Get the next track to play.
     // TODO: shuffle functionality is currently shit.
-    const randomIndex = Math.floor(Math.random() * state.queue.items.length)
-    newQueuePosition = randomIndex
-    nextTrackId = state.queue.items[randomIndex].track.id
+    newQueuePosition = Math.floor(Math.random() * state.queue.items.length)
+    nextTrackId = state.queue.items[newQueuePosition].track.id
   } else if (state.queue.current + 1 < state.queue.items.length) {
     // Get next song in queue.
     newQueuePosition = state.queue.current + 1
-    nextTrackId = state.queue.items[state.queue.current + 1].track.id
+    nextTrackId = state.queue.items[newQueuePosition].track.id
   } else if (
     state.player.repeat === PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ALL
   ) {
     // End of the queue.
     // Loop back to the first track of the queue.
     newQueuePosition = 0
-    nextTrackId = state.queue.items[0].track.id
+    nextTrackId = state.queue.items[newQueuePosition].track.id
   } else {
     // No further track to play.
     if (endOfTrack) {
@@ -331,23 +334,22 @@ export const setPreviousTrack = (): AppThunk => (dispatch, getState) => {
     // Play the same track again.
     // TODO: Maybe create an action to reset the current track.
     newQueuePosition = state.queue.current
-    prevTrackId = state.queue.items[state.queue.current].track.id
+    prevTrackId = state.queue.items[newQueuePosition].track.id
   } else if (state.player.shuffle) {
     // TODO: shuffle functionality is currently shit.
-    const randomIndex = Math.floor(Math.random() * state.queue.items.length)
-    newQueuePosition = randomIndex
-    prevTrackId = state.queue.items[randomIndex].track.id
+    newQueuePosition = Math.floor(Math.random() * state.queue.items.length)
+    prevTrackId = state.queue.items[newQueuePosition].track.id
   } else if (state.queue.current - 1 >= 0) {
     // Get previous song in queue.
     newQueuePosition = state.queue.current - 1
-    prevTrackId = state.queue.items[state.queue.current - 1].id
+    prevTrackId = state.queue.items[newQueuePosition].track.id
   } else if (
     state.player.repeat === PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ALL
   ) {
     // Beginning of the queue.
     // Loop back to the last track of the queue.
     newQueuePosition = state.queue.items.length - 1
-    prevTrackId = state.queue.items[state.queue.items.length - 1].track.id
+    prevTrackId = state.queue.items[newQueuePosition].track.id
   } else {
     // No further track to play, do nothing.
     return null
@@ -379,7 +381,7 @@ export const setPreviousTrack = (): AppThunk => (dispatch, getState) => {
  *   The length of the list of integers.
  *
  */
-const setCycleNumPos = (
+export const setCycleNumPos = (
   currentValue: number,
   change: number,
   length: number
@@ -394,41 +396,49 @@ const setCycleNumPos = (
   return newPos
 }
 
-const getTracksFromAlbum = (id: string, library: any) => {
+export const getTracksFromAlbum = (
+  id: string,
+  library: LibraryStateType
+): Track[] => {
   const filteredTracks = Object.values(library.tracks).filter(
-    // @ts-ignore
     (item) => id === item.albumId
   )
 
   return filteredTracks.map((track) => ({
-    // @ts-ignore
     ...track,
-    artist: library.artists[track.artistId],
-    album: library.albums[track.albumId],
+    artist: track.artistId ? library.artists[track.artistId] : undefined,
+    album: track.albumId ? library.albums[track.albumId] : undefined,
   }))
 }
 
 // TODO tracks should be ordered per album then track number.
-const getTracksFromArtist = (id: string, library: any) => {
+export const getTracksFromArtist = (
+  id: string,
+  library: LibraryStateType
+): Track[] => {
   const filteredTracks = Object.values(library.tracks).filter(
-    // @ts-ignore
     (item) => id === item.artistId
   )
 
   return filteredTracks.map((track) => ({
-    // @ts-ignore
     ...track,
-    artist: library.artists[track.artistId],
-    album: library.albums[track.albumId],
+    artist: track.artistId ? library.artists[track.artistId] : undefined,
+    album: track.albumId ? library.albums[track.albumId] : undefined,
   }))
 }
 
-const getTracksFromPlaylist = (id: string, library: any, playlists: any) => {
+export const getTracksFromPlaylist = (
+  id: string,
+  library: LibraryStateType,
+  playlists: PlaylistsStateType
+): Track[] => {
   const playlist = { ...playlists.playlists[id] }
-  // @ts-ignore
-  return playlist.tracks.map((track) => ({
-    ...track,
-    artist: library.artists[track.artistId],
-    album: library.albums[track.albumId],
+
+  return playlist.items.map((item) => ({
+    ...item.track,
+    artist: item.track.artistId
+      ? library.artists[item.track.artistId]
+      : undefined,
+    album: item.track.albumId ? library.albums[item.track.albumId] : undefined,
   }))
 }

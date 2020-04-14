@@ -9,9 +9,10 @@ import {
   playlistsSelector,
   addAlbum as addAlbumToPlaylist,
 } from 'modules/playlist/redux'
+import { RootState } from 'store/types'
 
 const AlbumContextMenu = () => {
-  const playlists = useSelector((state) => playlistsSelector(state))
+  const playlists = useSelector((state: RootState) => playlistsSelector(state))
   const dispatch = useDispatch()
 
   const playlistsItems = playlists.map((item) => (
@@ -20,6 +21,7 @@ const AlbumContextMenu = () => {
       onClick={(menuItem) => dispatch(
         addAlbumToPlaylist({
           playlistId: item.id,
+          // @ts-ignore
           albumId: menuItem.props.id,
         })
       )}
@@ -30,10 +32,16 @@ const AlbumContextMenu = () => {
 
   return (
     <ContextMenu id="album-context-menu">
-      <Item onClick={(menuItem) => dispatch(playAlbum(menuItem.props.id))}>
+      <Item
+        // @ts-ignore
+        onClick={(menuItem) => dispatch(playAlbum(menuItem.props.id))}
+      >
         Play now
       </Item>
-      <Item onClick={(menuItem) => dispatch(addAlbum(menuItem.props.id))}>
+      <Item
+        // @ts-ignore
+        onClick={(menuItem) => dispatch(addAlbum(menuItem.props.id))}
+      >
         Add to queue
       </Item>
       {playlists.length > 0 && <Separator />}

@@ -27,7 +27,7 @@ const PlaylistTrackContextMenu = () => {
         addTrackToPlaylist({
           playlistId: item.id,
           // @ts-ignore
-          trackId: menuItem.props.id,
+          trackId: menuItem.props.track.id,
         })
       )}
     >
@@ -39,13 +39,13 @@ const PlaylistTrackContextMenu = () => {
     <ContextMenu id="playlist-track-context-menu">
       <Item
         // @ts-ignore
-        onClick={(menuItem) => dispatch(playTrack(menuItem.props.id))}
+        onClick={(menuItem) => dispatch(playTrack(menuItem.props.track.id))}
       >
         Play now
       </Item>
       <Item
         // @ts-ignore
-        onClick={(menuItem) => dispatch(addTrack(menuItem.props.id))}
+        onClick={(menuItem) => dispatch(addTrack(menuItem.props.track.id))}
       >
         Add to queue
       </Item>
@@ -54,8 +54,11 @@ const PlaylistTrackContextMenu = () => {
       <Separator />
       <Item
         onClick={(menuItem) => dispatch(
-          // @ts-ignore
-          playlistRemoveTrack(currentPlaylist.id, menuItem.props.position)
+          playlistRemoveTrack({
+            playlistId: currentPlaylist.id,
+            // @ts-ignore
+            trackPosition: menuItem.props.position,
+          })
         )}
       >
         Remove from playlist

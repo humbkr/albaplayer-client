@@ -1,26 +1,43 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { FunctionComponent, Ref, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
 import { addAlbum, playAlbum } from 'modules/player/redux'
 import LibraryBrowserList from 'modules/browser/components/LibraryBrowserList'
-import AlbumTeaser from './AlbumTeaser'
+import AlbumTeaser from 'modules/browser/components/AlbumTeaser'
+import {
+  getAlbumsList,
+  libraryBrowserSortAlbums,
+  selectAlbum,
+} from 'modules/browser/redux'
 import LibraryBrowserListHeader from './LibraryBrowserListHeader'
 import LibraryBrowserPane from './LibraryBrowserPane'
 import AlbumContextMenu from './AlbumContextMenu'
-import { getAlbumsList, libraryBrowserSortAlbums, selectAlbum } from '../redux'
+import { RootState } from '../../../store/types'
 
-function AlbumsPaneContainer({ switchPaneHandler, forwardedRef }) {
+interface Props {
+  switchPaneHandler: (e: React.KeyboardEvent) => void
+}
+
+interface InternalProps extends Props {
+  forwardedRef: Ref<HTMLElement>
+}
+
+const AlbumsPaneContainer: FunctionComponent<InternalProps> = ({
+  switchPaneHandler,
+  forwardedRef,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const albums = useSelector((state) => getAlbumsList(state))
-  const orderBy = useSelector((state) => state.libraryBrowser.sortAlbums)
+  const albums = useSelector((state: RootState) => getAlbumsList(state))
+  const orderBy = useSelector(
+    (state: RootState) => state.libraryBrowser.sortAlbums
+  )
   const currentPosition = useSelector(
-    (state) => state.libraryBrowser.currentPositionAlbums
+    (state: RootState) => state.libraryBrowser.currentPositionAlbums
   )
   const currentAlbum = useSelector(
-    (state) => state.libraryBrowser.selectedAlbums
+    (state: RootState) => state.libraryBrowser.selectedAlbums
   )
   const dispatch = useDispatch()
 
@@ -31,23 +48,23 @@ function AlbumsPaneContainer({ switchPaneHandler, forwardedRef }) {
   ]
 
   // Change event handler for LibraryBrowserListHeader.
-  const onSortChangeHandler = (event) => {
-    dispatch(libraryBrowserSortAlbums(event.target.value))
+  const onSortChangeHandler = (event: React.MouseEvent<HTMLSelectElement>) => {
+    dispatch(libraryBrowserSortAlbums(event.currentTarget.value))
   }
 
-  const onItemClick = (itemId, index) => {
+  const onItemClick = (itemId: string, index: number) => {
     dispatch(selectAlbum({ albumId: itemId, index }))
   }
 
-  const handlePlayNow = (albumId) => {
+  const handlePlayNow = (albumId: string) => {
     dispatch(playAlbum(albumId))
   }
 
-  const handleAddToQueue = (albumId) => {
+  const handleAddToQueue = (albumId: string) => {
     dispatch(addAlbum(albumId))
   }
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13) {
       setModalIsOpen(true)
     } else {
@@ -85,12 +102,8 @@ function AlbumsPaneContainer({ switchPaneHandler, forwardedRef }) {
     </AlbumsPaneWrapper>
   )
 }
-AlbumsPaneContainer.propTypes = {
-  switchPaneHandler: PropTypes.func.isRequired,
-  forwardedRef: PropTypes.shape().isRequired,
-}
 
-export default React.forwardRef((props, ref) => (
+export default React.forwardRef<HTMLElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <AlbumsPaneContainer {...props} forwardedRef={ref} />
 ))

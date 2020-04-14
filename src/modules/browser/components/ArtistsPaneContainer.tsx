@@ -1,53 +1,66 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { FunctionComponent, Ref, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
 import { playArtist, addArtist } from 'modules/player/redux'
 import LibraryBrowserList from 'modules/browser/components/LibraryBrowserList'
-import ArtistTeaser from './ArtistTeaser'
-import LibraryBrowserPane from './LibraryBrowserPane'
-import LibraryBrowserListHeader from './LibraryBrowserListHeader'
-import ArtistContextMenu from './ArtistContextMenu'
+import ArtistContextMenu from 'modules/browser/components/ArtistContextMenu'
 import {
   getArtistsList,
   libraryBrowserSortArtists,
   selectArtist,
-} from '../redux'
+} from 'modules/browser/redux'
+import ArtistTeaser from './ArtistTeaser'
+import LibraryBrowserPane from './LibraryBrowserPane'
+import LibraryBrowserListHeader from './LibraryBrowserListHeader'
+import { RootState } from '../../../store/types'
 
-function ArtistsPaneContainer({ switchPaneHandler, forwardedRef }) {
+interface Props {
+  switchPaneHandler: (e: React.KeyboardEvent) => void
+}
+
+interface InternalProps extends Props {
+  forwardedRef: Ref<HTMLElement>
+}
+
+const ArtistsPaneContainer: FunctionComponent<InternalProps> = ({
+  switchPaneHandler,
+  forwardedRef,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const artists = useSelector((state) => getArtistsList(state))
-  const orderBy = useSelector((state) => state.libraryBrowser.sortArtists)
+  const artists = useSelector((state: RootState) => getArtistsList(state))
+  const orderBy = useSelector(
+    (state: RootState) => state.libraryBrowser.sortArtists
+  )
   const currentPosition = useSelector(
-    (state) => state.libraryBrowser.currentPositionArtists
+    (state: RootState) => state.libraryBrowser.currentPositionArtists
   )
   const currentArtist = useSelector(
-    (state) => state.libraryBrowser.selectedArtists
+    (state: RootState) => state.libraryBrowser.selectedArtists
   )
   const dispatch = useDispatch()
 
   const orderByOptions = [{ value: 'name', label: 'name' }]
 
   // Change event handler for LibraryBrowserListHeader.
-  const onSortChangeHandler = (event) => {
-    dispatch(libraryBrowserSortArtists(event.target.value))
+  const onSortChangeHandler = (event: React.MouseEvent<HTMLSelectElement>) => {
+    dispatch(libraryBrowserSortArtists(event.currentTarget.value))
   }
 
-  const onItemClick = (itemId, index) => {
+  const onItemClick = (itemId: string, index: number) => {
     dispatch(selectArtist({ artistId: itemId, index }))
   }
 
-  const handlePlayNow = (artistId) => {
+  const handlePlayNow = (artistId: string) => {
     dispatch(playArtist(artistId))
   }
 
-  const handleAddToQueue = (artistId) => {
+  const handleAddToQueue = (artistId: string) => {
     dispatch(addArtist(artistId))
   }
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13) {
       setModalIsOpen(true)
     } else {
@@ -85,12 +98,8 @@ function ArtistsPaneContainer({ switchPaneHandler, forwardedRef }) {
     </ArtistsPaneWrapper>
   )
 }
-ArtistsPaneContainer.propTypes = {
-  switchPaneHandler: PropTypes.func.isRequired,
-  forwardedRef: PropTypes.shape().isRequired,
-}
 
-export default React.forwardRef((props, ref) => (
+export default React.forwardRef<HTMLElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <ArtistsPaneContainer {...props} forwardedRef={ref} />
 ))
