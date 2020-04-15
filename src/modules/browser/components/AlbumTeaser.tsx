@@ -1,13 +1,30 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { MenuProvider as ContextMenuProvider } from 'react-contexify'
+import { contextMenu } from 'react-contexify'
+import Album from '../../../types/Album'
 
 const AlbumTeaser: FunctionComponent<{
-  item: any
+  item: Album
   selected?: boolean
-}> = ({ item, selected = false }) => (
-  <ContextMenuProvider id="album-context-menu" data={item}>
-    <AlbumTeaserWrapper>
+  index: number
+  onContextMenu: (p: { scrollToRow: number; itemId: string }) => void
+}> = ({
+  item, selected = false, index, onContextMenu,
+}) => {
+  const onRightClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    onContextMenu({ scrollToRow: index, itemId: item.id })
+    contextMenu.show({
+      id: 'album-context-menu',
+      event: e,
+      props: {
+        data: item,
+      },
+    })
+  }
+
+  return (
+    <AlbumTeaserWrapper onContextMenu={onRightClick}>
       <div>
         <AlbumTeaserTitle>{item.title}</AlbumTeaserTitle>
         <AlbumSubInfo className={selected ? 'selected' : ''}>
@@ -17,8 +34,8 @@ const AlbumTeaser: FunctionComponent<{
         </AlbumSubInfo>
       </div>
     </AlbumTeaserWrapper>
-  </ContextMenuProvider>
-)
+  )
+}
 
 export default AlbumTeaser
 

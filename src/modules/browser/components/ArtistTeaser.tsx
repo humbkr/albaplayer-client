@@ -1,17 +1,31 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { MenuProvider as ContextMenuProvider } from 'react-contexify'
+import { contextMenu } from 'react-contexify'
 import Artist from '../../../types/Artist'
 
 const ArtistTeaser: FunctionComponent<{
   item: Artist
-}> = ({ item }) => (
-  <ContextMenuProvider id="artist-context-menu" data={item}>
-    <ArtistTeaserWrapper>
+  index: number
+  onContextMenu: (p: { scrollToRow: number; itemId: string }) => void
+}> = ({ item, index, onContextMenu }) => {
+  const onRightClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    onContextMenu({ scrollToRow: index, itemId: item.id })
+    contextMenu.show({
+      id: 'artist-context-menu',
+      event: e,
+      props: {
+        data: item,
+      },
+    })
+  }
+
+  return (
+    <ArtistTeaserWrapper onContextMenu={onRightClick}>
       <ArtistTeaserName>{item.name}</ArtistTeaserName>
     </ArtistTeaserWrapper>
-  </ContextMenuProvider>
-)
+  )
+}
 
 export default ArtistTeaser
 

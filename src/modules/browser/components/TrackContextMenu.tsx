@@ -18,11 +18,10 @@ const TrackContextMenu = () => {
   const playlistsItems = playlists.map((item) => (
     <Item
       key={item.id}
-      onClick={(menuItem) => dispatch(
+      onClick={(menuItem: any) => dispatch(
         addTrackToPlaylist({
           playlistId: item.id,
-          // @ts-ignore
-          trackId: menuItem.props.id,
+          trackId: menuItem.props.data.id,
         })
       )}
     >
@@ -33,14 +32,12 @@ const TrackContextMenu = () => {
   return (
     <ContextMenu id="track-context-menu">
       <Item
-        // @ts-ignore
-        onClick={(menuItem) => dispatch(playTrack(menuItem.props.id))}
+        onClick={(menuItem: any) => dispatch(playTrack(menuItem.props.data.id))}
       >
         Play now
       </Item>
       <Item
-        // @ts-ignore
-        onClick={(menuItem) => dispatch(addTrack(menuItem.props.id))}
+        onClick={(menuItem: any) => dispatch(addTrack(menuItem.props.data.id))}
       >
         Add to queue
       </Item>
