@@ -6,7 +6,7 @@ import Album from 'types/Album'
 import Track from 'types/Track'
 import { AppThunk, RootState } from '../../store/types'
 
-interface BrowserStateType {
+export interface BrowserStateType {
   artists: Artist[]
   albums: Album[]
   tracks: Track[]
@@ -29,7 +29,7 @@ interface BrowserStateType {
   }
 }
 
-const initialState: BrowserStateType = {
+export const browserInitialState: BrowserStateType = {
   artists: [],
   albums: [],
   tracks: [],
@@ -52,7 +52,7 @@ const initialState: BrowserStateType = {
 
 const browserSlice = createSlice({
   name: 'libraryBrowser',
-  initialState,
+  initialState: browserInitialState,
   reducers: {
     libraryBrowserInitArtists(state, action: PayloadAction<Artist[]>) {
       state.artists = action.payload
@@ -142,13 +142,11 @@ const browserSlice = createSlice({
   },
 })
 
-const {
+export const {
   libraryBrowserSelectArtist,
   libraryBrowserSelectAlbum,
   libraryBrowserSearchUpdateInput,
   libraryBrowserSearchFilter,
-} = browserSlice.actions
-export const {
   libraryBrowserInitArtists,
   libraryBrowserSelectTrack,
   libraryBrowserSortArtists,
@@ -240,11 +238,12 @@ export const selectArtist = ({
   }
 
   if (artistId !== '0') {
-    if (artistId === APIConstants.COMPILATION_ALBUM_ID) {
+    if (artistId === APIConstants.COMPILATION_ARTIST_ID) {
       // Special case for compilations which are grouped under the "Various artists" artist.
       filteredAlbums = albumsToFilter.filter(
         (item) => item.artistId === artistId
       )
+      // We have to get all the tracks from all the compilation albums.
       const albumsIds = filteredAlbums.map((item) => item.id)
       filteredTracks = tracksToFilter.filter((item) => albumsIds.includes(item.albumId))
     } else {
@@ -299,7 +298,7 @@ export const selectAlbum = ({
     tracksToFilter = Object.values<Track>(library.tracks)
   }
 
-  if (libraryBrowser.selectedArtists === APIConstants.COMPILATION_ALBUM_ID) {
+  if (libraryBrowser.selectedArtists === APIConstants.COMPILATION_ARTIST_ID) {
     // We want to display all tracks for all the compilations, keep track (hoho) of the albums
     // being compilations.
     compilationsIds = libraryBrowser.albums.map((item: Album) => item.id)
@@ -308,7 +307,7 @@ export const selectAlbum = ({
   if (libraryBrowser.selectedArtists !== '0' || albumId !== '0') {
     filteredTracks = tracksToFilter.filter((item) => {
       if (
-        libraryBrowser.selectedArtists === APIConstants.COMPILATION_ALBUM_ID
+        libraryBrowser.selectedArtists === APIConstants.COMPILATION_ARTIST_ID
         && albumId === '0'
       ) {
         // If "various artists" artist selected and no specific album selected,
@@ -316,7 +315,7 @@ export const selectAlbum = ({
         return compilationsIds.includes(item.albumId)
       }
       if (
-        libraryBrowser.selectedArtists === APIConstants.COMPILATION_ALBUM_ID
+        libraryBrowser.selectedArtists === APIConstants.COMPILATION_ARTIST_ID
       ) {
         // If "various artists" artist selected and specific album selected,
         // Display all tracks for this album.
@@ -348,7 +347,7 @@ export const selectAlbum = ({
 }
 
 /**
- * Search reducer.
+ * Search thunk.
  *
  * Filters:
  *   - tracks on title
@@ -362,7 +361,10 @@ export const selectAlbum = ({
  *   included in the results.
  *
  */
-const searchFilter = (searchTerm: string): AppThunk => (dispatch, getState) => {
+export const searchFilter = (searchTerm: string): AppThunk => (
+  dispatch,
+  getState
+) => {
   const state = getState()
 
   // Get library lists as arrays.

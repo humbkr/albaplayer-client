@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { api } from 'api'
-import getBackendUrl from 'api/config'
+import { api, constants as APIConstants } from 'api'
 import { immutableRemove, immutableSortTracks } from 'common/utils/utils'
 import Track from 'types/Track'
 import { AppThunk } from 'store/types'
@@ -15,7 +14,7 @@ enum PlayerPlaybackMode {
   PLAYER_REPEAT_LOOP_ONE = constants.PLAYER_REPEAT_LOOP_ONE,
 }
 
-interface playerStateType {
+export interface playerStateType {
   // Controls and audio state.
   playing: boolean
   repeat: PlayerPlaybackMode
@@ -28,7 +27,7 @@ interface playerStateType {
   track?: Track
 }
 
-interface queueStateType {
+export interface queueStateType {
   items: QueueItem[]
   current?: number
 }
@@ -85,7 +84,6 @@ const queueSlice = createSlice({
   reducers: {
     queueAddTracks(state, action: PayloadAction<Track[]>) {
       const queueItems = action.payload.map((track) => ({ track }))
-      // @ts-ignore
       state.items.push(...queueItems)
     },
     queueRemoveTrack(state, action: PayloadAction<number>) {
@@ -137,7 +135,7 @@ export const setItemFromQueue = (itemPosition: number): AppThunk => (
 
   if (
     state.queue.items.length === 0
-    || state.queue.items.length < itemPosition
+    || state.queue.items.length <= itemPosition
   ) {
     return null
   }
@@ -149,8 +147,10 @@ export const setItemFromQueue = (itemPosition: number): AppThunk => (
       // And dispatch appropriate actions.
       // Copy track to change it.
       const track = { ...response.data.track }
-      track.cover = track.cover ? getBackendUrl() + track.cover : ''
-      track.src = getBackendUrl() + track.src
+      track.cover = track.cover
+        ? APIConstants.BACKEND_BASE_URL + track.cover
+        : ''
+      track.src = APIConstants.BACKEND_BASE_URL + track.src
 
       dispatch(playerSetTrack(track))
       dispatch(queueSetCurrent(itemPosition))
@@ -258,7 +258,7 @@ export const setNextTrack = (endOfTrack: boolean): AppThunk => (
   let nextTrackId = '0'
   let newQueuePosition = 0
 
-  if (state.player.track === null) {
+  if (!state.player.track) {
     // First play after launch.
     if (state.queue.items.length > 0) {
       // Get first track of the queue.
@@ -272,7 +272,7 @@ export const setNextTrack = (endOfTrack: boolean): AppThunk => (
     state.player.repeat === PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ONE
   ) {
     // Play the same track again.
-    // TODO: Maybe create an action to reset the current track.
+    // TODO: Create an action to reset the current track and avoid refetching info we already have.
     newQueuePosition = state.queue.current
     nextTrackId = state.queue.items[newQueuePosition].track.id
   } else if (state.player.shuffle) {
@@ -307,8 +307,8 @@ export const setNextTrack = (endOfTrack: boolean): AppThunk => (
     // And dispatch appropriate actions.
     // Copy track to change it.
     const track = { ...response.data.track }
-    track.cover = track.cover ? getBackendUrl() + track.cover : ''
-    track.src = getBackendUrl() + track.src
+    track.cover = track.cover ? APIConstants.BACKEND_BASE_URL + track.cover : ''
+    track.src = APIConstants.BACKEND_BASE_URL + track.src
 
     dispatch(playerSetTrack(track))
     dispatch(queueSetCurrent(newQueuePosition))
@@ -326,7 +326,7 @@ export const setPreviousTrack = (): AppThunk => (dispatch, getState) => {
   let newQueuePosition = 0
 
   // Get trackId of the previous track in playlist.
-  if (state.player.track === null) {
+  if (!state.player.track) {
     // Do nothing.
     return null
   }
@@ -360,8 +360,8 @@ export const setPreviousTrack = (): AppThunk => (dispatch, getState) => {
     // And dispatch appropriate actions.
     // Copy track to change it.
     const track = { ...response.data.track }
-    track.cover = track.cover ? getBackendUrl() + track.cover : ''
-    track.src = getBackendUrl() + track.src
+    track.cover = track.cover ? APIConstants.BACKEND_BASE_URL + track.cover : ''
+    track.src = APIConstants.BACKEND_BASE_URL + track.src
 
     dispatch(playerSetTrack(track))
     dispatch(queueSetCurrent(newQueuePosition))

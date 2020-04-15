@@ -1,3 +1,6 @@
+import configureMockStore from 'redux-mock-store'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import thunk from 'redux-thunk'
 import playlistsSlice, {
   playlistsInitialState,
   playlistSelectPlaylist,
@@ -9,10 +12,145 @@ import playlistsSlice, {
   playlistAddTracks,
   playlistUpdateItems,
   playlistUpdateInfo,
+  addTrack,
+  addAlbum,
+  addArtist,
+  addPlaylist,
+  playlistsSelector,
 } from '../redux'
 import Playlist from '../types/Playlist'
 import Track from '../../../types/Track'
 import PlaylistItem from '../types/PlaylistItem'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { libraryInitialState, LibraryStateType } from '../../library/redux'
+
+jest.mock('api')
+const mockStore = configureMockStore([thunk])
+const makeMockStore = (customState: any = {}) => mockStore({
+  library: libraryInitialState,
+  playlist: playlistsInitialState,
+  ...customState,
+})
+
+const mockLibraryState: LibraryStateType = {
+  ...libraryInitialState,
+  isInitialized: true,
+  artists: {
+    1: {
+      id: '1',
+      name: 'Artist 1',
+    },
+    2: {
+      id: '2',
+      name: 'Artist 2',
+    },
+  },
+  albums: {
+    1: {
+      id: '1',
+      title: 'Album 1',
+      year: '1986',
+      artistId: '1',
+    },
+    2: {
+      id: '2',
+      title: 'Album 2',
+      year: '2002',
+      artistId: '2',
+    },
+    3: {
+      id: '3',
+      title: 'Album 3',
+      year: '1992',
+      artistId: '1',
+    },
+  },
+  tracks: {
+    1: {
+      id: '1',
+      title: 'Track 1',
+      number: 1,
+      disc: '',
+      duration: 123,
+      cover: '',
+      albumId: '1',
+      artistId: '1',
+    },
+    2: {
+      id: '2',
+      title: 'Track 2',
+      number: 2,
+      disc: '',
+      duration: 124,
+      cover: '',
+      albumId: '2',
+      artistId: '2',
+    },
+    3: {
+      id: '3',
+      title: 'Track 3',
+      number: 2,
+      disc: '',
+      duration: 124,
+      cover: '',
+      albumId: '1',
+      artistId: '1',
+    },
+    4: {
+      id: '4',
+      title: 'Track 4',
+      number: 1,
+      disc: '',
+      duration: 124,
+      cover: '',
+      albumId: '3',
+      artistId: '1',
+    },
+  },
+}
+
+const mockPlaylistsState: PlaylistsStateType = {
+  ...playlistsInitialState,
+  playlists: {
+    temp_001: {
+      id: 'temp_001',
+      title: 'My playlist',
+      date: '2020-04-12',
+      items: [],
+    },
+    temp_002: {
+      id: 'temp_002',
+      title: 'My other playlist',
+      date: '2020-04-13',
+      items: [
+        {
+          track: {
+            ...mockLibraryState.tracks['1'],
+            album: mockLibraryState.albums['1'],
+            artist: mockLibraryState.artists['1'],
+          },
+          position: 1,
+        },
+        {
+          track: {
+            ...mockLibraryState.tracks['2'],
+            album: mockLibraryState.albums['2'],
+            artist: mockLibraryState.artists['2'],
+          },
+          position: 2,
+        },
+        {
+          track: {
+            ...mockLibraryState.tracks['4'],
+            album: mockLibraryState.albums['3'],
+            artist: mockLibraryState.artists['1'],
+          },
+          position: 3,
+        },
+      ],
+    },
+  },
+}
 
 describe('playlists (redux)', () => {
   describe('reducer', () => {
@@ -565,6 +703,163 @@ describe('playlists (redux)', () => {
           temp_002: playlist2,
         },
       })
+    })
+  })
+
+  describe('addTrack thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+        playlist: mockPlaylistsState,
+      })
+
+      const expectedTrackList: Track[] = [
+        {
+          ...mockLibraryState.tracks['1'],
+          album: mockLibraryState.albums['1'],
+          artist: mockLibraryState.artists['1'],
+        },
+      ]
+
+      const expected = [
+        playlistAddTracks({
+          playlistId: 'temp_001',
+          tracks: expectedTrackList,
+        }),
+      ]
+
+      // @ts-ignore
+      store.dispatch(addTrack({ playlistId: 'temp_001', trackId: '1' }))
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('addAlbum thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+        playlist: mockPlaylistsState,
+      })
+
+      const expectedTrackList: Track[] = [
+        {
+          ...mockLibraryState.tracks['1'],
+          album: mockLibraryState.albums['1'],
+          artist: mockLibraryState.artists['1'],
+        },
+        {
+          ...mockLibraryState.tracks['3'],
+          album: mockLibraryState.albums['1'],
+          artist: mockLibraryState.artists['1'],
+        },
+      ]
+
+      const expected = [
+        playlistAddTracks({
+          playlistId: 'temp_001',
+          tracks: expectedTrackList,
+        }),
+      ]
+
+      // @ts-ignore
+      store.dispatch(addAlbum({ playlistId: 'temp_001', albumId: '1' }))
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('addArtist thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+        playlist: mockPlaylistsState,
+      })
+
+      const expectedTrackList: Track[] = [
+        {
+          ...mockLibraryState.tracks['1'],
+          album: mockLibraryState.albums['1'],
+          artist: mockLibraryState.artists['1'],
+        },
+        {
+          ...mockLibraryState.tracks['3'],
+          album: mockLibraryState.albums['1'],
+          artist: mockLibraryState.artists['1'],
+        },
+        {
+          ...mockLibraryState.tracks['4'],
+          album: mockLibraryState.albums['3'],
+          artist: mockLibraryState.artists['1'],
+        },
+      ]
+
+      const expected = [
+        playlistAddTracks({
+          playlistId: 'temp_001',
+          tracks: expectedTrackList,
+        }),
+      ]
+
+      // @ts-ignore
+      store.dispatch(addArtist({ playlistId: 'temp_001', artistId: '1' }))
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('addPlaylist thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+        playlist: mockPlaylistsState,
+      })
+
+      const expectedTrackList: Track[] = [
+        {
+          ...mockLibraryState.tracks['1'],
+          album: mockLibraryState.albums['1'],
+          artist: mockLibraryState.artists['1'],
+        },
+        {
+          ...mockLibraryState.tracks['2'],
+          album: mockLibraryState.albums['2'],
+          artist: mockLibraryState.artists['2'],
+        },
+        {
+          ...mockLibraryState.tracks['4'],
+          album: mockLibraryState.albums['3'],
+          artist: mockLibraryState.artists['1'],
+        },
+      ]
+
+      const expected = [
+        playlistAddTracks({
+          playlistId: 'temp_001',
+          tracks: expectedTrackList,
+        }),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        addPlaylist({ playlistId: 'temp_001', playlistToAddId: 'temp_002' })
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('playlistsSelector selector', () => {
+    it('should return playlists ordered by title', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+        playlist: mockPlaylistsState,
+      })
+
+      const orderedPlaylists = playlistsSelector(store.getState())
+      expect(orderedPlaylists).toBeArray()
+      expect(orderedPlaylists[0].title).toBe('My other playlist')
+      expect(orderedPlaylists[1].title).toBe('My playlist')
     })
   })
 })

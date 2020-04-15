@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { api } from 'api'
-import Artist from '../../types/Artist'
-import Album from '../../types/Album'
-import Track from '../../types/Track'
-import { AppThunk } from '../../store/types'
+import Artist from 'types/Artist'
+import Album from 'types/Album'
+import Track from 'types/Track'
+import { AppThunk } from 'store/types'
 
 export interface LibraryStateType {
   isFetching: boolean
@@ -49,7 +49,7 @@ const librarySlice = createSlice({
       // Here we have to make up for the fact that we cannot request albums with artist names
       // from the backend without severe performance penalty. We have to populate the information
       // client-side from the artists list we got from the backend.
-      const hydratedAlbums = data.albums.map((album) => {
+      const hydratedAlbums: Album[] = data.albums.map((album) => {
         const artists = data.artists.filter(
           (artist) => album.artistId === artist.id
         )
@@ -86,7 +86,7 @@ const librarySlice = createSlice({
       state.isInitialized = false
       state.initHasFailed = true
     },
-    setLastScan(state, action) {
+    setLastScan(state, action: PayloadAction<string>) {
       state.lastScan = action.payload
     },
   },
@@ -100,17 +100,17 @@ export const {
 } = librarySlice.actions
 export default librarySlice.reducer
 
-export const initLibrary = (force: boolean = false): AppThunk => (
+export const initLibrary = (force: boolean = false): AppThunk => async (
   dispatch,
   getState
 ) => {
-  if (force || shouldFetchLibrary(dispatch, getState().library)) {
+  if (force || (await shouldFetchLibrary(getState().library))) {
     return dispatch(fetchLibrary())
   }
   return null
 }
 
-const fetchLibrary = (): AppThunk => (dispatch) => {
+export const fetchLibrary = (): AppThunk => (dispatch) => {
   // First the app state is updated to inform that the API call is starting.
   dispatch(initStart())
 
@@ -128,33 +128,28 @@ const fetchLibrary = (): AppThunk => (dispatch) => {
     })
 }
 
-const shouldFetchLibrary = async (
-  dispatch: unknown,
-  libraryState: LibraryStateType
-) => {
-  // We should fetch if library is not initialized.
-  if (!libraryState.isInitialized) {
-    if (libraryState.tracks && Object.values(libraryState.tracks).length < 1) {
-      return true
-    }
-
-    // Get last scan date from backend. If backend last scan > local version, we
-    // have to fetch, else we can reuse the local data.
-    api
-      .getVariable('library_last_updated')
-      .then((response) => {
-        const remoteLastScan = response.data.variable.value
-        return remoteLastScan > libraryState.lastScan
-      })
-      .catch(() => {
-        // TODO log failure.
-      })
-  }
-
+export const shouldFetchLibrary = async (libraryState: LibraryStateType) => {
   // If the library is currently fetching, nothing to do.
   if (libraryState.isFetching) {
     return false
   }
 
-  return false
+  // If there is no trace of a previous successful fetch, we have to fetch.
+  if (!libraryState.lastScan) {
+    return true
+  }
+
+  // Get last scan date from backend. If backend last scan > local version, we
+  // have to fetch.
+  try {
+    const response = await api.getVariable('library_last_updated')
+    if (response?.data?.variable?.value) {
+      const remoteLastScan = response.data.variable.value
+      return remoteLastScan > libraryState.lastScan
+    }
+  } catch (e) {
+    // Fail through.
+  }
+
+  return true
 }

@@ -48,6 +48,7 @@ const getFullTrackInfo = (trackId: string) => {
         album {
           id
           title
+          year
         }
         artist {
           id

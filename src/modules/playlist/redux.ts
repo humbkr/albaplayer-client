@@ -208,7 +208,7 @@ export const addTrack = ({
   trackId,
 }: {
   playlistId: string
-  trackId: number
+  trackId: string
 }): AppThunk => (dispatch, getState) => {
   const { library } = getState()
 
@@ -231,9 +231,9 @@ export const addAlbum = ({
   const { library } = getState()
 
   // Get tracks from album.
-  const filteredTracks = Object.values(library.tracks)
-    .flat()
-    .filter((track) => albumId === track.albumId)
+  const filteredTracks = Object.values<Track>(library.tracks).filter(
+    (track) => albumId === track.albumId
+  )
 
   // Hydrate tracks with album and artist info.
   const augmentedTracks = filteredTracks.map((track) => ({
@@ -255,9 +255,9 @@ export const addArtist = ({
   const { library } = getState()
 
   // Get tracks from artist.
-  const filteredTracks = Object.values(library.tracks)
-    .flat()
-    .filter((track) => artistId === track.artistId)
+  const filteredTracks = Object.values<Track>(library.tracks).filter(
+    (track) => artistId === track.artistId
+  )
 
   // Hydrate tracks with album and artist info.
   const augmentedTracks = filteredTracks.map((track) => ({
