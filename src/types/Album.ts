@@ -10,4 +10,7 @@ export default interface Album {
   artistId?: string
   artist?: Artist
   tracks?: Array<Track>
+  // TODO: Is the following really necessary?
+  // Shorthand property for performance.
+  artistName?: string
 }

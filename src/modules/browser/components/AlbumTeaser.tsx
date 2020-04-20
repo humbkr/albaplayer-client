@@ -29,8 +29,8 @@ const AlbumTeaser: FunctionComponent<{
         <AlbumTeaserTitle>{item.title}</AlbumTeaserTitle>
         <AlbumSubInfo className={selected ? 'selected' : ''}>
           {item.year && <span>{item.year}</span>}
-          {item.year && ' - '}
-          <AlbumTeaserArtist>{item.artist?.name}</AlbumTeaserArtist>
+          {item.year && item.artistName && ' - '}
+          <AlbumTeaserArtist>{item.artistName}</AlbumTeaserArtist>
         </AlbumSubInfo>
       </div>
     </AlbumTeaserWrapper>
