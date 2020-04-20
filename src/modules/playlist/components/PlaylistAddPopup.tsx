@@ -4,7 +4,7 @@ import Modal from 'react-modal'
 import {
   Formik, Form, Field, ErrorMessage, FormikErrors,
 } from 'formik'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { getRandomInt } from 'common/utils/utils'
 import ActionButton from 'common/components/ActionButton'
 import { AppTheme } from 'themes/types'
@@ -43,7 +43,7 @@ const PlaylistAddPopup: FunctionComponent<{
     onCreatePlaylist({
       id: `temp_${getRandomInt(1, 100000)}`,
       title,
-      date: moment().format('YYYY-MM-DD'),
+      date: dayjs().format('YYYY-MM-DD'),
       items: [],
     })
   }
