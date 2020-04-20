@@ -41,7 +41,7 @@ const PlaylistItem: FunctionComponent<{
           </AlbumInfo>
         </TrackInfo>
       </div>
-      <TrackActions>
+      <TrackActions className={selected ? 'selected' : ''}>
         <ActionButtonIcon
           icon="delete"
           onClick={() => handleRemoveTrack(position)}
@@ -81,6 +81,7 @@ const TrackFirstColumn = styled.div`
 `
 const TrackInfo = styled.div`
   font-size: 0.8em;
+  color: ${(props) => props.theme.textSecondaryColor};
 `
 const AlbumInfo = styled.span`
   font-style: italic;
