@@ -1,15 +1,31 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { MenuProvider as ContextMenuProvider } from 'react-contexify'
+import { contextMenu } from 'react-contexify'
 import Playlist from '../types/Playlist'
 
-const PlaylistTeaser = ({ playlist }: { playlist: Playlist }) => (
-  <ContextMenuProvider id="playlist-context-menu" data={playlist}>
-    <Wrapper>
+const PlaylistTeaser: FunctionComponent<{
+  playlist: Playlist
+  index: number
+  onContextMenu: (p: { scrollToRow: number }) => void
+}> = ({ playlist, index, onContextMenu }) => {
+  const onRightClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    onContextMenu({ scrollToRow: index })
+    contextMenu.show({
+      id: 'playlist-context-menu',
+      event: e,
+      props: {
+        data: playlist,
+      },
+    })
+  }
+
+  return (
+    <Wrapper onContextMenu={onRightClick}>
       <div>{playlist.title}</div>
     </Wrapper>
-  </ContextMenuProvider>
-)
+  )
+}
 
 export default PlaylistTeaser
 

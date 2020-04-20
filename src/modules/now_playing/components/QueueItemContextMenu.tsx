@@ -26,8 +26,12 @@ const QueueItemContextMenu = () => {
   const playlistsItems = playlists.map((item) => (
     <Item
       key={item.id}
-      // @ts-ignore
-      onClick={(menuItem) => dispatch(addTrackToPlaylist(item.id, menuItem.props.id))}
+      onClick={(menuItem: any) => dispatch(
+        addTrackToPlaylist({
+          playlistId: item.id,
+          trackId: menuItem.props.data.id,
+        })
+      )}
     >
       {item.title}
     </Item>
@@ -36,14 +40,12 @@ const QueueItemContextMenu = () => {
   return (
     <ContextMenu id="queue-item-context-menu">
       <Item
-        // @ts-ignore
-        onClick={(menuItem) => handlePlayTrack(menuItem.props.position - 1)}
+        onClick={(menuItem: any) => handlePlayTrack(menuItem.props.position - 1)}
       >
         Play track
       </Item>
       <Item
-        // @ts-ignore
-        onClick={(menuItem) => dispatch(queueRemoveTrack(menuItem.props.position - 1))}
+        onClick={(menuItem: any) => dispatch(queueRemoveTrack(menuItem.props.position - 1))}
       >
         Remove track from queue
       </Item>

@@ -33,12 +33,12 @@ const SortableItem = SortableElement(
       selected={selected}
       border
       style={style}
-      onContextMenu={() => onSelectRow({ scrollToRow: item.position - 1 })}
       onClick={() => onSelectRow({ scrollToRow: item.position - 1 })}
     >
       <PlaylistItem
         item={item}
         selected={selected}
+        onContextMenu={onSelectRow}
         handleRemoveTrack={handleRemoveTrack}
       />
     </ListItem>

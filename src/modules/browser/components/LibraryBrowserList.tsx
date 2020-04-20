@@ -7,6 +7,8 @@ import { AppTheme } from '../../../themes/types'
 interface ItemDisplayProps {
   item: any
   selected?: boolean
+  index: number
+  onContextMenu: (p: { scrollToRow: number; itemId: string }) => void
 }
 
 interface Props {
@@ -72,9 +74,13 @@ const LibraryBrowserList: FunctionComponent<InternalProps> = ({
         style={style}
         selected={selected.selected}
         onClick={() => selectRow({ scrollToRow: index, itemId: items[index].id })}
-        onContextMenu={() => selectRow({ scrollToRow: index, itemId: items[index].id })}
       >
-        <Display item={items[index]} selected={selected.selected} />
+        <Display
+          item={items[index]}
+          selected={selected.selected}
+          index={index}
+          onContextMenu={selectRow}
+        />
       </LibraryBrowserListItem>
     )
   }

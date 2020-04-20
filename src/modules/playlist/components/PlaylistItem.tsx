@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { MenuProvider as ContextMenuProvider } from 'react-contexify'
+import { contextMenu } from 'react-contexify'
 import ActionButtonIcon from 'common/components/ActionButtonIcon'
 import PlaylistItemType from '../types/PlaylistItem'
 
@@ -8,33 +8,46 @@ const PlaylistItem: FunctionComponent<{
   item: PlaylistItemType
   selected: boolean
   handleRemoveTrack: (position: number) => void
-}> = ({ item, handleRemoveTrack, selected = false }) => {
+  onContextMenu: (p: { scrollToRow: number }) => void
+}> = ({
+  item, handleRemoveTrack, onContextMenu, selected = false,
+}) => {
   const { track, position } = item
 
+  const onRightClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    onContextMenu({ scrollToRow: item.position - 1 })
+    contextMenu.show({
+      id: 'playlist-track-context-menu',
+      event: e,
+      props: {
+        data: item,
+      },
+    })
+  }
+
   return (
-    <ContextMenuProvider id="playlist-track-context-menu" data={item}>
-      <TrackWrapper>
-        <TrackFirstColumn className={selected ? 'selected' : ''}>
-          <div>{position}</div>
-        </TrackFirstColumn>
-        <TrackSecondColumn>
-          <div>{track.title}</div>
-          <TrackInfo className={selected ? 'selected' : ''}>
-            {track.artist?.name} -
-            <AlbumInfo>
-              {` ${track.album?.title}`}
-              {track.album?.year && ` (${track.album?.year})`}
-            </AlbumInfo>
-          </TrackInfo>
-        </TrackSecondColumn>
-        <TrackActions>
-          <ActionButtonIcon
-            icon="delete"
-            onClick={() => handleRemoveTrack(position)}
-          />
-        </TrackActions>
-      </TrackWrapper>
-    </ContextMenuProvider>
+    <TrackWrapper onContextMenu={onRightClick}>
+      <TrackFirstColumn className={selected ? 'selected' : ''}>
+        <div>{position}</div>
+      </TrackFirstColumn>
+      <div>
+        <div>{track.title}</div>
+        <TrackInfo className={selected ? 'selected' : ''}>
+          {track.artist?.name} -
+          <AlbumInfo>
+            {` ${track.album?.title}`}
+            {track.album?.year && ` (${track.album?.year})`}
+          </AlbumInfo>
+        </TrackInfo>
+      </div>
+      <TrackActions>
+        <ActionButtonIcon
+          icon="delete"
+          onClick={() => handleRemoveTrack(position)}
+        />
+      </TrackActions>
+    </TrackWrapper>
   )
 }
 
@@ -66,7 +79,6 @@ const TrackFirstColumn = styled.div`
   justify-self: center;
   color: ${(props) => props.theme.textSecondaryColor};
 `
-const TrackSecondColumn = styled.div``
 const TrackInfo = styled.div`
   font-size: 0.8em;
 `

@@ -1,18 +1,32 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
-import { MenuProvider as ContextMenuProvider } from 'react-contexify'
+import { contextMenu } from 'react-contexify'
 import Track from 'types/Track'
 
 const TrackTeaser: FunctionComponent<{
   item: Track
-}> = ({ item }) => (
-  <ContextMenuProvider id="track-context-menu" data={item}>
-    <TrackWrapper>
+  index: number
+  onContextMenu: (p: { scrollToRow: number; itemId: string }) => void
+}> = ({ item, index, onContextMenu }) => {
+  const onRightClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    onContextMenu({ scrollToRow: index, itemId: item.id })
+    contextMenu.show({
+      id: 'track-context-menu',
+      event: e,
+      props: {
+        data: item,
+      },
+    })
+  }
+
+  return (
+    <TrackWrapper onContextMenu={onRightClick}>
       <TrackTeaserNumber>{item.number}</TrackTeaserNumber>
       <TrackTeaserName>{item.title}</TrackTeaserName>
     </TrackWrapper>
-  </ContextMenuProvider>
-)
+  )
+}
 
 export default TrackTeaser
 

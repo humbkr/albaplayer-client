@@ -55,9 +55,12 @@ const PlaylistList = ({
         key={key}
         style={style}
         onClick={() => selectRow({ scrollToRow: index })}
-        onContextMenu={() => selectRow({ scrollToRow: index })}
       >
-        <PlaylistTeaser playlist={items[index]} />
+        <PlaylistTeaser
+          playlist={items[index]}
+          index={index}
+          onContextMenu={selectRow}
+        />
       </ListItem>
     )
   }
