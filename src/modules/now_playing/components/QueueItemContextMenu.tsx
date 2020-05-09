@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import {
   Menu as ContextMenu, Item, Separator, Submenu,
 } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
+import { MenuItemEventHandler } from 'react-contexify/lib/types'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   setItemFromQueue,
@@ -13,9 +14,19 @@ import {
   playlistsSelector,
   addTrack as addTrackToPlaylist,
 } from 'modules/playlist/redux'
+import Playlist from 'modules/playlist/types/Playlist'
+import { RootState } from 'store/types'
+import Track from '../../../types/Track'
 
-const QueueItemContextMenu = () => {
-  const playlists = useSelector((state) => playlistsSelector(state))
+interface MenuItemEventHandlerTrack extends MenuItemEventHandler {
+  props: {
+    position: number
+    track: Track
+  }
+}
+
+const QueueItemContextMenu: FunctionComponent = () => {
+  const playlists: Playlist[] = useSelector((state: RootState) => playlistsSelector(state))
   const dispatch = useDispatch()
 
   const handlePlayTrack = (position: number) => {
@@ -23,15 +34,23 @@ const QueueItemContextMenu = () => {
     dispatch(playerTogglePlayPause(true))
   }
 
-  const playlistsItems = playlists.map((item) => (
+  const handleAddTrackToPlaylist = (
+    menuItem: MenuItemEventHandlerTrack,
+    playlist: Playlist
+  ) => {
+    dispatch(
+      addTrackToPlaylist({
+        playlistId: playlist.id,
+        trackId: menuItem.props?.track?.id,
+      })
+    )
+  }
+
+  const playlistsItems = playlists.map((item: Playlist) => (
     <Item
       key={item.id}
-      onClick={(menuItem: any) => dispatch(
-        addTrackToPlaylist({
-          playlistId: item.id,
-          trackId: menuItem.props.data.id,
-        })
-      )}
+      // @ts-ignore
+      onClick={(menuItem: MenuItemEventHandlerTrack) => handleAddTrackToPlaylist(menuItem, item)}
     >
       {item.title}
     </Item>
@@ -40,12 +59,14 @@ const QueueItemContextMenu = () => {
   return (
     <ContextMenu id="queue-item-context-menu">
       <Item
-        onClick={(menuItem: any) => handlePlayTrack(menuItem.props.position - 1)}
+        // @ts-ignore
+        onClick={(menuItem: MenuItemEventHandlerTrack) => handlePlayTrack(menuItem.props?.position - 1)}
       >
         Play track
       </Item>
       <Item
-        onClick={(menuItem: any) => dispatch(queueRemoveTrack(menuItem.props.position - 1))}
+        // @ts-ignore
+        onClick={(menuItem: MenuItemEventHandlerTrack) => dispatch(queueRemoveTrack(menuItem.props?.position - 1))}
       >
         Remove track from queue
       </Item>

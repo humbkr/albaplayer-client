@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom'
 import Sidebar from 'common/components/Sidebar'
 import MainPanel from 'common/components/MainPanel'
 import { initLibrary } from './modules/library/redux'
-import MaterialIconsEot from './common/assets/fonts/MaterialIcons-Regular.eot'
 import MaterialIconsWoff2 from './common/assets/fonts/MaterialIcons-Regular.woff2'
 import MaterialIconsWoff from './common/assets/fonts/MaterialIcons-Regular.woff'
 import MaterialIconsTtf from './common/assets/fonts/MaterialIcons-Regular.ttf'
@@ -47,7 +46,6 @@ const GlobalStyle = createGlobalStyle<{ theme: AppTheme }>`
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(${MaterialIconsEot}); /* For IE6-8 */
   src: local('Material Icons'),
        local('MaterialIcons-Regular'),
        url(${MaterialIconsWoff2}) format('woff2'),
