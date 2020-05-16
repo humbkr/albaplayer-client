@@ -21,7 +21,7 @@ interface Props {
 
 interface InternalProps extends Props {
   theme: AppTheme
-  forwardedRef: Ref<HTMLElement>
+  forwardedRef: Ref<HTMLDivElement>
 }
 
 const LibraryBrowserList: FunctionComponent<InternalProps> = ({
@@ -88,7 +88,6 @@ const LibraryBrowserList: FunctionComponent<InternalProps> = ({
   return (
     <LibraryBrowserListWrapper onKeyDown={onKeyDown}>
       <ArrowKeyStepper
-        // This class is used to manage the focused style in LibraryBrowserPane.
         className="autosizer-wrapper"
         columnCount={1}
         rowCount={items.length}
@@ -105,29 +104,29 @@ const LibraryBrowserList: FunctionComponent<InternalProps> = ({
         }) => (
           <AutoSizer>
             {({ height, width }) => (
-              <List
-                // @ts-ignore
-                ref={forwardedRef}
-                width={width}
-                height={height}
-                rowHeight={parseInt(theme.itemHeight, 0)}
-                rowCount={items.length}
-                rowRenderer={({ key, index, style }) => rowRenderer({
-                  items,
-                  scrollToRow,
-                  key,
-                  index,
-                  style,
-                })}
-                onRowsRendered={({ startIndex, stopIndex }) => {
-                  // @ts-ignore
-                  onSectionRendered({
-                    rowStartIndex: startIndex,
-                    rowStopIndex: stopIndex,
-                  })
-                }}
-                scrollToIndex={scrollToRow}
-              />
+              <div ref={forwardedRef}>
+                <List
+                  width={width}
+                  height={height}
+                  rowHeight={parseInt(theme.itemHeight, 0)}
+                  rowCount={items.length}
+                  rowRenderer={({ key, index, style }) => rowRenderer({
+                    items,
+                    scrollToRow,
+                    key,
+                    index,
+                    style,
+                  })}
+                  onRowsRendered={({ startIndex, stopIndex }) => {
+                    // @ts-ignore
+                    onSectionRendered({
+                      rowStartIndex: startIndex,
+                      rowStopIndex: stopIndex,
+                    })
+                  }}
+                  scrollToIndex={scrollToRow}
+                />
+              </div>
             )}
           </AutoSizer>
         )}
@@ -138,7 +137,7 @@ const LibraryBrowserList: FunctionComponent<InternalProps> = ({
 
 const ThemedLibraryBrowserList = withTheme(LibraryBrowserList)
 
-export default React.forwardRef<HTMLElement, Props>((props, ref) => (
+export default React.forwardRef<HTMLDivElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <ThemedLibraryBrowserList {...props} forwardedRef={ref} />
 ))

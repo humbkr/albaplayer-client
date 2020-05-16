@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react'
-import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import TracksPaneContainer from 'modules/browser/components/TracksPaneContainer'
@@ -16,12 +15,12 @@ import { libraryBrowserInit } from 'modules/browser/redux'
  */
 function LibraryBrowser() {
   // Used to focus the search input at mount.
-  const searchBar = useRef(null)
+  const searchBar = useRef<HTMLInputElement>(null)
   // These refs are forwarded to the underlying react-virtualized
   // List components of each pane.
-  const artistsPane = useRef(null)
-  const albumsPane = useRef(null)
-  const tracksPane = useRef(null)
+  const artistsPane = useRef<HTMLDivElement>(null)
+  const albumsPane = useRef<HTMLDivElement>(null)
+  const tracksPane = useRef<HTMLDivElement>(null)
 
   const dispatch = useDispatch()
 
@@ -36,33 +35,24 @@ function LibraryBrowser() {
   const handleSwitchPaneArtists = (e: React.KeyboardEvent) => {
     if (e.keyCode === 39) {
       // @ts-ignore
-      // eslint-disable-next-line react/no-find-dom-node
-      ReactDOM.findDOMNode(albumsPane.current).focus()
+      albumsPane.current.children[0].focus()
     }
   }
 
   const handleSwitchPaneAlbums = (e: React.KeyboardEvent) => {
     if (e.keyCode === 37) {
       // @ts-ignore
-      // eslint-disable-next-line react/no-find-dom-node
-      ReactDOM.findDOMNode(artistsPane.current).focus()
-    } else if (
-      e.keyCode === 39
+      artistsPane.current.children[0].focus()
+    } else if (e.keyCode === 39 && tracksPane.current) {
       // @ts-ignore
-      // eslint-disable-next-line react/no-find-dom-node
-      && ReactDOM.findDOMNode(tracksPane.current)
-    ) {
-      // @ts-ignore
-      // eslint-disable-next-line react/no-find-dom-node
-      ReactDOM.findDOMNode(tracksPane.current).focus()
+      tracksPane.current.children[0].focus()
     }
   }
 
   const handleSwitchPaneTracks = (e: React.KeyboardEvent) => {
     if (e.keyCode === 37) {
       // @ts-ignore
-      // eslint-disable-next-line react/no-find-dom-node
-      ReactDOM.findDOMNode(albumsPane.current).focus()
+      albumsPane.current.children[0].focus()
     }
   }
 

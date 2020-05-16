@@ -20,7 +20,7 @@ interface Props {
 }
 
 interface InternalProps extends Props {
-  forwardedRef: Ref<HTMLElement>
+  forwardedRef: Ref<HTMLDivElement>
 }
 
 const TracksPaneContainer: FunctionComponent<InternalProps> = ({
@@ -107,7 +107,7 @@ const TracksPaneContainer: FunctionComponent<InternalProps> = ({
   )
 }
 
-export default React.forwardRef<HTMLElement, Props>((props, ref) => (
+export default React.forwardRef<HTMLDivElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <TracksPaneContainer {...props} forwardedRef={ref} />
 ))
