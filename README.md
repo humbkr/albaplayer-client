@@ -48,14 +48,12 @@ and thus follows its basic code structure.
 
 **Code style:**   
 
-This project uses [AirBNB javascript codestyle](https://github.com/airbnb/javascript) with minimal
-tweaks.
+This project uses [AirBNB javascript codestyle](https://github.com/airbnb/javascript) plus
+some tweaks.
 
 Jetbrains IDE setup: [https://www.themarketingtechnologist.co/eslint-with-airbnb-javascript-style-guide-in-webstorm/](https://www.themarketingtechnologist.co/eslint-with-airbnb-javascript-style-guide-in-webstorm/)
 
-## Development
-
-#### Jetbrains IDEs setup
+#### Jetbrains IDE setup
 This project uses absolute imports. To avoid Jetbrains IDEs to complain:
 - Right click on the /src folder > Mark directory as > Resources root
 - Menu > Settings > Editor > Code style > Javascript > Check "Use paths relative to the project, resource, or sources root"
@@ -82,6 +80,10 @@ access localhost:<port>.
 - To change the backend API url, see comments in the /.env file.
 - To run eslint on src/ run ``yarn lint``
 
+#### Known issues
+- Warning about findDOMNode in the console: see https://github.com/bvaughn/react-virtualized/issues/1353
+
+
 ## TODO
-- [ ] Write some tests
-- [ ] Improve perfs a little bit more
+- [ ] Write some tests for UI (redux tests done)
+- [ ] Improve perfs for library loading

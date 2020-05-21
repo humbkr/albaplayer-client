@@ -8,7 +8,7 @@ import { addPlaylist, playPlaylist } from 'modules/player/redux'
 import { addPlaylist as addPlaylistToPlaylist } from 'modules/playlist/redux'
 // eslint-disable-next-line import/no-cycle
 import { RootState } from 'store/types'
-import { EditPlaylistContext } from './PlaylistListPane'
+import { EditPlaylistContext } from '../scenes/Playlists'
 import Playlist from '../types/Playlist'
 
 const PlaylistContextMenu = () => {
@@ -48,7 +48,7 @@ const PlaylistContextMenu = () => {
           <Separator />
           <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
           <Separator />
-          <Item onClick={() => value('edit')}>Edit playlist...</Item>
+          <Item onClick={() => value('edit')}>Edit playlist</Item>
         </ContextMenu>
       )}
     </EditPlaylistContext.Consumer>

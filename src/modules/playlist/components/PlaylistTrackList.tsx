@@ -1,11 +1,8 @@
 import React, { FunctionComponent, Ref } from 'react'
 import styled, { withTheme } from 'styled-components'
 import { ArrowKeyStepper, AutoSizer, List } from 'react-virtualized'
-import {
-  arrayMove,
-  SortableContainer,
-  SortableElement,
-} from 'react-sortable-hoc'
+import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+import arrayMove from 'array-move'
 import ListItem from 'modules/playlist/components/ListItem'
 import PlaylistItem from 'modules/playlist/components/PlaylistItem'
 import { AppTheme } from 'themes/types'
@@ -48,7 +45,7 @@ const SortableItem = SortableElement(
 interface VirtualListProps {
   items: PlaylistItemType[]
   handleRemoveTrack: (position: number) => void
-  forwardedRef: Ref<HTMLElement>
+  forwardedRef: Ref<HTMLDivElement>
   height: number
   width: number
   scrollToRow: number
@@ -101,24 +98,24 @@ const VirtualList = ({
   }
 
   return (
-    <List
-      // @ts-ignore
-      ref={forwardedRef}
-      width={width}
-      height={height}
-      rowHeight={rowHeight}
-      rowCount={items.length}
-      rowRenderer={({ key, index, style }) => rowRenderer({
-        items,
-        scrollToRow,
-        // @ts-ignore
-        key,
-        index,
-        style,
-      })}
-      onRowsRendered={onRowsRendered}
-      scrollToIndex={scrollToRow}
-    />
+    <div ref={forwardedRef}>
+      <List
+        width={width}
+        height={height}
+        rowHeight={rowHeight}
+        rowCount={items.length}
+        rowRenderer={({ key, index, style }) => rowRenderer({
+          items,
+          scrollToRow,
+          // @ts-ignore
+          key,
+          index,
+          style,
+        })}
+        onRowsRendered={onRowsRendered}
+        scrollToIndex={scrollToRow}
+      />
+    </div>
   )
 }
 
@@ -140,7 +137,7 @@ interface PlaylistTrackListProps {
 
 interface PlaylistTrackListInternalProps extends PlaylistTrackListProps {
   theme: AppTheme
-  forwardedRef: Ref<HTMLElement>
+  forwardedRef: Ref<HTMLDivElement>
 }
 
 // Final list element.
@@ -223,7 +220,7 @@ const PlaylistTrackList: FunctionComponent<PlaylistTrackListInternalProps> = ({
 
 const ThemedPlaylistTrackList = withTheme(PlaylistTrackList)
 
-export default React.forwardRef<HTMLElement, PlaylistTrackListProps>(
+export default React.forwardRef<HTMLDivElement, PlaylistTrackListProps>(
   (props, ref) => (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <ThemedPlaylistTrackList {...props} forwardedRef={ref} />

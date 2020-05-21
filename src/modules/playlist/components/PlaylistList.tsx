@@ -15,7 +15,7 @@ interface Props {
 
 interface InternalProps extends Props {
   theme: AppTheme
-  forwardedRef: Ref<HTMLElement>
+  forwardedRef: Ref<HTMLDivElement>
 }
 
 const PlaylistList = ({
@@ -85,29 +85,31 @@ const PlaylistList = ({
         }) => (
           <AutoSizer>
             {({ height, width }) => (
-              <List
-                // @ts-ignore
-                ref={forwardedRef}
-                width={width}
-                height={height}
-                rowHeight={parseInt(theme.itemHeight, 0)}
-                rowCount={items.length}
-                rowRenderer={({ key, index, style }) => rowRenderer({
-                  items,
-                  scrollToRow,
-                  key,
-                  index,
-                  style,
-                })}
-                onRowsRendered={({ startIndex, stopIndex }) => {
+              <div ref={forwardedRef}>
+                <List
                   // @ts-ignore
-                  onSectionRendered({
-                    rowStartIndex: startIndex,
-                    rowStopIndex: stopIndex,
-                  })
-                }}
-                scrollToIndex={scrollToRow}
-              />
+                  ref={forwardedRef}
+                  width={width}
+                  height={height}
+                  rowHeight={parseInt(theme.itemHeight, 0)}
+                  rowCount={items.length}
+                  rowRenderer={({ key, index, style }) => rowRenderer({
+                    items,
+                    scrollToRow,
+                    key,
+                    index,
+                    style,
+                  })}
+                  onRowsRendered={({ startIndex, stopIndex }) => {
+                    // @ts-ignore
+                    onSectionRendered({
+                      rowStartIndex: startIndex,
+                      rowStopIndex: stopIndex,
+                    })
+                  }}
+                  scrollToIndex={scrollToRow}
+                />
+              </div>
             )}
           </AutoSizer>
         )}
@@ -118,7 +120,7 @@ const PlaylistList = ({
 
 const ThemedPlaylistList = withTheme(PlaylistList)
 
-export default React.forwardRef<HTMLElement, Props>((props, ref) => (
+export default React.forwardRef<HTMLDivElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <ThemedPlaylistList {...props} forwardedRef={ref} />
 ))

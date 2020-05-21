@@ -87,6 +87,7 @@ module.exports = {
     'no-confusing-arrow': ['warn', { 'allowParens': true }],
     'max-len': ['warn', { code: 120 }],
     'arrow-parens': ['warn', 'always'],
+    'arrow-body-style': ['warn'],
     'no-plusplus': ['off'],
     'comma-dangle': ['warn', {
       'arrays': 'always-multiline',

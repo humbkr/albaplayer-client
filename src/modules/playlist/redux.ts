@@ -5,6 +5,11 @@ import Track from '../../types/Track'
 import PlaylistItem from './types/PlaylistItem'
 import { AppThunk, RootState } from '../../store/types'
 
+export enum PlaylistPane {
+  Detail,
+  Fix,
+}
+
 export interface PlaylistsStateType {
   playlists: { [id: string]: Playlist }
   currentPlaylist: {
@@ -15,6 +20,7 @@ export interface PlaylistsStateType {
     id: string
     position: number
   }
+  currentPane: PlaylistPane
 }
 
 export const playlistsInitialState: PlaylistsStateType = {
@@ -27,6 +33,7 @@ export const playlistsInitialState: PlaylistsStateType = {
     id: '0',
     position: 0,
   },
+  currentPane: PlaylistPane.Detail,
 }
 
 const playlistSlice = createSlice({
@@ -42,6 +49,7 @@ const playlistSlice = createSlice({
         id: '0',
         position: 0,
       }
+      state.currentPane = PlaylistPane.Detail
     },
     playlistCreatePlaylist(state, action: PayloadAction<Playlist>) {
       const newList = { ...state.playlists }
@@ -188,6 +196,9 @@ const playlistSlice = createSlice({
         }
       }
     },
+    playlistChangePane(state, action: PayloadAction<PlaylistPane>) {
+      state.currentPane = action.payload
+    },
   },
 })
 
@@ -200,6 +211,7 @@ export const {
   playlistAddTracks,
   playlistUpdateItems,
   playlistUpdateInfo,
+  playlistChangePane,
 } = playlistSlice.actions
 export default playlistSlice.reducer
 

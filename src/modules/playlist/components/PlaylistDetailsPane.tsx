@@ -1,6 +1,7 @@
 import React, { FunctionComponent, Ref, useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
+import { contextMenu } from 'react-contexify'
 import ActionButtonIcon from 'common/components/ActionButtonIcon'
 import KeyboardNavPlayPopup from 'common/components/KeyboardNavPlayPopup'
 import {
@@ -14,20 +15,20 @@ import {
   playlistRemoveTrack,
   playlistSelectTrack,
   playlistUpdateItems,
-  playlistDeletePlaylist,
 } from 'modules/playlist/redux'
 import { RootState } from 'store/types'
 import PlaylistTrackList from './PlaylistTrackList'
 import PlaylistTrackContextMenu from './PlaylistTrackContextMenu'
 import PlaylistItem from '../types/PlaylistItem'
 import Playlist from '../types/Playlist'
+import PlaylistActionsMoreContextMenu from './PlaylistActionsMoreContextMenu'
 
 interface Props {
   switchPaneHandler: (e: React.KeyboardEvent) => void
 }
 
 interface InternalProps extends Props {
-  forwardedRef: Ref<HTMLElement>
+  forwardedRef: Ref<HTMLDivElement>
 }
 
 /**
@@ -92,6 +93,17 @@ const PlaylistDetailsPane: FunctionComponent<InternalProps> = ({
     }
   }
 
+  const handlePlaylistActionsMore = (e: React.MouseEvent) => {
+    e.preventDefault()
+    contextMenu.show({
+      id: 'playlist-actions-more-menu',
+      event: e,
+      props: {
+        playlist,
+      },
+    })
+  }
+
   // If no playlist is selected, display nothing.
   if (!playlist) {
     return null
@@ -108,31 +120,23 @@ const PlaylistDetailsPane: FunctionComponent<InternalProps> = ({
             </Subtitle>
           </Info>
           <Actions>
-            <PlaylistActionButtons
+            <PlaylistActionButton
               icon="play_arrow"
               size={30}
               onClick={() => handlePlaylistPlayNow(playlist)}
             />
-            <PlaylistActionButtons
+            <PlaylistActionButton
               icon="playlist_add"
               size={30}
               onClick={() => handlePlaylistAddToQueue(playlist)}
             />
-            <PlaylistActionButtons
-              icon="delete"
+            <PlaylistActionButton
+              icon="more_vert"
               size={25}
-              onClick={() => {
-                if (
-                  // eslint-disable-next-line no-alert
-                  window.confirm(
-                    'Are you sure you wish to delete this playlist?'
-                  )
-                ) {
-                  dispatch(playlistDeletePlaylist(playlist))
-                }
-              }}
+              onClick={handlePlaylistActionsMore}
             />
           </Actions>
+          <PlaylistActionsMoreContextMenu />
         </Header>
         <PlaylistTrackList
           playlistId={playlist.id}
@@ -158,16 +162,14 @@ const PlaylistDetailsPane: FunctionComponent<InternalProps> = ({
   )
 }
 
-export default React.forwardRef<HTMLElement, Props>((props, ref) => (
+export default React.forwardRef<HTMLDivElement, Props>((props, ref) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <PlaylistDetailsPane {...props} forwardedRef={ref} />
 ))
 
 const Wrapper = styled.div`
-  display: inline-block;
   vertical-align: top;
   overflow: hidden;
-  width: 66%;
   height: 100%;
 
   :focus-within {
@@ -196,7 +198,7 @@ const Header = styled.div`
 const Actions = styled.div`
   display: inline-block;
 `
-const PlaylistActionButtons = styled(ActionButtonIcon)`
+const PlaylistActionButton = styled(ActionButtonIcon)`
   color: ${(props) => props.theme.buttons.color};
 
   :hover {
