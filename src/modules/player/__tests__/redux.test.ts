@@ -24,6 +24,11 @@ import {
   queueSetCurrent,
   queueClear,
   queueAddTracks,
+  queueAddTracksAfterCurrent,
+  playTrackAfterCurrent,
+  playAlbumAfterCurrent,
+  playArtistAfterCurrent,
+  playPlaylistAfterCurrent,
 } from '../redux'
 import Track from '../../../types/Track'
 import { playlistsInitialState, PlaylistsStateType } from '../../playlist/redux'
@@ -493,6 +498,139 @@ describe('player (redux)', () => {
       store.dispatch(
         // @ts-ignore
         playPlaylist('temp_001')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('playTrackAfterCurrent thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+      })
+
+      api.getFullTrackInfo = jest.fn()
+
+      const expectedTrack = {
+        ...mockLibraryState.tracks['1'],
+        artist: mockLibraryState.tracks['1'].artistId
+          ? mockLibraryState.artists[mockLibraryState.tracks['1'].artistId]
+          : undefined,
+        album: mockLibraryState.tracks['1'].albumId
+          ? mockLibraryState.albums[mockLibraryState.tracks['1'].albumId]
+          : undefined,
+      }
+
+      const expected = [
+        queueAddTracksAfterCurrent([expectedTrack]),
+        // SetItemFromQueue(0),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        playTrackAfterCurrent('1')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('playAlbumAfterCurrent thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+      })
+
+      api.getFullTrackInfo = jest.fn()
+
+      const albumTracks = Object.values(mockLibraryState.tracks).filter(
+        (item) => item.albumId === '1'
+      )
+      const expectedTracks = albumTracks.map((item) => ({
+        ...item,
+        artist: item.artistId
+          ? mockLibraryState.artists[item.artistId]
+          : undefined,
+        album: item.albumId ? mockLibraryState.albums[item.albumId] : undefined,
+      }))
+
+      const expected = [
+        queueAddTracksAfterCurrent(expectedTracks),
+        // SetItemFromQueue(0),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        playAlbumAfterCurrent('1')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('playArtistAfterCurrent thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+      })
+
+      api.getFullTrackInfo = jest.fn()
+
+      const artistTracks = Object.values(mockLibraryState.tracks).filter(
+        (item) => item.artistId === '2'
+      )
+      const expectedTracks = artistTracks.map((item) => ({
+        ...item,
+        artist: item.artistId
+          ? mockLibraryState.artists[item.artistId]
+          : undefined,
+        album: item.albumId ? mockLibraryState.albums[item.albumId] : undefined,
+      }))
+
+      const expected = [
+        queueAddTracksAfterCurrent(expectedTracks),
+        // SetItemFromQueue(0),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        playArtistAfterCurrent('2')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('playPlaylistAfterCurrent thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+        playlist: mockPlaylistsState,
+      })
+
+      api.getFullTrackInfo = jest.fn()
+
+      const expectedTracks = mockPlaylistsState.playlists.temp_001.items.map(
+        (item) => ({
+          ...item.track,
+          artist: item.track.artistId
+            ? mockLibraryState.artists[item.track.artistId]
+            : undefined,
+          album: item.track.albumId
+            ? mockLibraryState.albums[item.track.albumId]
+            : undefined,
+        })
+      )
+
+      const expected = [
+        queueAddTracksAfterCurrent(expectedTracks),
+        // SetItemFromQueue(0),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        playPlaylistAfterCurrent('temp_001')
       )
       const actual = store.getActions()
       expect(actual).toEqual(expected)

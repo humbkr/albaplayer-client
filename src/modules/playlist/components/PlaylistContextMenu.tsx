@@ -4,7 +4,11 @@ import {
   Menu as ContextMenu, Item, Submenu, Separator,
 } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
-import { addPlaylist, playPlaylist } from 'modules/player/redux'
+import {
+  addPlaylist,
+  playPlaylist,
+  playPlaylistAfterCurrent,
+} from 'modules/player/redux'
 import { addPlaylist as addPlaylistToPlaylist } from 'modules/playlist/redux'
 // eslint-disable-next-line import/no-cycle
 import { RootState } from 'store/types'
@@ -13,7 +17,6 @@ import Playlist from '../types/Playlist'
 
 const PlaylistContextMenu = () => {
   const playlists = useSelector((state: RootState) => Object.values(state.playlist.playlists))
-
   const dispatch = useDispatch()
 
   // @ts-ignore
@@ -39,6 +42,11 @@ const PlaylistContextMenu = () => {
             onClick={(menuItem: any) => dispatch(playPlaylist(menuItem.props.data.id))}
           >
             Play now
+          </Item>
+          <Item
+            onClick={(menuItem: any) => dispatch(playPlaylistAfterCurrent(menuItem.props.data.id))}
+          >
+            Play after current track
           </Item>
           <Item
             onClick={(menuItem: any) => dispatch(addPlaylist(menuItem.props.data.id))}

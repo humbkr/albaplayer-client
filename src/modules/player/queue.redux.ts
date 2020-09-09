@@ -41,6 +41,16 @@ const queueSlice = createSlice({
     queueSetCurrent(state, action: PayloadAction<number>) {
       state.current = action.payload
     },
+    queueAddTracksAfterCurrent(state, action: PayloadAction<Track[]>) {
+      const queueItems = action.payload.map((track) => ({ track }))
+
+      if (state.current !== undefined) {
+        state.items.splice(state.current + 1, 0, ...queueItems)
+      } else {
+        // No item currently playing, add at the end of the queue.
+        state.items.push(...queueItems)
+      }
+    },
   },
 })
 

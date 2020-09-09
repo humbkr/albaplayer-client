@@ -24,6 +24,7 @@ export const {
   queueClear,
   queueReplace,
   queueSetCurrent,
+  queueAddTracksAfterCurrent,
 } = queueSlice.actions
 
 export const setItemFromQueue = (itemPosition: number): AppThunk => (
@@ -98,6 +99,64 @@ export const playPlaylist = (id: string): AppThunk => (dispatch, getState) => {
   dispatch(queueAddTracks(getTracksFromPlaylist(id, library, playlist)))
   dispatch(setItemFromQueue(0))
   dispatch(playerTogglePlayPause(true))
+}
+
+export const playTrackAfterCurrent = (id: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const { library, player } = getState()
+
+  const track = { ...library.tracks[id] }
+  track.artist = library.artists[track.artistId]
+  track.album = library.albums[track.albumId]
+
+  dispatch(queueAddTracksAfterCurrent([track]))
+
+  if (!player.track) {
+    dispatch(setItemFromQueue(0))
+  }
+}
+
+export const playAlbumAfterCurrent = (id: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const { library, player } = getState()
+
+  dispatch(queueAddTracksAfterCurrent(getTracksFromAlbum(id, library)))
+
+  if (!player.track) {
+    dispatch(setItemFromQueue(0))
+  }
+}
+
+export const playArtistAfterCurrent = (id: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const { library, player } = getState()
+
+  dispatch(queueAddTracksAfterCurrent(getTracksFromArtist(id, library)))
+
+  if (!player.track) {
+    dispatch(setItemFromQueue(0))
+  }
+}
+
+export const playPlaylistAfterCurrent = (id: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const { library, playlist, player } = getState()
+
+  dispatch(
+    queueAddTracksAfterCurrent(getTracksFromPlaylist(id, library, playlist))
+  )
+
+  if (!player.track) {
+    dispatch(setItemFromQueue(0))
+  }
 }
 
 export const addTrack = (id: string): AppThunk => (dispatch, getState) => {

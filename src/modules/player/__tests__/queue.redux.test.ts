@@ -7,6 +7,7 @@ const {
   queueClear,
   queueReplace,
   queueAddTracks,
+  queueAddTracksAfterCurrent,
 } = queueSlice.actions
 
 describe('queue reducer', () => {
@@ -174,6 +175,88 @@ describe('queue reducer', () => {
     ).toEqual({
       ...queueInitialState,
       current: 2,
+    })
+  })
+
+  it('should handle queueAddTracksAfterCurrent action', () => {
+    // Current track is defined.
+    const testState: QueueStateType = {
+      ...queueInitialState,
+      current: 0,
+      items: [
+        {
+          track: {
+            id: '1',
+            title: 'Track 1',
+            number: 1,
+            disc: '',
+            duration: 123,
+            cover: '',
+          },
+        },
+        {
+          track: {
+            id: '2',
+            title: 'Track 2',
+            number: 2,
+            disc: '',
+            duration: 124,
+            cover: '',
+          },
+        },
+      ],
+    }
+
+    const tracksToAdd: Track[] = [
+      {
+        id: '3',
+        title: 'Track 3',
+        number: 3,
+        disc: '',
+        duration: 123,
+        cover: '',
+      },
+      {
+        id: '4',
+        title: 'Track 4',
+        number: 4,
+        disc: '',
+        duration: 124,
+        cover: '',
+      },
+    ]
+
+    expect(
+      queueSlice.reducer(testState, {
+        type: queueAddTracksAfterCurrent.type,
+        payload: tracksToAdd,
+      })
+    ).toEqual({
+      ...testState,
+      items: [
+        testState.items[0],
+        ...tracksToAdd.map((item) => ({ track: item })),
+        testState.items[1],
+      ],
+    })
+
+    // No current track.
+    const testStateNoCurrent: QueueStateType = {
+      ...testState,
+      current: undefined,
+    }
+
+    expect(
+      queueSlice.reducer(testStateNoCurrent, {
+        type: queueAddTracksAfterCurrent.type,
+        payload: tracksToAdd,
+      })
+    ).toEqual({
+      ...testStateNoCurrent,
+      items: [
+        ...testStateNoCurrent.items,
+        ...tracksToAdd.map((item) => ({ track: item })),
+      ],
     })
   })
 })
