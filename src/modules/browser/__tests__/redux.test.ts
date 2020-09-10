@@ -25,6 +25,8 @@ import browserSlice, {
   getArtistsList,
   getAlbumsList,
   getTracksList,
+  libraryBrowserInit,
+  search,
 } from '../redux'
 
 const mockStore = configureMockStore([thunk])
@@ -126,7 +128,7 @@ const mockLibraryState: LibraryStateType = {
       duration: 164,
       cover: '',
       albumId: '4',
-      artistId: '1',
+      artistId: '34',
     },
   },
 }
@@ -435,6 +437,175 @@ describe('library browser (redux)', () => {
     })
   })
 
+  describe('libraryBrowserInit thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore()
+
+      const expected = [
+        {
+          payload: Object.values(mockLibraryState.artists),
+          type: 'libraryBrowser/libraryBrowserInitArtists',
+        },
+        {
+          payload: {
+            artistId: '0',
+            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredTracks: [],
+            index: 0,
+          },
+          type: 'libraryBrowser/libraryBrowserSelectArtist',
+        },
+        {
+          payload: {
+            albumId: '0',
+            filteredTracks: [],
+            index: 0,
+          },
+          type: 'libraryBrowser/libraryBrowserSelectAlbum',
+        },
+        {
+          payload: {
+            index: 0,
+            trackId: '0',
+          },
+          type: 'libraryBrowser/libraryBrowserSelectTrack',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        libraryBrowserInit()
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('search thunk', () => {
+    it('should dispatch correct actions when searching for 2 characters or more', () => {
+      const store = makeMockStore()
+
+      const expected = [
+        {
+          payload: 'corni',
+          type: 'libraryBrowser/libraryBrowserSearchUpdateInput',
+        },
+        {
+          payload: {
+            filteredAlbums: [
+              {
+                artistId: '3',
+                id: '2',
+                title: 'Album 2',
+                year: '2002',
+              },
+            ],
+            filteredArtists: [
+              {
+                id: '3',
+                name: 'Cornifer',
+              },
+            ],
+            filteredTracks: [
+              {
+                albumId: '2',
+                artistId: '3',
+                cover: '',
+                disc: '',
+                duration: 124,
+                id: '2',
+                number: 2,
+                title: 'I draw a map',
+              },
+            ],
+            searchTerm: 'corni',
+          },
+          type: 'libraryBrowser/libraryBrowserSearchFilter',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        search('corni')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+
+    it('should dispatch correct actions when searching for empty string', () => {
+      const store = makeMockStore()
+
+      const expected = [
+        {
+          payload: '',
+          type: 'libraryBrowser/libraryBrowserSearchUpdateInput',
+        },
+        {
+          payload: {
+            artistId: '0',
+            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredTracks: [],
+            index: 0,
+          },
+          type: 'libraryBrowser/libraryBrowserSelectArtist',
+        },
+        {
+          payload: Object.values(mockLibraryState.artists),
+          type: 'libraryBrowser/libraryBrowserInitArtists',
+        },
+        {
+          payload: {
+            artistId: '0',
+            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredTracks: [],
+            index: 0,
+          },
+          type: 'libraryBrowser/libraryBrowserSelectArtist',
+        },
+        {
+          payload: {
+            albumId: '0',
+            filteredTracks: [],
+            index: 0,
+          },
+          type: 'libraryBrowser/libraryBrowserSelectAlbum',
+        },
+        {
+          payload: {
+            index: 0,
+            trackId: '0',
+          },
+          type: 'libraryBrowser/libraryBrowserSelectTrack',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        search('')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+
+    it('should dispatch correct actions when searching for less than 2 characters', () => {
+      const store = makeMockStore()
+
+      const expected = [
+        {
+          payload: 'c',
+          type: 'libraryBrowser/libraryBrowserSearchUpdateInput',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        search('c')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
   describe('initArtists thunk', () => {
     it('should dispatch correct actions when not in search mode', () => {
       const store = makeMockStore()
@@ -618,7 +789,7 @@ describe('library browser (redux)', () => {
             (item) => item.artistId === '1'
           ),
           filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '1'
+            (item) => item.artistId === '34'
           ),
         }),
       ]
@@ -860,7 +1031,7 @@ describe('library browser (redux)', () => {
           albumId: '0',
           index: 0,
           filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '1'
+            (item) => item.artistId === '34'
           ),
         }),
       ]
@@ -874,7 +1045,7 @@ describe('library browser (redux)', () => {
     })
   })
 
-  describe('searchFiler thunk', () => {
+  describe('searchFilter thunk', () => {
     it('should dispatch correct actions when search matches a track', () => {
       const store = makeMockStore()
 
@@ -969,6 +1140,45 @@ describe('library browser (redux)', () => {
         mockLibraryState.tracks
       ).filter(
         (item) => item.artistId && filteredArtistIds.includes(item.artistId)
+      )
+
+      const expected = [
+        libraryBrowserSearchFilter({
+          searchTerm: testSearchTerm,
+          filteredArtists,
+          filteredAlbums,
+          filteredTracks,
+        }),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        searchFilter(testSearchTerm)
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+
+    it('should dispatch correct actions when searching for the special compilation artist', () => {
+      const store = makeMockStore()
+      const testSearchTerm = 'Various'
+
+      const filteredArtists = Object.values<Artist>(
+        mockLibraryState.artists
+      ).filter((item) => item.name.includes(testSearchTerm))
+      const filteredArtistIds = filteredArtists.map((item) => item.id)
+
+      const filteredAlbums = Object.values<Album>(
+        mockLibraryState.albums
+      ).filter(
+        (item) => item.artistId && filteredArtistIds.includes(item.artistId)
+      )
+
+      const filteredTracks = Object.values<Track>(
+        mockLibraryState.tracks
+      ).filter(
+        (item) => item.albumId
+          && filteredAlbums.map((album) => album.id).includes(item.albumId)
       )
 
       const expected = [
