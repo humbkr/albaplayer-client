@@ -33,8 +33,10 @@ const NowPlayingQueue: FunctionComponent<{ theme: AppTheme }> = ({ theme }) => {
 
   return (
     <>
-      <QueueTitle>Queue</QueueTitle>
-      <NowPlayingQueueActions />
+      <Header>
+        <QueueTitle>Queue</QueueTitle>
+        <NowPlayingQueueActions />
+      </Header>
       <NowPlayingQueueHeader />
       {items.length > 0 && (
         <NowPlayingQueueList
@@ -51,6 +53,11 @@ const NowPlayingQueue: FunctionComponent<{ theme: AppTheme }> = ({ theme }) => {
 
 export default withTheme(NowPlayingQueue)
 
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
 const QueueTitle = styled.h2`
   display: inline;
 `

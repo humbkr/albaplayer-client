@@ -1,9 +1,11 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { immutableNestedSort } from 'common/utils/utils'
+import { getRandomInt, immutableNestedSort } from 'common/utils/utils'
+import dayjs from 'dayjs'
 import Playlist from './types/Playlist'
 import Track from '../../types/Track'
 import PlaylistItem from './types/PlaylistItem'
 import { AppThunk, RootState } from '../../store/types'
+import QueueItem from '../player/types/QueueItem'
 
 export enum PlaylistPane {
   Detail,
@@ -215,11 +217,15 @@ export const {
 } = playlistSlice.actions
 export default playlistSlice.reducer
 
+/**
+ * Adds a track to a given playlist or create a new playlist with this track if no playlist id
+ * is provided.
+ */
 export const addTrack = ({
   playlistId,
   trackId,
 }: {
-  playlistId: string
+  playlistId?: string
   trackId: string
 }): AppThunk => (dispatch, getState) => {
   const { library } = getState()
@@ -230,14 +236,22 @@ export const addTrack = ({
   track.artist = library.artists[track.artistId]
   track.album = library.albums[track.albumId]
 
-  dispatch(playlistAddTracks({ playlistId, tracks: [track] }))
+  if (playlistId) {
+    dispatch(playlistAddTracks({ playlistId, tracks: [track] }))
+  } else {
+    dispatch(createPlaylist({ name: 'New playlist', tracks: [track] }))
+  }
 }
 
+/**
+ * Adds an album to a given playlist or create a new playlist with this album if no playlist id
+ * is provided.
+ */
 export const addAlbum = ({
   playlistId,
   albumId,
 }: {
-  playlistId: string
+  playlistId?: string
   albumId: string
 }): AppThunk => (dispatch, getState) => {
   const { library } = getState()
@@ -254,14 +268,22 @@ export const addAlbum = ({
     album: library.albums[track.albumId],
   }))
 
-  dispatch(playlistAddTracks({ playlistId, tracks: augmentedTracks }))
+  if (playlistId) {
+    dispatch(playlistAddTracks({ playlistId, tracks: augmentedTracks }))
+  } else {
+    dispatch(createPlaylist({ name: 'New playlist', tracks: augmentedTracks }))
+  }
 }
 
+/**
+ * Adds an artist to a given playlist or create a new playlist with this artist if no playlist id
+ * is provided.
+ */
 export const addArtist = ({
   playlistId,
   artistId,
 }: {
-  playlistId: string
+  playlistId?: string
   artistId: string
 }): AppThunk => (dispatch, getState) => {
   const { library } = getState()
@@ -278,23 +300,95 @@ export const addArtist = ({
     album: library.albums[track.albumId],
   }))
 
-  dispatch(playlistAddTracks({ playlistId, tracks: augmentedTracks }))
+  if (playlistId) {
+    dispatch(playlistAddTracks({ playlistId, tracks: augmentedTracks }))
+  } else {
+    dispatch(createPlaylist({ name: 'New playlist', tracks: augmentedTracks }))
+  }
 }
 
+/**
+ * Adds a playlist to a given playlist or create a copy of this playlist if no playlist id
+ * is provided.
+ */
 export const addPlaylist = ({
   playlistId,
   playlistToAddId,
 }: {
-  playlistId: string
+  playlistId?: string
   playlistToAddId: string
 }): AppThunk => (dispatch, getState) => {
   const { playlist } = getState()
+
+  const tracks = playlist.playlists[playlistToAddId].items.map(
+    (item: PlaylistItem) => item.track
+  )
+
+  if (playlistId) {
+    dispatch(
+      playlistAddTracks({
+        playlistId,
+        tracks,
+      })
+    )
+  } else {
+    dispatch(
+      createPlaylist({
+        name: `Copy of ${playlist.playlists[playlistToAddId].title}`,
+        tracks,
+      })
+    )
+  }
+}
+
+/**
+ * Adds the current queue to a given playlist or create a new playlist with the queue if no
+ * playlist id is provided.
+ */
+export const addCurrentQueue = ({
+  playlistId,
+}: {
+  playlistId?: string
+}): AppThunk => (dispatch, getState) => {
+  const { queue } = getState()
+
+  const tracks = queue.items.map((item: QueueItem) => item.track)
+
+  if (playlistId) {
+    dispatch(
+      playlistAddTracks({
+        playlistId,
+        tracks,
+      })
+    )
+  } else {
+    dispatch(
+      createPlaylist({
+        name: 'New playlist from queue',
+        tracks,
+      })
+    )
+  }
+}
+
+export const createPlaylist = ({
+  name,
+  tracks,
+}: {
+  name: string
+  tracks: Track[]
+}): AppThunk => (dispatch) => {
+  const playlistItems = tracks.map((item: Track, index: number) => ({
+    track: item,
+    position: index + 1,
+  }))
+
   dispatch(
-    playlistAddTracks({
-      playlistId,
-      tracks: playlist.playlists[playlistToAddId].items.map(
-        (item: PlaylistItem) => item.track
-      ),
+    playlistCreatePlaylist({
+      id: `temp_${getRandomInt(1, 100000)}`,
+      title: name,
+      date: dayjs().format('YYYY-MM-DD'),
+      items: playlistItems,
     })
   )
 }
