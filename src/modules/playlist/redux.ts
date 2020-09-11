@@ -5,7 +5,7 @@ import Playlist from './types/Playlist'
 import Track from '../../types/Track'
 import PlaylistItem from './types/PlaylistItem'
 import { AppThunk, RootState } from '../../store/types'
-import QueueItem from '../player/types/QueueItem'
+import { QueueItem } from '../player/types'
 
 export enum PlaylistPane {
   Detail,

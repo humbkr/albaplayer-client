@@ -32,6 +32,7 @@ const NowPlayingQueueActions = () => {
         icon="more_vert"
         size={25}
         onClick={handleQueueActionsMore}
+        testId="queue-actions-more"
       />
       <QueueActionsMoreContextMenu />
     </QueueActionsWrapper>

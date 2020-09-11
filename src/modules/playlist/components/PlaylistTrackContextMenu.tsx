@@ -70,7 +70,7 @@ const PlaylistTrackContextMenu = () => {
         onClick={(menuItem: any) => dispatch(
           playlistRemoveTrack({
             playlistId: currentPlaylist.id,
-            trackPosition: menuItem.props.position,
+            trackPosition: menuItem.props.data.position,
           })
         )}
       >
