@@ -3,22 +3,7 @@ import configureMockStore from 'redux-mock-store'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import thunk from 'redux-thunk'
 import { api } from 'api'
-import playerSlice, {
-  playerInitialState,
-  playerTogglePlayPause,
-  playerToggleShuffle,
-  playerToggleRepeat,
-  playerSetVolume,
-  playerSetTrack,
-  playerSetDuration,
-  playerSetProgress,
-  queueInitialState,
-  queueStateType,
-  queueAddTracks,
-  queueRemoveTrack,
-  queueClear,
-  queueReplace,
-  queueSetCurrent,
+import {
   setItemFromQueue,
   playTrack,
   playAlbum,
@@ -30,14 +15,28 @@ import playerSlice, {
   addPlaylist,
   setNextTrack,
   setPreviousTrack,
-  setCycleNumPos,
   getTracksFromArtist,
   getTracksFromPlaylist,
   getTracksFromAlbum,
+  playerSetTrack,
+  playerTogglePlayPause,
+  playerSetProgress,
+  queueSetCurrent,
+  queueClear,
+  queueAddTracks,
+  queueAddTracksAfterCurrent,
+  playTrackAfterCurrent,
+  playAlbumAfterCurrent,
+  playArtistAfterCurrent,
+  playPlaylistAfterCurrent,
 } from '../redux'
-import constants from '../constants'
 import Track from '../../../types/Track'
 import { playlistsInitialState, PlaylistsStateType } from '../../playlist/redux'
+
+import { PlayerPlaybackMode } from '../types'
+import { setCycleNumPos } from '../utils'
+import { playerInitialState } from '../player.redux'
+import { queueInitialState } from '../queue.redux'
 
 jest.mock('api')
 
@@ -183,372 +182,6 @@ const mockPlaylistsState: PlaylistsStateType = {
 }
 
 describe('player (redux)', () => {
-  describe('player reducer', () => {
-    it('should handle player initial state', () => {
-      // @ts-ignore
-      expect(playerSlice.player(undefined, {})).toEqual(playerInitialState)
-    })
-
-    it('should handle playerTogglePlayPause action', () => {
-      // No track in player, no forced value.
-      expect(
-        playerSlice.player(playerInitialState, {
-          type: playerTogglePlayPause.type,
-        })
-      ).toEqual({
-        ...playerInitialState,
-        playing: false,
-      })
-
-      // Track in player, no forced value.
-      expect(
-        playerSlice.player(
-          {
-            ...playerInitialState,
-            track: mockLibraryState.tracks['1'],
-          },
-          {
-            type: playerTogglePlayPause.type,
-          }
-        )
-      ).toEqual({
-        ...playerInitialState,
-        track: mockLibraryState.tracks['1'],
-        playing: true,
-      })
-
-      // Track in player, no forced value, already playing.
-      expect(
-        playerSlice.player(
-          {
-            ...playerInitialState,
-            track: mockLibraryState.tracks['1'],
-            playing: true,
-          },
-          {
-            type: playerTogglePlayPause.type,
-          }
-        )
-      ).toEqual({
-        ...playerInitialState,
-        track: mockLibraryState.tracks['1'],
-        playing: false,
-      })
-
-      // No track in player, forced value true.
-      expect(
-        playerSlice.player(playerInitialState, {
-          type: playerTogglePlayPause.type,
-          payload: true,
-        })
-      ).toEqual({
-        ...playerInitialState,
-        playing: true,
-      })
-
-      // No track in player, forced value false.
-      expect(
-        playerSlice.player(
-          {
-            ...playerInitialState,
-            playing: true,
-          },
-          {
-            type: playerTogglePlayPause.type,
-            payload: false,
-          }
-        )
-      ).toEqual({
-        ...playerInitialState,
-        playing: false,
-      })
-    })
-
-    it('should handle playerToggleShuffle action', () => {
-      expect(
-        playerSlice.player(playerInitialState, {
-          type: playerToggleShuffle.type,
-        })
-      ).toEqual({
-        ...playerInitialState,
-        shuffle: true,
-      })
-
-      expect(
-        playerSlice.player(
-          {
-            ...playerInitialState,
-            shuffle: true,
-          },
-          {
-            type: playerToggleShuffle.type,
-          }
-        )
-      ).toEqual({
-        ...playerInitialState,
-        shuffle: false,
-      })
-    })
-
-    it('should handle playerToggleRepeat action', () => {
-      expect(
-        playerSlice.player(playerInitialState, {
-          type: playerToggleRepeat.type,
-        })
-      ).toEqual({
-        ...playerInitialState,
-        repeat: constants.PLAYER_REPEAT_LOOP_ALL,
-      })
-
-      expect(
-        playerSlice.player(
-          {
-            ...playerInitialState,
-            repeat: constants.PLAYER_REPEAT_LOOP_ALL,
-          },
-          {
-            type: playerToggleRepeat.type,
-          }
-        )
-      ).toEqual({
-        ...playerInitialState,
-        repeat: constants.PLAYER_REPEAT_LOOP_ONE,
-      })
-
-      expect(
-        playerSlice.player(
-          {
-            ...playerInitialState,
-            repeat: constants.PLAYER_REPEAT_LOOP_ONE,
-          },
-          {
-            type: playerToggleRepeat.type,
-          }
-        )
-      ).toEqual({
-        ...playerInitialState,
-        repeat: constants.PLAYER_REPEAT_NO_REPEAT,
-      })
-    })
-
-    it('should handle playerSetVolume action', () => {
-      expect(
-        playerSlice.player(playerInitialState, {
-          type: playerSetVolume.type,
-          payload: 42,
-        })
-      ).toEqual({
-        ...playerInitialState,
-        volume: 42,
-      })
-    })
-
-    it('should handle playerSetTrack action', () => {
-      expect(
-        playerSlice.player(playerInitialState, {
-          type: playerSetTrack.type,
-          payload: mockLibraryState.tracks[0],
-        })
-      ).toEqual({
-        ...playerInitialState,
-        track: mockLibraryState.tracks[0],
-      })
-    })
-
-    it('should handle playerSetDuration action', () => {
-      expect(
-        playerSlice.player(playerInitialState, {
-          type: playerSetDuration.type,
-          payload: 134,
-        })
-      ).toEqual({
-        ...playerInitialState,
-        duration: 134,
-      })
-    })
-
-    it('should handle playerSetProgress action', () => {
-      expect(
-        playerSlice.player(playerInitialState, {
-          type: playerSetProgress.type,
-          payload: 120,
-        })
-      ).toEqual({
-        ...playerInitialState,
-        progress: 120,
-      })
-    })
-  })
-
-  describe('queue reducer', () => {
-    it('should handle queue initial state', () => {
-      // @ts-ignore
-      expect(playerSlice.queue(undefined, {})).toEqual(queueInitialState)
-    })
-
-    it('should handle queueAddTracks action', () => {
-      const tracksToAdd: Track[] = [
-        {
-          id: '1',
-          title: 'Track 1',
-          number: 1,
-          disc: '',
-          duration: 123,
-          cover: '',
-        },
-        {
-          id: '2',
-          title: 'Track 2',
-          number: 2,
-          disc: '',
-          duration: 124,
-          cover: '',
-        },
-      ]
-
-      expect(
-        playerSlice.queue(queueInitialState, {
-          type: queueAddTracks.type,
-          payload: tracksToAdd,
-        })
-      ).toEqual({
-        ...queueInitialState,
-        items: tracksToAdd.map((item) => ({ track: item })),
-      })
-    })
-
-    it('should handle queueRemoveTrack action', () => {
-      const testState: queueStateType = {
-        ...queueInitialState,
-        current: 1,
-        items: [
-          {
-            track: {
-              id: '1',
-              title: 'Track 1',
-              number: 1,
-              disc: '',
-              duration: 123,
-              cover: '',
-            },
-          },
-          {
-            track: {
-              id: '2',
-              title: 'Track 2',
-              number: 2,
-              disc: '',
-              duration: 124,
-              cover: '',
-            },
-          },
-        ],
-      }
-
-      expect(
-        playerSlice.queue(testState, {
-          type: queueRemoveTrack.type,
-          payload: 0,
-        })
-      ).toEqual({
-        ...queueInitialState,
-        current: 0,
-        items: [
-          {
-            track: {
-              id: '2',
-              title: 'Track 2',
-              number: 2,
-              disc: '',
-              duration: 124,
-              cover: '',
-            },
-          },
-        ],
-      })
-    })
-
-    it('should handle queueClear action', () => {
-      const testState: queueStateType = {
-        ...queueInitialState,
-        current: 1,
-        items: [
-          {
-            track: {
-              id: '1',
-              title: 'Track 1',
-              number: 1,
-              disc: '',
-              duration: 123,
-              cover: '',
-            },
-          },
-        ],
-      }
-
-      expect(
-        playerSlice.queue(testState, {
-          type: queueClear.type,
-        })
-      ).toEqual(queueInitialState)
-    })
-
-    it('should handle queueReplace action', () => {
-      const testState: queueStateType = {
-        ...queueInitialState,
-        current: 1,
-        items: [
-          {
-            track: {
-              id: '1',
-              title: 'Track 1',
-              number: 1,
-              disc: '',
-              duration: 123,
-              cover: '',
-            },
-          },
-        ],
-      }
-
-      const replacementItems = [
-        {
-          track: {
-            id: '2',
-            title: 'Track 2',
-            number: 2,
-            disc: '',
-            duration: 124,
-            cover: '',
-          },
-        },
-      ]
-
-      expect(
-        playerSlice.queue(testState, {
-          type: queueReplace.type,
-          payload: replacementItems,
-        })
-      ).toEqual({
-        ...queueInitialState,
-        current: 1,
-        items: replacementItems,
-      })
-    })
-
-    it('should handle queueSetCurrent action', () => {
-      expect(
-        playerSlice.queue(queueInitialState, {
-          type: queueSetCurrent.type,
-          payload: 2,
-        })
-      ).toEqual({
-        ...queueInitialState,
-        current: 2,
-      })
-    })
-  })
-
   describe('setItemFromQueue thunk', () => {
     it('should handle trying to set a track at position 0 of an empty queue', () => {
       const store = makeMockStore()
@@ -871,6 +504,139 @@ describe('player (redux)', () => {
     })
   })
 
+  describe('playTrackAfterCurrent thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+      })
+
+      api.getFullTrackInfo = jest.fn()
+
+      const expectedTrack = {
+        ...mockLibraryState.tracks['1'],
+        artist: mockLibraryState.tracks['1'].artistId
+          ? mockLibraryState.artists[mockLibraryState.tracks['1'].artistId]
+          : undefined,
+        album: mockLibraryState.tracks['1'].albumId
+          ? mockLibraryState.albums[mockLibraryState.tracks['1'].albumId]
+          : undefined,
+      }
+
+      const expected = [
+        queueAddTracksAfterCurrent([expectedTrack]),
+        // SetItemFromQueue(0),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        playTrackAfterCurrent('1')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('playAlbumAfterCurrent thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+      })
+
+      api.getFullTrackInfo = jest.fn()
+
+      const albumTracks = Object.values(mockLibraryState.tracks).filter(
+        (item) => item.albumId === '1'
+      )
+      const expectedTracks = albumTracks.map((item) => ({
+        ...item,
+        artist: item.artistId
+          ? mockLibraryState.artists[item.artistId]
+          : undefined,
+        album: item.albumId ? mockLibraryState.albums[item.albumId] : undefined,
+      }))
+
+      const expected = [
+        queueAddTracksAfterCurrent(expectedTracks),
+        // SetItemFromQueue(0),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        playAlbumAfterCurrent('1')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('playArtistAfterCurrent thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+      })
+
+      api.getFullTrackInfo = jest.fn()
+
+      const artistTracks = Object.values(mockLibraryState.tracks).filter(
+        (item) => item.artistId === '2'
+      )
+      const expectedTracks = artistTracks.map((item) => ({
+        ...item,
+        artist: item.artistId
+          ? mockLibraryState.artists[item.artistId]
+          : undefined,
+        album: item.albumId ? mockLibraryState.albums[item.albumId] : undefined,
+      }))
+
+      const expected = [
+        queueAddTracksAfterCurrent(expectedTracks),
+        // SetItemFromQueue(0),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        playArtistAfterCurrent('2')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('playPlaylistAfterCurrent thunk', () => {
+    it('should dispatch correct actions', () => {
+      const store = makeMockStore({
+        library: mockLibraryState,
+        playlist: mockPlaylistsState,
+      })
+
+      api.getFullTrackInfo = jest.fn()
+
+      const expectedTracks = mockPlaylistsState.playlists.temp_001.items.map(
+        (item) => ({
+          ...item.track,
+          artist: item.track.artistId
+            ? mockLibraryState.artists[item.track.artistId]
+            : undefined,
+          album: item.track.albumId
+            ? mockLibraryState.albums[item.track.albumId]
+            : undefined,
+        })
+      )
+
+      const expected = [
+        queueAddTracksAfterCurrent(expectedTracks),
+        // SetItemFromQueue(0),
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        playPlaylistAfterCurrent('temp_001')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
   describe('addTrack thunk', () => {
     it('should dispatch correct actions', () => {
       const store = makeMockStore({
@@ -1077,7 +843,7 @@ describe('player (redux)', () => {
         player: {
           ...playerInitialState,
           playing: true,
-          repeat: constants.PLAYER_REPEAT_LOOP_ONE,
+          repeat: PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ONE,
           track: mockLibraryState.tracks['2'],
         },
         queue: {
@@ -1224,7 +990,7 @@ describe('player (redux)', () => {
         player: {
           ...playerInitialState,
           playing: true,
-          repeat: constants.PLAYER_REPEAT_LOOP_ALL,
+          repeat: PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ALL,
           track: mockLibraryState.tracks['2'],
         },
         queue: {
@@ -1353,7 +1119,7 @@ describe('player (redux)', () => {
         player: {
           ...playerInitialState,
           playing: true,
-          repeat: constants.PLAYER_REPEAT_LOOP_ONE,
+          repeat: PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ONE,
           track: mockLibraryState.tracks['2'],
         },
         queue: {
@@ -1500,7 +1266,7 @@ describe('player (redux)', () => {
         player: {
           ...playerInitialState,
           playing: true,
-          repeat: constants.PLAYER_REPEAT_LOOP_ALL,
+          repeat: PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ALL,
           track: mockLibraryState.tracks['1'],
         },
         queue: {

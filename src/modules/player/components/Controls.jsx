@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { PlayerPlaybackMode } from 'modules/player/types'
 import * as Buttons from './buttons'
-import constants from '../constants'
 import VolumeContainer from './VolumeContainer'
 
 const Controls = ({
@@ -32,14 +32,14 @@ const Controls = ({
   let RepeatButton
   let repeatButtonEnabled = false
   switch (repeat) {
-    case constants.PLAYER_REPEAT_NO_REPEAT:
+    case PlayerPlaybackMode.PLAYER_REPEAT_NO_REPEAT:
       RepeatButton = Buttons.CycleBtn
       break
-    case constants.PLAYER_REPEAT_LOOP_ALL:
+    case PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ALL:
       RepeatButton = Buttons.CycleBtn
       repeatButtonEnabled = true
       break
-    case constants.PLAYER_REPEAT_LOOP_ONE:
+    case PlayerPlaybackMode.PLAYER_REPEAT_LOOP_ONE:
       RepeatButton = Buttons.RepeatBtn
       repeatButtonEnabled = true
       break

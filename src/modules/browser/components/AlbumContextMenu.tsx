@@ -4,7 +4,11 @@ import {
   Menu as ContextMenu, Item, Submenu, Separator,
 } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.min.css'
-import { addAlbum, playAlbum } from 'modules/player/redux'
+import {
+  addAlbum,
+  playAlbum,
+  playAlbumAfterCurrent,
+} from 'modules/player/redux'
 import {
   playlistsSelector,
   addAlbum as addAlbumToPlaylist,
@@ -43,6 +47,11 @@ const AlbumContextMenu = () => {
         onClick={(menuItem: any) => dispatch(playAlbum(menuItem.props.data.id))}
       >
         Play now
+      </Item>
+      <Item
+        onClick={(menuItem: any) => dispatch(playAlbumAfterCurrent(menuItem.props.data.id))}
+      >
+        Play after current track
       </Item>
       <Item
         onClick={(menuItem: any) => dispatch(addAlbum(menuItem.props.data.id))}

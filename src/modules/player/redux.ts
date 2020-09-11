@@ -1,114 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { api, constants as APIConstants } from 'api'
-import { immutableRemove, immutableSortTracks } from 'common/utils/utils'
+import { immutableSortTracks } from 'common/utils/utils'
 import Track from 'types/Track'
 import { AppThunk } from 'store/types'
-import QueueItem from './types/QueueItem'
-import constants from './constants'
 import { LibraryStateType } from '../library/redux'
 import { PlaylistsStateType } from '../playlist/redux'
+import playerSlice from './player.redux'
+import queueSlice from './queue.redux'
+import { PlayerPlaybackMode } from './types'
 
-enum PlayerPlaybackMode {
-  PLAYER_REPEAT_NO_REPEAT = constants.PLAYER_REPEAT_NO_REPEAT,
-  PLAYER_REPEAT_LOOP_ALL = constants.PLAYER_REPEAT_LOOP_ALL,
-  PLAYER_REPEAT_LOOP_ONE = constants.PLAYER_REPEAT_LOOP_ONE,
-}
-
-export interface playerStateType {
-  // Controls and audio state.
-  playing: boolean
-  repeat: PlayerPlaybackMode
-  shuffle: boolean
-  volume: number
-  volumeMuted: number
-  duration: number
-  progress: number
-  // Track currently loaded in audio.
-  track?: Track
-}
-
-export interface queueStateType {
-  items: QueueItem[]
-  current?: number
-}
-
-export const playerInitialState: playerStateType = {
-  playing: false,
-  repeat: PlayerPlaybackMode.PLAYER_REPEAT_NO_REPEAT,
-  shuffle: false,
-  volume: 1,
-  volumeMuted: 1,
-  duration: 0,
-  progress: 0,
-  track: undefined,
-}
-
-const playerSlice = createSlice({
-  name: 'player',
-  initialState: playerInitialState,
-  reducers: {
-    playerTogglePlayPause(state, action: PayloadAction<boolean>) {
-      if (state.track || action.payload !== undefined) {
-        state.playing = action.payload === undefined ? !state.playing : action.payload
-      }
-    },
-    playerToggleShuffle(state) {
-      state.shuffle = !state.shuffle
-    },
-    playerToggleRepeat(state) {
-      state.repeat = setCycleNumPos(state.repeat, 1, 3)
-    },
-    playerSetVolume(state, action: PayloadAction<number>) {
-      state.volume = action.payload
-    },
-    playerSetTrack(state, action: PayloadAction<Track>) {
-      state.track = action.payload
-    },
-    playerSetDuration(state, action: PayloadAction<number>) {
-      state.duration = action.payload
-    },
-    playerSetProgress(state, action: PayloadAction<number>) {
-      state.progress = action.payload
-    },
-  },
-})
-
-export const queueInitialState: queueStateType = {
-  items: [],
-  current: undefined,
-}
-
-const queueSlice = createSlice({
-  name: 'queue',
-  initialState: queueInitialState,
-  reducers: {
-    queueAddTracks(state, action: PayloadAction<Track[]>) {
-      const queueItems = action.payload.map((track) => ({ track }))
-      state.items.push(...queueItems)
-    },
-    queueRemoveTrack(state, action: PayloadAction<number>) {
-      const itemIndex = action.payload
-
-      let nextCurrent = state.current
-      if (nextCurrent && itemIndex <= nextCurrent) {
-        nextCurrent -= 1
-      }
-
-      state.items = immutableRemove(state.items, itemIndex)
-      state.current = nextCurrent
-    },
-    queueClear() {
-      return queueInitialState
-    },
-    queueReplace(state, action: PayloadAction<QueueItem[]>) {
-      state.items = action.payload
-    },
-    queueSetCurrent(state, action: PayloadAction<number>) {
-      state.current = action.payload
-    },
-  },
-})
-
+export default { player: playerSlice.reducer, queue: queueSlice.reducer }
 export const {
   playerTogglePlayPause,
   playerToggleShuffle,
@@ -124,8 +24,8 @@ export const {
   queueClear,
   queueReplace,
   queueSetCurrent,
+  queueAddTracksAfterCurrent,
 } = queueSlice.actions
-export default { player: playerSlice.reducer, queue: queueSlice.reducer }
 
 export const setItemFromQueue = (itemPosition: number): AppThunk => (
   dispatch,
@@ -199,6 +99,64 @@ export const playPlaylist = (id: string): AppThunk => (dispatch, getState) => {
   dispatch(queueAddTracks(getTracksFromPlaylist(id, library, playlist)))
   dispatch(setItemFromQueue(0))
   dispatch(playerTogglePlayPause(true))
+}
+
+export const playTrackAfterCurrent = (id: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const { library, player } = getState()
+
+  const track = { ...library.tracks[id] }
+  track.artist = library.artists[track.artistId]
+  track.album = library.albums[track.albumId]
+
+  dispatch(queueAddTracksAfterCurrent([track]))
+
+  if (!player.track) {
+    dispatch(setItemFromQueue(0))
+  }
+}
+
+export const playAlbumAfterCurrent = (id: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const { library, player } = getState()
+
+  dispatch(queueAddTracksAfterCurrent(getTracksFromAlbum(id, library)))
+
+  if (!player.track) {
+    dispatch(setItemFromQueue(0))
+  }
+}
+
+export const playArtistAfterCurrent = (id: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const { library, player } = getState()
+
+  dispatch(queueAddTracksAfterCurrent(getTracksFromArtist(id, library)))
+
+  if (!player.track) {
+    dispatch(setItemFromQueue(0))
+  }
+}
+
+export const playPlaylistAfterCurrent = (id: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const { library, playlist, player } = getState()
+
+  dispatch(
+    queueAddTracksAfterCurrent(getTracksFromPlaylist(id, library, playlist))
+  )
+
+  if (!player.track) {
+    dispatch(setItemFromQueue(0))
+  }
 }
 
 export const addTrack = (id: string): AppThunk => (dispatch, getState) => {
@@ -366,34 +324,6 @@ export const setPreviousTrack = (): AppThunk => (dispatch, getState) => {
     dispatch(playerSetTrack(track))
     dispatch(queueSetCurrent(newQueuePosition))
   })
-}
-
-/*
- * Computes the next / previous position in an list of consecutive integers
- * when looping.
- *
- * @param currentPosition integer
- *   The current value in the list.
- * @param change integer
- *   The number of positions you want to switch from. Negative value to go
- *   backward.
- * @param length integer
- *   The length of the list of integers.
- *
- */
-export const setCycleNumPos = (
-  currentValue: number,
-  change: number,
-  length: number
-) => {
-  let newPos = currentValue + change
-  if (newPos >= length) {
-    newPos -= length
-  }
-  if (newPos < 0) {
-    newPos += length
-  }
-  return newPos
 }
 
 export const getTracksFromAlbum = (

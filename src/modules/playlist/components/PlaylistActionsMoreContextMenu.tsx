@@ -16,6 +16,7 @@ import { RootState } from 'store/types'
 import Playlist from '../types/Playlist'
 // eslint-disable-next-line import/no-cycle
 import { EditPlaylistContext } from '../scenes/Playlists'
+import { playPlaylistAfterCurrent } from '../../player/redux'
 
 interface MenuItemEventHandlerPlaylist extends MenuItemEventHandler {
   props: {
@@ -56,6 +57,12 @@ const PlaylistActionsMoreContextMenu: React.FC = () => {
     <EditPlaylistContext.Consumer>
       {(value: any) => (
         <ContextMenu id="playlist-actions-more-menu">
+          <Item
+            onClick={(menuItem: any) => dispatch(playPlaylistAfterCurrent(menuItem.props.playlist.id))}
+          >
+            Play after current track
+          </Item>
+          <Separator />
           <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
           <Separator />
           <Item onClick={() => value('edit')}>Edit playlist</Item>
