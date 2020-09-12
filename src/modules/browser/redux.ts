@@ -390,6 +390,8 @@ export const searchFilter = (searchTerm: string): AppThunk => (
   // Store artists and album ids that are not found with a direct match in separate variables.
   const undirectAlbumsIds: string[] = []
   const undirectArtistsIds: string[] = []
+  // Special case for compilation albums.
+  const compilationAlbums: string[] = []
 
   libraryAlbums.forEach((item) => {
     // Get ids of all albums whose title is matching the search term.
@@ -404,7 +406,13 @@ export const searchFilter = (searchTerm: string): AppThunk => (
 
     // Also get all albums of artists that have previously been found.
     if (item.artistId && artistsIds.includes(item.artistId)) {
-      if (!albumsIds.includes(item.id)) {
+      if (
+        item.artistId === APIConstants.COMPILATION_ARTIST_ID
+        && !compilationAlbums.includes(item.id)
+      ) {
+        // Track compilation albums separately.
+        compilationAlbums.push(item.id)
+      } else if (!albumsIds.includes(item.id)) {
         undirectAlbumsIds.push(item.id)
       }
     }
@@ -418,6 +426,11 @@ export const searchFilter = (searchTerm: string): AppThunk => (
       }
     }
     if (item.albumId && albumsIds.includes(item.albumId)) {
+      if (!filteredTracks.includes(item)) {
+        filteredTracks.push(item)
+      }
+    }
+    if (item.albumId && compilationAlbums.includes(item.albumId)) {
       if (!filteredTracks.includes(item)) {
         filteredTracks.push(item)
       }
@@ -450,6 +463,11 @@ export const searchFilter = (searchTerm: string): AppThunk => (
 
   // Add back albums added from artists matching.
   undirectAlbumsIds.forEach((item) => {
+    if (!albumsIds.includes(item)) {
+      albumsIds.push(item)
+    }
+  })
+  compilationAlbums.forEach((item) => {
     if (!albumsIds.includes(item)) {
       albumsIds.push(item)
     }
