@@ -102,6 +102,21 @@ describe('PlaylistActionsMoreContextMenu', () => {
     expect(store.dispatch).toHaveBeenCalledWith(expect.any(Function))
   })
 
+  it('dispatches the correct actions when pressing on Create new playlist', () => {
+    render(
+      <ReduxProvider store={store}>
+        <MockComponent />
+        <PlaylistActionsMoreContextMenu />
+      </ReduxProvider>
+    )
+
+    fireEvent.contextMenu(screen.getByTestId('test-playlistactionsmoremenu'))
+    userEvent.click(screen.getByText('+ Duplicate playlist'))
+
+    expect(store.dispatch).toHaveBeenCalledTimes(1)
+    expect(store.dispatch).toHaveBeenCalledWith(expect.any(Function))
+  })
+
   it('dispatches the correct actions when pressing on "Fix dead tracks..."', () => {
     render(
       <ReduxProvider store={store}>

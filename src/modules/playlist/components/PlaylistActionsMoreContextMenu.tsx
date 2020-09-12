@@ -42,6 +42,16 @@ const PlaylistActionsMoreContextMenu: React.FC = () => {
       {item.title}
     </Item>
   ))
+  playlistsItems.push(
+    <Item
+      key="new"
+      onClick={(menuItem: any) => dispatch(
+        addPlaylistToPlaylist({ playlistToAddId: menuItem.props.playlist.id })
+      )}
+    >
+      + Duplicate playlist
+    </Item>
+  )
 
   return (
     <EditPlaylistContext.Consumer>

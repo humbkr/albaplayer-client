@@ -37,6 +37,14 @@ const PlaylistTrackContextMenu = () => {
       {item.title}
     </Item>
   ))
+  playlistsItems.push(
+    <Item
+      key="new"
+      onClick={(menuItem: any) => dispatch(addTrackToPlaylist({ trackId: menuItem.props.data.id }))}
+    >
+      + Create new playlist
+    </Item>
+  )
 
   return (
     <ContextMenu id="playlist-track-context-menu">
@@ -62,7 +70,7 @@ const PlaylistTrackContextMenu = () => {
         onClick={(menuItem: any) => dispatch(
           playlistRemoveTrack({
             playlistId: currentPlaylist.id,
-            trackPosition: menuItem.props.position,
+            trackPosition: menuItem.props.data.position,
           })
         )}
       >

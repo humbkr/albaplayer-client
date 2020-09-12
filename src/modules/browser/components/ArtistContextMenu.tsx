@@ -31,6 +31,14 @@ const ArtistContextMenu = () => {
       {item.title}
     </Item>
   ))
+  playlistsItems.push(
+    <Item
+      key="new"
+      onClick={(menuItem: any) => dispatch(addArtistToPlaylist({ artistId: menuItem.props.data.id }))}
+    >
+      + Create new playlist
+    </Item>
+  )
 
   return (
     <ContextMenu id="artist-context-menu">

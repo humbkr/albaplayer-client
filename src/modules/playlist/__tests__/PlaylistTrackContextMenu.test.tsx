@@ -41,10 +41,12 @@ const store = makeMockStore({
       },
     },
     currentPlaylist: {
-      id: 'playlist1',
-      title: 'Playlist one',
-      date: '2020-09-09',
-      items: [],
+      playlist: {
+        id: 'playlist1',
+        title: 'Playlist one',
+        date: '2020-09-09',
+        items: [],
+      },
     },
   },
 })
@@ -126,5 +128,41 @@ describe('PlaylistTrackContextMenu', () => {
 
     expect(store.dispatch).toHaveBeenCalledTimes(1)
     expect(store.dispatch).toHaveBeenCalledWith(expect.any(Function))
+  })
+
+  it('dispatches the correct actions when pressing on Create new playlist', () => {
+    render(
+      <ReduxProvider store={store}>
+        <MockComponent />
+        <PlaylistTrackContextMenu />
+      </ReduxProvider>
+    )
+
+    fireEvent.contextMenu(screen.getByTestId('test-playlisttrackcontextmenu'))
+    userEvent.click(screen.getByText('+ Create new playlist'))
+
+    expect(store.dispatch).toHaveBeenCalledTimes(1)
+    expect(store.dispatch).toHaveBeenCalledWith(expect.any(Function))
+  })
+
+  it('dispatches the correct actions when pressing on Remove from playlist', () => {
+    render(
+      <ReduxProvider store={store}>
+        <MockComponent />
+        <PlaylistTrackContextMenu />
+      </ReduxProvider>
+    )
+
+    fireEvent.contextMenu(screen.getByTestId('test-playlisttrackcontextmenu'))
+    userEvent.click(screen.getByText('Remove from playlist'))
+
+    expect(store.dispatch).toHaveBeenCalledTimes(1)
+    expect(store.dispatch).toHaveBeenCalledWith({
+      payload: {
+        playlistId: 'playlist1',
+        trackPosition: undefined,
+      },
+      type: 'playlist/playlistRemoveTrack',
+    })
   })
 })

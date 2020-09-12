@@ -10,6 +10,7 @@ const ActionButtonIcon: FunctionComponent<{
   className?: string
   disabled?: boolean
   size?: number
+  testId?: string
 }> = ({
   onClick,
   icon,
@@ -17,8 +18,14 @@ const ActionButtonIcon: FunctionComponent<{
   className = '',
   disabled = false,
   size = null,
+  testId = '',
 }) => (
-  <Wrapper className={className} disabled={disabled} onClick={onClick}>
+  <Wrapper
+    className={className}
+    disabled={disabled}
+    onClick={onClick}
+    data-testid={testId}
+  >
     <Icon size={size || theme.buttons.iconSize}>{icon}</Icon>
   </Wrapper>
 )

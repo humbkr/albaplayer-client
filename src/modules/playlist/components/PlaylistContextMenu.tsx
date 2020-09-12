@@ -33,6 +33,16 @@ const PlaylistContextMenu = () => {
       {item.title}
     </Item>
   ))
+  playlistsItems.push(
+    <Item
+      key="new"
+      onClick={(menuItem: any) => dispatch(
+        addPlaylistToPlaylist({ playlistToAddId: menuItem.props.data.id })
+      )}
+    >
+      + Duplicate playlist
+    </Item>
+  )
 
   return (
     <EditPlaylistContext.Consumer>

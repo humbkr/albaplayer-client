@@ -116,4 +116,19 @@ describe('ArtistContextMenu', () => {
     expect(store.dispatch).toHaveBeenCalledTimes(1)
     expect(store.dispatch).toHaveBeenCalledWith(expect.any(Function))
   })
+
+  it('dispatches the correct actions when pressing on Create new playlist', () => {
+    render(
+      <ReduxProvider store={store}>
+        <MockComponent />
+        <ArtistContextMenu />
+      </ReduxProvider>
+    )
+
+    fireEvent.contextMenu(screen.getByTestId('test-artistcontextmenu'))
+    userEvent.click(screen.getByText('+ Create new playlist'))
+
+    expect(store.dispatch).toHaveBeenCalledTimes(1)
+    expect(store.dispatch).toHaveBeenCalledWith(expect.any(Function))
+  })
 })

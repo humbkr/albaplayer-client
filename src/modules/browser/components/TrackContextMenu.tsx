@@ -32,6 +32,14 @@ const TrackContextMenu = () => {
       {item.title}
     </Item>
   ))
+  playlistsItems.push(
+    <Item
+      key="new"
+      onClick={(menuItem: any) => dispatch(addTrackToPlaylist({ trackId: menuItem.props.data.id }))}
+    >
+      + Create new playlist
+    </Item>
+  )
 
   return (
     <ContextMenu id="track-context-menu">
