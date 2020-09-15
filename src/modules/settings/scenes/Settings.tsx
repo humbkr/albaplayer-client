@@ -104,7 +104,7 @@ function Settings() {
         />
       </Paragraph>
       <VersionNumber data-testid="settings-version">
-        version {info.version}
+        UI version: {info.version}
       </VersionNumber>
     </SettingsScreenWrapper>
   )
