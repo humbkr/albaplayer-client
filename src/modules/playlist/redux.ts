@@ -42,16 +42,19 @@ const playlistSlice = createSlice({
   name: 'playlist',
   initialState: playlistsInitialState,
   reducers: {
-    playlistSelectPlaylist(state, action) {
-      state.currentPlaylist = {
-        playlist: action.payload.selectedPlaylist,
-        position: action.payload.playlistIndex,
+    playlistSelectPlaylist(state, action: PayloadAction<number>) {
+      const playlistsArray = Object.values(state.playlists)
+      if (playlistsArray.length > 0) {
+        state.currentPlaylist = {
+          playlist: playlistsArray[action.payload],
+          position: action.payload,
+        }
+        state.currentTrack = {
+          id: '0',
+          position: 0,
+        }
+        state.currentPane = PlaylistPane.Detail
       }
-      state.currentTrack = {
-        id: '0',
-        position: 0,
-      }
-      state.currentPane = PlaylistPane.Detail
     },
     playlistCreatePlaylist(state, action: PayloadAction<Playlist>) {
       const newList = { ...state.playlists }
