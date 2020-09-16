@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../store/types'
 import Icon from '../../../common/components/Icon'
@@ -11,7 +10,7 @@ import { findSimilarTracks } from '../utils/playlistCare'
 import { LibraryStateType } from '../../library/redux'
 import Loading from '../../../common/components/Loading'
 import { PlaylistCareItem } from '../types/PlaylistCareItem'
-import { playlistUpdateItems } from '../redux'
+import { PlaylistPane, playlistUpdateItems, playlistChangePane } from '../redux'
 
 const PlaylistsCarePane = () => {
   const library: LibraryStateType = useSelector(
@@ -44,8 +43,21 @@ const PlaylistsCarePane = () => {
       }
     })
 
+    // Start replacing items right away. In a future version we will have to let the user
+    // select the replacement track in case of multiple hits.
+    const fixedTracks = processedItems.map((item) => {
+      if (item.similarTracks.length === 1) {
+        return { track: item.similarTracks[0], position: item.position }
+      }
+
+      return { track: item.track, position: item.position }
+    })
+
     dispatch(
-      playlistUpdateItems({ playlistId: playlist.id, newItems: processedItems })
+      playlistUpdateItems({
+        playlistId: playlist.id,
+        newItems: fixedTracks,
+      })
     )
 
     setItems(processedItems)
@@ -56,9 +68,11 @@ const PlaylistsCarePane = () => {
   return (
     <Wrapper>
       <Header>
-        <Link to="/playlists">
-          <BackButton size={40}>navigate_before</BackButton>
-        </Link>
+        <BackButton
+          onClick={() => dispatch(playlistChangePane(PlaylistPane.Detail))}
+        >
+          <BackButtonIcon size={40}>navigate_before</BackButtonIcon>
+        </BackButton>
         <Info>
           <Title>{playlist.title}</Title>
           <Subtitle>
@@ -117,12 +131,21 @@ const Header = styled.div`
     color: ${(props) => props.theme.textPrimaryColor};
   }
 `
-const BackButton = styled(Icon)`
+const BackButton = styled.button`
+  border: 0;
+  background-color: transparent;
+
+  :hover {
+    cursor: pointer;
+  }
+`
+const BackButtonIcon = styled(Icon)`
   height: ${(props) => props.theme.itemHeight};
   width: ${(props) => props.theme.itemHeight};
   display: flex;
   align-items: center;
   justify-content: center;
+  color: ${(props) => props.theme.textPrimaryColor};
 `
 const Info = styled.div`
   display: inline-block;
