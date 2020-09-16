@@ -58,10 +58,8 @@ const AlbumContextMenu = () => {
       >
         Add to queue
       </Item>
-      {playlists.length > 0 && <Separator />}
-      {playlists.length > 0 && (
-        <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
-      )}
+      <Separator />
+      <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
     </ContextMenu>
   )
 }
