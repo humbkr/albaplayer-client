@@ -9,7 +9,7 @@ import Playlist from '../types/Playlist'
 interface Props {
   items: Playlist[]
   currentPosition: number
-  onItemClick: (playlistIndex: number) => void
+  onItemClick: (playlist: Playlist, playlistIndex: number) => void
   onKeyDown: (e: React.KeyboardEvent) => void
 }
 
@@ -27,7 +27,7 @@ const PlaylistList = ({
   theme,
 }: InternalProps) => {
   const selectRow = ({ scrollToRow }: { scrollToRow: number }) => {
-    onItemClick(scrollToRow)
+    onItemClick(items[scrollToRow], scrollToRow)
   }
 
   // Magic function used by react-virtualized.

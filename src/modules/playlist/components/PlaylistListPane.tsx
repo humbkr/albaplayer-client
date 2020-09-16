@@ -13,6 +13,7 @@ import {
 import PlaylistContextMenu from 'modules/playlist/components/PlaylistContextMenu'
 import ListItem from 'modules/playlist/components/ListItem'
 import { RootState } from 'store/types'
+import Playlist from '../types/Playlist'
 
 interface Props {
   switchPaneHandler: (e: React.KeyboardEvent) => void
@@ -55,8 +56,10 @@ const PlaylistListPane: FunctionComponent<InternalProps> = ({
     dispatch(addTrack(trackId))
   }
 
-  const handleSelectPlaylist = (playlistIndex: number) => {
-    dispatch(playlistSelectPlaylist(playlistIndex))
+  const handleSelectPlaylist = (playlist: Playlist, playlistIndex: number) => {
+    dispatch(
+      playlistSelectPlaylist({ selectedPlaylist: playlist, playlistIndex })
+    )
   }
 
   return (

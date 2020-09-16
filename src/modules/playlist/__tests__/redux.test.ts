@@ -175,7 +175,10 @@ describe('playlists (redux)', () => {
       expect(
         playlistsSlice(testState, {
           type: playlistSelectPlaylist.type,
-          payload: 0,
+          payload: {
+            selectedPlaylist: testState.playlists.temp_001,
+            playlistIndex: 0,
+          },
         })
       ).toEqual({
         ...testState,

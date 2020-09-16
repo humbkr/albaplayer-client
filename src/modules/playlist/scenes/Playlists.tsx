@@ -12,7 +12,6 @@ import {
   playlistCreatePlaylist,
   PlaylistPane,
   playlistUpdateInfo,
-  playlistSelectPlaylist,
 } from '../redux'
 import { RootState } from '../../../store/types'
 import PlaylistsCarePane from '../components/PlaylistCarePane'
@@ -37,15 +36,10 @@ const Playlists = () => {
   const playlistDetailPane = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Give focus to the playlists list pane.
+    // Give focus to the search bar.
     // @ts-ignore
     playlistListPane.current.children[0].focus()
-
-    if (!selected) {
-      dispatch(playlistSelectPlaylist(0))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch])
+  }, [])
 
   const handleSwitchPaneList = (e: React.KeyboardEvent) => {
     if (e.keyCode === 39) {
