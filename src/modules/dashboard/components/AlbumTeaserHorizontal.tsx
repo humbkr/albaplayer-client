@@ -3,11 +3,10 @@ import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 import { contextMenu } from 'react-contexify'
-import coverPlaceholder from '../../../common/assets/images/cover_placeholder.png'
 import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
 import Album from '../../../types/Album'
-import { constants as APIConstants } from '../../../api'
 import { playAlbum } from '../../player/redux'
+import Cover from '../../../common/components/Cover'
 
 const AlbumTeaserHorizontal: React.FC<{
   album: Album
@@ -42,28 +41,27 @@ const AlbumTeaserHorizontal: React.FC<{
       onBlur={() => setMouseHover(false)}
       onContextMenu={(e) => handleMoreActionsPress(e, true)}
       visible={mouseHover || selected}
+      data-testid="album-teaser-horizontal"
     >
       <CoverWrapper>
-        <ActionOverlay visible={mouseHover || selected}>
+        <ActionOverlay
+          visible={mouseHover || selected}
+          data-testid="album-teaser-horizontal-overlay"
+        >
           <ActionButton
             icon="play_arrow"
             size={40}
             onClick={() => dispatch(playAlbum(album.id))}
+            testId="album-teaser-horizontal-play-button"
           />
         </ActionOverlay>
-        <Cover
-          src={
-            album.cover
-              ? APIConstants.BACKEND_BASE_URL + album.cover
-              : coverPlaceholder
-          }
-        />
+        <Cover src={album.cover} />
       </CoverWrapper>
       <Info>
         <Left>
           <MainInfo>
             <Title>{album.title}</Title>
-            <Artist>{album.artist?.name}</Artist>
+            <Artist>{album.artist?.name || 'Unknown artist'}</Artist>
           </MainInfo>
           <DateAdded>
             Added on: {dayjs.unix(album.dateAdded).format('DD/MM/YYYY')}
@@ -74,6 +72,7 @@ const AlbumTeaserHorizontal: React.FC<{
             icon="more_horiz"
             size={25}
             onClick={handleMoreActionsPress}
+            testId="album-teaser-horizontal-more-button"
           />
         </SecondaryActions>
       </Info>
@@ -108,11 +107,6 @@ const ActionOverlay = styled.div<{ visible: boolean }>`
   justify-content: center;
   align-items: center;
   transition: background-color linear 0.15s;
-`
-const Cover = styled.img`
-  display: block;
-  width: 80px;
-  height: 80px;
 `
 const ActionButton = styled(ActionButtonIcon)`
   color: #fff;

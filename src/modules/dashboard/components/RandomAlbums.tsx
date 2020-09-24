@@ -31,6 +31,7 @@ const RandomAlbums: React.FC = () => {
         <ActionButtonIcon
           icon="refresh"
           onClick={() => dispatch(getRandomAlbums())}
+          testId="random-albums-refresh-button"
         />
       </Header>
       {randomAlbums.length === 0 && (

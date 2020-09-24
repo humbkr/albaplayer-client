@@ -13,7 +13,7 @@ export const dashboardInitialState: DashboardStateType = {
 }
 
 const dashboardSlice = createSlice({
-  name: 'library',
+  name: 'dashboard',
   initialState: dashboardInitialState,
   reducers: {
     setRandomAlbums(state, action: PayloadAction<Album[]>) {
@@ -34,7 +34,10 @@ export const getRandomAlbums = (): AppThunk => (dispatch, getState) => {
   const numberOfAlbumsToGet = albums.length < number ? albums.length : number
 
   const alreadyPicked: number[] = []
-  while (alreadyPicked.length < numberOfAlbumsToGet) {
+  while (
+    alreadyPicked.length < numberOfAlbumsToGet
+    && alreadyPicked.length < albums.length
+  ) {
     const randomIndex = getRandomInt(0, albums.length)
     if (!alreadyPicked.includes(randomIndex)) {
       const album = { ...albums[randomIndex] }
@@ -48,6 +51,7 @@ export const getRandomAlbums = (): AppThunk => (dispatch, getState) => {
   dispatch(setRandomAlbums(randomAlbums))
 }
 
+/* istanbul ignore next */
 const getRandomInt = (min: number, max: number): number => {
   // The maximum is exclusive and the minimum is inclusive.
   min = Math.ceil(min)

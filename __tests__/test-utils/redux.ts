@@ -1,16 +1,16 @@
 import configureMockStore from 'redux-mock-store'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import thunk from 'redux-thunk'
-import { initialState } from '../../src/modules/settings/redux'
 
-export const makeMockStore = (customState: any = {}) => {
+export const makeMockStore = (customState: any = {}, mockDispatch: boolean = true) => {
   const mockStore = configureMockStore([thunk])
   const store = mockStore({
-    settings: initialState,
     ...customState,
   })
 
-  store.dispatch = jest.fn()
+  if (mockDispatch) {
+    store.dispatch = jest.fn()
+  }
 
   return store
 }

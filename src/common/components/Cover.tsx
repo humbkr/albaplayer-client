@@ -7,9 +7,12 @@ const Cover: React.FC<{
   src?: string
 }> = ({ src }) => (
   <div>
-    <DefaultCover src={coverPlaceholder} />
+    <DefaultCover src={coverPlaceholder} data-testid="cover-default" />
     {src && (
-      <RealCoverWrapper cover={APIConstants.BACKEND_BASE_URL + src}>
+      <RealCoverWrapper
+        cover={APIConstants.BACKEND_BASE_URL + src}
+        data-testid="cover-image"
+      >
         <RealCover src={APIConstants.BACKEND_BASE_URL + src} />
       </RealCoverWrapper>
     )}
@@ -18,7 +21,7 @@ const Cover: React.FC<{
 
 export default Cover
 
-const RealCoverWrapper = styled.div<{ cover?: string }>`
+const RealCoverWrapper = styled.div<{ cover: string }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -36,7 +39,7 @@ const RealCoverWrapper = styled.div<{ cover?: string }>`
     position: absolute;
     left: 0;
     top: 0;
-    ${(props) => (props.cover ? `background-image: url(${props.cover})` : '')};
+    background-image: url(${(props) => props.cover});
     background-size: cover;
     background-position: center;
     filter: blur(5px);

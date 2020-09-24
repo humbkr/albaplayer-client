@@ -39,10 +39,12 @@ const mockLibraryState: LibraryStateType = {
     1: {
       id: '1',
       name: 'Artist 1',
+      dateAdded: 1234323433,
     },
     2: {
       id: '2',
       name: 'Artist 2',
+      dateAdded: 1234323433,
     },
   },
   albums: {
@@ -51,18 +53,21 @@ const mockLibraryState: LibraryStateType = {
       title: 'Album 1',
       year: '1986',
       artistId: '1',
+      dateAdded: 1234323433,
     },
     2: {
       id: '2',
       title: 'Album 2',
       year: '2002',
       artistId: '2',
+      dateAdded: 1234323433,
     },
     3: {
       id: '3',
       title: 'Album 3',
       year: '1992',
       artistId: '1',
+      dateAdded: 1234323433,
     },
   },
   tracks: {
@@ -75,6 +80,7 @@ const mockLibraryState: LibraryStateType = {
       cover: '',
       albumId: '1',
       artistId: '1',
+      dateAdded: 1234323433,
     },
     2: {
       id: '2',
@@ -85,6 +91,7 @@ const mockLibraryState: LibraryStateType = {
       cover: '',
       albumId: '2',
       artistId: '2',
+      dateAdded: 1234323433,
     },
     3: {
       id: '3',
@@ -95,6 +102,7 @@ const mockLibraryState: LibraryStateType = {
       cover: '',
       albumId: '1',
       artistId: '1',
+      dateAdded: 1234323433,
     },
     4: {
       id: '4',
@@ -105,6 +113,7 @@ const mockLibraryState: LibraryStateType = {
       cover: '',
       albumId: '3',
       artistId: '1',
+      dateAdded: 1234323433,
     },
   },
 }

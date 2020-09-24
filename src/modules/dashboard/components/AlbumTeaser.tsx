@@ -40,15 +40,20 @@ const AlbumTeaser: React.FC<{
         onFocus={() => setMouseHover(true)}
         onBlur={() => setMouseHover(false)}
         onContextMenu={(e) => handleMoreActionsPress(e, true)}
+        data-testid="album-teaser"
       >
         <Cover src={album.cover} />
-        <Overlay visible={mouseHover || selected}>
+        <Overlay
+          visible={mouseHover || selected}
+          data-testid="album-teaser-overlay"
+        >
           <Actions>
             <ActionButtonCircle
               icon="play_arrow"
               size={36}
               backgroundColor="rgba(0,0,0,0.65)"
               onClick={() => dispatch(playAlbum(album.id))}
+              testId="album-teaser-play-button"
             />
             <SecondaryActions visible={mouseHover || selected}>
               <ActionButtonCircle
@@ -56,6 +61,7 @@ const AlbumTeaser: React.FC<{
                 size={36}
                 backgroundColor="rgba(0,0,0,0.65)"
                 onClick={handleMoreActionsPress}
+                testId="album-teaser-more-button"
               />
             </SecondaryActions>
           </Actions>
@@ -63,7 +69,7 @@ const AlbumTeaser: React.FC<{
       </CoverWrapper>
       <Info>
         <Title>{album.title}</Title>
-        <Artist>{album.artist?.name}</Artist>
+        <Artist>{album.artist?.name || 'Unknown artist'}</Artist>
       </Info>
     </Wrapper>
   )
