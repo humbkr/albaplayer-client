@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { contextMenu } from 'react-contexify'
-import coverPlaceholder from '../../../common/assets/images/cover_placeholder.png'
 import Album from '../../../types/Album'
-import { constants as APIConstants } from '../../../api'
 import { playAlbum } from '../../player/redux'
 import ActionButtonCircle from '../../../common/components/ActionButtonCircle'
+import Cover from '../../../common/components/Cover'
 
 const AlbumTeaser: React.FC<{
   album: Album
@@ -42,7 +41,7 @@ const AlbumTeaser: React.FC<{
         onBlur={() => setMouseHover(false)}
         onContextMenu={(e) => handleMoreActionsPress(e, true)}
       >
-        <DefaultCover src={coverPlaceholder} />
+        <Cover src={album.cover} />
         <Overlay visible={mouseHover || selected}>
           <Actions>
             <ActionButtonCircle
@@ -61,11 +60,6 @@ const AlbumTeaser: React.FC<{
             </SecondaryActions>
           </Actions>
         </Overlay>
-        {album.cover && (
-          <RealCoverWrapper cover={APIConstants.BACKEND_BASE_URL + album.cover}>
-            <RealCover src={APIConstants.BACKEND_BASE_URL + album.cover} />
-          </RealCoverWrapper>
-        )}
       </CoverWrapper>
       <Info>
         <Title>{album.title}</Title>
@@ -109,40 +103,6 @@ const Actions = styled.div`
 const SecondaryActions = styled.div<{ visible: boolean }>`
   opacity: ${(props) => (props.visible ? 1 : 0)};
   transition: opacity linear 0.15s;
-`
-const RealCoverWrapper = styled.div<{ cover?: string }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-
-  &:before {
-    width: 100%;
-    height: 100%;
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    ${(props) => (props.cover ? `background-image: url(${props.cover})` : '')};
-    background-size: cover;
-    background-position: center;
-    filter: blur(5px);
-    transform: scale(1.1);
-  }
-`
-const RealCover = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-  z-index: 5;
-`
-const DefaultCover = styled.img`
-  display: block;
-  max-width: 100%;
 `
 const Info = styled.div`
   padding: 10px 5px;

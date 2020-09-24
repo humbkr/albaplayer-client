@@ -1,4 +1,4 @@
-import { api, constants as APIConstants } from 'api'
+import { api } from 'api'
 import { immutableSortTracks } from 'common/utils/utils'
 import Track from 'types/Track'
 import { AppThunk } from 'store/types'
@@ -44,15 +44,7 @@ export const setItemFromQueue = (itemPosition: number): AppThunk => (
   return api
     .getFullTrackInfo(state.queue.items[itemPosition].track.id)
     .then((response) => {
-      // And dispatch appropriate actions.
-      // Copy track to change it.
-      const track = { ...response.data.track }
-      track.cover = track.cover
-        ? APIConstants.BACKEND_BASE_URL + track.cover
-        : ''
-      track.src = APIConstants.BACKEND_BASE_URL + track.src
-
-      dispatch(playerSetTrack(track))
+      dispatch(playerSetTrack(response.data.track))
       dispatch(queueSetCurrent(itemPosition))
     })
 }
@@ -262,13 +254,7 @@ export const setNextTrack = (endOfTrack: boolean): AppThunk => (
 
   // Make API call to get the track full info.
   return api.getFullTrackInfo(nextTrackId).then((response) => {
-    // And dispatch appropriate actions.
-    // Copy track to change it.
-    const track = { ...response.data.track }
-    track.cover = track.cover ? APIConstants.BACKEND_BASE_URL + track.cover : ''
-    track.src = APIConstants.BACKEND_BASE_URL + track.src
-
-    dispatch(playerSetTrack(track))
+    dispatch(playerSetTrack(response.data.track))
     dispatch(queueSetCurrent(newQueuePosition))
   })
 }
@@ -315,13 +301,7 @@ export const setPreviousTrack = (): AppThunk => (dispatch, getState) => {
 
   // Make API call to get the track full info.
   return api.getFullTrackInfo(prevTrackId).then((response) => {
-    // And dispatch appropriate actions.
-    // Copy track to change it.
-    const track = { ...response.data.track }
-    track.cover = track.cover ? APIConstants.BACKEND_BASE_URL + track.cover : ''
-    track.src = APIConstants.BACKEND_BASE_URL + track.src
-
-    dispatch(playerSetTrack(track))
+    dispatch(playerSetTrack(response.data.track))
     dispatch(queueSetCurrent(newQueuePosition))
   })
 }

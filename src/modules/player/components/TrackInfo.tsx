@@ -3,22 +3,21 @@ import styled from 'styled-components'
 import Ripple from 'common/components/Ripple'
 import coverPlaceholder from 'common/assets/images/cover_placeholder.png'
 import Track from 'types/Track'
+import Cover from '../../../common/components/Cover'
 
 const TrackInfo: FunctionComponent<{
   track: Track
   onClick: () => void
 }> = ({ track, onClick }) => {
-  const trackTitle = track && track.title !== '' ? track.title : 'Unknown title'
-  const trackArtist = track && track.artist && track.artist.name
-    ? track.artist.name
-    : 'Unknown artist'
-  const trackCover = track && track.cover ? track.cover : false
+  const trackTitle = track?.title || 'Unknown title'
+  const trackArtist = track?.artist?.name || 'Unknown artist'
+  const trackCover = track?.cover || undefined
 
   return (
     <Ripple>
       <TrackInfoWrapper onClick={() => onClick()}>
         <Overlay />
-        {trackCover && <Cover src={trackCover} />}
+        <Cover src={trackCover} />
         {track && (
           <OverlayText>
             <TrackTitle>{trackTitle}</TrackTitle>
@@ -40,9 +39,6 @@ const TrackInfoWrapper = styled.div`
   background-size: 100% 100%;
   overflow: hidden;
   user-select: none;
-`
-const Cover = styled.img`
-  width: 100%;
 `
 const Overlay = styled.div`
   position: absolute;

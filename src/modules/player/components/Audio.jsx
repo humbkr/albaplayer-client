@@ -10,6 +10,7 @@ import {
   playerSetVolume,
   playerSetProgress,
 } from 'modules/player/redux'
+import { constants as APIConstants } from '../../../api'
 
 const Audio = (Player) => {
   class HOCAudio extends React.Component {
@@ -68,7 +69,7 @@ const Audio = (Player) => {
     loadTrack = () => {
       if (this.props.track) {
         // Load track source.
-        this.audioElement.src = this.props.track.src
+        this.audioElement.src = APIConstants.BACKEND_BASE_URL + this.props.track.src
 
         if (this.props.playing) {
           // Start playing.
