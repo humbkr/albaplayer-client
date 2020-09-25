@@ -48,11 +48,13 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 10;
 `
 const OverlayText = styled.div`
   position: absolute;
   top: 40px;
   left: 20px;
+  z-index: 15;
 `
 const TrackTitle = styled.h1`
   font-size: 1.5em;

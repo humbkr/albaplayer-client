@@ -83,12 +83,10 @@ const RippleContainer = styled.div`
   display: inline-block;
   position: relative;
   overflow: hidden;
-  -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 `
 const rippleAnimation = keyframes`
   100% {
-    -webkit-transform: scale(2);
     transform: scale(2);
     opacity: 0;
   }
@@ -106,4 +104,5 @@ const RippleStyled = styled.span`
   display: inline-block;
   pointer-events: none;
   animation: ${rippleAnimation} 0.3s linear;
+  z-index: 50;
 `
