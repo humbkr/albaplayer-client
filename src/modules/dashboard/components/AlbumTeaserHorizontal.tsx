@@ -107,6 +107,7 @@ const ActionOverlay = styled.div<{ visible: boolean }>`
   justify-content: center;
   align-items: center;
   transition: background-color linear 0.15s;
+  z-index: 50;
 `
 const ActionButton = styled(ActionButtonIcon)`
   color: #fff;
