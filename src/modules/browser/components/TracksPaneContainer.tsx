@@ -44,7 +44,7 @@ const TracksPaneContainer: FunctionComponent<InternalProps> = ({
   const orderByOptions = [
     { value: 'title', label: 'title' },
     { value: 'number', label: 'track number' },
-    { value: 'albumId', label: 'album' },
+    { value: 'album', label: 'album' },
     { value: 'artistId', label: 'artist' },
   ]
 

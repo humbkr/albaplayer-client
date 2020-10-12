@@ -79,8 +79,8 @@ const immutableNestedSort = (
   })
 }
 
-/*
-Sort function specifically designed for tracks list.
+/**
+ * Sort function specifically designed for tracks list.
  */
 const immutableSortTracks = (items: Array<any>, prop: string): Array<any> => {
   let result = 0
@@ -91,14 +91,14 @@ const immutableSortTracks = (items: Array<any>, prop: string): Array<any> => {
     let a = propA
     let b = propB
 
-    if (prop === 'number') {
-      // Special case for track number: we also need to sort by disc.
-      a = `${sanitizeDiscNumber(propA.disc)}${sanitizeTrackNumber(
-        propA.number
-      )}`
-      b = `${sanitizeDiscNumber(propB.disc)}${sanitizeTrackNumber(
-        propB.number
-      )}`
+    if (prop === 'number' || prop === 'album') {
+      // Special case for track number and album: we also need to sort by disc.
+      a = `${propA.albumId}${sanitizeDiscNumber(
+        propA.disc
+      )}${sanitizeTrackNumber(propA.number)}`
+      b = `${propB.albumId}${sanitizeDiscNumber(
+        propB.disc
+      )}${sanitizeTrackNumber(propB.number)}`
     } else {
       a = a[prop]
       b = b[prop]
