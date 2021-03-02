@@ -1,5 +1,8 @@
 module.exports = {
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/__tests__/test-utils/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/__tests__/test-utils/',
+  ],
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   coverageThreshold: {
     global: {

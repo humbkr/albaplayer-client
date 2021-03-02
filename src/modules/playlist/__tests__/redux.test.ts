@@ -18,9 +18,6 @@ import playlistsSlice, {
   addPlaylist,
   playlistsSelector,
 } from '../redux'
-import Playlist from '../types/Playlist'
-import Track from '../../../types/Track'
-import PlaylistItem from '../types/PlaylistItem'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { libraryInitialState, LibraryStateType } from '../../library/redux'
 

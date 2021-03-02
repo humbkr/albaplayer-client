@@ -64,7 +64,9 @@ describe('Settings scene', () => {
     expect(queryByTestId('settings-library-updating')).toBeNull()
     expect(queryByTestId('settings-theme')).not.toBeNull()
     expect(queryByTestId('settings-version')).not.toBeNull()
-    expect(getByText(`UI version: ${info.version}`))
+
+    const regex = new RegExp(`Version: \\w+ \\(UI version: ${info.version}\\)`)
+    expect(getByText(regex))
   })
 
   it('should launch a library update when corresponding button is pressed', () => {

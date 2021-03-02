@@ -1,5 +1,3 @@
-import { SortOrder } from '../../types/SortOrder'
-
 function immutableRemove(arr: Array<any>, index: number): Array<any> {
   return arr.slice(0, index).concat(arr.slice(index + 1))
 }
@@ -40,7 +38,7 @@ const sanitizeTrackNumber = (trackNumber: number | string): string => {
 const immutableNestedSort = (
   items: Array<any>,
   prop: string,
-  order: SortOrder = SortOrder.ASC
+  order: SortOrder = 'ASC'
 ): Array<any> => {
   const property = prop.split('.')
   // Get depth.
@@ -62,14 +60,14 @@ const immutableNestedSort = (
 
     // Sort if value type is string.
     if (typeof a === 'string' || a instanceof String) {
-      if (order === SortOrder.ASC) {
+      if (order === 'ASC') {
         return a.toLowerCase() > b.toLowerCase() ? 1 : -1
       }
       return a.toLowerCase() < b.toLowerCase() ? 1 : -1
     }
 
     // Sort if value type is number.
-    if (order === SortOrder.ASC) {
+    if (order === 'ASC') {
       result = a > b ? 1 : -1
     } else {
       result = a < b ? 1 : -1

@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
 import { RootState } from '../../../store/types'
 import { getRandomAlbums } from '../redux'
-import Album from '../../../types/Album'
 import AlbumMoreActionsContextMenu from './AlbumMoreActionsContextMenu'
 
 const RandomAlbums: React.FC = () => {

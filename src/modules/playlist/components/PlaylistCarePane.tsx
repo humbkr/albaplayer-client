@@ -5,11 +5,9 @@ import { RootState } from '../../../store/types'
 import Icon from '../../../common/components/Icon'
 import ActionButton from '../../../common/components/ActionButton'
 import PlaylistCareList from './PlaylistCareList'
-import Playlist from '../types/Playlist'
 import { findSimilarTracks } from '../utils/playlistCare'
 import { LibraryStateType } from '../../library/redux'
 import Loading from '../../../common/components/Loading'
-import { PlaylistCareItem } from '../types/PlaylistCareItem'
 import { PlaylistPane, playlistUpdateItems, playlistChangePane } from '../redux'
 
 const PlaylistsCarePane = () => {

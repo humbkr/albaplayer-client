@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { api } from 'api'
-import Artist from 'types/Artist'
-import Album from 'types/Album'
-import Track from 'types/Track'
 import { AppThunk } from 'store/types'
 
 export interface LibraryStateType {
