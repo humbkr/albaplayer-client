@@ -129,7 +129,11 @@ export const mockLibraryState: LibraryStateType = {
   },
 }
 
-export const initialStateForFilterTesting = {
+type initialStateForFilterTestingType = {
+  library: LibraryStateType
+  libraryBrowser: BrowserStateType
+}
+const initialStateForFilterTesting: initialStateForFilterTestingType = {
   library: {
     ...libraryInitialState,
     artists: {
@@ -622,7 +626,12 @@ describe('library browser (redux)', () => {
         {
           payload: {
             artistId: '0',
-            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredAlbums: Object.values(mockLibraryState.albums).map(
+              (album) => ({
+                ...album,
+                artist: mockLibraryState.artists[album.artistId as string],
+              })
+            ),
             filteredTracks: [],
             index: 0,
           },
@@ -655,7 +664,7 @@ describe('library browser (redux)', () => {
   })
 
   describe('search thunk', () => {
-    it('should dispatch correct actions when searching for 2 characters or more', () => {
+    it('should dispatch correct actions when searching for 3 characters or more', () => {
       const store = makeMockStore()
 
       const expected = [
@@ -665,31 +674,18 @@ describe('library browser (redux)', () => {
         },
         {
           payload: {
+            filteredArtists: [mockLibraryState.artists[3]],
             filteredAlbums: [
               {
-                artistId: '3',
-                id: '2',
-                title: 'Album 2',
-                year: '2002',
-                dateAdded: 1614682652,
-              },
-            ],
-            filteredArtists: [
-              {
-                id: '3',
-                name: 'Cornifer',
+                ...mockLibraryState.albums[2],
+                artist: mockLibraryState.artists[3],
               },
             ],
             filteredTracks: [
               {
-                albumId: '2',
-                artistId: '3',
-                cover: '',
-                disc: '',
-                duration: 124,
-                id: '2',
-                number: 2,
-                title: 'I draw a map',
+                ...mockLibraryState.tracks[2],
+                artist: mockLibraryState.artists[3],
+                album: mockLibraryState.albums[2],
               },
             ],
             searchTerm: 'corni',
@@ -717,7 +713,12 @@ describe('library browser (redux)', () => {
         {
           payload: {
             artistId: '0',
-            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredAlbums: Object.values(mockLibraryState.albums).map(
+              (album) => ({
+                ...album,
+                artist: mockLibraryState.artists[album.artistId as string],
+              })
+            ),
             filteredTracks: [],
             index: 0,
           },
@@ -730,7 +731,12 @@ describe('library browser (redux)', () => {
         {
           payload: {
             artistId: '0',
-            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredAlbums: Object.values(mockLibraryState.albums).map(
+              (album) => ({
+                ...album,
+                artist: mockLibraryState.artists[album.artistId as string],
+              })
+            ),
             filteredTracks: [],
             index: 0,
           },
@@ -761,7 +767,7 @@ describe('library browser (redux)', () => {
       expect(actual).toEqual(expected)
     })
 
-    it('should dispatch correct actions when searching for less than 2 characters', () => {
+    it('should dispatch correct actions when searching for less than 3 characters', () => {
       const store = makeMockStore()
 
       const expected = [
@@ -829,12 +835,19 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectArtist({
           artistId: '2',
           index: 2,
-          filteredAlbums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '2'
-          ),
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '2'
-          ),
+          filteredAlbums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '2')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '2')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -849,12 +862,21 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when in search mode', () => {
       // Mock a search.
       const filteredArtists = [mockLibraryState.artists['2']]
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.artistId === '3')
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.artistId === '3')
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const store = makeMockStore({
         libraryBrowser: {
@@ -896,7 +918,12 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectArtist({
           artistId: '0',
           index: 0,
-          filteredAlbums: Object.values<Album>(mockLibraryState.albums),
+          filteredAlbums: Object.values<Album>(mockLibraryState.albums).map(
+            (album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })
+          ),
           filteredTracks: [],
         }),
       ]
@@ -912,12 +939,21 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when All is selected and user has searched', () => {
       // Mock a search.
       const filteredArtists = [mockLibraryState.artists['2']]
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.artistId === '3')
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.artistId === '3')
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const store = makeMockStore({
         libraryBrowser: {
@@ -959,12 +995,19 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectArtist({
           artistId: '1',
           index: 1,
-          filteredAlbums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '1'
-          ),
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '34'
-          ),
+          filteredAlbums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '1')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '34')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -985,9 +1028,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '2',
           index: 2,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.albumId === '2'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.albumId === '2')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -1002,12 +1049,21 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when in search mode', () => {
       // Mock a search.
       const filteredArtists = [mockLibraryState.artists['2']]
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.artistId === '3')
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.artistId === '3')
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const store = makeMockStore({
         libraryBrowser: {
@@ -1063,12 +1119,21 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when no artist selected, All is selected, and user has searched', () => {
       // Mock a search.
       const filteredArtists = [mockLibraryState.artists['2']]
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.artistId === '3')
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.artistId === '3')
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const store = makeMockStore({
         libraryBrowser: {
@@ -1107,9 +1172,12 @@ describe('library browser (redux)', () => {
         libraryBrowser: {
           ...browserInitialState,
           selectedArtists: '2',
-          albums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '2'
-          ),
+          albums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '2')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
         },
       })
 
@@ -1117,9 +1185,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '0',
           index: 0,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '2'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '2')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -1136,9 +1208,12 @@ describe('library browser (redux)', () => {
         libraryBrowser: {
           ...browserInitialState,
           selectedArtists: '2',
-          albums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '2'
-          ),
+          albums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '2')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
         },
       })
 
@@ -1146,9 +1221,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '3',
           index: 3,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '2' && item.albumId === '3'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '2' && item.albumId === '3')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -1165,9 +1244,12 @@ describe('library browser (redux)', () => {
         libraryBrowser: {
           ...browserInitialState,
           selectedArtists: '1',
-          albums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '1'
-          ),
+          albums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '1')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
         },
       })
 
@@ -1175,9 +1257,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '4',
           index: 3,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.albumId === '4'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.albumId === '4')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -1194,9 +1280,12 @@ describe('library browser (redux)', () => {
         libraryBrowser: {
           ...browserInitialState,
           selectedArtists: '1',
-          albums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '1'
-          ),
+          albums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '1')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
         },
       })
 
@@ -1204,9 +1293,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '0',
           index: 0,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '34'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '34')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -1223,17 +1316,26 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when search matches a track', () => {
       const store = makeMockStore()
 
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.includes('I draw a map'))
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.includes('I draw a map'))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
+
       const filteredTracksAlbumIds = filteredTracks.map((item) => item.albumId)
+
       const filteredTracksArtistIds = filteredTracks.map(
         (item) => item.artistId
       )
 
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => filteredTracksAlbumIds.includes(item.id))
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => filteredTracksAlbumIds.includes(item.id))
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
 
       const filteredArtists = Object.values<Artist>(
         mockLibraryState.artists
@@ -1260,10 +1362,15 @@ describe('library browser (redux)', () => {
       const store = makeMockStore()
       const testSearchTerm = 'Album 2'
 
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.title.includes(testSearchTerm))
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.title.includes(testSearchTerm))
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
       const filteredAlbumIds = filteredAlbums.map((item) => item.id)
+
       const filteredAlbumsArtistIds = filteredAlbums.map(
         (item) => item.artistId
       )
@@ -1272,11 +1379,15 @@ describe('library browser (redux)', () => {
         mockLibraryState.artists
       ).filter((item) => filteredAlbumsArtistIds.includes(item.id))
 
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter(
-        (item) => item.albumId && filteredAlbumIds.includes(item.albumId)
-      )
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter(
+          (item) => item.albumId && filteredAlbumIds.includes(item.albumId)
+        )
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const expected = [
         libraryBrowserSearchFilter({
@@ -1302,19 +1413,27 @@ describe('library browser (redux)', () => {
       const filteredArtists = Object.values<Artist>(
         mockLibraryState.artists
       ).filter((item) => item.name.includes(testSearchTerm))
+
       const filteredArtistIds = filteredArtists.map((item) => item.id)
 
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter(
-        (item) => item.artistId && filteredArtistIds.includes(item.artistId)
-      )
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter(
+          (item) => item.artistId && filteredArtistIds.includes(item.artistId)
+        )
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
 
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter(
-        (item) => item.artistId && filteredArtistIds.includes(item.artistId)
-      )
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter(
+          (item) => item.artistId && filteredArtistIds.includes(item.artistId)
+        )
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const expected = [
         libraryBrowserSearchFilter({
@@ -1340,20 +1459,28 @@ describe('library browser (redux)', () => {
       const filteredArtists = Object.values<Artist>(
         mockLibraryState.artists
       ).filter((item) => item.name.includes(testSearchTerm))
+
       const filteredArtistIds = filteredArtists.map((item) => item.id)
 
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter(
-        (item) => item.artistId && filteredArtistIds.includes(item.artistId)
-      )
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter(
+          (item) => item.artistId && filteredArtistIds.includes(item.artistId)
+        )
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
 
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter(
-        (item) => item.albumId
-          && filteredAlbums.map((album) => album.id).includes(item.albumId)
-      )
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter(
+          (item) => item.albumId
+            && filteredAlbums.map((album) => album.id).includes(item.albumId)
+        )
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const expected = [
         libraryBrowserSearchFilter({
@@ -1418,31 +1545,18 @@ describe('library browser (redux)', () => {
         },
         {
           payload: {
+            filteredArtists: [mockLibraryState.artists[3]],
             filteredAlbums: [
               {
-                artistId: '3',
-                id: '2',
-                title: 'Album 2',
-                year: '2002',
-                dateAdded: 1614682652,
-              },
-            ],
-            filteredArtists: [
-              {
-                id: '3',
-                name: 'Cornifer',
+                ...mockLibraryState.albums[2],
+                artist: mockLibraryState.artists[3],
               },
             ],
             filteredTracks: [
               {
-                albumId: '2',
-                artistId: '3',
-                cover: '',
-                disc: '',
-                duration: 124,
-                id: '2',
-                number: 2,
-                title: 'I draw a map',
+                ...mockLibraryState.tracks[2],
+                artist: mockLibraryState.artists[3],
+                album: mockLibraryState.albums[2],
               },
             ],
             searchTerm: 'corni',
@@ -1484,12 +1598,28 @@ describe('library browser (redux)', () => {
             filteredArtists: initialStateForFilterTesting.libraryBrowser.search.filteredArtists.filter(
               (item) => item.id === '1'
             ),
-            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums.filter(
-              (item) => item.artistId === '1'
-            ),
-            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks.filter(
-              (item) => item.artistId === '1'
-            ),
+            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums
+              .filter((item) => item.artistId === '1')
+              .map((album) => ({
+                ...album,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    album.artistId as string
+                  ],
+              })),
+            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks
+              .filter((item) => item.artistId === '1')
+              .map((track) => ({
+                ...track,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    track.artistId as string
+                  ],
+                album:
+                  initialStateForFilterTesting.library.albums[
+                    track.albumId as string
+                  ],
+              })),
             searchTerm: 'place',
           },
           type: 'libraryBrowser/libraryBrowserSearchFilter',
@@ -1529,12 +1659,28 @@ describe('library browser (redux)', () => {
             filteredArtists: initialStateForFilterTesting.libraryBrowser.search.filteredArtists.filter(
               (item) => item.id === '2'
             ),
-            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums.filter(
-              (item) => item.artistId === '2'
-            ),
-            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks.filter(
-              (item) => item.artistId === '2'
-            ),
+            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums
+              .filter((item) => item.artistId === '2')
+              .map((album) => ({
+                ...album,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    album.artistId as string
+                  ],
+              })),
+            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks
+              .filter((item) => item.artistId === '2')
+              .map((track) => ({
+                ...track,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    track.artistId as string
+                  ],
+                album:
+                  initialStateForFilterTesting.library.albums[
+                    track.albumId as string
+                  ],
+              })),
             searchTerm: 'place',
           },
           type: 'libraryBrowser/libraryBrowserSearchFilter',
@@ -1574,12 +1720,28 @@ describe('library browser (redux)', () => {
             filteredArtists: initialStateForFilterTesting.libraryBrowser.search.filteredArtists.filter(
               (item) => item.id === '3'
             ),
-            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums.filter(
-              (item) => item.artistId === '3'
-            ),
-            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks.filter(
-              (item) => item.artistId === '3'
-            ),
+            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums
+              .filter((item) => item.artistId === '3')
+              .map((album) => ({
+                ...album,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    album.artistId as string
+                  ],
+              })),
+            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks
+              .filter((item) => item.artistId === '3')
+              .map((track) => ({
+                ...track,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    track.artistId as string
+                  ],
+                album:
+                  initialStateForFilterTesting.library.albums[
+                    track.albumId as string
+                  ],
+              })),
             searchTerm: 'place',
           },
           type: 'libraryBrowser/libraryBrowserSearchFilter',

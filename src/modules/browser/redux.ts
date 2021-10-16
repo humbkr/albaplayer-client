@@ -3,7 +3,7 @@ import { immutableNestedSort, immutableSortTracks } from 'common/utils/utils'
 import { constants as APIConstants } from 'api'
 import { AppThunk, RootState } from '../../store/types'
 
-export interface BrowserStateType {
+export type BrowserStateType = {
   artists: Artist[]
   albums: Album[]
   tracks: Track[]
