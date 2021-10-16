@@ -1,4 +1,3 @@
-import Album from 'types/Album'
 import configureMockStore from 'redux-mock-store'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import thunk from 'redux-thunk'
@@ -44,24 +43,28 @@ const mockLibraryState: LibraryStateType = {
       title: 'Album 1',
       year: '1986',
       artistId: '2',
+      dateAdded: 1614682652,
     },
     2: {
       id: '2',
       title: 'Album 2',
       year: '2002',
       artistId: '3',
+      dateAdded: 1614682652,
     },
     3: {
       id: '3',
       title: 'Album 3',
       year: '1992',
       artistId: '2',
+      dateAdded: 1614682652,
     },
     4: {
       id: '4',
       title: 'Compilation',
       year: '2018',
       artistId: '1',
+      dateAdded: 1614682652,
     },
   },
   tracks: {

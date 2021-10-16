@@ -2,10 +2,9 @@ import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { contextMenu } from 'react-contexify'
 import ActionButtonIcon from 'common/components/ActionButtonIcon'
-import PlaylistItemType from '../types/PlaylistItem'
 
 const PlaylistItem: FunctionComponent<{
-  item: PlaylistItemType
+  item: PlaylistItem
   selected: boolean
   handleRemoveTrack: (position: number) => void
   onContextMenu: (p: { scrollToRow: number }) => void

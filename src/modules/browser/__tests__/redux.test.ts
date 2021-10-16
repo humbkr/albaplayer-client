@@ -1,14 +1,9 @@
-import { libraryInitialState, LibraryStateType } from 'modules/library/redux'
-import Album from 'types/Album'
-import Track from 'types/Track'
-import Artist from 'types/Artist'
 import configureMockStore from 'redux-mock-store'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import thunk from 'redux-thunk'
 import { immutableNestedSort } from 'common/utils/utils'
 import browserSlice, {
   browserInitialState,
-  BrowserStateType,
   libraryBrowserSelectArtist,
   libraryBrowserSelectAlbum,
   libraryBrowserSearchUpdateInput,
@@ -18,6 +13,7 @@ import browserSlice, {
   libraryBrowserSortArtists,
   libraryBrowserSortAlbums,
   libraryBrowserSortTracks,
+  libraryBrowserSetFilter,
   initArtists,
   selectArtist,
   selectAlbum,
@@ -27,16 +23,11 @@ import browserSlice, {
   getTracksList,
   libraryBrowserInit,
   search,
+  setSearchFilter,
 } from '../redux'
+import { libraryInitialState, LibraryStateType } from '../../library/redux'
 
-const mockStore = configureMockStore([thunk])
-const makeMockStore = (customState: any = {}) => mockStore({
-  library: mockLibraryState,
-  libraryBrowser: browserInitialState,
-  ...customState,
-})
-
-const mockLibraryState: LibraryStateType = {
+export const mockLibraryState: LibraryStateType = {
   ...libraryInitialState,
   isInitialized: true,
   artists: {
@@ -59,24 +50,28 @@ const mockLibraryState: LibraryStateType = {
       title: 'Album 1',
       year: '1986',
       artistId: '2',
+      dateAdded: 1614682652,
     },
     2: {
       id: '2',
       title: 'Album 2',
       year: '2002',
       artistId: '3',
+      dateAdded: 1614682652,
     },
     3: {
       id: '3',
       title: 'Album 3',
       year: '1992',
       artistId: '2',
+      dateAdded: 1614682652,
     },
     4: {
       id: '4',
       title: 'Compilation',
       year: '2018',
       artistId: '1',
+      dateAdded: 1614682652,
     },
   },
   tracks: {
@@ -133,6 +128,168 @@ const mockLibraryState: LibraryStateType = {
   },
 }
 
+type initialStateForFilterTestingType = {
+  library: LibraryStateType
+  libraryBrowser: BrowserState
+}
+const initialStateForFilterTesting: initialStateForFilterTestingType = {
+  library: {
+    ...libraryInitialState,
+    artists: {
+      1: {
+        id: '1',
+        name: 'Placebo',
+      },
+      2: {
+        id: '2',
+        name: 'Zote',
+      },
+      3: {
+        id: '3',
+        name: 'Cornifer',
+      },
+    },
+    albums: {
+      1: {
+        artistId: '1',
+        id: '1',
+        title: 'Ghosts',
+        year: '2002',
+        dateAdded: 1614682652,
+      },
+      2: {
+        artistId: '2',
+        id: '2',
+        title: 'Going places',
+        year: '2003',
+        dateAdded: 1614682652,
+      },
+      3: {
+        artistId: '3',
+        id: '3',
+        title: 'Mapping for fun',
+        year: '2004',
+        dateAdded: 1614682652,
+      },
+    },
+    tracks: {
+      1: {
+        albumId: '1',
+        artistId: '1',
+        cover: '',
+        disc: '',
+        duration: 124,
+        id: '1',
+        number: 1,
+        title: 'The bitter end',
+      },
+      2: {
+        albumId: '2',
+        artistId: '2',
+        cover: '',
+        disc: '',
+        duration: 125,
+        id: '2',
+        number: 1,
+        title: 'Bretta',
+      },
+      3: {
+        albumId: '3',
+        artistId: '3',
+        cover: '',
+        disc: '',
+        duration: 126,
+        id: '3',
+        number: 1,
+        title: 'A place upon the stars',
+      },
+    },
+  },
+  libraryBrowser: {
+    ...browserInitialState,
+    search: {
+      ...browserInitialState.search,
+      term: 'place',
+      filteredArtists: [
+        {
+          id: '1',
+          name: 'Placebo',
+        },
+        {
+          id: '2',
+          name: 'Zote',
+        },
+        {
+          id: '3',
+          name: 'Cornifer',
+        },
+      ],
+      filteredAlbums: [
+        {
+          artistId: '1',
+          id: '1',
+          title: 'Ghosts',
+          year: '2002',
+          dateAdded: 1614682652,
+        },
+        {
+          artistId: '2',
+          id: '2',
+          title: 'Going places',
+          year: '2003',
+          dateAdded: 1614682652,
+        },
+        {
+          artistId: '3',
+          id: '3',
+          title: 'Mapping for fun',
+          year: '2004',
+          dateAdded: 1614682652,
+        },
+      ],
+      filteredTracks: [
+        {
+          albumId: '1',
+          artistId: '1',
+          cover: '',
+          disc: '',
+          duration: 124,
+          id: '1',
+          number: 1,
+          title: 'The bitter end',
+        },
+        {
+          albumId: '2',
+          artistId: '2',
+          cover: '',
+          disc: '',
+          duration: 125,
+          id: '2',
+          number: 1,
+          title: 'Bretta',
+        },
+        {
+          albumId: '3',
+          artistId: '3',
+          cover: '',
+          disc: '',
+          duration: 126,
+          id: '3',
+          number: 1,
+          title: 'A place upon the stars',
+        },
+      ],
+    },
+  },
+}
+
+const mockStore = configureMockStore([thunk])
+const makeMockStore = (customState: any = {}) => mockStore({
+  library: mockLibraryState,
+  libraryBrowser: browserInitialState,
+  ...customState,
+})
+
 describe('library browser (redux)', () => {
   describe('reducer', () => {
     it('should handle initial state', () => {
@@ -141,7 +298,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserInitArtists action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -157,7 +314,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSelectArtist action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
         artists: Object.values(mockLibraryState.artists),
         albums: Object.values(mockLibraryState.albums).map((item) => ({
@@ -214,7 +371,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSelectAlbum action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
         artists: Object.values(mockLibraryState.artists),
         albums: Object.values(mockLibraryState.albums).map((item) => ({
@@ -262,7 +419,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSelectTrack action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
         artists: Object.values(mockLibraryState.artists),
         albums: Object.values(mockLibraryState.albums).map((item) => ({
@@ -302,7 +459,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSortArtists action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -318,7 +475,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSortAlbums action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -334,7 +491,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSortTracks action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -350,7 +507,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSearchUpdateInput action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -369,7 +526,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSearchFilter action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
         artists: Object.values(mockLibraryState.artists),
         albums: Object.values(mockLibraryState.albums).map((item) => ({
@@ -435,6 +592,25 @@ describe('library browser (redux)', () => {
         },
       })
     })
+
+    it('should handle libraryBrowserSetFilter action', () => {
+      const testState: BrowserState = {
+        ...browserInitialState,
+      }
+
+      expect(
+        browserSlice(testState, {
+          type: libraryBrowserSetFilter.type,
+          payload: 'track',
+        })
+      ).toEqual({
+        ...testState,
+        search: {
+          ...testState.search,
+          filter: 'track',
+        },
+      })
+    })
   })
 
   describe('libraryBrowserInit thunk', () => {
@@ -449,7 +625,12 @@ describe('library browser (redux)', () => {
         {
           payload: {
             artistId: '0',
-            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredAlbums: Object.values(mockLibraryState.albums).map(
+              (album) => ({
+                ...album,
+                artist: mockLibraryState.artists[album.artistId as string],
+              })
+            ),
             filteredTracks: [],
             index: 0,
           },
@@ -482,7 +663,7 @@ describe('library browser (redux)', () => {
   })
 
   describe('search thunk', () => {
-    it('should dispatch correct actions when searching for 2 characters or more', () => {
+    it('should dispatch correct actions when searching for 3 characters or more', () => {
       const store = makeMockStore()
 
       const expected = [
@@ -492,30 +673,18 @@ describe('library browser (redux)', () => {
         },
         {
           payload: {
+            filteredArtists: [mockLibraryState.artists[3]],
             filteredAlbums: [
               {
-                artistId: '3',
-                id: '2',
-                title: 'Album 2',
-                year: '2002',
-              },
-            ],
-            filteredArtists: [
-              {
-                id: '3',
-                name: 'Cornifer',
+                ...mockLibraryState.albums[2],
+                artist: mockLibraryState.artists[3],
               },
             ],
             filteredTracks: [
               {
-                albumId: '2',
-                artistId: '3',
-                cover: '',
-                disc: '',
-                duration: 124,
-                id: '2',
-                number: 2,
-                title: 'I draw a map',
+                ...mockLibraryState.tracks[2],
+                artist: mockLibraryState.artists[3],
+                album: mockLibraryState.albums[2],
               },
             ],
             searchTerm: 'corni',
@@ -543,7 +712,12 @@ describe('library browser (redux)', () => {
         {
           payload: {
             artistId: '0',
-            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredAlbums: Object.values(mockLibraryState.albums).map(
+              (album) => ({
+                ...album,
+                artist: mockLibraryState.artists[album.artistId as string],
+              })
+            ),
             filteredTracks: [],
             index: 0,
           },
@@ -556,7 +730,12 @@ describe('library browser (redux)', () => {
         {
           payload: {
             artistId: '0',
-            filteredAlbums: Object.values(mockLibraryState.albums),
+            filteredAlbums: Object.values(mockLibraryState.albums).map(
+              (album) => ({
+                ...album,
+                artist: mockLibraryState.artists[album.artistId as string],
+              })
+            ),
             filteredTracks: [],
             index: 0,
           },
@@ -587,7 +766,7 @@ describe('library browser (redux)', () => {
       expect(actual).toEqual(expected)
     })
 
-    it('should dispatch correct actions when searching for less than 2 characters', () => {
+    it('should dispatch correct actions when searching for less than 3 characters', () => {
       const store = makeMockStore()
 
       const expected = [
@@ -655,12 +834,19 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectArtist({
           artistId: '2',
           index: 2,
-          filteredAlbums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '2'
-          ),
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '2'
-          ),
+          filteredAlbums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '2')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '2')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -675,12 +861,21 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when in search mode', () => {
       // Mock a search.
       const filteredArtists = [mockLibraryState.artists['2']]
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.artistId === '3')
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.artistId === '3')
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const store = makeMockStore({
         libraryBrowser: {
@@ -722,7 +917,12 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectArtist({
           artistId: '0',
           index: 0,
-          filteredAlbums: Object.values<Album>(mockLibraryState.albums),
+          filteredAlbums: Object.values<Album>(mockLibraryState.albums).map(
+            (album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })
+          ),
           filteredTracks: [],
         }),
       ]
@@ -738,12 +938,21 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when All is selected and user has searched', () => {
       // Mock a search.
       const filteredArtists = [mockLibraryState.artists['2']]
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.artistId === '3')
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.artistId === '3')
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const store = makeMockStore({
         libraryBrowser: {
@@ -785,12 +994,19 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectArtist({
           artistId: '1',
           index: 1,
-          filteredAlbums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '1'
-          ),
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '34'
-          ),
+          filteredAlbums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '1')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '34')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -811,9 +1027,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '2',
           index: 2,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.albumId === '2'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.albumId === '2')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -828,12 +1048,21 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when in search mode', () => {
       // Mock a search.
       const filteredArtists = [mockLibraryState.artists['2']]
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.artistId === '3')
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.artistId === '3')
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const store = makeMockStore({
         libraryBrowser: {
@@ -889,12 +1118,21 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when no artist selected, All is selected, and user has searched', () => {
       // Mock a search.
       const filteredArtists = [mockLibraryState.artists['2']]
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.artistId === '3')
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.artistId === '3')
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.toUpperCase().includes('I draw a map'.toUpperCase()))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const store = makeMockStore({
         libraryBrowser: {
@@ -933,9 +1171,12 @@ describe('library browser (redux)', () => {
         libraryBrowser: {
           ...browserInitialState,
           selectedArtists: '2',
-          albums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '2'
-          ),
+          albums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '2')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
         },
       })
 
@@ -943,9 +1184,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '0',
           index: 0,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '2'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '2')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -962,9 +1207,12 @@ describe('library browser (redux)', () => {
         libraryBrowser: {
           ...browserInitialState,
           selectedArtists: '2',
-          albums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '2'
-          ),
+          albums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '2')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
         },
       })
 
@@ -972,9 +1220,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '3',
           index: 3,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '2' && item.albumId === '3'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '2' && item.albumId === '3')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -991,9 +1243,12 @@ describe('library browser (redux)', () => {
         libraryBrowser: {
           ...browserInitialState,
           selectedArtists: '1',
-          albums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '1'
-          ),
+          albums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '1')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
         },
       })
 
@@ -1001,9 +1256,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '4',
           index: 3,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.albumId === '4'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.albumId === '4')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -1020,9 +1279,12 @@ describe('library browser (redux)', () => {
         libraryBrowser: {
           ...browserInitialState,
           selectedArtists: '1',
-          albums: Object.values<Album>(mockLibraryState.albums).filter(
-            (item) => item.artistId === '1'
-          ),
+          albums: Object.values<Album>(mockLibraryState.albums)
+            .filter((item) => item.artistId === '1')
+            .map((album) => ({
+              ...album,
+              artist: mockLibraryState.artists[album.artistId as string],
+            })),
         },
       })
 
@@ -1030,9 +1292,13 @@ describe('library browser (redux)', () => {
         libraryBrowserSelectAlbum({
           albumId: '0',
           index: 0,
-          filteredTracks: Object.values<Track>(mockLibraryState.tracks).filter(
-            (item) => item.artistId === '34'
-          ),
+          filteredTracks: Object.values<Track>(mockLibraryState.tracks)
+            .filter((item) => item.artistId === '34')
+            .map((track) => ({
+              ...track,
+              artist: mockLibraryState.artists[track.artistId as string],
+              album: mockLibraryState.albums[track.albumId as string],
+            })),
         }),
       ]
 
@@ -1049,17 +1315,26 @@ describe('library browser (redux)', () => {
     it('should dispatch correct actions when search matches a track', () => {
       const store = makeMockStore()
 
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter((item) => item.title.includes('I draw a map'))
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter((item) => item.title.includes('I draw a map'))
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
+
       const filteredTracksAlbumIds = filteredTracks.map((item) => item.albumId)
+
       const filteredTracksArtistIds = filteredTracks.map(
         (item) => item.artistId
       )
 
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => filteredTracksAlbumIds.includes(item.id))
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => filteredTracksAlbumIds.includes(item.id))
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
 
       const filteredArtists = Object.values<Artist>(
         mockLibraryState.artists
@@ -1086,10 +1361,15 @@ describe('library browser (redux)', () => {
       const store = makeMockStore()
       const testSearchTerm = 'Album 2'
 
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter((item) => item.title.includes(testSearchTerm))
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter((item) => item.title.includes(testSearchTerm))
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
+
       const filteredAlbumIds = filteredAlbums.map((item) => item.id)
+
       const filteredAlbumsArtistIds = filteredAlbums.map(
         (item) => item.artistId
       )
@@ -1098,11 +1378,15 @@ describe('library browser (redux)', () => {
         mockLibraryState.artists
       ).filter((item) => filteredAlbumsArtistIds.includes(item.id))
 
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter(
-        (item) => item.albumId && filteredAlbumIds.includes(item.albumId)
-      )
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter(
+          (item) => item.albumId && filteredAlbumIds.includes(item.albumId)
+        )
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const expected = [
         libraryBrowserSearchFilter({
@@ -1128,19 +1412,27 @@ describe('library browser (redux)', () => {
       const filteredArtists = Object.values<Artist>(
         mockLibraryState.artists
       ).filter((item) => item.name.includes(testSearchTerm))
+
       const filteredArtistIds = filteredArtists.map((item) => item.id)
 
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter(
-        (item) => item.artistId && filteredArtistIds.includes(item.artistId)
-      )
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter(
+          (item) => item.artistId && filteredArtistIds.includes(item.artistId)
+        )
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
 
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter(
-        (item) => item.artistId && filteredArtistIds.includes(item.artistId)
-      )
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter(
+          (item) => item.artistId && filteredArtistIds.includes(item.artistId)
+        )
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const expected = [
         libraryBrowserSearchFilter({
@@ -1166,20 +1458,28 @@ describe('library browser (redux)', () => {
       const filteredArtists = Object.values<Artist>(
         mockLibraryState.artists
       ).filter((item) => item.name.includes(testSearchTerm))
+
       const filteredArtistIds = filteredArtists.map((item) => item.id)
 
-      const filteredAlbums = Object.values<Album>(
-        mockLibraryState.albums
-      ).filter(
-        (item) => item.artistId && filteredArtistIds.includes(item.artistId)
-      )
+      const filteredAlbums = Object.values<Album>(mockLibraryState.albums)
+        .filter(
+          (item) => item.artistId && filteredArtistIds.includes(item.artistId)
+        )
+        .map((album) => ({
+          ...album,
+          artist: mockLibraryState.artists[album.artistId as string],
+        }))
 
-      const filteredTracks = Object.values<Track>(
-        mockLibraryState.tracks
-      ).filter(
-        (item) => item.albumId
-          && filteredAlbums.map((album) => album.id).includes(item.albumId)
-      )
+      const filteredTracks = Object.values<Track>(mockLibraryState.tracks)
+        .filter(
+          (item) => item.albumId
+            && filteredAlbums.map((album) => album.id).includes(item.albumId)
+        )
+        .map((track) => ({
+          ...track,
+          artist: mockLibraryState.artists[track.artistId as string],
+          album: mockLibraryState.albums[track.albumId as string],
+        }))
 
       const expected = [
         libraryBrowserSearchFilter({
@@ -1193,6 +1493,263 @@ describe('library browser (redux)', () => {
       store.dispatch(
         // @ts-ignore
         searchFilter(testSearchTerm)
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+  })
+
+  describe('setSearchFilter thunk', () => {
+    it('should dispatch correct actions when selecting a filter and search term is 2 characters or less', () => {
+      const store = makeMockStore({
+        libraryBrowser: {
+          ...browserInitialState,
+          search: {
+            ...browserInitialState.search,
+            term: 'co',
+          },
+        },
+      })
+
+      const expected = [
+        {
+          payload: 'artist',
+          type: 'libraryBrowser/libraryBrowserSetFilter',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        setSearchFilter('artist')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+
+    it('should dispatch correct actions when selecting a filter and search term is 3 characters or more', () => {
+      const store = makeMockStore({
+        libraryBrowser: {
+          ...browserInitialState,
+          search: {
+            ...browserInitialState.search,
+            term: 'corni',
+          },
+        },
+      })
+
+      const expected = [
+        {
+          payload: 'artist',
+          type: 'libraryBrowser/libraryBrowserSetFilter',
+        },
+        {
+          payload: {
+            filteredArtists: [mockLibraryState.artists[3]],
+            filteredAlbums: [
+              {
+                ...mockLibraryState.albums[2],
+                artist: mockLibraryState.artists[3],
+              },
+            ],
+            filteredTracks: [
+              {
+                ...mockLibraryState.tracks[2],
+                artist: mockLibraryState.artists[3],
+                album: mockLibraryState.albums[2],
+              },
+            ],
+            searchTerm: 'corni',
+          },
+          type: 'libraryBrowser/libraryBrowserSearchFilter',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        setSearchFilter('artist')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+
+    it('should filter search result by artist when selecting the artist filter', () => {
+      const store = makeMockStore({
+        ...initialStateForFilterTesting,
+        libraryBrowser: {
+          ...initialStateForFilterTesting.libraryBrowser,
+          search: {
+            ...initialStateForFilterTesting.libraryBrowser.search,
+            // We have to mock that because 'libraryBrowser/libraryBrowserSearchFilter' thunk
+            // depends on this property that is set using dispatch(setFilter), but dispatch()
+            // is mocked, so it doesn't actually change the state.
+            filter: 'artist',
+          },
+        },
+      })
+
+      const expected = [
+        {
+          payload: 'artist',
+          type: 'libraryBrowser/libraryBrowserSetFilter',
+        },
+        {
+          payload: {
+            filteredArtists: initialStateForFilterTesting.libraryBrowser.search.filteredArtists.filter(
+              (item) => item.id === '1'
+            ),
+            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums
+              .filter((item) => item.artistId === '1')
+              .map((album) => ({
+                ...album,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    album.artistId as string
+                  ],
+              })),
+            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks
+              .filter((item) => item.artistId === '1')
+              .map((track) => ({
+                ...track,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    track.artistId as string
+                  ],
+                album:
+                  initialStateForFilterTesting.library.albums[
+                    track.albumId as string
+                  ],
+              })),
+            searchTerm: 'place',
+          },
+          type: 'libraryBrowser/libraryBrowserSearchFilter',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        setSearchFilter('artist')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+
+    it('should filter search result by album when selecting the album filter', () => {
+      const store = makeMockStore({
+        ...initialStateForFilterTesting,
+        libraryBrowser: {
+          ...initialStateForFilterTesting.libraryBrowser,
+          search: {
+            ...initialStateForFilterTesting.libraryBrowser.search,
+            // We have to mock that because 'libraryBrowser/libraryBrowserSearchFilter' thunk
+            // depends on this property that is set using dispatch(setFilter), but dispatch()
+            // is mocked, so it doesn't actually change the state.
+            filter: 'album',
+          },
+        },
+      })
+
+      const expected = [
+        {
+          payload: 'album',
+          type: 'libraryBrowser/libraryBrowserSetFilter',
+        },
+        {
+          payload: {
+            filteredArtists: initialStateForFilterTesting.libraryBrowser.search.filteredArtists.filter(
+              (item) => item.id === '2'
+            ),
+            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums
+              .filter((item) => item.artistId === '2')
+              .map((album) => ({
+                ...album,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    album.artistId as string
+                  ],
+              })),
+            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks
+              .filter((item) => item.artistId === '2')
+              .map((track) => ({
+                ...track,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    track.artistId as string
+                  ],
+                album:
+                  initialStateForFilterTesting.library.albums[
+                    track.albumId as string
+                  ],
+              })),
+            searchTerm: 'place',
+          },
+          type: 'libraryBrowser/libraryBrowserSearchFilter',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        setSearchFilter('album')
+      )
+      const actual = store.getActions()
+      expect(actual).toEqual(expected)
+    })
+
+    it('should filter search result by track when selecting the track filter', () => {
+      const store = makeMockStore({
+        ...initialStateForFilterTesting,
+        libraryBrowser: {
+          ...initialStateForFilterTesting.libraryBrowser,
+          search: {
+            ...initialStateForFilterTesting.libraryBrowser.search,
+            // We have to mock that because 'libraryBrowser/libraryBrowserSearchFilter' thunk
+            // depends on this property that is set using dispatch(setFilter), but dispatch()
+            // is mocked, so it doesn't actually change the state.
+            filter: 'track',
+          },
+        },
+      })
+
+      const expected = [
+        {
+          payload: 'track',
+          type: 'libraryBrowser/libraryBrowserSetFilter',
+        },
+        {
+          payload: {
+            filteredArtists: initialStateForFilterTesting.libraryBrowser.search.filteredArtists.filter(
+              (item) => item.id === '3'
+            ),
+            filteredAlbums: initialStateForFilterTesting.libraryBrowser.search.filteredAlbums
+              .filter((item) => item.artistId === '3')
+              .map((album) => ({
+                ...album,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    album.artistId as string
+                  ],
+              })),
+            filteredTracks: initialStateForFilterTesting.libraryBrowser.search.filteredTracks
+              .filter((item) => item.artistId === '3')
+              .map((track) => ({
+                ...track,
+                artist:
+                  initialStateForFilterTesting.library.artists[
+                    track.artistId as string
+                  ],
+                album:
+                  initialStateForFilterTesting.library.albums[
+                    track.albumId as string
+                  ],
+              })),
+            searchTerm: 'place',
+          },
+          type: 'libraryBrowser/libraryBrowserSearchFilter',
+        },
+      ]
+
+      store.dispatch(
+        // @ts-ignore
+        setSearchFilter('track')
       )
       const actual = store.getActions()
       expect(actual).toEqual(expected)

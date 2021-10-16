@@ -1,41 +1,15 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { immutableNestedSort, immutableSortTracks } from 'common/utils/utils'
 import { constants as APIConstants } from 'api'
-import Artist from 'types/Artist'
-import Album from 'types/Album'
-import Track from 'types/Track'
 import { AppThunk, RootState } from '../../store/types'
 
-export interface BrowserStateType {
-  artists: Artist[]
-  albums: Album[]
-  tracks: Track[]
-  sortArtists: string
-  sortAlbums: string
-  sortTracks: string
-  selectedArtists: string
-  selectedAlbums: string
-  selectedTracks: string
-  currentPositionArtists: number
-  currentPositionAlbums: number
-  currentPositionTracks: number
-  search: {
-    term: string
-    // I don't like that but I don't want to rerun the search each time the user selects
-    // something after a search.
-    filteredArtists: Artist[]
-    filteredAlbums: Album[]
-    filteredTracks: Track[]
-  }
-}
-
-export const browserInitialState: BrowserStateType = {
+export const browserInitialState: BrowserState = {
   artists: [],
   albums: [],
   tracks: [],
   sortArtists: 'name',
   sortAlbums: 'title',
-  sortTracks: 'albumId',
+  sortTracks: 'number',
   selectedArtists: '0',
   selectedAlbums: '0',
   selectedTracks: '0',
@@ -44,6 +18,7 @@ export const browserInitialState: BrowserStateType = {
   currentPositionTracks: 0,
   search: {
     term: '',
+    filter: 'all',
     filteredArtists: [],
     filteredAlbums: [],
     filteredTracks: [],
@@ -54,11 +29,14 @@ const browserSlice = createSlice({
   name: 'libraryBrowser',
   initialState: browserInitialState,
   reducers: {
-    libraryBrowserInitArtists(state, action: PayloadAction<Artist[]>) {
+    libraryBrowserInitArtists(
+      state: BrowserState,
+      action: PayloadAction<Artist[]>
+    ) {
       state.artists = action.payload
     },
     libraryBrowserSelectArtist(
-      state,
+      state: BrowserState,
       action: PayloadAction<{
         artistId: string
         index: number
@@ -76,7 +54,7 @@ const browserSlice = createSlice({
       state.tracks = action.payload.filteredTracks
     },
     libraryBrowserSelectAlbum(
-      state,
+      state: BrowserState,
       action: PayloadAction<{
         albumId: string
         index: number
@@ -90,7 +68,7 @@ const browserSlice = createSlice({
       state.tracks = action.payload.filteredTracks
     },
     libraryBrowserSelectTrack(
-      state,
+      state: BrowserState,
       action: PayloadAction<{
         trackId: string
         index: number
@@ -99,20 +77,32 @@ const browserSlice = createSlice({
       state.selectedTracks = action.payload.trackId
       state.currentPositionTracks = action.payload.index
     },
-    libraryBrowserSortArtists(state, action: PayloadAction<string>) {
+    libraryBrowserSortArtists(
+      state: BrowserState,
+      action: PayloadAction<ArtistsSortOptions>
+    ) {
       state.sortArtists = action.payload
     },
-    libraryBrowserSortAlbums(state, action: PayloadAction<string>) {
+    libraryBrowserSortAlbums(
+      state: BrowserState,
+      action: PayloadAction<AlbumsSortOptions>
+    ) {
       state.sortAlbums = action.payload
     },
-    libraryBrowserSortTracks(state, action: PayloadAction<string>) {
+    libraryBrowserSortTracks(
+      state: BrowserState,
+      action: PayloadAction<TracksSortOptions>
+    ) {
       state.sortTracks = action.payload
     },
-    libraryBrowserSearchUpdateInput(state, action: PayloadAction<string>) {
+    libraryBrowserSearchUpdateInput(
+      state: BrowserState,
+      action: PayloadAction<string>
+    ) {
       state.search.term = action.payload
     },
     libraryBrowserSearchFilter(
-      state,
+      state: BrowserState,
       action: PayloadAction<{
         searchTerm: string
         filteredArtists: Artist[]
@@ -130,6 +120,7 @@ const browserSlice = createSlice({
       // Set search filtered lists and term in memory.
       state.search = {
         term: action.payload.searchTerm,
+        filter: state.search.filter,
         filteredArtists: action.payload.filteredArtists,
         filteredAlbums: action.payload.filteredAlbums,
         filteredTracks: action.payload.filteredTracks,
@@ -139,6 +130,12 @@ const browserSlice = createSlice({
       state.albums = action.payload.filteredAlbums
       state.tracks = action.payload.filteredTracks
     },
+    libraryBrowserSetFilter(
+      state: BrowserState,
+      action: PayloadAction<SearchFilter>
+    ) {
+      state.search.filter = action.payload
+    },
   },
 })
 
@@ -147,6 +144,7 @@ export const {
   libraryBrowserSelectAlbum,
   libraryBrowserSearchUpdateInput,
   libraryBrowserSearchFilter,
+  libraryBrowserSetFilter,
   libraryBrowserInitArtists,
   libraryBrowserSelectTrack,
   libraryBrowserSortArtists,
@@ -191,19 +189,33 @@ export const initArtists = (): AppThunk => (dispatch, getState) => {
 }
 
 export const search = (text: string): AppThunk => (dispatch) => {
+  dispatch(libraryBrowserSearchUpdateInput(text))
+
   // Launch the search only if user has typed 3 or more characters.
   if (text.length > 2) {
-    dispatch(libraryBrowserSearchUpdateInput(text))
     dispatch(searchFilter(text))
   } else if (text.length === 0) {
     // Reinitialise library browser.
-    dispatch(libraryBrowserSearchUpdateInput(text))
     dispatch(selectArtist({ artistId: '0', index: 0 }))
     // Others tabs will be reinitialised automatically.
     dispatch(libraryBrowserInit())
-  } else {
-    // In other cases, update the search field.
-    dispatch(libraryBrowserSearchUpdateInput(text))
+  }
+}
+
+export const setSearchFilter = (filter: SearchFilter): AppThunk => (
+  dispatch,
+  getState
+) => {
+  const {
+    libraryBrowser: {
+      search: { term },
+    },
+  } = getState()
+
+  dispatch(libraryBrowserSetFilter(filter))
+
+  if (term.length > 2) {
+    dispatch(searchFilter(term))
   }
 }
 
@@ -267,12 +279,23 @@ export const selectArtist = ({
     }
   }
 
+  const hydratedAlbums = filteredAlbums.map((album) => ({
+    ...album,
+    artist: library.artists[album.artistId],
+  }))
+
+  const hydratedTracks = filteredTracks.map((track) => ({
+    ...track,
+    artist: library.artists[track.artistId],
+    album: library.albums[track.albumId],
+  }))
+
   dispatch(
     libraryBrowserSelectArtist({
       artistId,
       index,
-      filteredAlbums,
-      filteredTracks,
+      filteredAlbums: hydratedAlbums,
+      filteredTracks: hydratedTracks,
     })
   )
 }
@@ -343,7 +366,19 @@ export const selectAlbum = ({
     filteredTracks = tracksToFilter
   }
 
-  dispatch(libraryBrowserSelectAlbum({ albumId, index, filteredTracks }))
+  const hydratedTracks = filteredTracks.map((track) => ({
+    ...track,
+    artist: library.artists[track.artistId],
+    album: library.albums[track.albumId],
+  }))
+
+  dispatch(
+    libraryBrowserSelectAlbum({
+      albumId,
+      index,
+      filteredTracks: hydratedTracks,
+    })
+  )
 }
 
 /**
@@ -381,11 +416,16 @@ export const searchFilter = (searchTerm: string): AppThunk => (
   const filteredTracks: Track[] = []
 
   // Get ids of all artists whose name is matching the search term.
-  libraryArtists.forEach((item) => {
-    if (item.name.toUpperCase().includes(searchTerm.toUpperCase())) {
-      artistsIds.push(item.id)
-    }
-  })
+  if (
+    state.libraryBrowser.search.filter === 'all'
+    || state.libraryBrowser.search.filter === 'artist'
+  ) {
+    libraryArtists.forEach((item) => {
+      if (item.name.toUpperCase().includes(searchTerm.toUpperCase())) {
+        artistsIds.push(item.id)
+      }
+    })
+  }
 
   // Store artists and album ids that are not found with a direct match in separate variables.
   const undirectAlbumsIds: string[] = []
@@ -395,12 +435,17 @@ export const searchFilter = (searchTerm: string): AppThunk => (
 
   libraryAlbums.forEach((item) => {
     // Get ids of all albums whose title is matching the search term.
-    if (item.title.toUpperCase().includes(searchTerm.toUpperCase())) {
-      albumsIds.push(item.id)
+    if (
+      state.libraryBrowser.search.filter === 'all'
+      || state.libraryBrowser.search.filter === 'album'
+    ) {
+      if (item.title.toUpperCase().includes(searchTerm.toUpperCase())) {
+        albumsIds.push(item.id)
 
-      // Add album's artist id to the list of artists.
-      if (item.artistId && !artistsIds.includes(item.artistId)) {
-        undirectArtistsIds.push(item.artistId)
+        // Add album's artist id to the list of artists.
+        if (item.artistId && !artistsIds.includes(item.artistId)) {
+          undirectArtistsIds.push(item.artistId)
+        }
       }
     }
 
@@ -437,19 +482,24 @@ export const searchFilter = (searchTerm: string): AppThunk => (
     }
 
     // Get ids of all tracks whose title is matching the search term.
-    if (item.title.toUpperCase().includes(searchTerm.toUpperCase())) {
-      if (!filteredTracks.includes(item)) {
-        filteredTracks.push(item)
-      }
+    if (
+      state.libraryBrowser.search.filter === 'all'
+      || state.libraryBrowser.search.filter === 'track'
+    ) {
+      if (item.title.toUpperCase().includes(searchTerm.toUpperCase())) {
+        if (!filteredTracks.includes(item)) {
+          filteredTracks.push(item)
+        }
 
-      // Add track's artist id to the list of artists.
-      if (item.artistId && !undirectArtistsIds.includes(item.artistId)) {
-        undirectArtistsIds.push(item.artistId)
-      }
+        // Add track's artist id to the list of artists.
+        if (item.artistId && !undirectArtistsIds.includes(item.artistId)) {
+          undirectArtistsIds.push(item.artistId)
+        }
 
-      // Add track's album id to the list of albums.
-      if (item.albumId && !undirectAlbumsIds.includes(item.albumId)) {
-        undirectAlbumsIds.push(item.albumId)
+        // Add track's album id to the list of albums.
+        if (item.albumId && !undirectAlbumsIds.includes(item.albumId)) {
+          undirectAlbumsIds.push(item.albumId)
+        }
       }
     }
   })
@@ -477,12 +527,24 @@ export const searchFilter = (searchTerm: string): AppThunk => (
   const filteredArtists = libraryArtists.filter((item) => artistsIds.includes(item.id))
   const filteredAlbums = libraryAlbums.filter((item) => albumsIds.includes(item.id))
 
+  // Hydrate elements.
+  const hydratedAlbums = filteredAlbums.map((album) => ({
+    ...album,
+    artist: state.library.artists[album.artistId],
+  }))
+
+  const hydratedTracks = filteredTracks.map((track) => ({
+    ...track,
+    artist: state.library.artists[track.artistId],
+    album: state.library.albums[track.albumId],
+  }))
+
   dispatch(
     libraryBrowserSearchFilter({
       searchTerm,
       filteredArtists,
-      filteredAlbums,
-      filteredTracks,
+      filteredAlbums: hydratedAlbums,
+      filteredTracks: hydratedTracks,
     })
   )
 }
@@ -491,7 +553,7 @@ const getArtists = (state: RootState) => state.libraryBrowser.artists
 const getArtistsSortOrder = (state: RootState) => state.libraryBrowser.sortArtists
 export const getArtistsList = createSelector(
   [getArtists, getArtistsSortOrder],
-  (list, sortOrder) => {
+  (list: Artist[], sortOrder: SortOrder) => {
     const itemList = immutableNestedSort(list, sortOrder)
 
     // Add a "All" item at the beginning of the list
@@ -512,7 +574,7 @@ const getAlbums = (state: RootState) => state.libraryBrowser.albums
 const getAlbumsSortOrder = (state: RootState) => state.libraryBrowser.sortAlbums
 export const getAlbumsList = createSelector(
   [getAlbums, getAlbumsSortOrder],
-  (list, sortOrder) => {
+  (list: Album[], sortOrder: SortOrder) => {
     const itemList = immutableNestedSort(list, sortOrder)
 
     // Add a "All" item at the beginning of the list
@@ -533,7 +595,7 @@ const getTracks = (state: RootState) => state.libraryBrowser.tracks
 const getTracksSortOrder = (state: RootState) => state.libraryBrowser.sortTracks
 export const getTracksList = createSelector(
   [getTracks, getTracksSortOrder],
-  (list, sortOrder) => {
+  (list: Track[], sortOrder: SortOrder) => {
     const itemList = immutableSortTracks(list, sortOrder)
 
     // Add a "All" item at the beginning of the list

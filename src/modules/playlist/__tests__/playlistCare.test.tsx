@@ -1,5 +1,4 @@
 import { libraryInitialState, LibraryStateType } from '../../library/redux'
-import Track from '../../../types/Track'
 import { findSimilarTracks } from '../utils/playlistCare'
 
 const mockLibraryState: LibraryStateType = {
@@ -25,18 +24,21 @@ const mockLibraryState: LibraryStateType = {
       title: 'Album from artist 1',
       year: '1986',
       artistId: '1',
+      dateAdded: 1614682652,
     },
     2: {
       id: '2',
       title: 'Album from artist 2',
       year: '2002',
       artistId: '2',
+      dateAdded: 1614682652,
     },
     3: {
       id: '3',
       title: 'Compilation 1',
       year: '1992',
       artistId: '3',
+      dateAdded: 1614682652,
     },
   },
   tracks: {
@@ -186,6 +188,7 @@ describe('playlistCare', () => {
           title: 'Album from artist 2',
           year: '2002',
           artistId: '23',
+          dateAdded: 1614682652,
         },
         artist: {
           id: '23',
@@ -209,6 +212,7 @@ describe('playlistCare', () => {
           title: 'Album from artist 2',
           year: '2002',
           artistId: '25',
+          dateAdded: 1614682652,
         },
         artist: {
           id: '25',
@@ -236,6 +240,7 @@ describe('playlistCare', () => {
           title: 'Album from artist 1',
           year: '2002',
           artistId: '11',
+          dateAdded: 1614682652,
         },
         artist: {
           id: '11',
@@ -261,6 +266,7 @@ describe('playlistCare', () => {
           title: 'Album from artist 1',
           year: '2002',
           artistId: '11',
+          dateAdded: 1614682652,
         },
         artist: {
           id: '11',
@@ -288,6 +294,7 @@ describe('playlistCare', () => {
           title: 'Compilation 1',
           year: '2002',
           artistId: '11',
+          dateAdded: 1614682652,
         },
         artist: {
           id: '11',
@@ -315,6 +322,7 @@ describe('playlistCare', () => {
           title: 'Compilation 1',
           year: '2002',
           artistId: '11',
+          dateAdded: 1614682652,
         },
         artist: {
           id: '11',
@@ -342,6 +350,7 @@ describe('playlistCare', () => {
           title: 'Compilation 1',
           year: '2002',
           artistId: '11',
+          dateAdded: 1614682652,
         },
       }
 
@@ -382,6 +391,7 @@ describe('playlistCare', () => {
           title: 'Album from artist 1',
           year: '2002',
           artistId: '11',
+          dateAdded: 1614682652,
         },
         artist: {
           id: '11',

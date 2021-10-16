@@ -56,6 +56,7 @@ module.exports = {
     'import/no-unresolved': ['error', { commonjs: true, caseSensitive: true }],
     'import/no-duplicates': 'error',
     'import/no-extraneous-dependencies': ['error', { 'devDependencies': true}],
+    'import/prefer-default-export': ['off'],
     'eqeqeq': ['error', 'always', { null: 'ignore' }],
     'no-debugger': 'error',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -68,6 +69,7 @@ module.exports = {
     'no-empty': 'error',
     'object-curly-newline': ['warn'],
     'object-curly-spacing': ['warn'],
+    'padded-blocks': ['warn'],
     'prefer-destructuring': [
       'warn',
       {

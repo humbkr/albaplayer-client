@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import ActionButtonIcon from 'common/components/ActionButtonIcon'
-import { PlaylistCareItem } from '../types/PlaylistCareItem'
 import Icon from '../../../common/components/Icon'
 
 const PlaylistCareListItem: FunctionComponent<{

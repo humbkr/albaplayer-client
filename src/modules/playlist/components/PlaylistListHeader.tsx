@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import ActionButtonIcon from 'common/components/ActionButtonIcon'
 
-const PlaylistListHeader = ({ onAddClick }: { onAddClick: () => void }) => (
+const PlaylistListHeader: React.FC<{
+  onAddClick: () => void
+}> = ({ onAddClick }: { onAddClick: () => void }) => (
   <Wrapper>
     <h2>Playlists</h2>
     <Actions>
@@ -11,9 +12,6 @@ const PlaylistListHeader = ({ onAddClick }: { onAddClick: () => void }) => (
     </Actions>
   </Wrapper>
 )
-PlaylistListHeader.propTypes = {
-  onAddClick: PropTypes.func.isRequired,
-}
 
 export default PlaylistListHeader
 

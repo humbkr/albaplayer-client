@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 import { contextMenu } from 'react-contexify'
 import ActionButtonIcon from '../../../common/components/ActionButtonIcon'
-import Album from '../../../types/Album'
 import { playAlbum } from '../../player/redux'
 import Cover from '../../../common/components/Cover'
 

@@ -101,6 +101,7 @@ const getSettings = () => {
         libraryPath
         coversPreferredSource
         disableLibrarySettings
+        version
       }
     }
   `

@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux'
 // eslint-disable-next-line import/no-cycle
 import PlaylistListPane from '../components/PlaylistListPane'
 import PlaylistAddPopup from '../components/PlaylistAddPopup'
-import Playlist from '../types/Playlist'
 import {
   playlistCreatePlaylist,
   PlaylistPane,

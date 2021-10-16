@@ -214,6 +214,7 @@ describe('settings (redux)', () => {
             libraryPath: '/remote/lib/path',
             coversPreferredSource: 'folder',
             disableLibrarySettings: false,
+            version: '1.2.3',
           },
         },
       }
@@ -262,12 +263,12 @@ describe('settings (redux)', () => {
       const store = makeMockStore()
 
       api.scanLibrary = jest.fn().mockImplementationOnce(
-        () => new Promise((resolve) => {
+        () => new Promise<void>((resolve) => {
           resolve()
         })
       )
       apolloClient.resetStore = jest.fn().mockImplementationOnce(
-        () => new Promise((resolve) => {
+        () => new Promise<void>((resolve) => {
           resolve()
         })
       )
@@ -314,12 +315,12 @@ describe('settings (redux)', () => {
       const store = makeMockStore()
 
       api.emptyLibrary = jest.fn().mockImplementationOnce(
-        () => new Promise((resolve) => {
+        () => new Promise<void>((resolve) => {
           resolve()
         })
       )
       apolloClient.resetStore = jest.fn().mockImplementationOnce(
-        () => new Promise((resolve) => {
+        () => new Promise<void>((resolve) => {
           resolve()
         })
       )

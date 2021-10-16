@@ -30,7 +30,6 @@ import {
   playArtistAfterCurrent,
   playPlaylistAfterCurrent,
 } from '../redux'
-import Track from '../../../types/Track'
 import { playlistsInitialState, PlaylistsStateType } from '../../playlist/redux'
 
 import { PlayerPlaybackMode } from '../types'
@@ -70,24 +69,28 @@ const mockLibraryState: LibraryStateType = {
       title: 'Album 1',
       year: '1986',
       artistId: '2',
+      dateAdded: 1614682652,
     },
     2: {
       id: '2',
       title: 'Album 2',
       year: '2002',
       artistId: '3',
+      dateAdded: 1614682652,
     },
     3: {
       id: '3',
       title: 'Album 3',
       year: '1992',
       artistId: '2',
+      dateAdded: 1614682652,
     },
     4: {
       id: '4',
       title: 'Compilation',
       year: '2018',
       artistId: '1',
+      dateAdded: 1614682652,
     },
   },
   tracks: {
@@ -271,6 +274,7 @@ describe('player (redux)', () => {
               id: '1',
               title: 'Album 01',
               year: '2000',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '1',
@@ -338,6 +342,7 @@ describe('player (redux)', () => {
               id: '1',
               title: 'Album 01',
               year: '2000',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '1',
@@ -797,6 +802,7 @@ describe('player (redux)', () => {
               id: '1',
               title: 'Album 01',
               year: '2000',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '1',
@@ -870,6 +876,7 @@ describe('player (redux)', () => {
               id: '2',
               title: 'Album 02',
               year: '2002',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '3',
@@ -919,7 +926,7 @@ describe('player (redux)', () => {
       })
 
       api.getFullTrackInfo = jest.fn().mockImplementationOnce(
-        () => new Promise((resolve) => {
+        () => new Promise<void>((resolve) => {
           resolve()
         })
       )
@@ -960,6 +967,7 @@ describe('player (redux)', () => {
               id: '2',
               title: 'Album 02',
               year: '2002',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '3',
@@ -1017,6 +1025,7 @@ describe('player (redux)', () => {
               id: '1',
               title: 'Album 01',
               year: '2000',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '1',
@@ -1082,7 +1091,7 @@ describe('player (redux)', () => {
       })
 
       api.getFullTrackInfo = jest.fn().mockImplementationOnce(
-        () => new Promise((resolve) => {
+        () => new Promise<void>((resolve) => {
           resolve()
         })
       )
@@ -1146,6 +1155,7 @@ describe('player (redux)', () => {
               id: '2',
               title: 'Album 02',
               year: '2002',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '3',
@@ -1195,7 +1205,7 @@ describe('player (redux)', () => {
       })
 
       api.getFullTrackInfo = jest.fn().mockImplementationOnce(
-        () => new Promise((resolve) => {
+        () => new Promise<void>((resolve) => {
           resolve()
         })
       )
@@ -1236,6 +1246,7 @@ describe('player (redux)', () => {
               id: '1',
               title: 'Album 01',
               year: '2000',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '1',
@@ -1293,6 +1304,7 @@ describe('player (redux)', () => {
               id: '2',
               title: 'Album 02',
               year: '2002',
+              dateAdded: 1614682652,
             },
             artist: {
               id: '3',
