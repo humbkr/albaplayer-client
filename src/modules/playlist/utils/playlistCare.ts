@@ -1,4 +1,3 @@
-import Track from '../../../types/Track'
 import { LibraryStateType } from '../../library/redux'
 
 /**
@@ -45,13 +44,11 @@ export const findSimilarTracks = (
   }
 
   // Else we will try to filter again by album name.
-  const trackNameAndAlbumNameMatch = trackNameMatches.filter((item: Track) =>
-    // @ts-ignore
-    (
-      item.albumId
+  const trackNameAndAlbumNameMatch = trackNameMatches.filter(
+    (item: Track) => item.albumId
       && library.albums[item.albumId].title.toLowerCase()
         === track.album?.title.toLowerCase()
-    ))
+  )
 
   if (trackNameAndAlbumNameMatch.length === 1) {
     // We found a unique match, no need to search more.
@@ -70,11 +67,9 @@ export const findSimilarTracks = (
 
   // Else we will try to filter again by artist name.
   const trackNameAndAlbumNameAndArtistNameMatch = trackNameAndAlbumNameMatch.filter(
-    (item: Track) => (
-      item.artistId
-        && library.artists[item.artistId].name.toLowerCase()
-          === track.artist?.name.toLowerCase()
-    )
+    (item: Track) => item.artistId
+      && library.artists[item.artistId].name.toLowerCase()
+        === track.artist?.name.toLowerCase()
   )
 
   if (trackNameAndAlbumNameAndArtistNameMatch.length === 1) {

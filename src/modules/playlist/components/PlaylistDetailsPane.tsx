@@ -19,8 +19,6 @@ import {
 import { RootState } from 'store/types'
 import PlaylistTrackList from './PlaylistTrackList'
 import PlaylistTrackContextMenu from './PlaylistTrackContextMenu'
-import PlaylistItem from '../types/PlaylistItem'
-import Playlist from '../types/Playlist'
 import PlaylistActionsMoreContextMenu from './PlaylistActionsMoreContextMenu'
 
 interface Props {

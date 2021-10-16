@@ -2,7 +2,6 @@ import {
   libraryInitialState,
   LibraryStateType,
 } from '../../modules/library/redux'
-import Track from '../../types/Track'
 import { immutableSortTracks } from '../utils/utils'
 
 const mockLibraryState: LibraryStateType = {

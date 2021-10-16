@@ -1,4 +1,3 @@
-import Playlist from 'modules/playlist/types/Playlist'
 import { RootState } from './types'
 
 const rootMigrations = {

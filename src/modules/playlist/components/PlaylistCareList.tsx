@@ -4,7 +4,6 @@ import { AutoSizer, List } from 'react-virtualized'
 import ListItem from 'modules/playlist/components/ListItem'
 import { AppTheme } from 'themes/types'
 import PlaylistCareListItem from './PlaylistCareListItem'
-import { PlaylistCareItem } from '../types/PlaylistCareItem'
 
 interface Props {
   items: PlaylistCareItem[]

@@ -13,7 +13,6 @@ import {
 import PlaylistContextMenu from 'modules/playlist/components/PlaylistContextMenu'
 import ListItem from 'modules/playlist/components/ListItem'
 import { RootState } from 'store/types'
-import Playlist from '../types/Playlist'
 
 interface Props {
   switchPaneHandler: (e: React.KeyboardEvent) => void

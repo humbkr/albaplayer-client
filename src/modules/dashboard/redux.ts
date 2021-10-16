@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import Album from '../../types/Album'
 import { AppThunk } from '../../store/types'
 
 export interface DashboardStateType {

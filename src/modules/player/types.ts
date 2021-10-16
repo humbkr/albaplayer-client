@@ -1,5 +1,3 @@
-import Track from '../../types/Track'
-
 export interface QueueItem {
   track: Track
 }

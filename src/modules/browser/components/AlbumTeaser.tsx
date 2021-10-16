@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { contextMenu } from 'react-contexify'
-import Album from '../../../types/Album'
 
 const AlbumTeaser: FunctionComponent<{
   item: Album
@@ -29,8 +28,8 @@ const AlbumTeaser: FunctionComponent<{
         <AlbumTeaserTitle>{item.title}</AlbumTeaserTitle>
         <AlbumSubInfo className={selected ? 'selected' : ''}>
           {item.year && <span>{item.year}</span>}
-          {item.year && item.artistName && ' - '}
-          <AlbumTeaserArtist>{item.artistName}</AlbumTeaserArtist>
+          {item.year && item.artist?.name && ' - '}
+          <AlbumTeaserArtist>{item.artist?.name}</AlbumTeaserArtist>
         </AlbumSubInfo>
       </div>
     </AlbumTeaserWrapper>

@@ -13,7 +13,6 @@ import { addPlaylist as addPlaylistToPlaylist } from 'modules/playlist/redux'
 // eslint-disable-next-line import/no-cycle
 import { RootState } from 'store/types'
 import { EditPlaylistContext } from '../scenes/Playlists'
-import Playlist from '../types/Playlist'
 
 const PlaylistContextMenu = () => {
   const playlists = useSelector((state: RootState) => Object.values(state.playlist.playlists))

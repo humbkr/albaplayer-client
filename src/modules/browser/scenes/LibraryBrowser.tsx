@@ -13,7 +13,7 @@ import { libraryBrowserInit } from 'modules/browser/redux'
  * Handles the switch between artists / albums / tracks pane using
  * left and right arrows.
  */
-function LibraryBrowser() {
+const LibraryBrowser: React.FC = () => {
   // Used to focus the search input at mount.
   const searchBar = useRef<HTMLInputElement>(null)
   // These refs are forwarded to the underlying react-virtualized

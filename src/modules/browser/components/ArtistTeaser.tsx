@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { contextMenu } from 'react-contexify'
-import Artist from '../../../types/Artist'
 
 const ArtistTeaser: FunctionComponent<{
   item: Artist

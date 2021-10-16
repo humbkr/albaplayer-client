@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import Track from '../../types/Track'
 import { immutableRemove } from '../../common/utils/utils'
 import { QueueItem } from './types'
 

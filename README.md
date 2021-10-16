@@ -33,13 +33,13 @@ configuration file and run the alba executable from the command line.
 ## Developement
 
 **Tech stack:**
-- React 16
+- React
 - Apollo GraphQL
-- Redux
+- Redux toolkit
 
 **Dependencies:**   
 
-This project uses yarn / npm to manage its dependencies.
+This project uses yarn to manage its dependencies.
 
 **Code organization:**   
 
@@ -52,6 +52,17 @@ This project uses [AirBNB javascript codestyle](https://github.com/airbnb/javasc
 some tweaks.
 
 Jetbrains IDE setup: [https://www.themarketingtechnologist.co/eslint-with-airbnb-javascript-style-guide-in-webstorm/](https://www.themarketingtechnologist.co/eslint-with-airbnb-javascript-style-guide-in-webstorm/)
+
+### Quick start
+
+
+```bash
+cp .env .env.development
+# Here Change .env.development values
+
+yarn install
+yarn start
+```
 
 #### Jetbrains IDE setup
 This project uses absolute imports. To avoid Jetbrains IDEs to complain:
