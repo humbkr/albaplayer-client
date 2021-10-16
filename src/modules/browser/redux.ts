@@ -3,37 +3,13 @@ import { immutableNestedSort, immutableSortTracks } from 'common/utils/utils'
 import { constants as APIConstants } from 'api'
 import { AppThunk, RootState } from '../../store/types'
 
-export type BrowserStateType = {
-  artists: Artist[]
-  albums: Album[]
-  tracks: Track[]
-  sortArtists: string
-  sortAlbums: string
-  sortTracks: string
-  selectedArtists: string
-  selectedAlbums: string
-  selectedTracks: string
-  currentPositionArtists: number
-  currentPositionAlbums: number
-  currentPositionTracks: number
-  search: {
-    term: string
-    filter: SearchFilter
-    // I don't like that but I don't want to rerun the search each time the user selects
-    // something after a search.
-    filteredArtists: Artist[]
-    filteredAlbums: Album[]
-    filteredTracks: Track[]
-  }
-}
-
-export const browserInitialState: BrowserStateType = {
+export const browserInitialState: BrowserState = {
   artists: [],
   albums: [],
   tracks: [],
   sortArtists: 'name',
   sortAlbums: 'title',
-  sortTracks: 'albumId',
+  sortTracks: 'number',
   selectedArtists: '0',
   selectedAlbums: '0',
   selectedTracks: '0',
@@ -54,13 +30,13 @@ const browserSlice = createSlice({
   initialState: browserInitialState,
   reducers: {
     libraryBrowserInitArtists(
-      state: BrowserStateType,
+      state: BrowserState,
       action: PayloadAction<Artist[]>
     ) {
       state.artists = action.payload
     },
     libraryBrowserSelectArtist(
-      state: BrowserStateType,
+      state: BrowserState,
       action: PayloadAction<{
         artistId: string
         index: number
@@ -78,7 +54,7 @@ const browserSlice = createSlice({
       state.tracks = action.payload.filteredTracks
     },
     libraryBrowserSelectAlbum(
-      state: BrowserStateType,
+      state: BrowserState,
       action: PayloadAction<{
         albumId: string
         index: number
@@ -92,7 +68,7 @@ const browserSlice = createSlice({
       state.tracks = action.payload.filteredTracks
     },
     libraryBrowserSelectTrack(
-      state: BrowserStateType,
+      state: BrowserState,
       action: PayloadAction<{
         trackId: string
         index: number
@@ -102,31 +78,31 @@ const browserSlice = createSlice({
       state.currentPositionTracks = action.payload.index
     },
     libraryBrowserSortArtists(
-      state: BrowserStateType,
-      action: PayloadAction<string>
+      state: BrowserState,
+      action: PayloadAction<ArtistsSortOptions>
     ) {
       state.sortArtists = action.payload
     },
     libraryBrowserSortAlbums(
-      state: BrowserStateType,
-      action: PayloadAction<string>
+      state: BrowserState,
+      action: PayloadAction<AlbumsSortOptions>
     ) {
       state.sortAlbums = action.payload
     },
     libraryBrowserSortTracks(
-      state: BrowserStateType,
-      action: PayloadAction<string>
+      state: BrowserState,
+      action: PayloadAction<TracksSortOptions>
     ) {
       state.sortTracks = action.payload
     },
     libraryBrowserSearchUpdateInput(
-      state: BrowserStateType,
+      state: BrowserState,
       action: PayloadAction<string>
     ) {
       state.search.term = action.payload
     },
     libraryBrowserSearchFilter(
-      state: BrowserStateType,
+      state: BrowserState,
       action: PayloadAction<{
         searchTerm: string
         filteredArtists: Artist[]
@@ -155,7 +131,7 @@ const browserSlice = createSlice({
       state.tracks = action.payload.filteredTracks
     },
     libraryBrowserSetFilter(
-      state: BrowserStateType,
+      state: BrowserState,
       action: PayloadAction<SearchFilter>
     ) {
       state.search.filter = action.payload

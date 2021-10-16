@@ -41,7 +41,7 @@ const AlbumsPaneContainer: FunctionComponent<InternalProps> = ({
   )
   const dispatch = useDispatch()
 
-  const orderByOptions = [
+  const orderByOptions: { value: AlbumsSortOptions; label: string }[] = [
     { value: 'title', label: 'title' },
     { value: 'year', label: 'year' },
     { value: 'artistName', label: 'artist' },
@@ -49,7 +49,9 @@ const AlbumsPaneContainer: FunctionComponent<InternalProps> = ({
 
   // Change event handler for LibraryBrowserListHeader.
   const onSortChangeHandler = (event: React.MouseEvent<HTMLSelectElement>) => {
-    dispatch(libraryBrowserSortAlbums(event.currentTarget.value))
+    dispatch(
+      libraryBrowserSortAlbums(event.currentTarget.value as AlbumsSortOptions)
+    )
   }
 
   const onItemClick = (itemId: string, index: number) => {

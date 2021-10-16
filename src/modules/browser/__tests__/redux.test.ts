@@ -4,7 +4,6 @@ import thunk from 'redux-thunk'
 import { immutableNestedSort } from 'common/utils/utils'
 import browserSlice, {
   browserInitialState,
-  BrowserStateType,
   libraryBrowserSelectArtist,
   libraryBrowserSelectAlbum,
   libraryBrowserSearchUpdateInput,
@@ -131,7 +130,7 @@ export const mockLibraryState: LibraryStateType = {
 
 type initialStateForFilterTestingType = {
   library: LibraryStateType
-  libraryBrowser: BrowserStateType
+  libraryBrowser: BrowserState
 }
 const initialStateForFilterTesting: initialStateForFilterTestingType = {
   library: {
@@ -299,7 +298,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserInitArtists action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -315,7 +314,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSelectArtist action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
         artists: Object.values(mockLibraryState.artists),
         albums: Object.values(mockLibraryState.albums).map((item) => ({
@@ -372,7 +371,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSelectAlbum action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
         artists: Object.values(mockLibraryState.artists),
         albums: Object.values(mockLibraryState.albums).map((item) => ({
@@ -420,7 +419,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSelectTrack action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
         artists: Object.values(mockLibraryState.artists),
         albums: Object.values(mockLibraryState.albums).map((item) => ({
@@ -460,7 +459,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSortArtists action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -476,7 +475,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSortAlbums action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -492,7 +491,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSortTracks action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -508,7 +507,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSearchUpdateInput action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
@@ -527,7 +526,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSearchFilter action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
         artists: Object.values(mockLibraryState.artists),
         albums: Object.values(mockLibraryState.albums).map((item) => ({
@@ -595,7 +594,7 @@ describe('library browser (redux)', () => {
     })
 
     it('should handle libraryBrowserSetFilter action', () => {
-      const testState: BrowserStateType = {
+      const testState: BrowserState = {
         ...browserInitialState,
       }
 
