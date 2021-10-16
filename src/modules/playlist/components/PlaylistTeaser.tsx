@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { contextMenu } from 'react-contexify'
-import Playlist from '../types/Playlist'
 
 const PlaylistTeaser: FunctionComponent<{
   playlist: Playlist

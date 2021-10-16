@@ -1,6 +1,5 @@
 import { api } from 'api'
 import { immutableSortTracks } from 'common/utils/utils'
-import Track from 'types/Track'
 import { AppThunk } from 'store/types'
 import { LibraryStateType } from '../library/redux'
 import { PlaylistsStateType } from '../playlist/redux'

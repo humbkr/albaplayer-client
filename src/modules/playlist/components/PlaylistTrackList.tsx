@@ -4,12 +4,11 @@ import { ArrowKeyStepper, AutoSizer, List } from 'react-virtualized'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
 import ListItem from 'modules/playlist/components/ListItem'
-import PlaylistItem from 'modules/playlist/components/PlaylistItem'
+import PlaylistItemComponent from 'modules/playlist/components/PlaylistItem'
 import { AppTheme } from 'themes/types'
-import PlaylistItemType from '../types/PlaylistItem'
 
 interface SortableElementProps {
-  item: PlaylistItemType
+  item: PlaylistItem
   selected: boolean
   onSelectRow: (p: {}) => void
   handleRemoveTrack: (position: number) => void
@@ -32,7 +31,7 @@ const SortableItem = SortableElement(
       style={style}
       onClick={() => onSelectRow({ scrollToRow: item.position - 1 })}
     >
-      <PlaylistItem
+      <PlaylistItemComponent
         item={item}
         selected={selected}
         onContextMenu={onSelectRow}
@@ -43,7 +42,7 @@ const SortableItem = SortableElement(
 )
 
 interface VirtualListProps {
-  items: PlaylistItemType[]
+  items: PlaylistItem[]
   handleRemoveTrack: (position: number) => void
   forwardedRef: Ref<HTMLDivElement>
   height: number
@@ -74,7 +73,7 @@ const VirtualList = ({
     index,
     style,
   }: {
-    items: PlaylistItemType[]
+    items: PlaylistItem[]
     scrollToRow: number
     index: number
     style: {}
@@ -124,15 +123,12 @@ const SortableList = SortableContainer(VirtualList)
 
 interface PlaylistTrackListProps {
   playlistId: string
-  items: PlaylistItemType[]
+  items: PlaylistItem[]
   currentPosition: number
   onItemClick: (trackId: string, trackIndex: number) => void
   onKeyDown: (e: React.KeyboardEvent) => void
   handleRemoveTrack: (trackIndex: number) => void
-  onTrackListUpdate: (
-    playlistId: string,
-    newTrackList: PlaylistItemType[]
-  ) => void
+  onTrackListUpdate: (playlistId: string, newTrackList: PlaylistItem[]) => void
 }
 
 interface PlaylistTrackListInternalProps extends PlaylistTrackListProps {

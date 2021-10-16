@@ -1,12 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import coverPlaceholder from 'common/assets/images/cover_placeholder.png'
 import { formatDuration } from 'common/utils/utils'
 import ActionButtonCircle from 'common/components/ActionButtonCircle'
-import Track from 'types/Track'
 import { RootState } from 'store/types'
+import { constants } from 'api'
+import { useHistory } from 'react-router'
+import SearchLink from 'common/components/SearchLink'
+import { search, setSearchFilter } from '../../browser/redux'
 
 const SEARCH_ENGINE_URL = 'https://www.google.fr/search?q='
 
@@ -34,13 +36,18 @@ function getTrackInfoForDisplay(track: Track): TrackInfo | null {
       number: track?.number ? track.number.toString() : '',
       disc: track?.disc ?? '',
       duration: track?.duration ? formatDuration(track.duration) : '',
-      cover: track?.cover ?? '',
+      cover: track?.cover ? constants.BACKEND_BASE_URL + track.cover : '',
     }
     : null
 }
 
-function NowPlayingHeader({ pinned }: { pinned: boolean }) {
+const NowPlayingHeader: React.FC<{
+  pinned?: boolean
+}> = ({ pinned = false }) => {
   const track = useSelector((state: RootState) => state.player.track)
+
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   const handleWebSearch = (what: WebSearchType) => {
     if (track) {
@@ -53,6 +60,18 @@ function NowPlayingHeader({ pinned }: { pinned: boolean }) {
 
       window.open(`${SEARCH_ENGINE_URL}${searchQuery}`, '_blank')
     }
+  }
+
+  const handleArtistSearch = () => {
+    dispatch(setSearchFilter('artist'))
+    dispatch(search(track.artist?.name))
+    history.push('/library')
+  }
+
+  const handleAlbumSearch = () => {
+    dispatch(setSearchFilter('album'))
+    dispatch(search(track.album?.title))
+    history.push('/library')
   }
 
   const trackInfo = getTrackInfoForDisplay(track)
@@ -89,10 +108,19 @@ function NowPlayingHeader({ pinned }: { pinned: boolean }) {
             <SongInfo pinned={pinned}>
               <div>
                 <Title pinned={pinned}>{trackInfo?.title}</Title>
-                <Artist pinned={pinned}>by {trackInfo?.artist}</Artist>
+                <Artist pinned={pinned}>
+                  by{' '}
+                  <SearchLink onClick={handleArtistSearch}>
+                    {trackInfo?.artist}
+                  </SearchLink>
+                </Artist>
               </div>
               <SongInfoPart2 pinned={pinned}>
-                <Album>{trackInfo?.album}</Album>
+                <Album>
+                  <SearchLink onClick={handleAlbumSearch}>
+                    {trackInfo?.album}
+                  </SearchLink>
+                </Album>
                 <Position>{trackAlbumInfo}</Position>
               </SongInfoPart2>
               <SongActions pinned={pinned}>
@@ -116,12 +144,6 @@ function NowPlayingHeader({ pinned }: { pinned: boolean }) {
       </Background>
     </Wrapper>
   )
-}
-NowPlayingHeader.propTypes = {
-  pinned: PropTypes.bool,
-}
-NowPlayingHeader.defaultProps = {
-  pinned: false,
 }
 
 export default NowPlayingHeader

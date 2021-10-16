@@ -14,12 +14,23 @@ import {
   addTrack as addTrackToPlaylist,
 } from 'modules/playlist/redux'
 import { RootState } from 'store/types'
+import { search, setSearchFilter } from '../redux'
 
 const TrackContextMenu = () => {
   const playlists = useSelector((state: RootState) => playlistsSelector(state))
   const dispatch = useDispatch()
 
-  const playlistsItems = playlists.map((item) => (
+  const findAllByArtist = (menuItem: any) => {
+    dispatch(setSearchFilter('artist'))
+    dispatch(search(menuItem.props.data.artist?.name))
+  }
+
+  const findAllByAlbum = (menuItem: any) => {
+    dispatch(setSearchFilter('album'))
+    dispatch(search(menuItem.props.data.album?.title))
+  }
+
+  const playlistsItems = playlists.map((item: Playlist) => (
     <Item
       key={item.id}
       onClick={(menuItem: any) => dispatch(
@@ -60,6 +71,13 @@ const TrackContextMenu = () => {
       </Item>
       <Separator />
       <Submenu label="Add to playlist...">{playlistsItems}</Submenu>
+      <Separator />
+      <Item onClick={(menuItem: any) => findAllByArtist(menuItem)}>
+        Find all by the artist
+      </Item>
+      <Item onClick={(menuItem: any) => findAllByAlbum(menuItem)}>
+        Find all on album
+      </Item>
     </ContextMenu>
   )
 }

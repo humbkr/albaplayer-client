@@ -1,4 +1,3 @@
-import Track from '../../../types/Track'
 import queueSlice, { queueInitialState, QueueStateType } from '../queue.redux'
 
 const {

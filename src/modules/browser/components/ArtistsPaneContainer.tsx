@@ -41,11 +41,15 @@ const ArtistsPaneContainer: FunctionComponent<InternalProps> = ({
   )
   const dispatch = useDispatch()
 
-  const orderByOptions = [{ value: 'name', label: 'name' }]
+  const orderByOptions: { value: ArtistsSortOptions; label: string }[] = [
+    { value: 'name', label: 'name' },
+  ]
 
   // Change event handler for LibraryBrowserListHeader.
   const onSortChangeHandler = (event: React.MouseEvent<HTMLSelectElement>) => {
-    dispatch(libraryBrowserSortArtists(event.currentTarget.value))
+    dispatch(
+      libraryBrowserSortArtists(event.currentTarget.value as ArtistsSortOptions)
+    )
   }
 
   const onItemClick = (itemId: string, index: number) => {

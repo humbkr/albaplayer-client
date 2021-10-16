@@ -3,10 +3,8 @@ import styled from 'styled-components'
 import AlbumTeaserHorizontal from 'modules/dashboard/components/AlbumTeaserHorizontal'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { immutableNestedSort } from 'common/utils/utils'
 import { RootState } from '../../../store/types'
-import { immutableNestedSort } from '../../../common/utils/utils'
-import { SortOrder } from '../../../types/SortOrder'
-import Album from '../../../types/Album'
 import { LibraryStateType } from '../../library/redux'
 import AlbumMoreActionsContextMenu from './AlbumMoreActionsContextMenu'
 
@@ -17,7 +15,7 @@ export const getRecentlyAddedAlbums = (
   const recent = immutableNestedSort(
     Object.values(library.albums),
     'dateAdded',
-    SortOrder.DESC
+    'DESC'
   ).slice(0, number)
 
   return recent.map((item) => ({

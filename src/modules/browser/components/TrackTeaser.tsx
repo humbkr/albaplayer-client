@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import styled from 'styled-components'
 import { contextMenu } from 'react-contexify'
-import Track from 'types/Track'
 
 const TrackTeaser: FunctionComponent<{
   item: Track

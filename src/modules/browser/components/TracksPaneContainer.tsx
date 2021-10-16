@@ -41,7 +41,7 @@ const TracksPaneContainer: FunctionComponent<InternalProps> = ({
   )
   const dispatch = useDispatch()
 
-  const orderByOptions = [
+  const orderByOptions: { value: TracksSortOptions; label: string }[] = [
     { value: 'title', label: 'title' },
     { value: 'number', label: 'track number' },
     { value: 'album', label: 'album' },
@@ -50,7 +50,9 @@ const TracksPaneContainer: FunctionComponent<InternalProps> = ({
 
   // Change event handler for LibraryBrowserListHeader.
   const onSortChangeHandler = (event: React.MouseEvent<HTMLSelectElement>) => {
-    dispatch(libraryBrowserSortTracks(event.currentTarget.value))
+    dispatch(
+      libraryBrowserSortTracks(event.currentTarget.value as TracksSortOptions)
+    )
   }
 
   const onItemClick = (itemId: string, index: number) => {

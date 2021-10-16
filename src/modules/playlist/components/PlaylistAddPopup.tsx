@@ -8,7 +8,6 @@ import dayjs from 'dayjs'
 import { getRandomInt } from 'common/utils/utils'
 import ActionButton from 'common/components/ActionButton'
 import { AppTheme } from 'themes/types'
-import Playlist from '../types/Playlist'
 
 // http://reactcommunity.org/react-modal/accessibility/
 Modal.setAppElement('#root')

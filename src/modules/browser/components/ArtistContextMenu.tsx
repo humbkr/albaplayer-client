@@ -18,7 +18,7 @@ const ArtistContextMenu = () => {
   const playlists = useSelector((state) => playlistsSelector(state))
   const dispatch = useDispatch()
 
-  const playlistsItems = playlists.map((item) => (
+  const playlistsItems = playlists.map((item: Playlist) => (
     <Item
       key={item.id}
       onClick={(menuItem: any) => dispatch(

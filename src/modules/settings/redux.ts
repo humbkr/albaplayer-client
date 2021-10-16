@@ -4,13 +4,23 @@ import { initLibrary } from 'modules/library/redux'
 // eslint-disable-next-line import/named
 import { AppThunk } from 'store/types'
 
-interface SettingsPayload {
+interface Settings {
   libraryPath: string
   coversPreferredSource: string
   disableLibrarySettings: boolean
+  version: string
 }
 
-export const initialState = {
+export interface BrowserStateType {
+  library: {
+    isUpdating: boolean
+    error: string
+    config: Settings | {}
+  }
+  theme: string
+}
+
+export const initialState: BrowserStateType = {
   library: {
     isUpdating: false,
     error: '',
@@ -23,18 +33,9 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    init(state, action: PayloadAction<SettingsPayload>) {
-      const {
-        libraryPath,
-        coversPreferredSource,
-        disableLibrarySettings,
-      } = action.payload
+    init(state, action: PayloadAction<Settings>) {
       state.library.error = ''
-      state.library.config = {
-        libraryPath,
-        coversPreferredSource,
-        disableLibrarySettings,
-      }
+      state.library.config = action.payload
     },
     libraryUpdateStart(state) {
       state.library.error = ''
